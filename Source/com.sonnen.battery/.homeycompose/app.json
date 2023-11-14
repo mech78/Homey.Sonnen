@@ -10,7 +10,7 @@
     "en": "Sonnen Batterie"
   },
   "description": {
-    "en": "Adds support for Sonnen Batterie - Time of Consumption (ToC)"
+    "en": "Adds support for Sonnen Batterie - Time of Use(ToU)"
   },
   "category": [
     "energy"
@@ -25,5 +25,11 @@
     "name": "Kim Kokholm",
     "email": "kokholm@gmail.com"
   },
-  "brandColor": "#060d1b"
+  "brandColor": "#060d1b",
+  "source": "https://github.com/HarpunDK/Homey.Sonnen",
+  "support": "https://github.com/HarpunDK/Homey.Sonnen",
+  "bugs": {
+    "url": "https://github.com/HarpunDK/Homey.Sonnen"
+  },
+  "homepage": "https://github.com/HarpunDK/Homey.Sonnen"
 }

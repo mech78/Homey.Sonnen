@@ -82,7 +82,7 @@ class BatteryDevice extends Homey.Device {
     axios.get(`${baseUrl}/api/v2/latestdata`, options)
       .then((response) => {
         var batteryJson = response.data;
-        console.log("RESPONSE", batteryJson);
+        //console.log("RESPONSE", batteryJson);
         //USOC
         this.setCapabilityValue("measure_battery", +batteryJson.USOC);
 

@@ -1,4 +1,6 @@
 import Homey from 'homey';
+import axios from 'axios';
+import _ from 'underscore';
 
 class SonnenBatterieDriver extends Homey.Driver {
 
@@ -7,6 +9,123 @@ class SonnenBatterieDriver extends Homey.Driver {
    */
   async onInit() {
     this.log('SonnenBatterieDriver has been initialized');
+
+    const setToC_card   = this.homey.flow.getActionCard("set-time-of-use");
+    const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
+    const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
+    
+    
+    var batteryBaseUrl   = this.homey.settings.get("BatteryBaseUrl");
+    var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
+
+
+    setToC_card.registerRunListener(async (args) => {
+      var timeStart = args.Start;
+      var timeEnd   = args.End;
+      var maxPower  = args.MaxPower;
+      
+      this.log("args", timeStart, timeEnd, maxPower);
+
+      var options = {
+        method: 'put',
+        headers: {
+          'Auth-Token': `${batteryAuthToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      };
+
+      var body = {
+        "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`
+      }
+  
+      // Act
+      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
+        .then((response) => {
+          var batteryJson = response.data;
+          console.log("RESPONSE", batteryJson);
+          
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        })
+        .finally(() => {
+          // always executed
+        });
+      
+
+
+    });
+
+    resetToC_card.registerRunListener(async () => {
+      var options = {
+        method: 'put',
+        headers: {
+          'Auth-Token': `${batteryAuthToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      };
+
+      var body = {
+        "EM_ToU_Schedule": `[]`
+      }
+  
+      // Act
+      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
+        .then((response) => {
+          var batteryJson = response.data;
+          console.log("RESPONSE", batteryJson);
+          
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        })
+        .finally(() => {
+          // always executed
+        });
+
+
+    });
+
+    pauseToC_card.registerRunListener(async (args) => {
+      var timeStart = args.Start;
+      var timeEnd   = args.End;
+      
+      this.log("args", timeStart, timeEnd);
+
+      var options = {
+        method: 'put',
+        headers: {
+          'Auth-Token': `${batteryAuthToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      };
+
+      var body = {
+        "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":0}]`
+      }
+  
+      // Act
+      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
+        .then((response) => {
+          var batteryJson = response.data;
+          console.log("RESPONSE", batteryJson);
+          
+        })
+        .catch((error) => {
+          console.log("ERROR", error);
+        })
+        .finally(() => {
+          // always executed
+        });
+      
+
+
+    });
+
+    
   }
 
   /**

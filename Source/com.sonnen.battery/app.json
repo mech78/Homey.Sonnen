@@ -11,7 +11,7 @@
     "en": "Sonnen Batterie"
   },
   "description": {
-    "en": "Adds support for Sonnen Batterie - Time of Consumption (ToC)"
+    "en": "Adds support for Sonnen Batterie - Time of Use(ToU)"
   },
   "category": [
     "energy"
@@ -27,6 +27,102 @@
     "email": "kokholm@gmail.com"
   },
   "brandColor": "#060d1b",
+  "flow": {
+    "actions": [
+      {
+        "id": "set-time-of-use",
+        "title": {
+          "en": "Set Time-Of-Use"
+        },
+        "titleFormatted": {
+          "en": "Set Time-Of-Use starting [[Start]] and ending [[End]] with charge of maximum [[MaxPower]]W within this period."
+        },
+        "hint": {
+          "en": "Set period for Time-Of-Use"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "time",
+            "name": "Start",
+            "placeholder": {
+              "en": "Enter starting time for new charge event"
+            }
+          },
+          {
+            "type": "time",
+            "name": "End",
+            "placeholder": {
+              "en": "Enter end time for the new charge event"
+            }
+          },
+          {
+            "type": "number",
+            "name": "MaxPower",
+            "placeholder": {
+              "en": "Max. power from grid (0-46000 W)"
+            },
+            "min": 0,
+            "max": 46000,
+            "step": 1000
+          }
+        ]
+      },
+      {
+        "id": "reset-time-of-use",
+        "title": {
+          "en": "Reset Time-Of-Use"
+        },
+        "hint": {
+          "en": "Resets the schedule for Time-Of-Use"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          }
+        ]
+      },
+      {
+        "id": "pause-time-of-use",
+        "title": {
+          "en": "Pause Time-Of-Use"
+        },
+        "titleFormatted": {
+          "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be pause within this period."
+        },
+        "hint": {
+          "en": "Pause battery consumption within a given period of time"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "time",
+            "name": "Start",
+            "placeholder": {
+              "en": "Enter starting time for new charge event"
+            }
+          },
+          {
+            "type": "time",
+            "name": "End",
+            "placeholder": {
+              "en": "Enter end time for the new charge event"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
