@@ -26,5 +26,49 @@
     "name": "Kim Kokholm",
     "email": "kokholm@gmail.com"
   },
-  "brandColor": "#060d1b"
+  "brandColor": "#060d1b",
+  "drivers": [
+    {
+      "name": {
+        "en": "sonnenBatterie"
+      },
+      "class": "other",
+      "capabilities": [
+        "measure_battery"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie/assets/images/large.png"
+      },
+      "energy": {
+        "batteries": [
+          "C",
+          "C",
+          "C",
+          "C"
+        ],
+        "cumulative": true
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "sonnenbatterie"
+    }
+  ]
 }
