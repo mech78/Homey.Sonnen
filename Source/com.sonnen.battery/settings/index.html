@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- The '/homey.js' script must be included in your settings view to work -->
+    <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+
+<body>
+    <header class="homey-header">
+        <h1 class="homey-title" data-i18n="settings.title">
+            <!-- This will be filled with the translated string with key 'settings.title'. -->
+        </h1>
+        <p class="homey-subtitle" data-i18n="settings.subtitle">
+            <!-- This field will also be translated -->
+        </p>
+    </header>
+
+    <fieldset class="homey-form-fieldset">
+        <legend class="homey-form-legend">Pushover.net Settings</legend>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputBatteryBaseUrl">Base Url</label>
+            <input class="homey-form-input"  id="inputBatteryBaseUrl" type="text" value="" placeholder="Insert your Sonnen Batterie base url" />
+            <small class="text-muted">Ex: http://192.168.1.112:80</small>
+        </div>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputBatteryAuthToken">Auth Token</label>
+            <input class="homey-form-input"  id="inputBatteryAuthToken" type="text" value="" placeholder="Insert Auth token" />
+            <small class="text-muted">Auth Token is retrived from user-login on you Sonnen Batterie system.</small>
+        </div>
+
+    </fieldset>
+
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+
+    <script type="text/javascript">
+        // a method named 'onHomeyReady' must be present in your code
+        function onHomeyReady(Homey) {
+            // Tell Homey we're ready to be displayed
+            Homey.ready();
+
+            var inputBatteryBaseUrlElement          = document.getElementById("inputBatteryBaseUrl");
+            var inputBatteryAuthTokenElement       = document.getElementById("inputBatteryAuthToken");
+            var saveElement = document.getElementById("save");
+
+            Homey.get("BatteryBaseUrl", function (err, baseUrl) {
+                if (err) return Homey.alert(err);
+                inputBatteryBaseUrlElement.value = baseUrl;
+            });
+            
+            Homey.get("BatteryAuthToken", function (err, authToken) {
+                if (err) return Homey.alert(err);
+                inputBatteryAuthTokenElement.value = authToken;
+            });
+
+
+
+            saveElement.addEventListener("click", function (e) {
+                var anySaveErrors = false;
+
+                Homey.set("BatteryBaseUrl", inputBatteryBaseUrlElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
+                Homey.set("BatteryAuthToken", inputBatteryAuthTokenElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+                if (!anySaveErrors)
+                    return Homey.alert("Settings saved. You can close this dialog now.");
+                else
+                    return Homey.alert("Error occured.");
+
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,1 +1,6 @@
-{}
+{
+    "settings": {
+      "title": "Sonnen Batterie settings",
+      "subtitle": "Please provide information for api-usage."
+    }
+  }

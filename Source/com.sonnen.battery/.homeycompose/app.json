@@ -7,10 +7,10 @@
     "local"
   ],
   "name": {
-    "en": "Sonnen"
+    "en": "Sonnen Batterie"
   },
   "description": {
-    "en": "Adds support for Sonnen Battery - Time of Consumption (ToC)"
+    "en": "Adds support for Sonnen Batterie - Time of Consumption (ToC)"
   },
   "category": [
     "energy"
@@ -24,5 +24,6 @@
   "author": {
     "name": "Kim Kokholm",
     "email": "kokholm@gmail.com"
-  }
+  },
+  "brandColor": "#060d1b"
 }
