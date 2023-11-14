@@ -1,0 +1,28 @@
+{
+  "id": "com.sonnen.battery",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Sonnen"
+  },
+  "description": {
+    "en": "Adds support for Sonnen Battery - Time of Consumption (ToC)"
+  },
+  "category": [
+    "energy"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Kim Kokholm",
+    "email": "kokholm@gmail.com"
+  }
+}
