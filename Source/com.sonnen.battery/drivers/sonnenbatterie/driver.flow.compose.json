@@ -39,6 +39,47 @@
       ]
     },
     {
+      "id": "set-time-of-use-hours",
+      "title": {
+        "en": "Set Time-Of-Use with hours"
+      },
+      "titleFormatted": {
+        "en": "Set Time-Of-Use starting [[Start]] and ending after hours of [[Hours]] with charge of maximum [[MaxPower]]W within this period."
+      },
+      "hint": {
+        "en": "Set period for Time-Of-Use"
+      },
+      "args": [
+        {
+          "type": "time",
+          "name": "Start",
+          "placeholder": {
+            "en": "Enter starting time for new charge event"
+          }
+        },
+        {
+          "type": "number",
+          "name": "Hours",
+          "placeholder": {
+            "en": "Specify hours after 'Start' to end of schedule"
+          },
+          "min": 0,
+          "max": 24,
+          "step": 1
+        },
+        {
+          "type": "number",
+          "name": "MaxPower",
+          "placeholder": {
+            "en": "Max. power from grid (0-46000 W)"
+          },
+          "min": 0,
+          "max": 46000,
+          "step": 1000
+        }
+      ]
+    },
+    {
       "id": "reset-time-of-use",
       "title": {
         "en": "Reset Time-Of-Use"

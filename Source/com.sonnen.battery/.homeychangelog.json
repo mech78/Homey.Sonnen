@@ -1,5 +1,8 @@
 {
   "1.0.0": {
     "en": "Initial release"
+  },
+  "1.0.1": {
+    "en": "Added Time-Of-Use where you specify StartTime and Hours instead of EndTime. Specify Hours from StartTime instead of EndTime. "
   }
 }
