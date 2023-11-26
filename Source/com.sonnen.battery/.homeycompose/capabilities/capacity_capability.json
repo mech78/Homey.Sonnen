@@ -1,0 +1,8 @@
+{
+    "type": "string",
+    "title": { "en": "Capacity", "nl": "Capaciteit", "dk": "Kapacitet" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
+  }

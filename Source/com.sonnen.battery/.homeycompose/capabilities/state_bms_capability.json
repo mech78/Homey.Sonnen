@@ -1,0 +1,8 @@
+{
+    "type": "string",
+    "title": { "en": "BMS" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "icon": "/assets/images/wave-pulse-regular.svg"
+  }

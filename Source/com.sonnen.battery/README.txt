@@ -8,3 +8,9 @@ This is very handy with changing energy prices, you can pause your batterie deli
 Reset Time-Of-Use is very handy, because once schedule is set - the schedule is repeated daily. Reset will clear the schedule. Please use this before setting a new schedule. 
 
 Be aware, atm. only one schedule/Time-Of-Use is supported - and not multiple like example: 10-14:charge:2000 AND 17-23:charge:2000
+
+
+Please visit the settings page, after installing this application. Configuration-fields are mandatory. 
+
+If you appreciate this and want to give a tip, use the following link:
+https://www.paypal.com/donate/?business=WJ4994R47H3TJ&no_recurring=0&item_name=Tip+for+efford+at+developing+this+app.+Tip+is+appreciated.&currency_code=DKK

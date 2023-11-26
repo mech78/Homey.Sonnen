@@ -1,0 +1,8 @@
+{
+    "type": "string",
+    "title": { "en": "Eclipse color" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "icon": "/assets/images/lightbulb-on-light.svg"
+  }

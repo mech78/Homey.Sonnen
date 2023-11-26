@@ -4,7 +4,17 @@
   },
   "class": "other",
   "capabilities": [
-    "measure_battery"
+    "measure_power",
+    "measure_battery",
+    "production_capability",
+    "capacity_capability",
+    "consumption_capability",
+    "feed_grid_capability",
+    "online_capability",
+    "number_battery_capability",
+    "eclipse_capability",
+    "state_inverter_capability",
+    "state_bms_capability"
   ],
   "platforms": [
     "local"

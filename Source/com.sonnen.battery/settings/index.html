@@ -31,6 +31,17 @@
             <small class="text-muted">Auth Token is retrived from user-login on you Sonnen Batterie system.</small>
         </div>
 
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputPullIntervalValue">Pull data interval</label>
+            <input class="homey-form-input"  id="inputPullIntervalValue" type="number" value="" placeholder="Pull frequency in seconds" />
+            <small class="text-muted">Frequency in seconds. How often to pull for data. Default i 30 seconds (30).</small>
+        </div>
+
+        <hr />
+
+        <div class="homey-form-group">
+            <strong>Remark</strong> Please restart the app, after changing settings.
+        </div>
     </fieldset>
 
     <button id="save" class="homey-button-primary-full">Save changes</button>
@@ -41,8 +52,9 @@
             // Tell Homey we're ready to be displayed
             Homey.ready();
 
-            var inputBatteryBaseUrlElement          = document.getElementById("inputBatteryBaseUrl");
-            var inputBatteryAuthTokenElement       = document.getElementById("inputBatteryAuthToken");
+            var inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
+            var inputBatteryAuthTokenElement   = document.getElementById("inputBatteryAuthToken");
+            var inputPullIntervalValueElement  = document.getElementById("inputPullIntervalValue");
             var saveElement = document.getElementById("save");
 
             Homey.get("BatteryBaseUrl", function (err, baseUrl) {
@@ -55,7 +67,10 @@
                 inputBatteryAuthTokenElement.value = authToken;
             });
 
-
+            Homey.get("BatteryPullInterval", function (err, pullInterval) {
+                if (err) return Homey.alert(err);
+                inputPullIntervalValueElement.value = pullInterval ?? "30";
+            });
 
             saveElement.addEventListener("click", function (e) {
                 var anySaveErrors = false;
@@ -73,6 +88,14 @@
                         return Homey.alert(err);
                     } 
                 });
+
+                Homey.set("BatteryPullInterval", inputPullIntervalValueElement.value, function (err) {
+                    if (err) {
+                        anySaveErrors = true;
+                        return Homey.alert(err);
+                    } 
+                });
+
                 if (!anySaveErrors)
                     return Homey.alert("Settings saved. You can close this dialog now.");
                 else

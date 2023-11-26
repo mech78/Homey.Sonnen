@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "Added Time-Of-Use where you specify StartTime and Hours instead of EndTime. Specify Hours from StartTime instead of EndTime. "
+  },
+  "1.0.2": {
+    "en": "A lot of capabilities added and more configuration."
   }
 }

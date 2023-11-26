@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "Production now", "da": "Produktion" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "kW" },
+    "min": 0,
+    "decimals": 3,
+    "insights": true,
+    "icon": "/assets/images/house-day-thin.svg"
+  }

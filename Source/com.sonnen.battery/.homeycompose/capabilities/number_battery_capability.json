@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "#Batteries", "da": "#Batterier" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "#" },
+    "min": 0,
+    "decimals": 0,
+    "insights": true,
+    "icon": "/assets/images/car-battery-sharp-light.svg"
+  }

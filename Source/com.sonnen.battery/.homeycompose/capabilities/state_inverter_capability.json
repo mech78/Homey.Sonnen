@@ -1,0 +1,8 @@
+{
+    "type": "string",
+    "title": { "en": "Inverter state" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "icon": "/assets/images/monitor-waveform-light.svg"
+  }

@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": { "en": "Active" },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "sensor",
+  "uiQuickAction": true,
+  "icon": "/assets/images/power-off-thin.svg"
+}
