@@ -2,8 +2,19 @@
   "type": "boolean",
   "title": { "en": "Active" },
   "getable": true,
-  "setable": true,
+  "setable": false,
   "uiComponent": "sensor",
   "uiQuickAction": true,
-  "icon": "/assets/images/power-off-thin.svg"
+  "insights": true,
+  "icon": "/assets/images/power-off-thin.svg",
+  "insightsTitleTrue": {
+    "en": "Connection alarm turned on",
+    "nl": "Connection alarm ging af",
+    "da": "Forbindelsesalarm blev aktiveret"
+  },
+  "insightsTitleFalse": {
+    "en": "Connection alarm turned off",
+    "nl": "Connection alarm ging uit",
+    "da": "Forbindelsesalarm blev deaktiveret"
+  }
 }

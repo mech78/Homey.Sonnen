@@ -6,6 +6,7 @@
   "capabilities": [
     "measure_power",
     "measure_battery",
+    "meter_power",
     "production_capability",
     "capacity_capability",
     "consumption_capability",
@@ -14,7 +15,8 @@
     "number_battery_capability",
     "eclipse_capability",
     "state_inverter_capability",
-    "state_bms_capability"
+    "state_bms_capability",    
+    "alarm_generic"
   ],
   "platforms": [
     "local"

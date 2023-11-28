@@ -1,6 +1,6 @@
 {
   "id": "com.sonnen.battery",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -10,7 +10,7 @@
     "en": "Sonnen Batterie"
   },
   "description": {
-    "en": "Adds support for Sonnen Batterie - Time of Use(ToU)"
+    "en": "Clean and affordable energy for everyone."
   },
   "category": [
     "energy"

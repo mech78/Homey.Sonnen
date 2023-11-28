@@ -96,10 +96,10 @@ class BatteryDevice extends Homey.Device {
         //   // always executed
         // });
         var latestStateJson = response.data;
-        this.log("DATA½", latestStateJson);
+        // this.log("DATA½", latestStateJson);
 
       
-        
+      this.setCapabilityValue("meter_power", +latestStateJson.Consumption_W / 1000); // = consumption
       this.setCapabilityValue("measure_battery", +latestStateJson.USOC); // Percentage on battery
       this.setCapabilityValue("production_capability", +latestStateJson.Production_W / 100);
       this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity)/1000} kWh` );
@@ -111,7 +111,7 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("state_bms_capability", latestStateJson.ic_status.statebms);
       this.setCapabilityValue("state_inverter_capability", latestStateJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue("online_capability", !latestStateJson.ic_status["DC Shutdown Reason"].HW_Shutdown);
-
+      this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
 
     } catch (e:any) {
