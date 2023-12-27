@@ -1,187 +1,158 @@
 import Homey from 'homey';
 import axios from 'axios';
 import _ from 'underscore';
+import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 
 class SonnenBatterieDriver extends Homey.Driver {
 
   /**
    * onInit is called when the driver is initialized.
   */
- async onInit() {
-   this.log('SonnenBatterieDriver has been initialized');
-   
-   const setToC_card   = this.homey.flow.getActionCard("set-time-of-use");
-   const setToCHours_card   = this.homey.flow.getActionCard("set-time-of-use-hours");
-   const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
-   const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
-   const zeroPad = (num:any, places:any) => String(num).padStart(places, '0');
-   
-    
-    var batteryBaseUrl   = this.homey.settings.get("BatteryBaseUrl");
+  async onInit() {
+    this.log('SonnenBatterieDriver has been initialized');
+
+    const setToC_card = this.homey.flow.getActionCard("set-time-of-use");
+    const setToCHours_card = this.homey.flow.getActionCard("set-time-of-use-hours");
+    const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
+    const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
+
+    const startToC_card = this.homey.flow.getActionCard("start-charge");
+    const stopToC_card = this.homey.flow.getActionCard("stop-charge");
+
+    const zeroPad = (num: any, places: any) => String(num).padStart(places, '0');
+
+
+    var batteryBaseUrl = this.homey.settings.get("BatteryBaseUrl");
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
 
+    var sonnenBatterieClient = new SonnenBatterieClient(batteryBaseUrl, batteryAuthToken);
 
     setToC_card.registerRunListener(async (args) => {
       var timeStart = args.Start;
-      var timeEnd   = args.End;
-      var maxPower  = args.MaxPower;
-      
-      this.log("args", timeStart, timeEnd, maxPower);
+      var timeEnd = args.End;
+      var maxPower = args.MaxPower;
 
-      var options = {
-        method: 'put',
-        headers: {
-          'Auth-Token': `${batteryAuthToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      };
+      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      this.log("Result", commandResult, args.Power);
 
-      var body = {
-        "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`
-      }
-  
-      this.log("SCHEDULE", body);
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
 
-      // Act
-      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-        .then((response) => {
-          var batteryJson = response.data;
-          console.log("RESPONSE", batteryJson);
-          
-        })
-        .catch((error) => {
-          console.log("ERROR", error);
-        })
-        .finally(() => {
-          // always executed
-        });
-      
-
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
 
     });
 
     setToCHours_card.registerRunListener(async (args) => {
       var timeStart = args.Start;
-      var hours     = args.Hours;
-      var maxPower  = args.MaxPower;
+      var hours = args.Hours;
+      var maxPower = args.MaxPower;
 
       // Calculate end from timeStart and hours.
-      var timeStartHours    = +timeStart.split(":", 1)[0];
-      var timeStartMinutes  =  timeStart.split(":", 2)[1];
-      var timeEndHours = (timeStartHours + hours)%24; // Handle overflow.
+      var timeStartHours = +timeStart.split(":", 1)[0];
+      var timeStartMinutes = timeStart.split(":", 2)[1];
+      var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
       var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
 
       var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-      this.log("args", timeStart, hours, maxPower, timeEndHoursFormatted, "calculated endtime", timeEnd);
+      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      this.log("Result", commandResult, args.Power);
 
-      var options = {
-        method: 'put',
-        headers: {
-          'Auth-Token': `${batteryAuthToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      };
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
 
-      var body = {
-        "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`
-      }
-
-      this.log("SCHEDULE", body);
-  
-      // Act
-      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-        .then((response) => {
-          var batteryJson = response.data;
-          console.log("RESPONSE", batteryJson);
-          
-        })
-        .catch((error) => {
-          console.log("ERROR", error);
-        })
-        .finally(() => {
-          // always executed
-        });
-      
-
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
 
     });
 
     resetToC_card.registerRunListener(async () => {
-      var options = {
-        method: 'put',
-        headers: {
-          'Auth-Token': `${batteryAuthToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      };
+      // Set empty schedule
 
-      var body = {
-        "EM_ToU_Schedule": `[]`
-      }
+      var commandResult = await sonnenBatterieClient.ClearSchedule();
+      this.log("Result", commandResult);
 
-      this.log("SCHEDULE", body);
-  
-      // Act
-      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-        .then((response) => {
-          var batteryJson = response.data;
-          console.log("RESPONSE", batteryJson);
-          
-        })
-        .catch((error) => {
-          console.log("ERROR", error);
-        })
-        .finally(() => {
-          // always executed
-        });
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Reset ToC.`});
 
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
 
     });
 
     pauseToC_card.registerRunListener(async (args) => {
       var timeStart = args.Start;
-      var timeEnd   = args.End;
-      
-      this.log("args", timeStart, timeEnd);
+      var timeEnd = args.End;
 
-      var options = {
-        method: 'put',
-        headers: {
-          'Auth-Token': `${batteryAuthToken}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      };
+      var commandResult =       await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, 0);
+      this.log("Result", commandResult, args.Power);
 
-      var body = {
-        "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":0}]`
-      }
-  
-      this.log("SCHEDULE", body);
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause ToC between ${timeStart} and ${timeEnd}.`});
 
-      // Act
-      axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-        .then((response) => {
-          var batteryJson = response.data;
-          console.log("RESPONSE", batteryJson);
-          
-        })
-        .catch((error) => {
-          console.log("ERROR", error);
-        })
-        .finally(() => {
-          // always executed
-        });
-      
-
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
 
     });
 
+    startToC_card.registerRunListener(async (args) => {
+      // Set full schedule
+
+      var commandResult =       await sonnenBatterieClient.SetSchedule("00:00", "23:59", args.Power);
+      this.log("Result", commandResult, args.Power);
+
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start ToC.`});
+
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
+    });
+
+    stopToC_card.registerRunListener(async () => {
+      // Set empty schedule
+
+      var commandResult = await sonnenBatterieClient.ClearSchedule();
+      this.log("Result", commandResult);
+
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Stop ToC.`});
+
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
+
+    });
+
+    // Conditions:
+    const fromBatteryTrigger  = this.homey.flow.getConditionCard("power-from-battery");
+    const toBatteryTrigger    = this.homey.flow.getConditionCard("power-to-battery");
+    const toGridTrigger       = this.homey.flow.getConditionCard("deliver-to-grid");
+    const fromGridTrigger     = this.homey.flow.getConditionCard("consumption-from-grid");
+
+    fromBatteryTrigger.registerRunListener(async (args) => {
+      return (+this.getDevices()[0].getCapabilityValue("from_battery_capability")) > 0;
+    });
+
+    toBatteryTrigger.registerRunListener(async (args) => {
+      return (+this.getDevices()[0].getCapabilityValue("to_battery_capability")) > 0;
+    });
+
+    toGridTrigger.registerRunListener(async (args) => {
+      var fromGridValue = +this.getDevices()[0].getCapabilityValue("feed_grid_capability") * 1000;
+      this.log("TRIGGER", "toGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue > 0);
+      
+      if (fromGridValue > 0)
+        return false; // not current feeding  grid
+
+        return (fromGridValue < args.Power);
+    });
+
+    fromGridTrigger.registerRunListener(async (args) => {      
+      var fromGridValue = +this.getDevices()[0].getCapabilityValue("feed_grid_capability") * 1000;      
+      this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue < 0);
+
+      if (fromGridValue < 0)
+        return false; // not current consuming from grid
+
+      return (fromGridValue > args.Power);
+    });
+
     
+
   }
 
   /**
@@ -189,7 +160,7 @@ class SonnenBatterieDriver extends Homey.Driver {
    * This should return an array with the data of devices that are available for pairing.
    */
   async onPairListDevices() {
-    return [      
+    return [
       {
         "name": 'SonnenBatterie',
         "data": {

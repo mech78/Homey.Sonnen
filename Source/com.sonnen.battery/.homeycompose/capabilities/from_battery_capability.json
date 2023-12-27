@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "From battery", "da": "Fra batteri" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "W" },
+    "min": 0,
+    "decimals": 0,
+    "insights": true,
+    "icon": "/assets/images/from-battery.svg"
+  }

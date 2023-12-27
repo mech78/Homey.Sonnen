@@ -113,6 +113,13 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("online_capability", !latestStateJson.ic_status["DC Shutdown Reason"].HW_Shutdown);
       this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
+      try {
+        this.setCapabilityValue("from_battery_capability", (latestStateJson.Pac_total_W ?? 0)> 0 ? latestStateJson.Pac_total_W : 0);
+        this.setCapabilityValue("to_battery_capability",   (latestStateJson.Pac_total_W ?? 0)< 0 ? -1 * latestStateJson.Pac_total_W : 0);
+      } catch (error) {
+        await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..`});
+      }
+
 
     } catch (e:any) {
       
