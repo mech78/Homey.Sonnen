@@ -1,0 +1,22 @@
+{
+  "title": {
+    "en": "Deliver to grid"
+  },
+  "titleFormatted": {
+    "en": "Deliver to grid is greater than [[Power]] W"
+  },
+  "hint": {
+    "en": "Deliverying power to grid"
+  },
+  "args": [
+    {
+      "type": "number",
+      "name": "Power",
+      "placeholder": {
+        "en": "Power (W)"
+      },
+      "min": 1,
+      "step": 1
+    }
+  ]
+}

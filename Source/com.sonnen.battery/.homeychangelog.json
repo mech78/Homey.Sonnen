@@ -13,5 +13,8 @@
   },
   "1.0.4": {
     "en": "Capability adjustments. "
+  },
+  "1.0.5": {
+    "en": "New capabilities added (from/to battery). More conditions added."
   }
 }

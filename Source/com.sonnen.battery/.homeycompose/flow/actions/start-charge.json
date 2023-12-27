@@ -1,0 +1,23 @@
+{
+  "title": {
+    "en": "Start charge"
+  },
+  "titleFormatted": {
+    "en": "Start charging of batteri with max. power [[Power]] W"
+  },
+  "hint": {
+    "en": "Start charging of battery (Time-of-Use)"
+  },
+  "args": [
+    {
+      "type": "number",
+      "name": "Power",
+      "placeholder": {
+        "en": "Max. power from grid (0-46.000 W)"
+      },
+      "min": 0,
+      "max": 46000,
+      "step": 1
+    }
+  ]
+}

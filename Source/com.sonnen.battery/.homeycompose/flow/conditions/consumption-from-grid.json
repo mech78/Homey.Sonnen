@@ -1,0 +1,22 @@
+{
+  "title": {
+    "en": "Consumption from grid"
+  },
+  "titleFormatted": {
+    "en": "Consuming watts from grid is greater than [[Power]] W"
+  },
+  "hint": {
+    "en": "Is consuming power from grid."
+  },
+  "args": [
+    {
+      "type": "number",
+      "name": "Power",
+      "placeholder": {
+        "en": "Power (W)"
+      },
+      "min": 1,
+      "step": 1
+    }
+  ]
+}

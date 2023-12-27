@@ -12,6 +12,8 @@
     "consumption_capability",
     "feed_grid_capability",
     "online_capability",
+    "to_battery_capability",
+    "from_battery_capability",
     "number_battery_capability",
     "eclipse_capability",
     "state_inverter_capability",

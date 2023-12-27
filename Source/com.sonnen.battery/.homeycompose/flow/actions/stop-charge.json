@@ -1,0 +1,11 @@
+{
+  "title": {
+    "en": "Stop charge"
+  },
+  "titleFormatted": {
+    "en": "Stop charging of battery"
+  },
+  "hint": {
+    "en": "Stop charging of battery (Time-of-Use)"
+  }
+}
