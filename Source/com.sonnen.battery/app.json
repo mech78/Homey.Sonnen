@@ -154,7 +154,7 @@
           "en": "Pause Time-Of-Use"
         },
         "titleFormatted": {
-          "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be pause within this period."
+          "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period."
         },
         "hint": {
           "en": "Pause battery consumption within a given period of time"

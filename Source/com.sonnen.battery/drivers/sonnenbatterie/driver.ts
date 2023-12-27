@@ -41,6 +41,8 @@ class SonnenBatterieDriver extends Homey.Driver {
         "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`
       }
   
+      this.log("SCHEDULE", body);
+
       // Act
       axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
         .then((response) => {
@@ -66,7 +68,7 @@ class SonnenBatterieDriver extends Homey.Driver {
 
       // Calculate end from timeStart and hours.
       var timeStartHours    = +timeStart.split(":", 1)[0];
-      var timeStartMinutes  = +timeStart.split(":", 2)[1];
+      var timeStartMinutes  =  timeStart.split(":", 2)[1];
       var timeEndHours = (timeStartHours + hours)%24; // Handle overflow.
       var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
 
@@ -86,6 +88,8 @@ class SonnenBatterieDriver extends Homey.Driver {
       var body = {
         "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`
       }
+
+      this.log("SCHEDULE", body);
   
       // Act
       axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
@@ -118,6 +122,8 @@ class SonnenBatterieDriver extends Homey.Driver {
       var body = {
         "EM_ToU_Schedule": `[]`
       }
+
+      this.log("SCHEDULE", body);
   
       // Act
       axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
@@ -155,6 +161,8 @@ class SonnenBatterieDriver extends Homey.Driver {
         "EM_ToU_Schedule": `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":0}]`
       }
   
+      this.log("SCHEDULE", body);
+
       // Act
       axios.put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
         .then((response) => {
