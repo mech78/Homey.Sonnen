@@ -1,6 +1,6 @@
 {
     "type": "string",
-    "title": { "en": "Capacity", "nl": "Capaciteit", "dk": "Kapacitet" },
+    "title": { "en": "Capacity", "nl": "Capaciteit", "dk": "Kapacitet", "de": "Kapazität" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

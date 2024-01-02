@@ -1,10 +1,10 @@
 {
     "type": "number",
-    "title": { "en": "To battery", "da": "Til batteri" },
+    "title": { "en": "To battery", "da": "Til batteri", "de": "Zur Batterie", "nl": "Naar batterij" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
-    "units": { "en": "W" },
+    "units": { "en": "W", "da": "W", "de": "W", "nl": "W" },
     "min": 0,
     "decimals": 0,
     "insights": true,

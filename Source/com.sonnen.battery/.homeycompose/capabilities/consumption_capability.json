@@ -1,10 +1,10 @@
 {
     "type": "number",
-    "title": { "en": "Consumption", "da": "Forbrug" },
+    "title": { "en": "Consumption", "da": "Forbrug", "de": "Ausgaben", "nl":"Uitgaven" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
-    "units": { "en": "kW" },
+    "units": { "en": "kW", "de": "kW", "da": "kW", "nl": "kW" },
     "min": 0,
     "decimals": 3,
     "insights": true,

@@ -1,15 +1,21 @@
 {
   "title": {
     "en": "Deliver to grid",
-    "da": "Leverer til net"
+    "da": "Leverer til net",
+    "de": "An das Netz liefern",
+    "nl": "Leveren aan het net"
   },
   "titleFormatted": {
     "en": "Deliver to grid !{{is|isn't}} greater than [[Power]] W",
-    "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W"
+    "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W",
+    "de": "Die Lieferung an das Netz !{{ist|ist nicht}} größer als [[Power]] W",
+    "nl": "Leveren aan net !{{is|is niet}} groter dan [[Power]] W"
   },
   "hint": {
     "en": "Deliverying power to grid",
-    "da": "Leverer strøm til nettet"
+    "da": "Leverer strøm til nettet",
+    "de": "Lieferung von Strom an das Netz",
+    "nl": "Stroom leveren aan het net"
   },
   "args": [
     {
@@ -17,7 +23,9 @@
       "name": "Power",
       "placeholder": {
         "en": "Power (W)",
-        "da": "Watt (W)"
+        "da": "Watt (W)",
+        "de": "Power (W)",
+        "nl": "Power (W)"
       },
       "min": 1,
       "step": 1

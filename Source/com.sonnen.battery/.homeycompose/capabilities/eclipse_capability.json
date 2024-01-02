@@ -1,6 +1,6 @@
 {
     "type": "string",
-    "title": { "en": "Eclipse color", "da": "Cirkel farve" },
+    "title": { "en": "Eclipse color", "da": "Cirkel farve", "nl":"Eclipse kleur", "de": "Eclipse-Farbe" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

@@ -1,6 +1,6 @@
 {
     "type": "number",
-    "title": { "en": "Grid", "da": "Fra net" },
+    "title": { "en": "From grid", "da": "Fra net", "de":"Vom Gitter", "nl": "Uit rooster" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

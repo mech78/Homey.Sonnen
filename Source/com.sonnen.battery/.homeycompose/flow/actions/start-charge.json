@@ -1,15 +1,21 @@
 {
   "title": {
     "en": "Start charge",
-    "da": "Start opladning"
+    "da": "Start opladning",
+    "nl": "Beginnen met opladen",
+    "de": "Ladung starten"
   },
   "titleFormatted": {
     "en": "Start charging of batteri with max. power [[Power]] W",
-    "da": "Start opladning af batteri med max. power [[Power]] W"
+    "da": "Start opladning af batteri med max. power [[Power]] W",
+    "de": "Laden Sie die Batterie mit max. Leistung [[Power]] W",
+    "nl": "Begin met het opladen van de batterij met max. stroom [[Power]] W"
   },
   "hint": {
     "en": "Start charging of battery (Time-of-Use)",
-    "da": "Start opladning af batteri (Time-of-Use)"
+    "da": "Start opladning af batteri (Time-of-Use)",
+    "de": "Laden Sie den Akku auf (Time-of-Use)",
+    "nl": "Begin met het opladen van de batterij (Time-of-Use)"
   },
   "args": [
     {
@@ -17,7 +23,9 @@
       "name": "Power",
       "placeholder": {
         "en": "Max. power from grid (0-46.000 W)",
-        "da": "Max. power fra net (0-46.000 W)"
+        "da": "Max. power fra net (0-46.000 W)",
+        "de": "Max. Strom aus dem Netz (0-46.000 W)",
+        "nl": "Max. stroom uit het net (0-46.000 W)"
       },
       "min": 0,
       "max": 46000,

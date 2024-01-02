@@ -1,10 +1,14 @@
 {
   "title": {
     "en": "Power from battery",
-    "da": "Strøm fra batteri"
+    "da": "Strøm fra batteri",
+    "de": "",
+    "nl": ""
   },
   "hint": {
     "en": "Power !{{is|isn't}} delivered from battery",
-    "da": "Strøm !{{er|er ikke}} leveres fra batteri"
+    "da": "Strøm !{{er|er ikke}} leveres fra batteri",
+    "de": "Strom !{{wird|wird nicht}} ins Netz geliefert",
+    "nl": "Er !{{wordt|wordt geen}} stroom aan het net geleverd"
   }
 }

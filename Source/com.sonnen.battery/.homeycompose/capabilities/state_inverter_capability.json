@@ -1,6 +1,6 @@
 {
     "type": "string",
-    "title": { "en": "Inverter state", "da": "Inverter status" },
+    "title": { "en": "Inverter state", "da": "Inverter status", "nl": "Omvormer staat", "de": "Wechselrichterstatus" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

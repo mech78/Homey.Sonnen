@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -46,15 +46,21 @@
       {
         "title": {
           "en": "Battery level above",
-          "da": "Batteriniveau over"
+          "da": "Batteriniveau over",
+          "de": "Batteriestand oben",
+          "nl": "Batterijniveau boven"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} above [[Percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%"
+          "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%",
+          "de": "Der Batteriestand !{{liegt|liegt nicht}} darüber [[Percentage]]%",
+          "nl": "Batterijniveau !{{is|is niet}} hoger [[Percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
-          "da": "Batteriniveau er over eller lig med procent angivet."
+          "da": "Batteriniveau er over eller lig med procent angivet.",
+          "de": "Batteriestand über oder gleicher Prozentsatz angegeben.",
+          "nl": "Batterijniveau boven of gelijk percentage verstrekt."
         },
         "args": [
           {
@@ -62,7 +68,9 @@
             "name": "Percentage",
             "placeholder": {
               "en": "Battery percentage level",
-              "da": "Batteriniveau"
+              "da": "Batteriniveau",
+              "de": "Batterieprozentsatz",
+              "nl": "Batterijpercentageniveau"
             },
             "min": 0,
             "max": 100,
@@ -74,15 +82,21 @@
       {
         "title": {
           "en": "Battery level below",
-          "da": "Batteriniveau under"
+          "da": "Batteriniveau under",
+          "de": "Batteriestand unten",
+          "nl": "Batterijniveau hieronder"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} below [[Percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} under [[Percentage]]%"
+          "da": "Batteriniveau !{{er|er ikke}} under [[Percentage]]%",
+          "de": "Der Batteriestand !{{ist|ist nicht}} unten [[Percentage]]%",
+          "nl": "Het batterijniveau !{{is|is niet}} lager [[Percentage]]%"
         },
         "hint": {
           "en": "Battery level below percentage provided.",
-          "da": "Batteriniveau er under procent angivet."
+          "da": "Batteriniveau er under procent angivet.",
+          "de": "Der Batteriestand liegt unter dem angegebenen Prozentsatz",
+          "nl": "Batterijniveau lager dan aangegeven percentage"
         },
         "args": [
           {
@@ -90,7 +104,9 @@
             "name": "Percentage",
             "placeholder": {
               "en": "Battery percentage level",
-              "da": "Batteriniveau"
+              "da": "Batteriniveau",
+              "de": "Batterieprozentsatz",
+              "nl": "Batterijpercentageniveau"
             },
             "min": 0,
             "max": 100,
@@ -102,22 +118,31 @@
       {
         "title": {
           "en": "Consumption from grid",
-          "da": "Forbrug fra net"
+          "da": "Forbrug fra net",
+          "de": "Verbrauch aus dem Netz",
+          "nl": "Verbruik uit net"
         },
         "titleFormatted": {
           "en": "Consuming watts from grid !{{is|isn't}} greater than [[Power]] W",
-          "da": "Watt forbrug fra net !{{er|er ikke}} over [[Power]] W"
+          "da": "Watt forbrug fra net !{{er|er ikke}} over [[Power]] W",
+          "de": "Der Stromverbrauch aus dem Netz !{{ist|ist nicht}} größer als [[Power]] W",
+          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[Power]] W"
         },
         "hint": {
           "en": "Is consuming power from grid.",
-          "da": "Henter forbrug fra net"
+          "da": "Henter forbrug fra net",
+          "de": "Verbraucht Strom aus dem Netz",
+          "nl": "Verbruikt stroom van het elektriciteitsnet"
         },
         "args": [
           {
             "type": "number",
             "name": "Power",
             "placeholder": {
-              "en": "Power (W)"
+              "en": "Power (W)",
+              "da": "Watt (W)",
+              "de": "Power (W)",
+              "nl": "Power (W)"
             },
             "min": 1,
             "step": 1
@@ -128,15 +153,21 @@
       {
         "title": {
           "en": "Deliver to grid",
-          "da": "Leverer til net"
+          "da": "Leverer til net",
+          "de": "An das Netz liefern",
+          "nl": "Leveren aan het net"
         },
         "titleFormatted": {
           "en": "Deliver to grid !{{is|isn't}} greater than [[Power]] W",
-          "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W"
+          "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W",
+          "de": "Die Lieferung an das Netz !{{ist|ist nicht}} größer als [[Power]] W",
+          "nl": "Leveren aan net !{{is|is niet}} groter dan [[Power]] W"
         },
         "hint": {
           "en": "Deliverying power to grid",
-          "da": "Leverer strøm til nettet"
+          "da": "Leverer strøm til nettet",
+          "de": "Lieferung von Strom an das Netz",
+          "nl": "Stroom leveren aan het net"
         },
         "args": [
           {
@@ -144,7 +175,9 @@
             "name": "Power",
             "placeholder": {
               "en": "Power (W)",
-              "da": "Watt (W)"
+              "da": "Watt (W)",
+              "de": "Power (W)",
+              "nl": "Power (W)"
             },
             "min": 1,
             "step": 1
@@ -155,22 +188,30 @@
       {
         "title": {
           "en": "Power from battery",
-          "da": "Strøm fra batteri"
+          "da": "Strøm fra batteri",
+          "de": "",
+          "nl": ""
         },
         "hint": {
           "en": "Power !{{is|isn't}} delivered from battery",
-          "da": "Strøm !{{er|er ikke}} leveres fra batteri"
+          "da": "Strøm !{{er|er ikke}} leveres fra batteri",
+          "de": "Strom !{{wird|wird nicht}} ins Netz geliefert",
+          "nl": "Er !{{wordt|wordt geen}} stroom aan het net geleverd"
         },
         "id": "power-from-battery"
       },
       {
         "title": {
           "en": "Power to battery",
-          "da": "Strøm til batteri"
+          "da": "Strøm til batteri",
+          "de": "Strom zur Batterie",
+          "nl": "Stroom naar batterij"
         },
         "hint": {
           "en": "Battery !{{is|isn't}} charging",
-          "da": "Batteri !{{lader|lader ikke}}"
+          "da": "Batteri !{{lader|lader ikke}}",
+          "de": "Akku !{{wird|wird nicht}} geladen",
+          "nl": "Batterij !{{wordt opgeladen|laadt niet op}}"
         },
         "id": "power-to-battery"
       }
@@ -179,15 +220,21 @@
       {
         "title": {
           "en": "Start charge",
-          "da": "Start opladning"
+          "da": "Start opladning",
+          "nl": "Beginnen met opladen",
+          "de": "Ladung starten"
         },
         "titleFormatted": {
           "en": "Start charging of batteri with max. power [[Power]] W",
-          "da": "Start opladning af batteri med max. power [[Power]] W"
+          "da": "Start opladning af batteri med max. power [[Power]] W",
+          "de": "Laden Sie die Batterie mit max. Leistung [[Power]] W",
+          "nl": "Begin met het opladen van de batterij met max. stroom [[Power]] W"
         },
         "hint": {
           "en": "Start charging of battery (Time-of-Use)",
-          "da": "Start opladning af batteri (Time-of-Use)"
+          "da": "Start opladning af batteri (Time-of-Use)",
+          "de": "Laden Sie den Akku auf (Time-of-Use)",
+          "nl": "Begin met het opladen van de batterij (Time-of-Use)"
         },
         "args": [
           {
@@ -195,7 +242,9 @@
             "name": "Power",
             "placeholder": {
               "en": "Max. power from grid (0-46.000 W)",
-              "da": "Max. power fra net (0-46.000 W)"
+              "da": "Max. power fra net (0-46.000 W)",
+              "de": "Max. Strom aus dem Netz (0-46.000 W)",
+              "nl": "Max. stroom uit het net (0-46.000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -211,11 +260,15 @@
         },
         "titleFormatted": {
           "en": "Stop charging of battery",
-          "da": "Stop opladning af batteri"
+          "da": "Stop opladning af batteri",
+          "de": "Stoppen Sie den Ladevorgang des Akkus",
+          "nl": "Stop met het opladen van de batterij"
         },
         "hint": {
           "en": "Stop charging of battery (Time-of-Use)",
-          "da": "Stop opladning af batteri (Time-of-Use)"
+          "da": "Stop opladning af batteri (Time-of-Use)",
+          "de": "Stoppen Sie den Ladevorgang des Akkus (Time-of-Use)",
+          "nl": "Stop met het opladen van de batterij (Time-of-Use)"
         },
         "id": "stop-charge"
       },
@@ -423,7 +476,8 @@
       "title": {
         "en": "Capacity",
         "nl": "Capaciteit",
-        "dk": "Kapacitet"
+        "dk": "Kapacitet",
+        "de": "Kapazität"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -434,13 +488,18 @@
       "type": "number",
       "title": {
         "en": "Consumption",
-        "da": "Forbrug"
+        "da": "Forbrug",
+        "de": "Ausgaben",
+        "nl": "Uitgaven"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "units": {
-        "en": "kW"
+        "en": "kW",
+        "de": "kW",
+        "da": "kW",
+        "nl": "kW"
       },
       "min": 0,
       "decimals": 3,
@@ -451,7 +510,9 @@
       "type": "string",
       "title": {
         "en": "Eclipse color",
-        "da": "Cirkel farve"
+        "da": "Cirkel farve",
+        "nl": "Eclipse kleur",
+        "de": "Eclipse-Farbe"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -462,8 +523,10 @@
     "feed_grid_capability": {
       "type": "number",
       "title": {
-        "en": "Grid",
-        "da": "Fra net"
+        "en": "From grid",
+        "da": "Fra net",
+        "de": "Vom Gitter",
+        "nl": "Uit rooster"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -480,13 +543,18 @@
       "type": "number",
       "title": {
         "en": "From battery",
-        "da": "Fra batteri"
+        "da": "Fra batteri",
+        "nl": "Van de batterij",
+        "de": "Aus der Batterie"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "units": {
-        "en": "W"
+        "en": "W",
+        "da": "W",
+        "de": "W",
+        "nl": "W"
       },
       "min": 0,
       "decimals": 0,
@@ -497,13 +565,18 @@
       "type": "number",
       "title": {
         "en": "#Batteries",
-        "da": "#Batterier"
+        "da": "#Batterier",
+        "de": "#Batterien",
+        "nl": "#Batterijen"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "units": {
-        "en": "#"
+        "en": "#",
+        "da": "#",
+        "de": "#",
+        "nl": "#"
       },
       "min": 0,
       "decimals": 0,
@@ -514,7 +587,9 @@
       "type": "boolean",
       "title": {
         "en": "Active",
-        "da": "Aktiv"
+        "da": "Aktiv",
+        "nl": "Actief",
+        "de": "Aktiv"
       },
       "getable": true,
       "setable": false,
@@ -525,25 +600,32 @@
       "insightsTitleTrue": {
         "en": "Connection alarm turned on",
         "nl": "Connection alarm ging af",
-        "da": "Forbindelsesalarm blev aktiveret"
+        "da": "Forbindelsesalarm blev aktiveret",
+        "de": "Verbindungsalarm aktiviert"
       },
       "insightsTitleFalse": {
         "en": "Connection alarm turned off",
         "nl": "Connection alarm ging uit",
-        "da": "Forbindelsesalarm blev deaktiveret"
+        "da": "Forbindelsesalarm blev deaktiveret",
+        "de": "Verbindungsalarm ausgeschaltet"
       }
     },
     "production_capability": {
       "type": "number",
       "title": {
         "en": "Production now",
-        "da": "Produktion"
+        "da": "Produktion",
+        "de": "Produktion jetzt",
+        "nl": "productie nu"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "units": {
-        "en": "kW"
+        "en": "kW",
+        "da": "kW",
+        "de": "kW",
+        "nl": "kW"
       },
       "min": 0,
       "decimals": 3,
@@ -553,7 +635,10 @@
     "state_bms_capability": {
       "type": "string",
       "title": {
-        "en": "BMS"
+        "en": "BMS",
+        "da": "BMS",
+        "de": "BMS",
+        "nl": "BMS"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -564,7 +649,9 @@
       "type": "string",
       "title": {
         "en": "Inverter state",
-        "da": "Inverter status"
+        "da": "Inverter status",
+        "nl": "Omvormer staat",
+        "de": "Wechselrichterstatus"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -575,13 +662,18 @@
       "type": "number",
       "title": {
         "en": "To battery",
-        "da": "Til batteri"
+        "da": "Til batteri",
+        "de": "Zur Batterie",
+        "nl": "Naar batterij"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "units": {
-        "en": "W"
+        "en": "W",
+        "da": "W",
+        "de": "W",
+        "nl": "W"
       },
       "min": 0,
       "decimals": 0,
