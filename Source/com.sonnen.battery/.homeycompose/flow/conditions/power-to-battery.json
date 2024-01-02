@@ -1,8 +1,10 @@
 {
   "title": {
-    "en": "Power to battery"
+    "en": "Power to battery",
+    "da": "Strøm til batteri"
   },
   "hint": {
-    "en": "Battery is charging"
+    "en": "Battery !{{is|isn't}} charging",
+    "da": "Batteri !{{lader|lader ikke}}"
   }
 }

@@ -1,5 +1,4 @@
 import Homey from 'homey';
-import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 
@@ -118,10 +117,12 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     // Conditions:
-    const fromBatteryTrigger  = this.homey.flow.getConditionCard("power-from-battery");
-    const toBatteryTrigger    = this.homey.flow.getConditionCard("power-to-battery");
-    const toGridTrigger       = this.homey.flow.getConditionCard("deliver-to-grid");
-    const fromGridTrigger     = this.homey.flow.getConditionCard("consumption-from-grid");
+    const fromBatteryTrigger    = this.homey.flow.getConditionCard("power-from-battery");
+    const toBatteryTrigger      = this.homey.flow.getConditionCard("power-to-battery");
+    const toGridTrigger         = this.homey.flow.getConditionCard("deliver-to-grid");
+    const fromGridTrigger       = this.homey.flow.getConditionCard("consumption-from-grid");
+    const batteryLevelBelowCard = this.homey.flow.getConditionCard("battery-level-below");
+    const batteryLevelAboveCard = this.homey.flow.getConditionCard("battery-level-above");
 
     fromBatteryTrigger.registerRunListener(async (args) => {
       return (+this.getDevices()[0].getCapabilityValue("from_battery_capability")) > 0;
@@ -151,7 +152,24 @@ class SonnenBatterieDriver extends Homey.Driver {
       return (fromGridValue > args.Power);
     });
 
-    
+    batteryLevelBelowCard.registerRunListener(async (args) => {      
+      var argPercentage = args.Percentage;
+      var batteryLevel  = +this.getDevices()[0].getCapabilityValue("measure_battery");
+      
+      this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
+
+      return (batteryLevel < argPercentage);
+    });
+
+    batteryLevelAboveCard.registerRunListener(async (args) => {      
+      var argPercentage = args.Percentage;
+      var batteryLevel  = +this.getDevices()[0].getCapabilityValue("measure_battery");
+      
+      this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
+
+      return (batteryLevel >= argPercentage);
+    });
+
 
   }
 

@@ -16,5 +16,11 @@
   },
   "1.0.5": {
     "en": "New capabilities added (from/to battery). More conditions added."
+  },
+  "1.0.6": {
+    "en": "Battery level conditions added."
+  },
+  "1.0.7": {
+    "en": "Localization (DA) added."
   }
 }

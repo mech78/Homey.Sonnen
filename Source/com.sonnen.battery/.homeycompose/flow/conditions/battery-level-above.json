@@ -1,0 +1,27 @@
+{
+  "title": {
+    "en": "Battery level above",
+    "da": "Batteriniveau over"
+  },
+  "titleFormatted": {
+    "en": "Battery level !{{is|isn't}} above [[Percentage]]%",
+    "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%"
+  },
+  "hint": {
+    "en": "Battery level above or equal percentage provided.",
+    "da": "Batteriniveau er over eller lig med procent angivet."
+  },
+  "args": [
+    {
+      "type": "number",
+      "name": "Percentage",
+      "placeholder": {
+        "en": "Battery percentage level",
+        "da": "Batteriniveau"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1
+    }
+  ]
+}

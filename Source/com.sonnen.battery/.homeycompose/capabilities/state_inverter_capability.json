@@ -1,6 +1,6 @@
 {
     "type": "string",
-    "title": { "en": "Inverter state" },
+    "title": { "en": "Inverter state", "da": "Inverter status" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

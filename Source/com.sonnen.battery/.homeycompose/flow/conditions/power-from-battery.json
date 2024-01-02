@@ -1,8 +1,10 @@
 {
   "title": {
-    "en": "Power from battery"
+    "en": "Power from battery",
+    "da": "Strøm fra batteri"
   },
   "hint": {
-    "en": "Power is delivered from battery"
+    "en": "Power !{{is|isn't}} delivered from battery",
+    "da": "Strøm !{{er|er ikke}} leveres fra batteri"
   }
 }

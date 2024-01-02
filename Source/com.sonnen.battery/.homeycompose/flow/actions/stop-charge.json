@@ -1,11 +1,14 @@
 {
   "title": {
-    "en": "Stop charge"
+    "en": "Stop charge",
+    "da": "Stop opladning"
   },
   "titleFormatted": {
-    "en": "Stop charging of battery"
+    "en": "Stop charging of battery",
+    "da": "Stop opladning af batteri"
   },
   "hint": {
-    "en": "Stop charging of battery (Time-of-Use)"
+    "en": "Stop charging of battery (Time-of-Use)",
+    "da": "Stop opladning af batteri (Time-of-Use)"
   }
 }

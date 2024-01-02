@@ -1,19 +1,23 @@
 {
   "title": {
-    "en": "Deliver to grid"
+    "en": "Deliver to grid",
+    "da": "Leverer til net"
   },
   "titleFormatted": {
-    "en": "Deliver to grid is greater than [[Power]] W"
+    "en": "Deliver to grid !{{is|isn't}} greater than [[Power]] W",
+    "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W"
   },
   "hint": {
-    "en": "Deliverying power to grid"
+    "en": "Deliverying power to grid",
+    "da": "Leverer strøm til nettet"
   },
   "args": [
     {
       "type": "number",
       "name": "Power",
       "placeholder": {
-        "en": "Power (W)"
+        "en": "Power (W)",
+        "da": "Watt (W)"
       },
       "min": 1,
       "step": 1
