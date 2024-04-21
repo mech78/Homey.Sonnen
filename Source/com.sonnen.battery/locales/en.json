@@ -23,11 +23,11 @@
     },
     "stateBms": {
       "ready": "ready",
-      "notReady": "not ready"
+      "notready": "not ready"
     },
     "stateInverter": {
       "ready": "ready",
-      "notReady": "not ready",
+      "notready": "not ready",
       "ongrid": "on grid"
     }
   }
