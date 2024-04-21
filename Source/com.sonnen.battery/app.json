@@ -47,19 +47,19 @@
         "title": {
           "en": "Battery level above",
           "da": "Batteriniveau over",
-          "de": "Batteriestand oben",
+          "de": "Batteriestand über",
           "nl": "Batterijniveau boven"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} above [[Percentage]]%",
           "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%",
-          "de": "Der Batteriestand !{{liegt|liegt nicht}} darüber [[Percentage]]%",
+          "de": "Batteriestand !{{liegt|liegt nicht}} über [[Percentage]]%",
           "nl": "Batterijniveau !{{is|is niet}} hoger [[Percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
           "da": "Batteriniveau er over eller lig med procent angivet.",
-          "de": "Batteriestand über oder gleicher Prozentsatz angegeben.",
+          "de": "Batteriestand über oder gleich dem angegebenen Prozentsatz.",
           "nl": "Batterijniveau boven of gelijk percentage verstrekt."
         },
         "args": [
@@ -69,7 +69,7 @@
             "placeholder": {
               "en": "Battery percentage level",
               "da": "Batteriniveau",
-              "de": "Batterieprozentsatz",
+              "de": "Prozentualer Batteriestand",
               "nl": "Batterijpercentageniveau"
             },
             "min": 0,
@@ -83,19 +83,19 @@
         "title": {
           "en": "Battery level below",
           "da": "Batteriniveau under",
-          "de": "Batteriestand unten",
+          "de": "Batteriestand unter",
           "nl": "Batterijniveau hieronder"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} below [[Percentage]]%",
           "da": "Batteriniveau !{{er|er ikke}} under [[Percentage]]%",
-          "de": "Der Batteriestand !{{ist|ist nicht}} unten [[Percentage]]%",
+          "de": "Batteriestand !{{ist|ist nicht}} unter [[Percentage]]%",
           "nl": "Het batterijniveau !{{is|is niet}} lager [[Percentage]]%"
         },
         "hint": {
           "en": "Battery level below percentage provided.",
           "da": "Batteriniveau er under procent angivet.",
-          "de": "Der Batteriestand liegt unter dem angegebenen Prozentsatz",
+          "de": "Batteriestand unter dem angegebenen Prozentwert.",
           "nl": "Batterijniveau lager dan aangegeven percentage"
         },
         "args": [
@@ -105,7 +105,7 @@
             "placeholder": {
               "en": "Battery percentage level",
               "da": "Batteriniveau",
-              "de": "Batterieprozentsatz",
+              "de": "Prozentualer Batteriestand",
               "nl": "Batterijpercentageniveau"
             },
             "min": 0,
@@ -119,19 +119,19 @@
         "title": {
           "en": "Consumption from grid",
           "da": "Forbrug fra net",
-          "de": "Verbrauch aus dem Netz",
+          "de": "Netzbezug",
           "nl": "Verbruik uit net"
         },
         "titleFormatted": {
           "en": "Consuming watts from grid !{{is|isn't}} greater than [[Power]] W",
           "da": "Watt forbrug fra net !{{er|er ikke}} over [[Power]] W",
-          "de": "Der Stromverbrauch aus dem Netz !{{ist|ist nicht}} größer als [[Power]] W",
+          "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[Power]] W",
           "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[Power]] W"
         },
         "hint": {
           "en": "Is consuming power from grid.",
           "da": "Henter forbrug fra net",
-          "de": "Verbraucht Strom aus dem Netz",
+          "de": "Bezug aus dem Stromnetz",
           "nl": "Verbruikt stroom van het elektriciteitsnet"
         },
         "args": [
@@ -141,7 +141,7 @@
             "placeholder": {
               "en": "Power (W)",
               "da": "Watt (W)",
-              "de": "Power (W)",
+              "de": "Leistung (W)",
               "nl": "Power (W)"
             },
             "min": 1,
@@ -154,19 +154,19 @@
         "title": {
           "en": "Deliver to grid",
           "da": "Leverer til net",
-          "de": "An das Netz liefern",
+          "de": "Netzeinspeisung",
           "nl": "Leveren aan het net"
         },
         "titleFormatted": {
           "en": "Deliver to grid !{{is|isn't}} greater than [[Power]] W",
           "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W",
-          "de": "Die Lieferung an das Netz !{{ist|ist nicht}} größer als [[Power]] W",
+          "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[Power]] W",
           "nl": "Leveren aan net !{{is|is niet}} groter dan [[Power]] W"
         },
         "hint": {
           "en": "Deliverying power to grid",
           "da": "Leverer strøm til nettet",
-          "de": "Lieferung von Strom an das Netz",
+          "de": "Einspeisung in das Stromnetz",
           "nl": "Stroom leveren aan het net"
         },
         "args": [
@@ -176,7 +176,7 @@
             "placeholder": {
               "en": "Power (W)",
               "da": "Watt (W)",
-              "de": "Power (W)",
+              "de": "Leistung (W)",
               "nl": "Power (W)"
             },
             "min": 1,
@@ -189,13 +189,13 @@
         "title": {
           "en": "Power from battery",
           "da": "Strøm fra batteri",
-          "de": "",
+          "de": "Leistungsabgabe Batterie",
           "nl": ""
         },
         "hint": {
           "en": "Power !{{is|isn't}} delivered from battery",
           "da": "Strøm !{{er|er ikke}} leveres fra batteri",
-          "de": "Strom !{{wird|wird nicht}} ins Netz geliefert",
+          "de": "Leistung !{{wird|wird nicht}} aus der Batterie geliefert",
           "nl": "Er !{{wordt|wordt geen}} stroom aan het net geleverd"
         },
         "id": "power-from-battery"
@@ -204,13 +204,13 @@
         "title": {
           "en": "Power to battery",
           "da": "Strøm til batteri",
-          "de": "Strom zur Batterie",
+          "de": "Leistungsaufnahme Batterie",
           "nl": "Stroom naar batterij"
         },
         "hint": {
           "en": "Battery !{{is|isn't}} charging",
           "da": "Batteri !{{lader|lader ikke}}",
-          "de": "Akku !{{wird|wird nicht}} geladen",
+          "de": "Batterie !{{wird|wird nicht}} geladen",
           "nl": "Batterij !{{wordt opgeladen|laadt niet op}}"
         },
         "id": "power-to-battery"
@@ -222,18 +222,18 @@
           "en": "Start charge",
           "da": "Start opladning",
           "nl": "Beginnen met opladen",
-          "de": "Ladung starten"
+          "de": "Starte Ladevorgang"
         },
         "titleFormatted": {
           "en": "Start charging of batteri with max. power [[Power]] W",
           "da": "Start opladning af batteri med max. power [[Power]] W",
-          "de": "Laden Sie die Batterie mit max. Leistung [[Power]] W",
+          "de": "Starte Ladevorgang der Batterie mit max. Leistung [[Power]] W",
           "nl": "Begin met het opladen van de batterij met max. stroom [[Power]] W"
         },
         "hint": {
           "en": "Start charging of battery (Time-of-Use)",
           "da": "Start opladning af batteri (Time-of-Use)",
-          "de": "Laden Sie den Akku auf (Time-of-Use)",
+          "de": "Starte Ladevorgang der Batterie (Time-of-Use)",
           "nl": "Begin met het opladen van de batterij (Time-of-Use)"
         },
         "args": [
@@ -241,10 +241,10 @@
             "type": "number",
             "name": "Power",
             "placeholder": {
-              "en": "Max. power from grid (0-46.000 W)",
-              "da": "Max. power fra net (0-46.000 W)",
-              "de": "Max. Strom aus dem Netz (0-46.000 W)",
-              "nl": "Max. stroom uit het net (0-46.000 W)"
+              "en": "Max. power from grid (0-46000 W)",
+              "da": "Max. power fra net (0-46000 W)",
+              "de": "Max. Leistung aus dem Netz (0-46000 W)",
+              "nl": "Max. stroom uit het net (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -256,18 +256,19 @@
       {
         "title": {
           "en": "Stop charge",
-          "da": "Stop opladning"
+          "da": "Stop opladning",
+          "de": "Stoppe Ladevorgang"
         },
         "titleFormatted": {
           "en": "Stop charging of battery",
           "da": "Stop opladning af batteri",
-          "de": "Stoppen Sie den Ladevorgang des Akkus",
+          "de": "Stoppe Ladevorgang der Batterie",
           "nl": "Stop met het opladen van de batterij"
         },
         "hint": {
           "en": "Stop charging of battery (Time-of-Use)",
           "da": "Stop opladning af batteri (Time-of-Use)",
-          "de": "Stoppen Sie den Ladevorgang des Akkus (Time-of-Use)",
+          "de": "Stoppe Ladevorgang der Batterie (Time-of-Use)",
           "nl": "Stop met het opladen van de batterij (Time-of-Use)"
         },
         "id": "stop-charge"
@@ -275,13 +276,16 @@
       {
         "id": "set-time-of-use",
         "title": {
-          "en": "Set Time-Of-Use"
+          "en": "Set Time-Of-Use",
+          "de": "Zeitabhängige Steuerung einstellen"
         },
         "titleFormatted": {
-          "en": "Set Time-Of-Use starting [[Start]] and ending [[End]] with charge of maximum [[MaxPower]]W within this period."
+          "en": "Set Time-Of-Use starting [[Start]] and ending [[End]] with charge of maximum [[MaxPower]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[Start]] und endend um [[End]] mit maximaler Leistung [[MaxPower]]W in dieser Zeitspanne."
         },
         "hint": {
-          "en": "Set period for Time-Of-Use"
+          "en": "Set period for Time-Of-Use",
+          "de": "Einstellen der Dauer der zeitabhängigen Steuerung"
         },
         "args": [
           {
@@ -293,21 +297,24 @@
             "type": "time",
             "name": "Start",
             "placeholder": {
-              "en": "Enter starting time for new charge event"
+              "en": "Enter starting time for new charge event",
+              "de": "Startzeit für neues Ladeereignis eingeben"
             }
           },
           {
             "type": "time",
             "name": "End",
             "placeholder": {
-              "en": "Enter end time for the new charge event"
+              "en": "Enter end time for the new charge event",
+              "de": "Endzeit für neues Ladeereignis eingeben"
             }
           },
           {
             "type": "number",
             "name": "MaxPower",
             "placeholder": {
-              "en": "Max. power from grid (0-46000 W)"
+              "en": "Max. power from grid (0-46000 W)",
+              "de": "Max. Leistung aus dem Netz (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -318,13 +325,16 @@
       {
         "id": "set-time-of-use-hours",
         "title": {
-          "en": "Set Time-Of-Use with hours"
+          "en": "Set Time-Of-Use with hours",
+          "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen"
         },
         "titleFormatted": {
-          "en": "Set Time-Of-Use starting [[Start]] and ending after hours of [[Hours]] with charge of maximum [[MaxPower]]W within this period."
+          "en": "Set Time-Of-Use starting [[Start]] and ending after hours of [[Hours]] with charge of maximum [[MaxPower]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[Start]] und nach [[Hours]] Stunden endend mit maximaler Leistung [[MaxPower]]W in dieser Zeitspanne."
         },
         "hint": {
-          "en": "Set period for Time-Of-Use"
+          "en": "Set period for Time-Of-Use",
+          "de": "Einstellen der Dauer der zeitabhängigen Steuerung"
         },
         "args": [
           {
@@ -336,14 +346,16 @@
             "type": "time",
             "name": "Start",
             "placeholder": {
-              "en": "Enter starting time for new charge event"
+              "en": "Enter starting time for new charge event",
+              "de": "Startzeit für neues Ladeereignis eingeben"
             }
           },
           {
             "type": "number",
             "name": "Hours",
             "placeholder": {
-              "en": "Specify hours after 'Start' to end of schedule"
+              "en": "Specify hours after 'Start' to end of schedule",
+              "de": "Stundenanzahl ab dem 'Start' bis zum Ende des Ladevorgangs"
             },
             "min": 0,
             "max": 24,
@@ -353,7 +365,8 @@
             "type": "number",
             "name": "MaxPower",
             "placeholder": {
-              "en": "Max. power from grid (0-46000 W)"
+              "en": "Max. power from grid (0-46000 W)",
+              "de": "Max. Leistung aus dem Netz (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -364,10 +377,12 @@
       {
         "id": "reset-time-of-use",
         "title": {
-          "en": "Reset Time-Of-Use"
+          "en": "Reset Time-Of-Use",
+          "de": "Zurücksetzen der zeitabhängigen Steuerung"
         },
         "hint": {
-          "en": "Resets the schedule for Time-Of-Use"
+          "en": "Resets the schedule for Time-Of-Use",
+          "de": "Zurücksetzen des Zeitplans der zeitabhängigen Steuerung"
         },
         "args": [
           {
@@ -380,13 +395,16 @@
       {
         "id": "pause-time-of-use",
         "title": {
-          "en": "Pause Time-Of-Use"
+          "en": "Pause Time-Of-Use",
+          "de": "Pausieren der zeitabhängigen Steuerung"
         },
         "titleFormatted": {
-          "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period."
+          "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period.",
+          "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[Start]] und endend um [[End]]. Die Batterie wird während dieser Zeitspanne pausiert."
         },
         "hint": {
-          "en": "Pause battery consumption within a given period of time"
+          "en": "Pause battery consumption within a given period of time",
+          "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne"
         },
         "args": [
           {
@@ -398,14 +416,16 @@
             "type": "time",
             "name": "Start",
             "placeholder": {
-              "en": "Enter starting time for new charge event"
+              "en": "Enter starting time for new charge event",
+              "de": "Startzeit für neues Ladeereignis eingeben"
             }
           },
           {
             "type": "time",
             "name": "End",
             "placeholder": {
-              "en": "Enter end time for the new charge event"
+              "en": "Enter end time for the new charge event",
+              "de": "Endzeit für neues Ladeereignis eingeben"
             }
           }
         ]
@@ -415,7 +435,8 @@
   "drivers": [
     {
       "name": {
-        "en": "sonnenBatterie"
+        "en": "sonnenBatterie",
+        "de": "sonnenBatterie"
       },
       "class": "other",
       "capabilities": [
@@ -489,7 +510,7 @@
       "title": {
         "en": "Consumption",
         "da": "Forbrug",
-        "de": "Ausgaben",
+        "de": "Verbrauch",
         "nl": "Uitgaven"
       },
       "uiComponent": "sensor",
@@ -525,7 +546,7 @@
       "title": {
         "en": "From grid",
         "da": "Fra net",
-        "de": "Vom Gitter",
+        "de": "Netzbezug",
         "nl": "Uit rooster"
       },
       "uiComponent": "sensor",
@@ -545,7 +566,7 @@
         "en": "From battery",
         "da": "Fra batteri",
         "nl": "Van de batterij",
-        "de": "Aus der Batterie"
+        "de": "Endladeleistung"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -615,7 +636,7 @@
       "title": {
         "en": "Production now",
         "da": "Produktion",
-        "de": "Produktion jetzt",
+        "de": "Produktion",
         "nl": "productie nu"
       },
       "uiComponent": "sensor",
@@ -663,7 +684,7 @@
       "title": {
         "en": "To battery",
         "da": "Til batteri",
-        "de": "Zur Batterie",
+        "de": "Ladeleistung",
         "nl": "Naar batterij"
       },
       "uiComponent": "sensor",

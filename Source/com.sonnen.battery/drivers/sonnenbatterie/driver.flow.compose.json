@@ -3,34 +3,40 @@
     {
       "id": "set-time-of-use",
       "title": {
-        "en": "Set Time-Of-Use"
+        "en": "Set Time-Of-Use",
+        "de": "Zeitabhängige Steuerung einstellen"
       },
       "titleFormatted": {
-        "en": "Set Time-Of-Use starting [[Start]] and ending [[End]] with charge of maximum [[MaxPower]]W within this period."
+        "en": "Set Time-Of-Use starting [[Start]] and ending [[End]] with charge of maximum [[MaxPower]]W within this period.",
+        "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[Start]] und endend um [[End]] mit maximaler Leistung [[MaxPower]]W in dieser Zeitspanne."
       },
       "hint": {
-        "en": "Set period for Time-Of-Use"
+        "en": "Set period for Time-Of-Use",
+        "de": "Einstellen der Dauer der zeitabhängigen Steuerung"
       },
       "args": [
         {
           "type": "time",
           "name": "Start",
           "placeholder": {
-            "en": "Enter starting time for new charge event"
+            "en": "Enter starting time for new charge event",
+            "de": "Startzeit für neues Ladeereignis eingeben"
           }
         },
         {
           "type": "time",
           "name": "End",
           "placeholder": {
-            "en": "Enter end time for the new charge event"
+            "en": "Enter end time for the new charge event",
+            "de": "Endzeit für neues Ladeereignis eingeben"
           }
         },
         {
           "type": "number",
           "name": "MaxPower",
           "placeholder": {
-            "en": "Max. power from grid (0-46000 W)"
+            "en": "Max. power from grid (0-46000 W)",
+            "de": "Max. Leistung aus dem Netz (0-46000 W)"
           },
           "min": 0,
           "max": 46000,
@@ -41,27 +47,32 @@
     {
       "id": "set-time-of-use-hours",
       "title": {
-        "en": "Set Time-Of-Use with hours"
+        "en": "Set Time-Of-Use with hours",
+        "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen"
       },
       "titleFormatted": {
-        "en": "Set Time-Of-Use starting [[Start]] and ending after hours of [[Hours]] with charge of maximum [[MaxPower]]W within this period."
+        "en": "Set Time-Of-Use starting [[Start]] and ending after hours of [[Hours]] with charge of maximum [[MaxPower]]W within this period.",
+        "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[Start]] und nach [[Hours]] Stunden endend mit maximaler Leistung [[MaxPower]]W in dieser Zeitspanne."
       },
       "hint": {
-        "en": "Set period for Time-Of-Use"
+        "en": "Set period for Time-Of-Use",
+        "de": "Einstellen der Dauer der zeitabhängigen Steuerung"
       },
       "args": [
         {
           "type": "time",
           "name": "Start",
           "placeholder": {
-            "en": "Enter starting time for new charge event"
+            "en": "Enter starting time for new charge event",
+            "de": "Startzeit für neues Ladeereignis eingeben"
           }
         },
         {
           "type": "number",
           "name": "Hours",
           "placeholder": {
-            "en": "Specify hours after 'Start' to end of schedule"
+            "en": "Specify hours after 'Start' to end of schedule",
+            "de": "Stundenanzahl ab dem 'Start' bis zum Ende des Ladevorgangs"
           },
           "min": 0,
           "max": 24,
@@ -71,7 +82,8 @@
           "type": "number",
           "name": "MaxPower",
           "placeholder": {
-            "en": "Max. power from grid (0-46000 W)"
+            "en": "Max. power from grid (0-46000 W)",
+            "de": "Max. Leistung aus dem Netz (0-46000 W)"
           },
           "min": 0,
           "max": 46000,
@@ -82,36 +94,43 @@
     {
       "id": "reset-time-of-use",
       "title": {
-        "en": "Reset Time-Of-Use"
+        "en": "Reset Time-Of-Use",
+        "de": "Zurücksetzen der zeitabhängigen Steuerung"
       },
       "hint": {
-        "en": "Resets the schedule for Time-Of-Use"
+        "en": "Resets the schedule for Time-Of-Use",
+        "de": "Zurücksetzen des Zeitplans der zeitabhängigen Steuerung"
       }
     },
     {
       "id": "pause-time-of-use",
       "title": {
-        "en": "Pause Time-Of-Use"
+        "en": "Pause Time-Of-Use",
+        "de": "Pausieren der zeitabhängigen Steuerung"
       },            
       "titleFormatted": {
-        "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period."
+        "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period.",
+        "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[Start]] und endend um [[End]]. Die Batterie wird während dieser Zeitspanne pausiert."
       },
       "hint": {
-        "en": "Pause battery consumption within a given period of time"
+        "en": "Pause battery consumption within a given period of time",
+        "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne"
       },
       "args": [
         {
           "type": "time",
           "name": "Start",
           "placeholder": {
-            "en": "Enter starting time for new charge event"
+            "en": "Enter starting time for new charge event",
+            "de": "Startzeit für neues Ladeereignis eingeben"
           }
         },
         {
           "type": "time",
           "name": "End",
           "placeholder": {
-            "en": "Enter end time for the new charge event"
+            "en": "Enter end time for the new charge event",
+            "de": "Endzeit für neues Ladeereignis eingeben"
           }
         }
       ]

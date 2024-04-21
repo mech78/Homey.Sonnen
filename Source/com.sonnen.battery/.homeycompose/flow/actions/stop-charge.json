@@ -1,18 +1,19 @@
 {
   "title": {
     "en": "Stop charge",
-    "da": "Stop opladning"
+    "da": "Stop opladning",
+    "de": "Stoppe Ladevorgang"
   },
   "titleFormatted": {
     "en": "Stop charging of battery",
     "da": "Stop opladning af batteri",
-    "de": "Stoppen Sie den Ladevorgang des Akkus",
+    "de": "Stoppe Ladevorgang der Batterie",
     "nl": "Stop met het opladen van de batterij"
   },
   "hint": {
     "en": "Stop charging of battery (Time-of-Use)",
     "da": "Stop opladning af batteri (Time-of-Use)",
-    "de": "Stoppen Sie den Ladevorgang des Akkus (Time-of-Use)",
+    "de": "Stoppe Ladevorgang der Batterie (Time-of-Use)",
     "nl": "Stop met het opladen van de batterij (Time-of-Use)"
   }
 }

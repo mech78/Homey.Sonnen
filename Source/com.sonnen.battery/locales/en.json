@@ -1,6 +1,16 @@
 {
     "settings": {
       "title": "Sonnen Batterie settings",
-      "subtitle": "Please provide information for api-usage."
+      "subtitle": "Please provide information for api-usage.",
+      "baseUrl": "Base URL",
+      "save": "Save changes",
+      "remark": "Remark:",
+      "note": "Please restart the app, after changing settings.",
+      "frequency": "Pull data interval",
+      "frequencyHint": "Frequency in seconds. How often to pull for data. Default is 30 seconds (30).",
+      "authToken": "Auth Token",
+      "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
+      "savedOk": "Settings saved. You can close this dialog now.",
+      "savedError": "An error occured."
     }
   }

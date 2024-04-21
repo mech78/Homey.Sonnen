@@ -1,6 +1,6 @@
 {
     "type": "number",
-    "title": { "en": "Consumption", "da": "Forbrug", "de": "Ausgaben", "nl":"Uitgaven" },
+    "title": { "en": "Consumption", "da": "Forbrug", "de": "Verbrauch", "nl":"Uitgaven" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
