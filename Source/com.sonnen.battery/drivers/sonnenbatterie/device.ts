@@ -108,8 +108,8 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("measure_power", +latestStateJson.Consumption_W);
       this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
       this.setCapabilityValue("eclipse_capability", this.ResolveCircleColor(latestStateJson.ic_status["Eclipse Led"]));
-      this.setCapabilityValue("state_bms_capability", latestStateJson.ic_status.statebms);
-      this.setCapabilityValue("state_inverter_capability", latestStateJson.ic_status.statecorecontrolmodule);
+      this.setCapabilityValue("state_bms_capability", this.homey.__("stateBms." + latestStateJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestStateJson.ic_status.statebms;
+      this.setCapabilityValue("state_inverter_capability", this.homey.__("stateInverter." + latestStateJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestStateJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue("online_capability", !latestStateJson.ic_status["DC Shutdown Reason"].HW_Shutdown);
       this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
@@ -131,23 +131,12 @@ class BatteryDevice extends Homey.Device {
   }
   
   private ResolveCircleColor = (eclipseLed:any) :string => {
-    if (eclipseLed["Blinking Red"])
-      return "Blinking Red";
-
-      if (eclipseLed["Pulsing Green"])
-      return "Pulsing Green";
-
-      if (eclipseLed["Pulsing Orange"])
-      return "Pulsing Orange";
-
-      if (eclipseLed["Pulsing White"])
-      return "Pulsing White";
-
-      if (eclipseLed["Solid Red"])
-      return "Solid Red";
-
-      return "Unknown";
-    
+    for (var key of Object.keys(eclipseLed)) {
+      if (eclipseLed[key] === true) {
+        return this.homey.__("eclipseLed." + key.replaceAll(' ', '')) ?? key;
+      }
+    }
+    return this.homey.__("eclipseLed.Unknown");    
   }
 
 }

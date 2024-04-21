@@ -12,5 +12,22 @@
       "authTokenHint": "Das Auth Token wird von der Benutzeranmeldung auf Ihrem Sonnen Batterie System abgerufen.",
       "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
       "savedError": "Ein Fehler ist aufgetreten."
+    },
+    "eclipseLed": {
+      "BlinkingRed": "blinkt rot",
+      "PulsingGreen": "pulsiert grün",
+      "PulsingOrange": "pulsiert orange",
+      "PulsingWhite": "pulsiert weiß",
+      "SolidRed": "dauerhaft rot",
+      "Unknown": "unbekannt"
+    },
+    "stateBms": {
+      "ready": "bereit",
+      "notReady": "nicht bereit"
+    },
+    "stateInverter": {
+      "ready": "bereit",
+      "notReady": "nicht bereit",
+      "ongrid": "am Netz"
     }
   }

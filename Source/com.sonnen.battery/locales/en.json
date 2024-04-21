@@ -12,5 +12,22 @@
       "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
       "savedOk": "Settings saved. You can close this dialog now.",
       "savedError": "An error occured."
+    },
+    "eclipseLed": {
+      "BlinkingRed": "blinking red",
+      "PulsingGreen": "pulsing green",
+      "PulsingOrange": "pulsing orange",
+      "PulsingWhite": "pulsing white",
+      "SolidRed": "solid red",
+      "Unknown": "unknown"
+    },
+    "stateBms": {
+      "ready": "ready",
+      "notReady": "not ready"
+    },
+    "stateInverter": {
+      "ready": "ready",
+      "notReady": "not ready",
+      "ongrid": "on grid"
     }
   }
