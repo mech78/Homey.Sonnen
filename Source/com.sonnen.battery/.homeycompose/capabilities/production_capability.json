@@ -1,6 +1,6 @@
 {
     "type": "number",
-    "title": { "en": "Production now", "da": "Produktion", "de": "Produktion jetzt", "nl": "productie nu" },
+    "title": { "en": "Production now", "da": "Produktion", "de": "Produktion", "nl": "productie nu" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,

@@ -2,13 +2,13 @@
   "title": {
     "en": "Power to battery",
     "da": "Strøm til batteri",
-    "de": "Strom zur Batterie",
+    "de": "Leistungsaufnahme Batterie",
     "nl": "Stroom naar batterij"
   },
   "hint": {
     "en": "Battery !{{is|isn't}} charging",
     "da": "Batteri !{{lader|lader ikke}}",
-    "de": "Akku !{{wird|wird nicht}} geladen",
+    "de": "Batterie !{{wird|wird nicht}} geladen",
     "nl": "Batterij !{{wordt opgeladen|laadt niet op}}"
   }
 }

@@ -1,0 +1,33 @@
+{
+    "settings": {
+      "title": "Sonnen Batterie Einstellungen",
+      "subtitle": "Bitte die Daten für die API-Nutzung angeben.",
+      "baseUrl": "Basis-URL",
+      "save": "Änderungen speichern",
+      "remark": "Hinweis:",
+      "note": "Bitte die Anwendung nach dem Speichern der Konfigurationsänderung neu starten.",
+      "frequency": "Frequenz des Datenabrufs",
+      "frequencyHint": "Frequenz in Sekunden. Wie häufig sollen Daten abgeholt werden. Standard ist 30 Sekunden (30).",
+      "authToken": "Auth Token",
+      "authTokenHint": "Das Auth Token wird von der Benutzeranmeldung auf Ihrem Sonnen Batterie System abgerufen.",
+      "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
+      "savedError": "Ein Fehler ist aufgetreten."
+    },
+    "eclipseLed": {
+      "BlinkingRed": "blinkt rot",
+      "PulsingGreen": "pulsiert grün",
+      "PulsingOrange": "pulsiert orange",
+      "PulsingWhite": "pulsiert weiß",
+      "SolidRed": "dauerhaft rot",
+      "Unknown": "unbekannt"
+    },
+    "stateBms": {
+      "ready": "bereit",
+      "notready": "nicht bereit"
+    },
+    "stateInverter": {
+      "ready": "bereit",
+      "notready": "nicht bereit",
+      "ongrid": "am Netz"
+    }
+  }

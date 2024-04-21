@@ -17,34 +17,33 @@
     </header>
 
     <fieldset class="homey-form-fieldset">
-        <legend class="homey-form-legend">Pushover.net Settings</legend>
 
         <div class="homey-form-group">
-            <label class="homey-form-label" for="inputBatteryBaseUrl">Base Url</label>
-            <input class="homey-form-input"  id="inputBatteryBaseUrl" type="text" value="" placeholder="Insert your Sonnen Batterie base url" />
+            <label class="homey-form-label" for="inputBatteryBaseUrl" data-i18n="settings.baseUrl">Base Url</label>
+            <input class="homey-form-input"  id="inputBatteryBaseUrl" type="text" value="" placeholder="Enter your Sonnen Batterie base url" />
             <small class="text-muted">Ex: http://192.168.1.112:80</small>
         </div>
 
         <div class="homey-form-group">
-            <label class="homey-form-label" for="inputBatteryAuthToken">Auth Token</label>
-            <input class="homey-form-input"  id="inputBatteryAuthToken" type="text" value="" placeholder="Insert Auth token" />
-            <small class="text-muted">Auth Token is retrived from user-login on you Sonnen Batterie system.</small>
+            <label class="homey-form-label" for="inputBatteryAuthToken" data-i18n="settings.authToken">Auth Token</label>
+            <input class="homey-form-input"  id="inputBatteryAuthToken" type="text" value="" placeholder="Enter Auth token" />
+            <small class="text-muted" data-i81n="settings.authTokenHint">Auth Token is retrieved from user-login on your Sonnen Batterie system.</small>
         </div>
 
         <div class="homey-form-group">
-            <label class="homey-form-label" for="inputPullIntervalValue">Pull data interval</label>
+            <label class="homey-form-label" for="inputPullIntervalValue" data-i18n="settings.frequency">Pull data interval</label>
             <input class="homey-form-input"  id="inputPullIntervalValue" type="number" value="" placeholder="Pull frequency in seconds" />
-            <small class="text-muted">Frequency in seconds. How often to pull for data. Default i 30 seconds (30).</small>
+            <small class="text-muted" data-i18n="settings.frequencyHint">Frequency in seconds. How often to pull for data. Default is 30 seconds (30).</small>
         </div>
 
         <hr />
 
         <div class="homey-form-group">
-            <strong>Remark</strong> Please restart the app, after changing settings.
+            <strong data-i18n="settings.remark">Remark</strong> <span data-i18n="settings.note">Please restart the app, after changing settings.</span>
         </div>
     </fieldset>
 
-    <button id="save" class="homey-button-primary-full">Save changes</button>
+    <button id="save" class="homey-button-primary-full" data-i18n="settings.save">Save changes</button>
 
     <script type="text/javascript">
         // a method named 'onHomeyReady' must be present in your code
@@ -97,10 +96,9 @@
                 });
 
                 if (!anySaveErrors)
-                    return Homey.alert("Settings saved. You can close this dialog now.");
+                    return Homey.alert(Homey.__("settings.savedOk"));
                 else
-                    return Homey.alert("Error occured.");
-
+                    return Homey.alert(Homey.__("settings.savedError"));
             });
         }
     </script>

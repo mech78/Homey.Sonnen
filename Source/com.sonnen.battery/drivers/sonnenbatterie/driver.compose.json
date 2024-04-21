@@ -1,6 +1,7 @@
 {
   "name": {
-    "en": "sonnenBatterie"
+    "en": "sonnenBatterie",
+    "de": "sonnenBatterie"
   },
   "class": "other",
   "capabilities": [

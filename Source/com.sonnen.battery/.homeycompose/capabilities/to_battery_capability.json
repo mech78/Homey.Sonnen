@@ -1,6 +1,6 @@
 {
     "type": "number",
-    "title": { "en": "To battery", "da": "Til batteri", "de": "Zur Batterie", "nl": "Naar batterij" },
+    "title": { "en": "To battery", "da": "Til batteri", "de": "Ladeleistung", "nl": "Naar batterij" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
