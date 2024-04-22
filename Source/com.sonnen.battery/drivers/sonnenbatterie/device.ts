@@ -15,12 +15,14 @@ class BatteryDevice extends Homey.Device {
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
     var batteryPullInterval = +(this.homey.settings.get("BatteryPullInterval") || '30');
 
+    var lastUpdateUtc = new Date(); // UTC
+
     // Get latest state:
-    await this.loadLatestState(batteryBaseUrl, batteryAuthToken);
+    lastUpdateUtc = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, lastUpdateUtc);
     
     // Pull battery status 
     await this.homey.setInterval(async () => {
-      await this.loadLatestState(batteryBaseUrl, batteryAuthToken);
+      lastUpdateUtc = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, lastUpdateUtc);
     }, batteryPullInterval * 1000 /* pull quarter hour */);
 
   }
@@ -68,7 +70,7 @@ class BatteryDevice extends Homey.Device {
     this.log('BatteryDevice has been deleted');
   }
 
-  public async loadLatestState(baseUrl: string, authKey: string) {
+  public async loadLatestState(baseUrl: string, authKey: string, lastUpdateUtc: Date) : Promise<Date> {
     // Arrange
     var options = {
       method: 'get',
@@ -98,8 +100,9 @@ class BatteryDevice extends Homey.Device {
         var latestStateJson = response.data;
         // this.log("DATA½", latestStateJson);
 
-      
-      this.setCapabilityValue("meter_power", +latestStateJson.Consumption_W / 1000); // = consumption
+      var [totalDailyProduction_kWh, currentUpdateUtc] = this.aggregateDailyTotal(+this.getCapabilityValue("meter_power") ?? 0, latestStateJson.Production_W, lastUpdateUtc, latestStateJson.Timestamp, latestStateJson.UTC_Offet); 
+
+      this.setCapabilityValue("meter_power", +totalDailyProduction_kWh);
       this.setCapabilityValue("measure_battery", +latestStateJson.USOC); // Percentage on battery
       this.setCapabilityValue("production_capability", +latestStateJson.Production_W / 1000);
       this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity)/1000} kWh` );
@@ -120,13 +123,11 @@ class BatteryDevice extends Homey.Device {
         await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..`});
       }
 
-
+      return currentUpdateUtc;
     } catch (e:any) {
-      
-      
       this.error("Error occured", e);
+      return lastUpdateUtc;
     }
-    
     
   }
   
@@ -139,6 +140,15 @@ class BatteryDevice extends Homey.Device {
     return this.homey.__("eclipseLed.Unknown");    
   }
 
+  private aggregateDailyTotal(totalEnergyDaily_kWh: number, power_W: number, lastUpdateUtc: Date, timestampLocal: Date, utcOffset: number): [number, Date] {
+    var currentUpdateUtc = new Date(new Date(timestampLocal).getTime() - utcOffset * 60 * 60 * 1000); // to UTC
+    
+    var totalEnergyDailyResult_kWh = (currentUpdateUtc.getUTCDay() !== lastUpdateUtc.getUTCDay()) ? 0 : totalEnergyDaily_kWh;  // reset daily total around midnight   
+    var sampleIntervalMillis = (currentUpdateUtc.getTime() - lastUpdateUtc.getTime()); // should be ~30000ms resp. polling frequency
+    var sampleEnergy_kWh = (power_W / 1000) * (sampleIntervalMillis / 60 / 60 / 1000); // kWh
+    totalEnergyDailyResult_kWh += sampleEnergy_kWh;
+    return [totalEnergyDailyResult_kWh, currentUpdateUtc];
+  }
 }
 
 module.exports = BatteryDevice;
