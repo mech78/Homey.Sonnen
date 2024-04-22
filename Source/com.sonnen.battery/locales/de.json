@@ -28,6 +28,7 @@
     "stateInverter": {
       "ready": "bereit",
       "notready": "nicht bereit",
-      "ongrid": "am Netz"
+      "ongrid": "am Netz",
+      "offgrid": "ohne Netz"
     }
   }
