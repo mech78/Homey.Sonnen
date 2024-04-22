@@ -11,13 +11,13 @@ class BatteryDevice extends Homey.Device {
     this.log('BatteryDevice has been initialized');
 
 
-    var batteryBaseUrl   = this.homey.settings.get("BatteryBaseUrl");
+    var batteryBaseUrl = this.homey.settings.get("BatteryBaseUrl");
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
     var batteryPullInterval = +(this.homey.settings.get("BatteryPullInterval") || '30');
 
     // Get latest state:
     await this.loadLatestState(batteryBaseUrl, batteryAuthToken);
-    
+
     // Pull battery status 
     await this.homey.setInterval(async () => {
       await this.loadLatestState(batteryBaseUrl, batteryAuthToken);
@@ -82,28 +82,18 @@ class BatteryDevice extends Homey.Device {
     try {
       // Act
       var response = await axios.get(`${baseUrl}/api/v2/latestdata`, options).then();
-        // .then((response) => {
-        //   var batteryJson = response.data;
-        //   //console.log("RESPONSE", batteryJson);
-        //   //USOC
-        //   this.setCapabilityValue("measure_battery", +batteryJson.USOC);
-  
-        // })
-        // .catch((error) => {
-        //   this.log("ERROR", error);
-        // })
-        // .finally(() => {
-        //   // always executed
-        // });
-        var latestStateJson = response.data;
-        // this.log("DATA½", latestStateJson);
 
-      
+      var statusResponse = await axios.get(`${baseUrl}/api/v2/status`, options).then();
+
+      var latestStateJson = response.data;
+      var statusJson = statusResponse.data;
+
+
       this.setCapabilityValue("meter_power", +latestStateJson.Consumption_W / 1000); // = consumption
       this.setCapabilityValue("measure_battery", +latestStateJson.USOC); // Percentage on battery
       this.setCapabilityValue("production_capability", +latestStateJson.Production_W / 1000);
-      this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity)/1000} kWh` );
-      this.setCapabilityValue("feed_grid_capability", -1 * (+latestStateJson.GridFeedIn_W / 1000)); // GridFeedIn_W  : from grid
+      this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity) / 1000} kWh`);
+      this.setCapabilityValue("feed_grid_capability", -1 * (+statusJson.GridFeedIn_W / 1000)); // GridFeedIn_W  : from grid
       this.setCapabilityValue("consumption_capability", +latestStateJson.Consumption_W / 1000); // Consumption_W : consumption
       this.setCapabilityValue("measure_power", +latestStateJson.Consumption_W);
       this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
@@ -114,29 +104,29 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
       try {
-        this.setCapabilityValue("from_battery_capability", (latestStateJson.Pac_total_W ?? 0)> 0 ? latestStateJson.Pac_total_W : 0);
-        this.setCapabilityValue("to_battery_capability",   (latestStateJson.Pac_total_W ?? 0)< 0 ? -1 * latestStateJson.Pac_total_W : 0);
+        this.setCapabilityValue("from_battery_capability", (latestStateJson.Pac_total_W ?? 0) > 0 ? latestStateJson.Pac_total_W : 0);
+        this.setCapabilityValue("to_battery_capability", (latestStateJson.Pac_total_W ?? 0) < 0 ? -1 * latestStateJson.Pac_total_W : 0);
       } catch (error) {
-        await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..`});
+        await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..` });
       }
 
 
-    } catch (e:any) {
-      
-      
+    } catch (e: any) {
+
+
       this.error("Error occured", e);
     }
-    
-    
+
+
   }
-  
-  private ResolveCircleColor = (eclipseLed:any) :string => {
+
+  private ResolveCircleColor = (eclipseLed: any): string => {
     for (var key of Object.keys(eclipseLed)) {
       if (eclipseLed[key] === true) {
         return this.homey.__("eclipseLed." + key.replaceAll(' ', '')) ?? key;
       }
     }
-    return this.homey.__("eclipseLed.Unknown");    
+    return this.homey.__("eclipseLed.Unknown");
   }
 
 }
