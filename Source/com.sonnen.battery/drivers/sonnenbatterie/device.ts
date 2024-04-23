@@ -85,11 +85,14 @@ class BatteryDevice extends Homey.Device {
       // Act
       var response = await axios.get(`${baseUrl}/api/v2/latestdata`, options).then();
 
+<<<<<<< HEAD
       var statusResponse = await axios.get(`${baseUrl}/api/v2/status`, options).then();
 
       var latestStateJson = response.data;
       var statusJson = statusResponse.data;
 
+=======
+>>>>>>> a80e6c6bf74359a5802e8f4ae0511d015acbb380
       var [totalDailyProduction_kWh, currentUpdateUtc] = this.aggregateDailyTotal(+this.getCapabilityValue("meter_power") ?? 0, latestStateJson.Production_W, lastUpdateUtc, latestStateJson.Timestamp, latestStateJson.UTC_Offet); 
 
       this.setCapabilityValue("meter_power", +totalDailyProduction_kWh);
@@ -114,7 +117,11 @@ class BatteryDevice extends Homey.Device {
       }
 
       return currentUpdateUtc;
+<<<<<<< HEAD
     } catch (e: any) {
+=======
+    } catch (e:any) {
+>>>>>>> a80e6c6bf74359a5802e8f4ae0511d015acbb380
       this.error("Error occured", e);
       return lastUpdateUtc;
     }
