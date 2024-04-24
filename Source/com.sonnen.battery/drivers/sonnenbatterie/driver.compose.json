@@ -19,8 +19,20 @@
     "eclipse_capability",
     "state_inverter_capability",
     "state_bms_capability",    
-    "alarm_generic"
+    "alarm_generic",
+    "button.reset_meter"
   ],
+  "capabilitiesOptions": {
+    "button.reset_meter": {
+      "maintenanceAction": true,
+      "title": { 
+          "en": "Reset total day yield", 
+          "de": "Tagesgesamtertrag zurücksetzen" },
+      "desc": { 
+          "en": "Resets today's accumulated power production (kWh). This can not be restored.", 
+          "de": "Setzt die heutige, akkumulierte Energieproduktion (kWh) zurück. Dies kann nicht rückgängig gemacht werden." }
+    }
+  },
   "platforms": [
     "local"
   ],

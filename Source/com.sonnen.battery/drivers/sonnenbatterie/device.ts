@@ -28,6 +28,10 @@ class BatteryDevice extends Homey.Device {
       lastUpdateLocal = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, lastUpdateLocal);
     }, batteryPullInterval * 1000 /* pull quarter hour */);
 
+    
+    this.registerCapabilityListener('button.reset_meter', async () => {
+      this.setCapabilityValue("meter_power", +0);
+    });
   }
 
   /**
