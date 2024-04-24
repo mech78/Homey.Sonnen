@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "To grid", "da": "Til net", "de":"Netzeinspeisung", "nl": "Naar rooster" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "kW" },
+    "min": 0,
+    "decimals": 3,
+    "insights": true,
+    "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+  }
