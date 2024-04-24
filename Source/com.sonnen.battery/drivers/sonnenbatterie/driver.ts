@@ -133,17 +133,17 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     toGridTrigger.registerRunListener(async (args) => {
-      var fromGridValue = +this.getDevices()[0].getCapabilityValue("feed_grid_capability") * 1000;
-      this.log("TRIGGER", "toGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue > 0);
+      var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_capability") * 1000;
+      this.log("TRIGGER", "toGrid", toGridValue, "arg", args.Power, "VALID", toGridValue > 0);
       
-      if (fromGridValue > 0)
+      if (toGridValue > 0)
         return false; // not current feeding  grid
 
-        return (fromGridValue < args.Power);
+        return (toGridValue < args.Power);
     });
 
     fromGridTrigger.registerRunListener(async (args) => {      
-      var fromGridValue = +this.getDevices()[0].getCapabilityValue("feed_grid_capability") * 1000;      
+      var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_capability") * 1000;      
       this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue < 0);
 
       if (fromGridValue < 0)
