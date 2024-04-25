@@ -29,7 +29,7 @@ class BatteryDevice extends Homey.Device {
     }, batteryPullInterval * 1000 /* pull quarter hour */);
 
     this.registerResetMetersButton();
-    await this.gracefullyAddNewCapabilities();
+    await this.gracefullyAddOrRemoveCapabilities();
   }
 
   private registerResetMetersButton() {
@@ -41,14 +41,19 @@ class BatteryDevice extends Homey.Device {
     });
   }
 
-  private async gracefullyAddNewCapabilities() {
+  private async gracefullyAddOrRemoveCapabilities() {
     // https://apps.developer.homey.app/guides/how-to-breaking-changes
+
+    // since 1.0.5, so probably up-to-date anyway, if devices were repaired after updating meanwhile.
+    // but if not, they would show up with the next update now and then could remove them one release after.
     if (this.hasCapability('from_battery_capability') === false) {
       await this.addCapability('from_battery_capability');
     }
     if (this.hasCapability('to_battery_capability') === false) {
-      await this.addCapability('to_battery_capability');
+      await this.addCapability('to_battery_capability'); 
     }
+
+    // added/altered after 1.0.11
     if (this.hasCapability('consumption_daily_capability') === false) {
       await this.addCapability('consumption_daily_capability');
     }
@@ -57,6 +62,11 @@ class BatteryDevice extends Homey.Device {
     }
     if (this.hasCapability('grid_consumption_daily_capability') === false) {
       await this.addCapability('grid_consumption_daily_capability');
+    }
+    if (this.hasCapability('grid_feed_capability')) {
+      // as renamed to "grid_feed_in_capability" when adding grid_consumption_capability.
+      // removing it completely as GridFeedIn_W had problems before 1.0.11 anyway; not worth keeping flows alive.
+      await this.removeCapability('grid_feed_capability'); 
     }
   }
 
