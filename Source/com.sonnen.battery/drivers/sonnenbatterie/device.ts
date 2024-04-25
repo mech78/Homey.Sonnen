@@ -28,13 +28,36 @@ class BatteryDevice extends Homey.Device {
       lastUpdateLocal = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, lastUpdateLocal);
     }, batteryPullInterval * 1000 /* pull quarter hour */);
 
-    
+    this.registerResetMetersButton();
+    await this.gracefullyAddNewCapabilities();
+  }
+
+  private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
       this.setCapabilityValue("meter_power", +0);
       this.setCapabilityValue("consumption_daily_capability", +0);
       this.setCapabilityValue("grid_feed_in_daily_capability", +0);
       this.setCapabilityValue("grid_consumption_daily_capability", +0);
     });
+  }
+
+  private async gracefullyAddNewCapabilities() {
+    // https://apps.developer.homey.app/guides/how-to-breaking-changes
+    if (this.hasCapability('from_battery_capability') === false) {
+      await this.addCapability('from_battery_capability');
+    }
+    if (this.hasCapability('to_battery_capability') === false) {
+      await this.addCapability('to_battery_capability');
+    }
+    if (this.hasCapability('consumption_daily_capability') === false) {
+      await this.addCapability('consumption_daily_capability');
+    }
+    if (this.hasCapability('grid_feed_in_daily_capability') === false) {
+      await this.addCapability('grid_feed_in_daily_capability');
+    }
+    if (this.hasCapability('grid_consumption_daily_capability') === false) {
+      await this.addCapability('grid_consumption_daily_capability');
+    }
   }
 
   /**
@@ -125,15 +148,11 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("online_capability", !latestStateJson.ic_status["DC Shutdown Reason"].HW_Shutdown);
       this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
-      try {
-        this.setCapabilityValue("from_battery_capability", (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0);
-        this.setCapabilityValue("to_battery_capability", (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0);
-        this.setCapabilityValue("consumption_daily_capability", totalDailyConsumption_kWh);
-        this.setCapabilityValue("grid_feed_in_daily_capability", totalDailyGridFeedIn_kWh);
-        this.setCapabilityValue("grid_consumption_daily_capability", totalDailyGridConsumption_kWh);
-      } catch (error) {
-        await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..` });
-      }
+      this.setCapabilityValue("from_battery_capability", (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0);
+      this.setCapabilityValue("to_battery_capability", (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0);
+      this.setCapabilityValue("consumption_daily_capability", totalDailyConsumption_kWh);
+      this.setCapabilityValue("grid_feed_in_daily_capability", totalDailyGridFeedIn_kWh);
+      this.setCapabilityValue("grid_consumption_daily_capability", totalDailyGridConsumption_kWh);
 
       return currentUpdateLocal;
     } catch (e: any) {
