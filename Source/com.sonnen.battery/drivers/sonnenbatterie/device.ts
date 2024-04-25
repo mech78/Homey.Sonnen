@@ -53,7 +53,9 @@ class BatteryDevice extends Homey.Device {
       await this.addCapability('to_battery_capability'); 
     }
 
-    // added/altered after 1.0.11
+    // added/altered after 1.0.11 
+    // TODO: how to achieve the same UI ordering as it would happen for fresh devices as ordered in driver.compose.json? 
+    // Upgrading works, but all new capability icons are appended to the bottom just in the order below.
     if (this.hasCapability('feed_grid_capability') === true) {
       // as renamed to "grid_feed_in_capability" when adding grid_consumption_capability.
       // removing it completely as GridFeedIn_W had problems before 1.0.11 anyway; not worth keeping flows alive.
@@ -77,7 +79,7 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('button.reset_meter') === false) {
       await this.addCapability('button.reset_meter');
     }
-    
+   
   }
 
   /**
