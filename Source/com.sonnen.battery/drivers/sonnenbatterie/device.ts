@@ -74,6 +74,10 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('grid_consumption_daily_capability') === false) {
       await this.addCapability('grid_consumption_daily_capability');
     }
+    if (this.hasCapability('button.reset_meter') === false) {
+      await this.addCapability('button.reset_meter');
+    }
+    
   }
 
   /**
