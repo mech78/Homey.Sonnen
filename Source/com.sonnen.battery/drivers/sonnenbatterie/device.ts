@@ -31,6 +31,9 @@ class BatteryDevice extends Homey.Device {
     
     this.registerCapabilityListener('button.reset_meter', async () => {
       this.setCapabilityValue("meter_power", +0);
+      this.setCapabilityValue("consumption_daily_capability", +0);
+      this.setCapabilityValue("grid_feed_in_daily_capability", +0);
+      this.setCapabilityValue("grid_consumption_daily_capability", +0);
     });
   }
 
@@ -98,13 +101,21 @@ class BatteryDevice extends Homey.Device {
       var statusJson = statusResponse.data;
 
       var [totalDailyProduction_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("meter_power") ?? 0, statusJson.Production_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      
+      var [totalDailyConsumption_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("consumption_daily_capability") ?? 0, statusJson.Consumption_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      
+      var grid_feed_in = (+statusJson.GridFeedIn_W > 0) ? (+statusJson.GridFeedIn_W / 1000) : 0;
+      var [totalDailyGridFeedIn_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_feed_in_daily_capability") ?? 0, grid_feed_in, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      
+      var grid_consumption = (+statusJson.GridFeedIn_W < 0) ? -1 * (+statusJson.GridFeedIn_W / 1000) : 0;
+      var [totalDailyGridConsumption_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_consumption_daily_capability") ?? 0, grid_consumption, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
 
       this.setCapabilityValue("meter_power", +totalDailyProduction_kWh);
       this.setCapabilityValue("measure_battery", +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue("production_capability", +statusJson.Production_W / 1000);
       this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity) / 1000} kWh`);
-      this.setCapabilityValue("grid_feed_in_capability", (+statusJson.GridFeedIn_W > 0) ? (+statusJson.GridFeedIn_W / 1000) : 0); // GridFeedIn_W positive: to grid
-      this.setCapabilityValue("grid_consumption_capability", (+statusJson.GridFeedIn_W < 0) ? -1 * (+statusJson.GridFeedIn_W / 1000) : 0); // GridFeedIn_W negative: from grid
+      this.setCapabilityValue("grid_feed_in_capability", grid_feed_in); // GridFeedIn_W positive: to grid
+      this.setCapabilityValue("grid_consumption_capability", grid_consumption); // GridFeedIn_W negative: from grid
       this.setCapabilityValue("consumption_capability", +statusJson.Consumption_W / 1000); // Consumption_W : consumption
       this.setCapabilityValue("measure_power", +statusJson.Consumption_W);
       this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
@@ -117,6 +128,9 @@ class BatteryDevice extends Homey.Device {
       try {
         this.setCapabilityValue("from_battery_capability", (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0);
         this.setCapabilityValue("to_battery_capability", (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0);
+        this.setCapabilityValue("consumption_daily_capability", totalDailyConsumption_kWh);
+        this.setCapabilityValue("grid_feed_in_daily_capability", totalDailyGridFeedIn_kWh);
+        this.setCapabilityValue("grid_consumption_daily_capability", totalDailyGridConsumption_kWh);
       } catch (error) {
         await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..` });
       }
@@ -143,7 +157,7 @@ class BatteryDevice extends Homey.Device {
     var sampleIntervalMillis = (timestampLocal.getTime() - lastUpdateLocal.getTime()); // should be ~30000ms resp. polling frequency
     var sampleEnergy_kWh = (power_W / 1000) * (sampleIntervalMillis / 60 / 60 / 1000); // kWh
     totalEnergyDailyResult_kWh += sampleEnergy_kWh;
-    // this.log("last: " + lastUpdateLocal + ", now: "+ timestampLocal + ": " + sampleEnergy_kWh + "kWh during: " + sampleIntervalMillis +"ms, total: " + totalEnergyDailyResult_kWh + "kWh");
+    //this.log("last: " + lastUpdateLocal + ", now: "+ timestampLocal + ": " + sampleEnergy_kWh + "kWh during: " + sampleIntervalMillis +"ms, total: " + totalEnergyDailyResult_kWh + "kWh");
     return [totalEnergyDailyResult_kWh, timestampLocal];
   }
 }

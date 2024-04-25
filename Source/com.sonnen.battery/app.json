@@ -446,8 +446,11 @@
         "production_capability",
         "capacity_capability",
         "consumption_capability",
+        "consumption_daily_capability",
         "grid_feed_in_capability",
+        "grid_feed_in_daily_capability",
         "grid_consumption_capability",
+        "grid_consumption_daily_capability",
         "online_capability",
         "to_battery_capability",
         "from_battery_capability",
@@ -462,12 +465,12 @@
         "button.reset_meter": {
           "maintenanceAction": true,
           "title": {
-            "en": "Reset total day yield",
-            "de": "Tagesgesamtertrag zurücksetzen"
+            "en": "Reset daily totals",
+            "de": "Tagessummen zurücksetzen"
           },
           "desc": {
-            "en": "Resets today's accumulated power production (kWh). This can not be restored.",
-            "de": "Setzt die heutige, akkumulierte Energieproduktion (kWh) zurück. Dies kann nicht rückgängig gemacht werden."
+            "en": "Resets today's totals (kWh). This can not be restored.",
+            "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden."
           }
         }
       },
@@ -542,6 +545,25 @@
       "insights": true,
       "icon": "/assets/images/light-house-blank-circle-bolt.svg"
     },
+    "consumption_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total consumption",
+        "da": "Samlet forbrug",
+        "de": "Gesamtverbrauch",
+        "nl": "Totaal verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+    },
     "eclipse_capability": {
       "type": "string",
       "title": {
@@ -597,6 +619,25 @@
       "insights": true,
       "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
     },
+    "grid_consumption_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total grid consumption",
+        "da": "Samlet netforbrug",
+        "de": "Gesamter Netzbezug",
+        "nl": "Totaal netverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+    },
     "grid_feed_in_capability": {
       "type": "number",
       "title": {
@@ -610,6 +651,25 @@
       "setable": true,
       "units": {
         "en": "kW"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+    },
+    "grid_feed_in_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total grid feed-in",
+        "da": "Samlet nettilførsel",
+        "de": "Gesamte Netzeinspeisung",
+        "nl": "Totale netinvoeding"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
       },
       "min": 0,
       "decimals": 3,
