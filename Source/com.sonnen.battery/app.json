@@ -95,7 +95,7 @@
         "hint": {
           "en": "Battery level below percentage provided.",
           "da": "Batteriniveau er under procent angivet.",
-          "de": "Batteriestand unter dem angegebenen Prozentwert.",
+          "de": "Batteriestand unter dem angegebenen Prozentsatz.",
           "nl": "Batterijniveau lager dan aangegeven percentage"
         },
         "args": [

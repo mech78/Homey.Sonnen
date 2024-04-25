@@ -97,16 +97,16 @@ class BatteryDevice extends Homey.Device {
       var latestStateJson = response.data;
       var statusJson = statusResponse.data;
 
-      var [totalDailyProduction_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("meter_power") ?? 0, latestStateJson.Production_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      var [totalDailyProduction_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("meter_power") ?? 0, statusJson.Production_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
 
       this.setCapabilityValue("meter_power", +totalDailyProduction_kWh);
-      this.setCapabilityValue("measure_battery", +latestStateJson.USOC); // Percentage on battery
-      this.setCapabilityValue("production_capability", +latestStateJson.Production_W / 1000);
+      this.setCapabilityValue("measure_battery", +statusJson.USOC); // Percentage on battery
+      this.setCapabilityValue("production_capability", +statusJson.Production_W / 1000);
       this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity) / 1000} kWh`);
       this.setCapabilityValue("grid_feed_in_capability", (+statusJson.GridFeedIn_W > 0) ? (+statusJson.GridFeedIn_W / 1000) : 0); // GridFeedIn_W positive: to grid
       this.setCapabilityValue("grid_consumption_capability", (+statusJson.GridFeedIn_W < 0) ? -1 * (+statusJson.GridFeedIn_W / 1000) : 0); // GridFeedIn_W negative: from grid
-      this.setCapabilityValue("consumption_capability", +latestStateJson.Consumption_W / 1000); // Consumption_W : consumption
-      this.setCapabilityValue("measure_power", +latestStateJson.Consumption_W);
+      this.setCapabilityValue("consumption_capability", +statusJson.Consumption_W / 1000); // Consumption_W : consumption
+      this.setCapabilityValue("measure_power", +statusJson.Consumption_W);
       this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
       this.setCapabilityValue("eclipse_capability", this.ResolveCircleColor(latestStateJson.ic_status["Eclipse Led"]));
       this.setCapabilityValue("state_bms_capability", this.homey.__("stateBms." + latestStateJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestStateJson.ic_status.statebms;
@@ -115,8 +115,8 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("alarm_generic", (latestStateJson.ic_status["Eclipse Led"])["Solid Red"]);
 
       try {
-        this.setCapabilityValue("from_battery_capability", (latestStateJson.Pac_total_W ?? 0) > 0 ? latestStateJson.Pac_total_W : 0);
-        this.setCapabilityValue("to_battery_capability", (latestStateJson.Pac_total_W ?? 0) < 0 ? -1 * latestStateJson.Pac_total_W : 0);
+        this.setCapabilityValue("from_battery_capability", (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0);
+        this.setCapabilityValue("to_battery_capability", (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0);
       } catch (error) {
         await this.homey.notifications.createNotification({ excerpt: `Warning: New capabilities not supported. Replace remove and add SonnenBatterie to support new capabilities..` });
       }
