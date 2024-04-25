@@ -10,7 +10,9 @@ class BatteryDevice extends Homey.Device {
   async onInit() {
     this.log('BatteryDevice has been initialized');
 
-
+    await this.gracefullyAddOrRemoveCapabilities();
+    this.registerResetMetersButton();
+    
     var batteryBaseUrl = this.homey.settings.get("BatteryBaseUrl");
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
     var batteryPullInterval = +(this.homey.settings.get("BatteryPullInterval") || '30');
@@ -28,8 +30,6 @@ class BatteryDevice extends Homey.Device {
       lastUpdateLocal = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, lastUpdateLocal);
     }, batteryPullInterval * 1000 /* pull quarter hour */);
 
-    this.registerResetMetersButton();
-    await this.gracefullyAddOrRemoveCapabilities();
   }
 
   private registerResetMetersButton() {
@@ -57,13 +57,19 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('consumption_daily_capability') === false) {
       await this.addCapability('consumption_daily_capability');
     }
+    if (this.hasCapability('grid_feed_in_capability') === false) {
+      await this.addCapability('grid_feed_in_capability');
+    }
     if (this.hasCapability('grid_feed_in_daily_capability') === false) {
       await this.addCapability('grid_feed_in_daily_capability');
+    }
+    if (this.hasCapability('grid_consumption_capability') === false) {
+      await this.addCapability('grid_consumption_capability');
     }
     if (this.hasCapability('grid_consumption_daily_capability') === false) {
       await this.addCapability('grid_consumption_daily_capability');
     }
-    if (this.hasCapability('feed_grid_capability')) {
+    if (this.hasCapability('feed_grid_capability') === true) {
       // as renamed to "grid_feed_in_capability" when adding grid_consumption_capability.
       // removing it completely as GridFeedIn_W had problems before 1.0.11 anyway; not worth keeping flows alive.
       await this.removeCapability('feed_grid_capability'); 
