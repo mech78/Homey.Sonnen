@@ -38,6 +38,8 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("consumption_daily_capability", +0);
       this.setCapabilityValue("grid_feed_in_daily_capability", +0);
       this.setCapabilityValue("grid_consumption_daily_capability", +0);
+      this.setCapabilityValue("self_consumption_capability", +0);
+      this.setCapabilityValue("autarky_capability", +0);
     });
   }
 
@@ -79,7 +81,12 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('button.reset_meter') === false) {
       await this.addCapability('button.reset_meter');
     }
-   
+    if (this.hasCapability('self_consumption_capability') === false) {
+      await this.addCapability('self_consumption_capability');
+    }
+    if (this.hasCapability('autarky_capability') === false) {
+      await this.addCapability('autarky_capability');
+    }
   }
 
   /**
@@ -175,6 +182,14 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("consumption_daily_capability", totalDailyConsumption_kWh);
       this.setCapabilityValue("grid_feed_in_daily_capability", totalDailyGridFeedIn_kWh);
       this.setCapabilityValue("grid_consumption_daily_capability", totalDailyGridConsumption_kWh);
+
+      var percentageGridConsumption = (totalDailyGridConsumption_kWh / totalDailyConsumption_kWh) * 100;
+      var percentageSelfProduction = 100 - percentageGridConsumption;
+      this.setCapabilityValue("autarky_capability", +percentageSelfProduction);
+
+      var percentageGridFeedIn = (totalDailyGridFeedIn_kWh / totalDailyProduction_kWh) * 100;
+      var percentageSelfConsumption = 100 - percentageGridFeedIn;
+      this.setCapabilityValue("self_consumption_capability", +percentageSelfConsumption);
 
       return currentUpdateLocal;
     } catch (e: any) {

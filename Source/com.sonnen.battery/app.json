@@ -452,6 +452,8 @@
         "grid_consumption_daily_capability",
         "to_battery_capability",
         "from_battery_capability",
+        "autarky_capability",
+        "self_consumption_capability",
         "online_capability",
         "capacity_capability",
         "number_battery_capability",
@@ -510,6 +512,26 @@
     }
   ],
   "capabilities": {
+    "autarky_capability": {
+      "type": "number",
+      "title": {
+        "en": "Autarky",
+        "da": "Autarki",
+        "de": "Autarkie",
+        "nl": "Autarkie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/percentage.svg"
+    },
     "capacity_capability": {
       "type": "string",
       "title": {
@@ -746,6 +768,26 @@
       "decimals": 3,
       "insights": true,
       "icon": "/assets/images/house-day-thin.svg"
+    },
+    "self_consumption_capability": {
+      "type": "number",
+      "title": {
+        "en": "Self-consumption",
+        "da": "Selvforbrug",
+        "de": "Eigenverbrauch",
+        "nl": "Eigenverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 1,
+      "insights": true,
+      "icon": "/assets/images/percentage.svg"
     },
     "state_bms_capability": {
       "type": "string",

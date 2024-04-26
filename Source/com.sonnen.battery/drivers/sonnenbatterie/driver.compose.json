@@ -17,6 +17,8 @@
     "grid_consumption_daily_capability",
     "to_battery_capability",
     "from_battery_capability",
+    "autarky_capability",
+    "self_consumption_capability",
     "online_capability",
     "capacity_capability",
     "number_battery_capability",
