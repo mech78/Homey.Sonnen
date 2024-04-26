@@ -149,18 +149,18 @@ class BatteryDevice extends Homey.Device {
       
       var [totalDailyConsumption_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("consumption_daily_capability") ?? 0, statusJson.Consumption_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
       
-      var grid_feed_in = (+statusJson.GridFeedIn_W > 0) ? (+statusJson.GridFeedIn_W / 1000) : 0;
-      var [totalDailyGridFeedIn_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_feed_in_daily_capability") ?? 0, grid_feed_in, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      var grid_feed_in_W = (+statusJson.GridFeedIn_W > 0) ? +statusJson.GridFeedIn_W : 0;
+      var [totalDailyGridFeedIn_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_feed_in_daily_capability") ?? 0, grid_feed_in_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
       
-      var grid_consumption = (+statusJson.GridFeedIn_W < 0) ? -1 * (+statusJson.GridFeedIn_W / 1000) : 0;
-      var [totalDailyGridConsumption_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_consumption_daily_capability") ?? 0, grid_consumption, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
+      var grid_consumption_W = (+statusJson.GridFeedIn_W < 0) ? -1 * statusJson.GridFeedIn_W : 0;
+      var [totalDailyGridConsumption_kWh, currentUpdateLocal] = this.aggregateDailyTotal(+this.getCapabilityValue("grid_consumption_daily_capability") ?? 0, grid_consumption_W, lastUpdateLocal, new Date(latestStateJson.Timestamp)); 
 
       this.setCapabilityValue("meter_power", +totalDailyProduction_kWh);
       this.setCapabilityValue("measure_battery", +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue("production_capability", +statusJson.Production_W / 1000);
       this.setCapabilityValue("capacity_capability", `${(+latestStateJson.FullChargeCapacity) / 1000} kWh`);
-      this.setCapabilityValue("grid_feed_in_capability", grid_feed_in); // GridFeedIn_W positive: to grid
-      this.setCapabilityValue("grid_consumption_capability", grid_consumption); // GridFeedIn_W negative: from grid
+      this.setCapabilityValue("grid_feed_in_capability", grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
+      this.setCapabilityValue("grid_consumption_capability", grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       this.setCapabilityValue("consumption_capability", +statusJson.Consumption_W / 1000); // Consumption_W : consumption
       this.setCapabilityValue("measure_power", +statusJson.Consumption_W);
       this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
