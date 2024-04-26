@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="169.32809mm"
+   height="135.46005mm"
+   viewBox="0 0 169.32809 135.46005"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="light-house-blank-circle-bolt_daily.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.69219276"
+     inkscape:cx="335.88909"
+     inkscape:cy="372.0062"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-16.241101,-50.102058)">
+    <g
+       id="g2"
+       transform="matrix(0.26458333,0,0,0.26458333,-41.96982,-25.043576)">
+      <path
+         style="opacity:1;fill:#000000;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+         vector-effect="non-scaling-stroke"
+         transform="translate(219.99,283.99)"
+         d="M 4,266.6 C -1.8,260 -1.2,249.8 5.4,244 96.1,164 186.7,84 277.4,4 c 6,-5.3 15.1,-5.3 21.2,0 71.3,62.9 142.6,125.9 213.9,188.8 -5.4,-0.5 -11,-0.8 -16.5,-0.8 -10.2,0 -20.1,0.9 -29.8,2.5 C 406.8,142.1 347.4,89.7 288,37.3 224,93.8 160,150.2 96,206.7 c 0,75.1 0,150.2 0,225.3 0,26.5 21.5,48 48,48 72.1,0 144.2,0 216.3,0 10,12.1 21.6,22.9 34.5,32 -83.6,0 -167.2,0 -250.8,0 C 99.8,512 64,476.2 64,432 64,366.3 64,300.7 64,235 51.5,246 39.1,257 26.6,268 20,273.8 9.8,273.2 4,266.6 Z M 352,368 c 0,-79.5 64.5,-144 144,-144 79.5,0 144,64.5 144,144 0,79.5 -64.5,144 -144,144 -79.5,0 -144,-64.5 -144,-144 z m 32,0 c 0,61.9 50.1,112 112,112 61.9,0 112,-50.1 112,-112 0,-61.9 -50.1,-112 -112,-112 -61.9,0 -112,50.1 -112,112 z m 44.6,3.8 c -1.6,-4.9 0.1,-10.3 4.2,-13.4 32,-24 64,-48 96,-72 4.5,-3.4 10.8,-3.2 15.1,0.6 4.3,3.8 5.4,9.9 2.6,14.9 -10,18.1 -20.1,36.1 -30.1,54.2 11.9,0 23.7,0 35.6,0 5.2,0 9.8,3.3 11.4,8.2 1.6,4.9 -0.1,10.3 -4.2,13.4 -32,24 -64,48 -96,72 -4.5,3.4 -10.8,3.2 -15.1,-0.6 -4.3,-3.8 -5.4,-9.9 -2.6,-14.9 10,-18.1 20.1,-36.1 30.1,-54.2 -11.9,0 -23.7,0 -35.6,0 -5.2,0 -9.8,-3.3 -11.4,-8.2 z"
+         stroke-linecap="round"
+         id="path1" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:174.044px;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke-width:1.35972"
+         x="332.94833"
+         y="706.39844"
+         id="text3"><tspan
+           sodipodi:role="line"
+           id="tspan3"
+           x="332.94833"
+           y="706.39844"
+           style="stroke-width:1.35972">∑</tspan></text>
+    </g>
+  </g>
+</svg>

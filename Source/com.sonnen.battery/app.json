@@ -562,7 +562,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
     },
     "eclipse_capability": {
       "type": "string",
@@ -636,7 +636,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
     },
     "grid_feed_in_capability": {
       "type": "number",
@@ -674,7 +674,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
     },
     "number_battery_capability": {
       "type": "number",
