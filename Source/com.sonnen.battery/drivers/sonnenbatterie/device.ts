@@ -19,7 +19,7 @@ class BatteryDevice extends Homey.Device {
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
     var batteryPullInterval = +(this.homey.settings.get("BatteryPullInterval") || '30');
 
-    // re-initialize from capability values with 3 digit precision (kWh), but aggregate in (Wh) to retain precision
+    // re-initialize from capability values
     this.state = {
       lastUpdate: this.getLocalNow(),
       totalProduction_Wh: +this.getCapabilityValue("meter_power") * 1000 ?? 0,
@@ -216,12 +216,7 @@ class BatteryDevice extends Homey.Device {
       var percentageSelfConsumption = 100 - percentageGridFeedIn;
       this.setCapabilityValue("self_consumption_capability", +percentageSelfConsumption);
       
-      // this.log("Total grid consumption: " + currentState.totalGridConsumption_Wh + "Wh, total consumption: " + currentState.totalConsumption_Wh + "Wh");
-      // this.log("grid consumption: " + percentageGridConsumption + "%, autarky: " + percentageSelfProduction + "%");
-      // this.log("Total grid feed-in: " + currentState.totalGridFeedIn_Wh  + "Wh, total production: " + currentState.totalProduction_Wh + "Wh");
-      // this.log("Grid feed-in: " + percentageGridFeedIn + "%, self-consumption: " + percentageSelfConsumption + "%");
-
-      return currentState
+      return currentState;
     } catch (e: any) {
       this.error("Error occured", e);
       return lastState;
@@ -239,12 +234,10 @@ class BatteryDevice extends Homey.Device {
   }
 
   private aggregateDailyTotal(totalEnergyDaily_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {   
-    // this.log("last: " + lastUpdate + ", now: " + currentUpdate);
     var totalEnergyDailyResult_Wh = (currentUpdate.getDay() !== lastUpdate.getDay()) ? 0 : totalEnergyDaily_Wh;  // reset daily total at local midnight   
     var sampleIntervalMillis = (currentUpdate.getTime() - lastUpdate.getTime()); // should be ~30000ms resp. polling frequency
     var sampleEnergy_Wh = currentPower_W * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyDailyResult_Wh += sampleEnergy_Wh;
-    // this.log("sample: " + sampleEnergy_Wh + "Wh during: " + sampleIntervalMillis +"ms, total: " + totalEnergyDailyResult_Wh + "Wh");
     return totalEnergyDailyResult_Wh;
   }
 }
