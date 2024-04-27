@@ -528,7 +528,7 @@
       },
       "min": 0,
       "max": 100,
-      "decimals": 0,
+      "decimals": 1,
       "insights": true,
       "icon": "/assets/images/percentage.svg"
     },
