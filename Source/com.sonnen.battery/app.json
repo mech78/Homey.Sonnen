@@ -488,10 +488,7 @@
       },
       "energy": {
         "batteries": [
-          "C",
-          "C",
-          "C",
-          "C"
+          "OTHER"
         ],
         "cumulative": true
       },

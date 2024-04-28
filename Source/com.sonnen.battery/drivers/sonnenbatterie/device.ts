@@ -175,6 +175,15 @@ class BatteryDevice extends Homey.Device {
       var latestStateJson = response.data;
       var statusJson = statusResponse.data;
 
+      // update device's batteries to actual number of internal batteries
+      var numberBatteries = +latestStateJson.ic_status.nrbatterymodules;
+      var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
+      var energy = await this.getEnergy();
+      if (!_.isEqual(energy.batteries, actualBatteries)) {
+        energy.batteries = actualBatteries;
+        await this.setEnergy({ batteries: actualBatteries });  
+      }
+     
       var currentUpdate = new Date(latestStateJson.Timestamp);
       var grid_feed_in_W = (+statusJson.GridFeedIn_W > 0) ? +statusJson.GridFeedIn_W : 0;
       var grid_consumption_W = (+statusJson.GridFeedIn_W < 0) ? -1 * statusJson.GridFeedIn_W : 0;
@@ -195,7 +204,7 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue("grid_consumption_capability", grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       this.setCapabilityValue("consumption_capability", +statusJson.Consumption_W / 1000); // Consumption_W : consumption
       this.setCapabilityValue("measure_power", +statusJson.Consumption_W);
-      this.setCapabilityValue("number_battery_capability", +latestStateJson.ic_status.nrbatterymodules);
+      this.setCapabilityValue("number_battery_capability", numberBatteries);
       this.setCapabilityValue("eclipse_capability", this.resolveCircleColor(latestStateJson.ic_status["Eclipse Led"]));
       this.setCapabilityValue("state_bms_capability", this.homey.__("stateBms." + latestStateJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestStateJson.ic_status.statebms;
       this.setCapabilityValue("state_inverter_capability", this.homey.__("stateInverter." + latestStateJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestStateJson.ic_status.statecorecontrolmodule);
