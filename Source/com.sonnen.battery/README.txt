@@ -11,6 +11,3 @@ Be aware, atm. only one schedule/Time-Of-Use is supported - and not multiple lik
 
 
 Please visit the settings page, after installing this application. Configuration-fields are mandatory. 
-
-If you appreciate this and want to give a tip, use the following link:
-https://www.paypal.com/donate/?business=WJ4994R47H3TJ&no_recurring=0&item_name=Tip+for+efford+at+developing+this+app.+Tip+is+appreciated.&currency_code=DKK
