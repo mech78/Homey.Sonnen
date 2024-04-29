@@ -1,0 +1,13 @@
+{
+    "type": "number",
+    "title": { "en": "Autarky", "da": "Autarki", "de": "Autarkie", "nl":"Autarkie" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "%" },
+    "min": 0,
+    "max": 100,
+    "decimals": 1,
+    "insights": true,
+    "icon": "/assets/images/percentage.svg"
+  }

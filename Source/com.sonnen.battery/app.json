@@ -107,7 +107,7 @@
         "hint": {
           "en": "Battery level below percentage provided.",
           "da": "Batteriniveau er under procent angivet.",
-          "de": "Batteriestand unter dem angegebenen Prozentwert.",
+          "de": "Batteriestand unter dem angegebenen Prozentsatz.",
           "nl": "Batterijniveau lager dan aangegeven percentage"
         },
         "args": [
@@ -202,7 +202,7 @@
           "en": "Power from battery",
           "da": "Strøm fra batteri",
           "de": "Leistungsabgabe Batterie",
-          "nl": ""
+          "nl": "Stroom uit batterij"
         },
         "hint": {
           "en": "Power !{{is|isn't}} delivered from battery",
@@ -456,18 +456,38 @@
         "measure_battery",
         "meter_power",
         "production_capability",
-        "capacity_capability",
         "consumption_capability",
-        "feed_grid_capability",
-        "online_capability",
+        "consumption_daily_capability",
+        "grid_feed_in_capability",
+        "grid_feed_in_daily_capability",
+        "grid_consumption_capability",
+        "grid_consumption_daily_capability",
         "to_battery_capability",
         "from_battery_capability",
+        "autarky_capability",
+        "self_consumption_capability",
+        "online_capability",
+        "capacity_capability",
         "number_battery_capability",
         "eclipse_capability",
         "state_inverter_capability",
         "state_bms_capability",
-        "alarm_generic"
+        "alarm_generic",
+        "button.reset_meter"
       ],
+      "capabilitiesOptions": {
+        "button.reset_meter": {
+          "maintenanceAction": true,
+          "title": {
+            "en": "Reset daily totals",
+            "de": "Tagessummen zurücksetzen"
+          },
+          "desc": {
+            "en": "Resets today's totals (kWh). This can not be restored.",
+            "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden."
+          }
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -480,10 +500,7 @@
       },
       "energy": {
         "batteries": [
-          "C",
-          "C",
-          "C",
-          "C"
+          "OTHER"
         ],
         "cumulative": true
       },
@@ -504,6 +521,26 @@
     }
   ],
   "capabilities": {
+    "autarky_capability": {
+      "type": "number",
+      "title": {
+        "en": "Autarky",
+        "da": "Autarki",
+        "de": "Autarkie",
+        "nl": "Autarkie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 1,
+      "insights": true,
+      "icon": "/assets/images/percentage.svg"
+    },
     "capacity_capability": {
       "type": "string",
       "title": {
@@ -539,6 +576,25 @@
       "insights": true,
       "icon": "/assets/images/light-house-blank-circle-bolt.svg"
     },
+    "consumption_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total consumption",
+        "da": "Samlet forbrug",
+        "de": "Gesamtverbrauch",
+        "nl": "Totaal verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
+    },
     "eclipse_capability": {
       "type": "string",
       "title": {
@@ -552,25 +608,6 @@
       "setable": true,
       "icon": "/assets/images/lightbulb-on-light.svg",
       "insights": true
-    },
-    "feed_grid_capability": {
-      "type": "number",
-      "title": {
-        "en": "From grid",
-        "da": "Fra net",
-        "de": "Netzbezug",
-        "nl": "Uit rooster"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": true,
-      "units": {
-        "en": "kW"
-      },
-      "min": 0,
-      "decimals": 3,
-      "insights": true,
-      "icon": "/assets/images/utility-pole-thin.svg"
     },
     "from_battery_capability": {
       "type": "number",
@@ -593,6 +630,82 @@
       "decimals": 0,
       "insights": true,
       "icon": "/assets/images/from-battery.svg"
+    },
+    "grid_consumption_capability": {
+      "type": "number",
+      "title": {
+        "en": "From grid",
+        "da": "Fra net",
+        "de": "Netzbezug",
+        "nl": "Uit rooster"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kW"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+    },
+    "grid_consumption_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total grid consumption",
+        "da": "Samlet netforbrug",
+        "de": "Gesamter Netzbezug",
+        "nl": "Totaal netverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+    },
+    "grid_feed_in_capability": {
+      "type": "number",
+      "title": {
+        "en": "To grid",
+        "da": "Til net",
+        "de": "Netzeinspeisung",
+        "nl": "Naar rooster"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kW"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+    },
+    "grid_feed_in_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total grid feed-in",
+        "da": "Samlet nettilførsel",
+        "de": "Gesamte Netzeinspeisung",
+        "nl": "Totale netinvoeding"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
     },
     "number_battery_capability": {
       "type": "number",
@@ -664,6 +777,26 @@
       "decimals": 3,
       "insights": true,
       "icon": "/assets/images/house-day-thin.svg"
+    },
+    "self_consumption_capability": {
+      "type": "number",
+      "title": {
+        "en": "Self-consumption",
+        "da": "Selvforbrug",
+        "de": "Eigenverbrauch",
+        "nl": "Eigenverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 1,
+      "insights": true,
+      "icon": "/assets/images/percentage.svg"
     },
     "state_bms_capability": {
       "type": "string",
