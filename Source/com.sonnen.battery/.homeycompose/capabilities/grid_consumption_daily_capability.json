@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "Total grid consumption", "da": "Samlet netforbrug", "de":"Gesamter Netzbezug", "nl": "Totaal netverbruik" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "kWh" },
+    "min": 0,
+    "decimals": 3,
+    "insights": true,
+    "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+  }

@@ -3,7 +3,7 @@
     "en": "Power from battery",
     "da": "Strøm fra batteri",
     "de": "Leistungsabgabe Batterie",
-    "nl": ""
+    "nl": "Stroom uit batterij"
   },
   "hint": {
     "en": "Power !{{is|isn't}} delivered from battery",

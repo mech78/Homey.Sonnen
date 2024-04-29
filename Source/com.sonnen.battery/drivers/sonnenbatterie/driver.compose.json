@@ -9,18 +9,36 @@
     "measure_battery",
     "meter_power",
     "production_capability",
-    "capacity_capability",
     "consumption_capability",
-    "feed_grid_capability",
-    "online_capability",
+    "consumption_daily_capability",
+    "grid_feed_in_capability",
+    "grid_feed_in_daily_capability",
+    "grid_consumption_capability",
+    "grid_consumption_daily_capability",
     "to_battery_capability",
     "from_battery_capability",
+    "autarky_capability",
+    "self_consumption_capability",
+    "online_capability",
+    "capacity_capability",
     "number_battery_capability",
     "eclipse_capability",
     "state_inverter_capability",
     "state_bms_capability",    
-    "alarm_generic"
+    "alarm_generic",
+    "button.reset_meter"
   ],
+  "capabilitiesOptions": {
+    "button.reset_meter": {
+      "maintenanceAction": true,
+      "title": { 
+          "en": "Reset daily totals", 
+          "de": "Tagessummen zurücksetzen" },
+      "desc": { 
+          "en": "Resets today's totals (kWh). This can not be restored.", 
+          "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden." }
+    }
+  },
   "platforms": [
     "local"
   ],
@@ -33,10 +51,7 @@
   },
   "energy": {
     "batteries": [
-      "C",
-      "C",
-      "C",
-      "C"
+      "OTHER"
     ],
     "cumulative": true
   },
