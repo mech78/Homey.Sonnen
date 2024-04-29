@@ -1,6 +1,6 @@
 {
     "type": "number",
-    "title": { "en": "Autarky", "da": "Autarki", "de": "Autarkie", "nl":"Autarkie" },
+    "title": { "en": "Selfsupply", "da": "Selvforsyning", "de": "Autarkie", "nl":"Autarkie" },
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
