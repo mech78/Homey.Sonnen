@@ -40,5 +40,8 @@
   },
   "1.1.1": {
     "en": "Hotfix."
+  },
+  "1.1.2": {
+    "en": "Added support for start-as-string. Packages update."
   }
 }

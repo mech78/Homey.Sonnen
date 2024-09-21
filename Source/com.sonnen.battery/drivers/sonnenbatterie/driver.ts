@@ -12,6 +12,7 @@ class SonnenBatterieDriver extends Homey.Driver {
 
     const setToC_card = this.homey.flow.getActionCard("set-time-of-use");
     const setToCHours_card = this.homey.flow.getActionCard("set-time-of-use-hours");
+    const setToCHoursString_card = this.homey.flow.getActionCard("set-time-of-use-hours-string");
     const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
     const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
 
@@ -43,8 +44,31 @@ class SonnenBatterieDriver extends Homey.Driver {
 
     setToCHours_card.registerRunListener(async (args) => {
       var timeStart = args.Start;
-      var hours = args.Hours;
-      var maxPower = args.MaxPower;
+      var hours     = args.Hours;
+      var maxPower  = args.MaxPower;
+
+      // Calculate end from timeStart and hours.
+      var timeStartHours = +timeStart.split(":", 1)[0];
+      var timeStartMinutes = timeStart.split(":", 2)[1];
+      var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+      var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
+
+      var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
+
+      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      this.log("Result", commandResult, args.Power);
+
+      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
+
+      if (commandResult.HasError)
+        throw Error(commandResult.error);
+
+    });
+
+    setToCHoursString_card.registerRunListener(async (args) => {
+      var timeStart = args.Start;
+      var hours     = args.Hours;
+      var maxPower  = args.MaxPower;
 
       // Calculate end from timeStart and hours.
       var timeStartHours = +timeStart.split(":", 1)[0];

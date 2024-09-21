@@ -26,9 +26,17 @@
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
-    "button.reset_meter"
+    "button.reset_meter",
+    "meter_power.imported", 
+    "meter_power.exported"
   ],
   "capabilitiesOptions": {
+    "meter_power.imported": {
+      "title": { "en": "Imported Energy" }
+    },
+    "meter_power.exported": {
+      "title": { "en": "Exported Energy" }
+    },
     "button.reset_meter": {
       "maintenanceAction": true,
       "title": { 
@@ -50,10 +58,12 @@
     "large": "{{driverAssetsPath}}/images/large.png"
   },
   "energy": {
+    "cumulative": true,
+    "cumulativeImportedCapability": "meter_power.imported",
+    "cumulativeExportedCapability": "meter_power.exported",
     "batteries": [
       "OTHER"
-    ],
-    "cumulative": true
+    ]
   },
   "pair": [
     {
