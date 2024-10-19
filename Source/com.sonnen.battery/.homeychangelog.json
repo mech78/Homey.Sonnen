@@ -49,5 +49,8 @@
   },
   "1.2.0": {
     "en": "Widget support"
+  },
+  "1.2.1": {
+    "en": "Widget preview added."
   }
 }
