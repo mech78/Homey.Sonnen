@@ -22,10 +22,10 @@ class BatteryDevice extends Homey.Device {
     // re-initialize from capability values
     this.state = {
       lastUpdate: this.getLocalNow(),
-      totalProduction_Wh: +this.getCapabilityValue("meter_power") * 1000 ?? 0,
-      totalConsumption_Wh: +this.getCapabilityValue("consumption_daily_capability") * 1000 ?? 0,
-      totalGridFeedIn_Wh: +this.getCapabilityValue("grid_feed_in_daily_capability") * 1000 ?? 0,
-      totalGridConsumption_Wh: +this.getCapabilityValue("grid_consumption_daily_capability") * 1000 ?? 0
+      totalProduction_Wh: +this.getCapabilityValue("meter_power") * 1000,
+      totalConsumption_Wh: +this.getCapabilityValue("consumption_daily_capability") * 1000,
+      totalGridFeedIn_Wh: +this.getCapabilityValue("grid_feed_in_daily_capability") * 1000,
+      totalGridConsumption_Wh: +this.getCapabilityValue("grid_consumption_daily_capability") * 1000
     };
 
     // Get latest state:

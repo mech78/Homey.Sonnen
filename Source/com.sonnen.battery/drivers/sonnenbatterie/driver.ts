@@ -48,8 +48,8 @@ class SonnenBatterieDriver extends Homey.Driver {
       var maxPower  = args.MaxPower;
 
       // Calculate end from timeStart and hours.
-      var timeStartHours = +timeStart.split(":", 1)[0];
-      var timeStartMinutes = timeStart.split(":", 2)[1];
+      var timeStartHours   = +timeStart.split(":", 1)[0];
+      var timeStartMinutes =  timeStart.split(":", 2)[1];
       var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
       var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
 

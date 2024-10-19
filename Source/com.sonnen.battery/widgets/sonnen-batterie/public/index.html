@@ -1,0 +1,169 @@
+<html>
+
+<head>
+  <style>
+    /* Example of a custom CSS class. */
+    .custom-image-class {
+      margin: var(--homey-su-3) auto var(--homey-su-5);
+      --homey-icon-color: var(--homey-icon-color-green);
+      --homey-icon-size: var(--homey-icon-size-small);
+    }
+
+    .app-container {
+      display: flex;
+      justify-content: space-between;
+      /* Space between the two items */
+      flex-wrap: wrap;
+      /* Allows items to wrap to the next line */
+    }
+
+    .app-item-container {
+      margin: 10px 0px;
+      flex: 1 1 25%;
+      /* Each item takes 25% of the width (adjust as needed) */
+      max-width: 25%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      /* Ensures elements inside stack vertically */
+      align-items: center;
+      /* Center items horizontally within the container */
+      text-align: center;
+      /* Ensures text aligns in the center */
+    }
+
+    .app-icon {
+      height: var(--homey-icon-size-medium);
+      /* background-color: var(--homey-color-mono-400); */
+      /* padding: 16px, 16px, 16px, 16px; */
+      padding-bottom: var(--homey-su);
+    }
+
+    .batteryContainer {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .batteryOuter {
+      border-radius: 3px;
+      border: 1px solid var(--homey-color-mono-1000);
+      padding: 1px;
+      width: 100px;
+      height: 35px;
+    }
+
+    .batteryBump {
+      border-radius: 2px;
+      background-color: var(--homey-color-mono-1000);
+      margin: 2px;
+      width: 1px;
+      height: 3px;
+    }
+
+    #batteryLevel {
+      border-radius: 2px;
+      background-color: var(--homey-color-green-500);
+      width: 0px;
+      height: 31px;
+    }
+  </style>
+</head>
+
+<body class="homey-widget">
+  <!-- <img src="homey-logo.png" alt="Homey logo" class="custom-image-class" /> -->
+  <!-- <p class="homey-text-regular homey-text-align-center">Edit public/index.html and hit refresh.</p> -->
+
+  <div class="app-container">
+    <!-- Column 1-->
+    <div class="app-item-container">
+      <img src="solar-panel-sharp-thin.svg" class="app-icon homey-text-small-light"></img>
+      <p class="homey-text-small-light homey-text-align-center">Production</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblProduction">0</span> kW</p>
+    </div>
+    <!-- Column 2-->
+    <div class="app-item-container">
+      <img src="house-sharp-thin.svg" class="app-icon homey-text-small-light"></img>
+      <p class="homey-text-small-light homey-text-align-center">Consumption</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblConsumption">0</span> kW</p>
+    </div>
+    <!-- Column 3-->
+    <div class="app-item-container">
+      <img src="icon.svg" class="app-icon"></img>
+      <p class="homey-text-small-light homey-text-align-center">Batterie</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblBatterie">0</span> kW</p>
+      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">FROM</span> -->
+    </div>
+    <!-- Column 4-->
+    <div class="app-item-container">
+      <img src="utility-pole-sharp-thin.svg" class="app-icon"></img>
+      <p class="homey-text-small-light homey-text-align-center">Grid</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblGrid">0</span> kW</p>
+      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">TO</span> -->
+    </div>
+  </div>
+
+  <div>
+    <div class="batteryContainer" style="padding-left: var(--homey-su-2);">
+      <div class="batteryOuter">
+        <div id="batteryLevel"></div>
+      </div>
+      <div class="batteryBump"></div>
+      <span class="homey-font-size-default hoemy-font-weight-regular" id="batteriePercentage" style="padding-left: var(--homey-su-2);">-%</span>
+    </div>
+  </div>
+
+  <!-- <div>
+    <span id="lblDebug" style="background-color: green;"></span>
+  </div> -->
+
+  <script type="text/javascript">
+    let widget_data = {};
+
+    function onHomeyReady(Homey) {
+
+      Homey.ready();
+      
+      this.getData();
+      // Repeat every 30 sek.
+      setTimeout(() => { this.getData(); }, 30*1000);
+      
+    }
+
+
+    function getData() {
+
+      //document.getElementById('lblDebug').innerText = 'Call api';
+
+      try {
+        Homey.api("GET", `/`).then((response) => {
+          var batterieData = response;
+
+          document.getElementById('lblProduction').innerText  = batterieData["production"];
+          document.getElementById('lblConsumption').innerText = batterieData["consumption"];
+          document.getElementById('lblBatterie').innerText    = batterieData["batterie"];
+          document.getElementById('lblGrid').innerText        = batterieData["from_grid"];
+
+          document.getElementById('batteryLevel').style.width = batterieData["percentage"] + 'px';
+          document.getElementById('batteriePercentage').innerText = batterieData["percentage"] + '%';
+        });
+      } catch (e) {
+        //document.getElementById('lblDebug').innerText = 'E: ' + e;
+      }
+
+
+
+
+
+
+
+    }
+
+  </script>
+</body>
+
+</html>
