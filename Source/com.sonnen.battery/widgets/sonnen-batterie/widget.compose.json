@@ -1,0 +1,13 @@
+{
+  "name": {
+    "en": "Sonnen Batterie"
+  },
+  "height": 150,
+  "settings": [],
+  "api": {
+    "getData": {
+      "method": "GET",
+      "path": "/"
+    }
+  }
+}
