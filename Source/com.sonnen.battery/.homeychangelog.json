@@ -52,5 +52,8 @@
   },
   "1.2.1": {
     "en": "Widget preview added."
+  },
+  "1.2.2": {
+    "en": "Added auto-discovery of (local) IP."
   }
 }

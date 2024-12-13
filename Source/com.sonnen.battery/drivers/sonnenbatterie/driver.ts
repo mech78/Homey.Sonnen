@@ -1,4 +1,5 @@
 import Homey from 'homey';
+import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 
@@ -205,14 +206,31 @@ class SonnenBatterieDriver extends Homey.Driver {
    * This should return an array with the data of devices that are available for pairing.
    */
   async onPairListDevices() {
-    return [
-      {
-        "name": 'SonnenBatterie',
-        "data": {
-          "id": 'sonnenBatterie',
+    try {
+      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
+
+      if (response.data) {
+        this.log('results found', response.data);
+        const results = [];
+        for (const e of response.data) {
+          results.push({
+            name: e.info,
+            data: {
+              id: e.device,
+            },
+            store: {
+              lanip: e.lanip,
+            },
+          });
         }
+
+        return results;
       }
-    ];
+    } catch (error) {
+      console.error(error);
+    }
+
+    return [];
   }
 
 }

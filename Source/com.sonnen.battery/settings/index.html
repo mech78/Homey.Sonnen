@@ -18,11 +18,11 @@
 
     <fieldset class="homey-form-fieldset">
 
-        <div class="homey-form-group">
+        <!-- <div class="homey-form-group">
             <label class="homey-form-label" for="inputBatteryBaseUrl" data-i18n="settings.baseUrl">Base Url</label>
             <input class="homey-form-input"  id="inputBatteryBaseUrl" type="text" value="" placeholder="Enter your Sonnen Batterie base url" />
             <small class="text-muted">Ex: http://192.168.1.112:80</small>
-        </div>
+        </div> -->
 
         <div class="homey-form-group">
             <label class="homey-form-label" for="inputBatteryAuthToken" data-i18n="settings.authToken">Auth Token</label>
@@ -51,15 +51,15 @@
             // Tell Homey we're ready to be displayed
             Homey.ready();
 
-            var inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
+            //var inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
             var inputBatteryAuthTokenElement   = document.getElementById("inputBatteryAuthToken");
             var inputPullIntervalValueElement  = document.getElementById("inputPullIntervalValue");
             var saveElement = document.getElementById("save");
 
-            Homey.get("BatteryBaseUrl", function (err, baseUrl) {
-                if (err) return Homey.alert(err);
-                inputBatteryBaseUrlElement.value = baseUrl;
-            });
+            // Homey.get("BatteryBaseUrl", function (err, baseUrl) {
+            //     if (err) return Homey.alert(err);
+            //     inputBatteryBaseUrlElement.value = baseUrl;
+            // });
             
             Homey.get("BatteryAuthToken", function (err, authToken) {
                 if (err) return Homey.alert(err);
@@ -74,12 +74,12 @@
             saveElement.addEventListener("click", function (e) {
                 var anySaveErrors = false;
 
-                Homey.set("BatteryBaseUrl", inputBatteryBaseUrlElement.value, function (err) {
-                    if (err) {
-                        anySaveErrors = true;
-                        return Homey.alert(err);
-                    } 
-                });
+                // Homey.set("BatteryBaseUrl", inputBatteryBaseUrlElement.value, function (err) {
+                //     if (err) {
+                //         anySaveErrors = true;
+                //         return Homey.alert(err);
+                //     } 
+                // });
 
                 Homey.set("BatteryAuthToken", inputBatteryAuthTokenElement.value, function (err) {
                     if (err) {

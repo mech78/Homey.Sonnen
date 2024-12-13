@@ -14,8 +14,8 @@ class BatteryDevice extends Homey.Device {
 
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
-    
-    var batteryBaseUrl = this.homey.settings.get("BatteryBaseUrl");
+
+    var batteryBaseUrl = `http://${this.getStore().lanip}:80`; // This may change/update at runtime.      
     var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
     var batteryPullInterval = +(this.homey.settings.get("BatteryPullInterval") || '30');
 
@@ -30,9 +30,11 @@ class BatteryDevice extends Homey.Device {
 
     // Get latest state:
     this.state = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, this.state);
-    
+
     // Pull battery status 
     await this.homey.setInterval(async () => {
+
+      batteryBaseUrl = `http://${this.getStore().lanip}:80`; // This may change/update at runtime.      
       this.state = await this.loadLatestState(batteryBaseUrl, batteryAuthToken, this.state);
     }, batteryPullInterval * 1000);
 
@@ -75,7 +77,7 @@ class BatteryDevice extends Homey.Device {
       await this.addCapability('from_battery_capability');
     }
     if (this.hasCapability('to_battery_capability') === false) {
-      await this.addCapability('to_battery_capability'); 
+      await this.addCapability('to_battery_capability');
     }
 
     // added/altered after 1.0.11 
@@ -84,7 +86,7 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('feed_grid_capability') === true) {
       // as renamed to "grid_feed_in_capability" when adding grid_consumption_capability.
       // removing it completely as GridFeedIn_W had problems before 1.0.11 anyway; not worth keeping flows alive.
-      await this.removeCapability('feed_grid_capability'); 
+      await this.removeCapability('feed_grid_capability');
     }
     if (this.hasCapability('consumption_daily_capability') === false) {
       await this.addCapability('consumption_daily_capability');
@@ -155,7 +157,7 @@ class BatteryDevice extends Homey.Device {
     this.log('BatteryDevice has been deleted');
   }
 
-  private async loadLatestState(baseUrl: string, authKey: string, lastState: any) : Promise<any> {
+  private async loadLatestState(baseUrl: string, authKey: string, lastState: any, retryOnError = true): Promise<any> {
     // Arrange
     var options = {
       method: 'get',
@@ -168,6 +170,8 @@ class BatteryDevice extends Homey.Device {
 
     try {
       // Act
+      this.log("INVOKE", "loadLatestState", `${baseUrl}/api/v2/latestdata`);
+
       var response = await axios.get(`${baseUrl}/api/v2/latestdata`, options).then();
 
       var statusResponse = await axios.get(`${baseUrl}/api/v2/status`, options).then();
@@ -182,13 +186,13 @@ class BatteryDevice extends Homey.Device {
 
       if (!_.isEqual(energy.batteries, actualBatteries)) {
         energy.batteries = actualBatteries;
-        await this.setEnergy({ batteries: actualBatteries });  
+        await this.setEnergy({ batteries: actualBatteries });
       }
-     
+
       var currentUpdate = new Date(latestStateJson.Timestamp);
       var grid_feed_in_W = (+statusJson.GridFeedIn_W > 0) ? +statusJson.GridFeedIn_W : 0;
       var grid_consumption_W = (+statusJson.GridFeedIn_W < 0) ? -1 * statusJson.GridFeedIn_W : 0;
-       
+
       var currentState = {
         lastUpdate: currentUpdate,
         totalProduction_Wh: this.aggregateDailyTotal(lastState.totalProduction_Wh, statusJson.Production_W, lastState.lastUpdate, currentUpdate),
@@ -225,13 +229,36 @@ class BatteryDevice extends Homey.Device {
       var percentageGridFeedIn = (currentState.totalGridFeedIn_Wh / currentState.totalProduction_Wh) * 100;
       var percentageSelfConsumption = 100 - percentageGridFeedIn;
       this.setCapabilityValue("self_consumption_capability", +percentageSelfConsumption);
-      
+
       return currentState;
     } catch (e: any) {
-      this.error("Error occured", e);
-      return lastState;
+      console.log("INVOKE", "LoadLatest...", "ERROR CATCH", retryOnError, "this.getName()", this.getName());
+      if (retryOnError) {
+
+        // Maybe IP has changed, lets try and fix this...
+        await axios.get('https://find-my.sonnen-batterie.com/find')
+          .then(async (res) => {
+            if (res.data) {
+              for (const e of res.data) {
+                if (this.resolveDeviceNameWithFallback() === e.info) {
+                  this.log('found device and resetting', e.device, e.lanip);
+                  this.setStoreValue('lanip', e.lanip);
+
+                  // Try and reload data
+                  await this.loadLatestState(e.lanip, authKey, lastState, false);
+                }
+              }
+            }
+          })
+          .catch((err) => this.log('failed to find sonnen batteries', err));
+
+      } else {
+        this.error("Error occured", e);
+        return lastState;
+      }
+
     }
-    
+
   }
 
   private resolveCircleColor(eclipseLed: any): string {
@@ -243,12 +270,17 @@ class BatteryDevice extends Homey.Device {
     return this.homey.__("eclipseLed.Unknown");
   }
 
-  private aggregateDailyTotal(totalEnergyDaily_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {   
+  private aggregateDailyTotal(totalEnergyDaily_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
     var totalEnergyDailyResult_Wh = (currentUpdate.getDay() !== lastUpdate.getDay()) ? 0 : totalEnergyDaily_Wh;  // reset daily total at local midnight   
     var sampleIntervalMillis = (currentUpdate.getTime() - lastUpdate.getTime()); // should be ~30000ms resp. polling frequency
     var sampleEnergy_Wh = currentPower_W * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyDailyResult_Wh += sampleEnergy_Wh;
     return totalEnergyDailyResult_Wh;
+  }
+
+  private resolveDeviceNameWithFallback() : string {
+    var name = this.getName() || "sonnenBatterie";
+    return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
 }
 
