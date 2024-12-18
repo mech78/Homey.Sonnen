@@ -3,7 +3,7 @@
     "en": "sonnenBatterie",
     "de": "sonnenBatterie"
   },
-  "class": "other",
+  "class": "battery",
   "capabilities": [
     "measure_power",
     "measure_battery",
@@ -46,6 +46,9 @@
           "en": "Resets today's totals (kWh). This can not be restored.", 
           "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden." }
     }
+  },
+  "energy": {
+    "homeBattery": true
   },
   "platforms": [
     "local"

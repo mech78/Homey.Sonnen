@@ -55,5 +55,8 @@
   },
   "1.2.2": {
     "en": "Added auto-discovery of (local) IP."
+  },
+  "1.2.3": {
+    "en": "Hotfixes. Addressed by Tim Bogaert."
   }
 }

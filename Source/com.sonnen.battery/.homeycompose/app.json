@@ -1,6 +1,6 @@
 {
   "id": "com.sonnen.battery",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "compatibility": ">=12.1.0",
   "sdk": 3,
   "platforms": [
@@ -44,6 +44,9 @@
     "developers": [
       {
         "name": "mech78"
+      },
+      {
+        "name": "Tim Bogaert"
       }
     ],
     "translators": [
