@@ -58,5 +58,8 @@
   },
   "1.2.3": {
     "en": "Hotfixes. Addressed by Tim Bogaert."
+  },
+  "1.2.4": {
+    "en": "Hotfix. Commands not being sent. Added settings on device."
   }
 }

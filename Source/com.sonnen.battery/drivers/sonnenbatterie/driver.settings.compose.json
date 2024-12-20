@@ -1,0 +1,32 @@
+[
+    {
+        "type": "group",
+        "label": {
+            "en": "Connection"
+        },
+        "children": [
+          {
+            "id": "device-ip",
+            "type": "text",
+            "label": { 
+              "en": "IP address"
+            },
+            "value": "192.168.1.xxx",
+            "hint": { 
+              "en": "Specify the ip of the Sonnen Batterie."
+             }
+          },
+          {
+            "id": "device-discovery",
+            "type": "checkbox",
+            "label": { 
+              "en": "Auto-discover IP"
+             },
+            "value": true,
+            "hint": { 
+              "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my ip. Requires local-network."
+             }
+          }
+        ]
+    }
+]

@@ -1,6 +1,7 @@
 import Homey from 'homey';
 import axios from 'axios';
 import _ from 'underscore';
+import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 
 class BatteryDevice extends Homey.Device {
   state: any;
@@ -14,7 +15,8 @@ class BatteryDevice extends Homey.Device {
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
-    var batteryBaseUrl = `http://${this.getStore().lanip}:80`; // This may change/update at runtime.
+    var batteryBaseUrl   = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+    var retryOnError     = this.getStore().autodiscovery ?? true;
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
     var batteryPullInterval = +(
       this.homey.settings.get('BatteryPullInterval') || '30'
@@ -36,16 +38,22 @@ class BatteryDevice extends Homey.Device {
     this.state = await this.loadLatestState(
       batteryBaseUrl,
       batteryAuthToken,
-      this.state
+      this.state,
+      retryOnError
     );
 
     // Pull battery status
     await this.homey.setInterval(async () => {
-      batteryBaseUrl = `http://${this.getStore().lanip}:80`; // This may change/update at runtime.
+      batteryBaseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+      retryOnError = this.getStore().autodiscovery ?? true;
+
+      this.log("Recovery of ip: " + retryOnError);
+
       this.state = await this.loadLatestState(
         batteryBaseUrl,
         batteryAuthToken,
-        this.state
+        this.state,
+        retryOnError
       );
     }, batteryPullInterval * 1000);
   }
@@ -146,15 +154,23 @@ class BatteryDevice extends Homey.Device {
     newSettings,
     changedKeys,
   }: {
-    oldSettings: {
-      [key: string]: boolean | string | number | undefined | null;
-    };
-    newSettings: {
-      [key: string]: boolean | string | number | undefined | null;
-    };
+    oldSettings: { [key: string]: boolean | string | number | undefined | null; };
+    newSettings: { [key: string]: boolean | string | number | undefined | null; };
     changedKeys: string[];
   }): Promise<string | void> {
     this.log('BatteryDevice settings where changed');
+
+    if (_.contains(changedKeys, "device-ip")){
+      var newDeviceIp = newSettings["device-ip"];
+      this.log("Settings", "IP", newDeviceIp);
+      this.setStoreValue('lanip', newDeviceIp);
+    };
+
+    if (_.contains(changedKeys, "device-discovery")){
+      var blnUseAutoDisovery = newSettings["device-discovery"];
+      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
+      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
+    };
   }
 
   /**
@@ -349,6 +365,8 @@ class BatteryDevice extends Homey.Device {
                   this.log('found device and resetting', e.device, e.lanip);
                   this.setStoreValue('lanip', e.lanip);
 
+                  await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of ip detected. Resolved new IP: ${e.lanip}`});
+
                   // Try and reload data
                   await this.loadLatestState(
                     e.lanip,
@@ -396,6 +414,7 @@ class BatteryDevice extends Homey.Device {
     var name = this.getName() || 'sonnenBatterie';
     return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
+
 }
 
 module.exports = BatteryDevice;

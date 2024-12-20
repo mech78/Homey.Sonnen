@@ -11,8 +11,8 @@ class SonnenBatterieDriver extends Homey.Driver {
   async onInit() {
     this.log('SonnenBatterieDriver has been initialized');
 
-    const setToC_card = this.homey.flow.getActionCard("set-time-of-use");
-    const setToCHours_card = this.homey.flow.getActionCard("set-time-of-use-hours");
+    const setToC_card       = this.homey.flow.getActionCard("set-time-of-use");
+    const setToCHours_card  = this.homey.flow.getActionCard("set-time-of-use-hours");
     const setToCHoursString_card = this.homey.flow.getActionCard("set-time-of-use-hours-string");
     const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
     const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
@@ -22,18 +22,17 @@ class SonnenBatterieDriver extends Homey.Driver {
 
     const zeroPad = (num: any, places: any) => String(num).padStart(places, '0');
 
+    var batteryAuthToken  = this.homey.settings.get("BatteryAuthToken");
 
-    var batteryBaseUrl = this.homey.settings.get("BatteryBaseUrl");
-    var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
-
-    var sonnenBatterieClient = new SonnenBatterieClient(batteryBaseUrl, batteryAuthToken);
+    var sonnenBatterieClient = new SonnenBatterieClient(batteryAuthToken);
 
     setToC_card.registerRunListener(async (args) => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       var timeStart = args.Start;
-      var timeEnd = args.End;
-      var maxPower = args.MaxPower;
+      var timeEnd   = args.End;
+      var maxPower  = args.MaxPower;
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
       this.log("Result", commandResult, args.Power);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
@@ -44,6 +43,7 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     setToCHours_card.registerRunListener(async (args) => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       var timeStart = args.Start;
       var hours     = args.Hours;
       var maxPower  = args.MaxPower;
@@ -56,7 +56,7 @@ class SonnenBatterieDriver extends Homey.Driver {
 
       var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
       this.log("Result", commandResult, args.Power);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
@@ -67,6 +67,7 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     setToCHoursString_card.registerRunListener(async (args) => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       var timeStart = args.Start;
       var hours     = args.Hours;
       var maxPower  = args.MaxPower;
@@ -82,7 +83,7 @@ class SonnenBatterieDriver extends Homey.Driver {
 
       //this.log("INPUT", timeStart, timeEnd, maxPower);
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, maxPower);
+      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
       this.log("Result", commandResult, args.Power);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.`});
@@ -93,9 +94,10 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     resetToC_card.registerRunListener(async () => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       // Set empty schedule
 
-      var commandResult = await sonnenBatterieClient.ClearSchedule();
+      var commandResult = await sonnenBatterieClient.ClearSchedule(baseUrl);
       this.log("Result", commandResult);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Reset ToC.`});
@@ -106,10 +108,11 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     pauseToC_card.registerRunListener(async (args) => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       var timeStart = args.Start;
-      var timeEnd = args.End;
+      var timeEnd   = args.End;
 
-      var commandResult =       await sonnenBatterieClient.SetSchedule(timeStart, timeEnd, 0);
+      var commandResult =       await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, 0);
       this.log("Result", commandResult, args.Power);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause ToC between ${timeStart} and ${timeEnd}.`});
@@ -120,9 +123,10 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     startToC_card.registerRunListener(async (args) => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       // Set full schedule
 
-      var commandResult =       await sonnenBatterieClient.SetSchedule("00:00", "23:59", args.Power);
+      var commandResult =       await sonnenBatterieClient.SetSchedule(baseUrl, "00:00", "23:59", args.Power);
       this.log("Result", commandResult, args.Power);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start ToC.`});
@@ -132,9 +136,10 @@ class SonnenBatterieDriver extends Homey.Driver {
     });
 
     stopToC_card.registerRunListener(async () => {
+      var baseUrl   = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
       // Set empty schedule
 
-      var commandResult = await sonnenBatterieClient.ClearSchedule();
+      var commandResult = await sonnenBatterieClient.ClearSchedule(baseUrl);
       this.log("Result", commandResult);
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Stop ToC.`});
