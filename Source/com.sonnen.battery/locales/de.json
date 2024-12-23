@@ -30,5 +30,11 @@
       "notready": "nicht bereit",
       "ongrid": "am Netz",
       "offgrid": "ohne Netz"
+    },
+    "widget": {
+      "production": "Produktion",
+      "consumption": "Verbrauch",
+      "fromBattery": "Batteriebezug",
+      "fromGrid": "Netzbezug"
     }
   }
