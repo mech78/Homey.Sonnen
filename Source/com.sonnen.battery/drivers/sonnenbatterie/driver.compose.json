@@ -32,10 +32,16 @@
   ],
   "capabilitiesOptions": {
     "meter_power.imported": {
-      "title": { "en": "Imported Energy" }
+      "title": { 
+        "en": "Imported Energy", 
+        "de": "Importierte Energie" 
+      }
     },
     "meter_power.exported": {
-      "title": { "en": "Exported Energy" }
+      "title": { 
+        "en": "Exported Energy", 
+        "de": "Exportierte Energie" 
+      }
     },
     "button.reset_meter": {
       "maintenanceAction": true,
