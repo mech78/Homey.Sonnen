@@ -2,29 +2,34 @@
     {
         "type": "group",
         "label": {
-            "en": "Connection"
+            "en": "Connection",
+            "de": "Verbindung"
         },
         "children": [
           {
             "id": "device-ip",
             "type": "text",
             "label": { 
-              "en": "IP address"
+              "en": "IP address",
+              "de": "IP Adresse"
             },
             "value": "192.168.1.xxx",
             "hint": { 
-              "en": "Specify the ip of the Sonnen Batterie."
+              "en": "Specify the ip of the Sonnen Batterie.",
+              "de": "IP Adresse der Sonnen Batterie angeben."
              }
           },
           {
             "id": "device-discovery",
             "type": "checkbox",
             "label": { 
-              "en": "Auto-discover IP"
+              "en": "Auto-discover IP address",
+              "de": "Selbsterkennung IP Adresse"
              },
             "value": true,
             "hint": { 
-              "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my ip. Requires local-network."
+              "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my IP address. Requires local-network.",
+              "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk."
              }
           }
         ]
