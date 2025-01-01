@@ -61,5 +61,8 @@
   },
   "1.2.4": {
     "en": "Hotfix. Commands not being sent. Added settings on device."
+  },
+  "1.2.5": {
+    "en": "Added DE translations for v1.2.4. Fixes IP change auto-recovery. Fixes homeBattery device config."
   }
 }

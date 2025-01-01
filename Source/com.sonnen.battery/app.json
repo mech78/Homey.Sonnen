@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "compatibility": ">=12.1.0",
   "sdk": 3,
   "platforms": [
@@ -530,21 +530,9 @@
         "state_inverter_capability",
         "state_bms_capability",
         "alarm_generic",
-        "button.reset_meter",
-        "meter_power.imported",
-        "meter_power.exported"
+        "button.reset_meter"
       ],
       "capabilitiesOptions": {
-        "meter_power.imported": {
-          "title": {
-            "en": "Imported Energy"
-          }
-        },
-        "meter_power.exported": {
-          "title": {
-            "en": "Exported Energy"
-          }
-        },
         "button.reset_meter": {
           "maintenanceAction": true,
           "title": {
@@ -558,11 +546,9 @@
         }
       },
       "energy": {
-        "cumulative": true,
-        "cumulativeImportedCapability": "meter_power.imported",
-        "cumulativeExportedCapability": "meter_power.exported",
+        "homeBattery": true,
         "batteries": [
-          "OTHER"
+          "INTERNAL"
         ]
       },
       "platforms": [
@@ -593,29 +579,34 @@
         {
           "type": "group",
           "label": {
-            "en": "Connection"
+            "en": "Connection",
+            "de": "Verbindung"
           },
           "children": [
             {
               "id": "device-ip",
               "type": "text",
               "label": {
-                "en": "IP address"
+                "en": "IP address",
+                "de": "IP Adresse"
               },
               "value": "192.168.1.xxx",
               "hint": {
-                "en": "Specify the ip of the Sonnen Batterie."
+                "en": "Specify the ip of the Sonnen Batterie.",
+                "de": "IP Adresse der Sonnen Batterie angeben."
               }
             },
             {
               "id": "device-discovery",
               "type": "checkbox",
               "label": {
-                "en": "Auto-discover IP"
+                "en": "Auto-discover IP address",
+                "de": "Selbsterkennung IP Adresse"
               },
               "value": true,
               "hint": {
-                "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my ip. Requires local-network."
+                "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my IP address. Requires local-network.",
+                "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk."
               }
             }
           ]

@@ -30,5 +30,11 @@
       "notready": "not ready",
       "ongrid": "on grid",
       "offgrid": "off grid"
+    },
+    "widget": {
+      "production": "Production",
+      "consumption": "Consumption",
+      "fromBattery": "From battery",
+      "fromGrid": "From grid"
     }
   }

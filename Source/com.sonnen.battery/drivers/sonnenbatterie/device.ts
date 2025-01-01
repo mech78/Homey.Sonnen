@@ -15,8 +15,6 @@ class BatteryDevice extends Homey.Device {
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
-    var batteryBaseUrl   = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
-    var retryOnError     = this.getStore().autodiscovery ?? true;
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
     var batteryPullInterval = +(
       this.homey.settings.get('BatteryPullInterval') || '30'
@@ -36,24 +34,17 @@ class BatteryDevice extends Homey.Device {
 
     // Get latest state:
     this.state = await this.loadLatestState(
-      batteryBaseUrl,
       batteryAuthToken,
       this.state,
-      retryOnError
+      this.getStore().autodiscovery ?? true
     );
 
     // Pull battery status
-    await this.homey.setInterval(async () => {
-      batteryBaseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
-      retryOnError = this.getStore().autodiscovery ?? true;
-
-      this.log("Recovery of ip: " + retryOnError);
-
+    this.homey.setInterval(async () => {
       this.state = await this.loadLatestState(
-        batteryBaseUrl,
         batteryAuthToken,
         this.state,
-        retryOnError
+        this.getStore().autodiscovery ?? true
       );
     }, batteryPullInterval * 1000);
   }
@@ -190,7 +181,6 @@ class BatteryDevice extends Homey.Device {
   }
 
   private async loadLatestState(
-    baseUrl: string,
     authKey: string,
     lastState: any,
     retryOnError = true
@@ -207,6 +197,8 @@ class BatteryDevice extends Homey.Device {
 
     try {
       // Act
+      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+
       this.log('INVOKE', 'loadLatestState', `${baseUrl}/api/v2/latestdata`);
 
       var response = await axios
@@ -351,9 +343,16 @@ class BatteryDevice extends Homey.Device {
         +percentageSelfConsumption
       );
 
+      /*
+      if (Math.random() < 0.5) {
+        throw new Error("random");
+      }
+      */
+
       return currentState;
     } catch (e: any) {
-      console.log('INVOKE', 'LoadLatest...', 'ERROR CATCH', retryOnError);
+      this.error('Error occured', e)
+      this.log('INVOKE', 'loadLatestState', 'ERROR CATCH', retryOnError);
       if (retryOnError) {
         // Maybe IP has changed, lets try and fix this...
         await axios
@@ -362,27 +361,28 @@ class BatteryDevice extends Homey.Device {
             if (res.data) {
               for (const e of res.data) {
                 if (this.resolveDeviceNameWithFallback() === e.info) {
-                  this.log('found device and resetting', e.device, e.lanip);
-                  this.setStoreValue('lanip', e.lanip);
+                  this.log(`Found device ${e.device} with IP ${e.lanip}`);
+                  const currentIP = this.getStoreValue('lanip');
+                  if (currentIP !== e.lanip) {
+                    this.log(`Device: ${e.device} changed IP from ${currentIP} to ${e.lanip}. Retrying...`);
+                    this.setStoreValue('lanip', e.lanip);
 
-                  await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of ip detected. Resolved new IP: ${e.lanip}`});
+                    await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${e.lanip}`});
 
-                  // Try and reload data
-                  await this.loadLatestState(
-                    e.lanip,
-                    authKey,
-                    lastState,
-                    false
-                  );
+                    // Try and reload data
+                    return await this.loadLatestState(
+                      authKey,
+                      lastState,
+                      false
+                    );
+                  }
                 }
               }
             }
           })
-          .catch((err) => this.log('failed to find sonnen batteries', err));
-      } else {
-        this.error('Error occured', e);
-        return lastState;
-      }
+          .catch((err) => this.log('Failed to find sonnen batteries', err));
+        }
+      return lastState; // always return some valid state 
     }
   }
 
