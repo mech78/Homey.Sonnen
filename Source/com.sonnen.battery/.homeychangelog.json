@@ -64,5 +64,8 @@
   },
   "1.2.5": {
     "en": "Added DE translations for v1.2.4. Fixes IP change auto-recovery. Fixes homeBattery device config."
+  },
+  "1.3.0": {
+    "en": "Changes to the Energy-tab"
   }
 }

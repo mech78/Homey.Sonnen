@@ -1,8 +1,8 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.2.5",
-  "compatibility": ">=12.1.0",
+  "version": "1.3.0",
+  "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
     "local"
@@ -530,7 +530,8 @@
         "state_inverter_capability",
         "state_bms_capability",
         "alarm_generic",
-        "button.reset_meter"
+        "button.reset_meter",
+        "battery_charging_state"
       ],
       "capabilitiesOptions": {
         "button.reset_meter": {
@@ -548,6 +549,9 @@
       "energy": {
         "homeBattery": true,
         "batteries": [
+          "INTERNAL",
+          "INTERNAL",
+          "INTERNAL",
           "INTERNAL"
         ]
       },

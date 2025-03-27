@@ -26,7 +26,8 @@
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
-    "button.reset_meter"
+    "button.reset_meter",
+    "battery_charging_state"
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
@@ -41,7 +42,12 @@
   },
   "energy": {
     "homeBattery": true,
-    "batteries": [ "INTERNAL" ]
+    "batteries": [
+      "INTERNAL",
+      "INTERNAL",
+      "INTERNAL",
+      "INTERNAL"
+    ]
   },
   "platforms": [
     "local"

@@ -12,6 +12,10 @@ class BatteryDevice extends Homey.Device {
   async onInit() {
     this.log('BatteryDevice has been initialized');
 
+    
+    //await this.setEnergy({ homeBattery: true });
+    this.log("Setting up", this.getEnergy());
+
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
@@ -123,6 +127,9 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('autarky_capability') === false) {
       await this.addCapability('autarky_capability');
     }
+    if (this.hasCapability('battery_charging_state') === false) {
+      await this.addCapability('battery_charging_state');
+    }
   }
 
   /**
@@ -213,14 +220,14 @@ class BatteryDevice extends Homey.Device {
       var statusJson = statusResponse.data;
 
       // update device's batteries to actual number of internal batteries
-      var numberBatteries = +latestStateJson.ic_status.nrbatterymodules;
-      var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || { batteries: [] };
+      // var numberBatteries = +latestStateJson.ic_status.nrbatterymodules;
+      // var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
+      // var energy = (await this.getEnergy()) || { batteries: [] };
 
-      if (!_.isEqual(energy.batteries, actualBatteries)) {
-        energy.batteries = actualBatteries;
-        await this.setEnergy({ batteries: actualBatteries });
-      }
+      // if (!_.isEqual(energy.batteries, actualBatteries)) {
+      //   energy.batteries = actualBatteries;
+      //   await this.setEnergy({ batteries: actualBatteries, homeBattery: true });
+      // }
 
       var currentUpdate = new Date(latestStateJson.Timestamp);
       var grid_feed_in_W =
@@ -279,7 +286,7 @@ class BatteryDevice extends Homey.Device {
         +statusJson.Consumption_W / 1000
       ); // Consumption_W : consumption
       this.setCapabilityValue('measure_power', +statusJson.Consumption_W);
-      this.setCapabilityValue('number_battery_capability', numberBatteries);
+      this.setCapabilityValue('number_battery_capability', +latestStateJson.ic_status.nrbatterymodules);
       this.setCapabilityValue(
         'eclipse_capability',
         this.resolveCircleColor(latestStateJson.ic_status['Eclipse Led'])
