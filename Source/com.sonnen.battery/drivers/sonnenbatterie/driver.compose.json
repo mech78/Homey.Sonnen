@@ -42,12 +42,7 @@
   },
   "energy": {
     "homeBattery": true,
-    "batteries": [
-      "INTERNAL",
-      "INTERNAL",
-      "INTERNAL",
-      "INTERNAL"
-    ]
+    "batteries": [ "INTERNAL" ]
   },
   "platforms": [
     "local"
