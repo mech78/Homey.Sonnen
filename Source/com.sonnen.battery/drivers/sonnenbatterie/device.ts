@@ -130,6 +130,36 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('battery_charging_state') === false) {
       await this.addCapability('battery_charging_state');
     }
+
+    // v1.4.0
+    this.log("Homey version:", this.homey.version); // software version won't help
+    this.log("Homey plattform: ", this.homey.platformVersion); // Homey 2019 = 1...
+    
+    //"cumulativeImportedCapability": "meter_power.imported",
+    //"cumulativeExportedCapability": "meter_power.exported"
+
+   // "meter_power.imported": {
+   //   "uiComponent": null
+   // },
+   // "meter_power.exported": {
+   //   "uiComponent": null
+   // }
+
+   // Homey Pro (early 2019) emits this, so need to dynamically apply the energy settings
+   // Warning: drivers.sonnenbatterie has energy.cumulative set to true, but is missing 'cumulativeImportedCapability'. Disregard this warning if the driver does not have `meter_power` capabilities.
+   // Warning: drivers.sonnenbatterie has energy.cumulative set to true, but is missing 'cumulativeExportedCapability'. Disregard this warning if the driver does not have `meter_power` capabilities.
+
+
+    if (this.hasCapability('meter_power.imported') === false) {
+      await this.addCapability('meter_power.imported');
+    
+    }
+    await this.setCapabilityOptions("meter_power.imported", { "uiComponent": null });
+    if (this.hasCapability('meter_power.exported') === false) {
+      await this.addCapability('meter_power.exported');
+      
+    }
+    await this.setCapabilityOptions("meter_power.exported", { "uiComponent": null });
   }
 
   /**
