@@ -26,8 +26,7 @@
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
-    "button.reset_meter",
-    "battery_charging_state"
+    "button.reset_meter"
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
