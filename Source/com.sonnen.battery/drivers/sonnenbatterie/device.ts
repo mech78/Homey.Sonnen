@@ -133,7 +133,7 @@ class BatteryDevice extends Homey.Device {
 
     // v1.4.0
     this.log("Homey version:", this.homey.version); // software version won't help
-    this.log("Homey plattform: ", this.homey.platformVersion); // Homey 2019 = 1...
+    this.log("Homey plattform: ", this.homey.platformVersion); // Homey 2019 = 1... Homey 2023 = 2
     
     //"cumulativeImportedCapability": "meter_power.imported",
     //"cumulativeExportedCapability": "meter_power.exported"
