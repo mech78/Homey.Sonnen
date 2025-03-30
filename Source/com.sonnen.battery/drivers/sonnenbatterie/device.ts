@@ -277,11 +277,13 @@ class BatteryDevice extends Homey.Device {
         'capacity_capability',
         `${+latestStateJson.FullChargeCapacity / 1000} kWh`
       );
+
+      // meter: Wh, measure: W
+      this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
+      this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh /1000);
+
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
-      this.setCapabilityValue(
-        'grid_consumption_capability',
-        grid_consumption_W / 1000
-      ); // GridFeedIn_W negative: from grid
+      this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       this.setCapabilityValue(
         'consumption_capability',
         +statusJson.Consumption_W / 1000
