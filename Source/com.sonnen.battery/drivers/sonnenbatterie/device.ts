@@ -278,7 +278,8 @@ class BatteryDevice extends Homey.Device {
         `${+latestStateJson.FullChargeCapacity / 1000} kWh`
       );
 
-      // meter: Wh, measure: W
+      // meter: Wh, measure: W - default units would be kWh in the UI
+      // but disabled both as using grid_feed_in_daily_capability and grid_consumption_daily_capability already.
       this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
       this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh /1000);
 

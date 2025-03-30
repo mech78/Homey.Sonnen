@@ -42,10 +42,10 @@
           "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden." }
     },
     "meter_power.imported": {
-      "title": { "en": "Imported Energy" }
+      "uiComponent": null
     },
     "meter_power.exported": {
-      "title": { "en": "Exported Energy" }
+      "uiComponent": null
     }
   },
   "energy": {
