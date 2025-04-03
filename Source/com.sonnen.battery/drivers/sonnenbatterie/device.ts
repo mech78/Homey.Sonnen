@@ -66,16 +66,26 @@ class BatteryDevice extends Homey.Device {
       energy.cumulativeExportedCapability = "meter_power.exported";
       await this.setEnergy(energy);
 
-      if (this.hasCapability('meter_power.imported') === false) {
-        await this.addCapability('meter_power.imported');
+      //if (this.hasCapability('meter_power.imported') === false) {
+        await this.addCapability('meter_power.imported').catch((err) => this.log("Error adding capability", err));
          // meter_power.imported is redundant to grid_consumption_daily_capability but unvailable on older Homeys
-        await this.setCapabilityOptions("meter_power.imported", { "uiComponent": null }); // make invisible in tab
-      }
-      if (this.hasCapability('meter_power.exported') === false) {
-        await this.addCapability('meter_power.exported');
+        await this.setCapabilityOptions("meter_power.imported", {    
+          "title": {
+            "en": "Imported Power",
+            "de": "Importierte Energie"
+          }
+        }).catch((err) => this.log("Error setting capability options", err));
+      //}
+      //if (this.hasCapability('meter_power.exported') === false) {
+        await this.addCapability('meter_power.exported').catch((err) => this.log("Error adding capability", err));
          // meter_power.exported is redundant to grid_feed_in_daily_capability but unvailable on older Homeys
-        await this.setCapabilityOptions("meter_power.exported", { "uiComponent": null }); // make invisible in tab
-      }
+        await this.setCapabilityOptions("meter_power.exported", { 
+          "title": {
+            "en": "Exported Power",
+            "de": "Exportierte Energie"
+          }
+        }).catch((err) => this.log("Error setting capability options", err));; 
+      //}
     } else {
       this.log("This Homey does not support meter_power.imported & meter_power.exported");  
     }
@@ -319,7 +329,7 @@ class BatteryDevice extends Homey.Device {
         'consumption_capability',
         +statusJson.Consumption_W / 1000
       ); // Consumption_W : consumption
-      this.setCapabilityValue('measure_power', +statusJson.Consumption_W);
+      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
       this.setCapabilityValue('number_battery_capability', numberBatteries);
       this.setCapabilityValue(
         'eclipse_capability',
