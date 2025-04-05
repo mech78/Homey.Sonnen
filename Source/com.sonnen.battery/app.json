@@ -549,8 +549,7 @@
         "homeBattery": true,
         "batteries": [
           "INTERNAL"
-        ],
-        "cumulative": true
+        ]
       },
       "platforms": [
         "local"

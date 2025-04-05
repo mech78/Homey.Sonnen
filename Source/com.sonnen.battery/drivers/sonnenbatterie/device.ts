@@ -58,36 +58,44 @@ class BatteryDevice extends Homey.Device {
    */
   private async updateEnergyOnInit() {
     const energy = this.getEnergy();
-    this.log("Current energy config: ", energy, this.homey.platform, this.homey.platformVersion);
+    this.log('Current energy config: ', energy, this.homey.platform, this.homey.platformVersion);
 
-    if (this.homey.platform === "cloud" || this.homey.platformVersion >= 2 /* Homey Pro (early 2023) or later */) {
-      this.log("Configure meter_power.imported & meter_power.exported");
-      energy.cumulativeImportedCapability = "meter_power.imported";
-      energy.cumulativeExportedCapability = "meter_power.exported";
-      await this.setEnergy(energy);
-
-      //if (this.hasCapability('meter_power.imported') === false) {
-        await this.addCapability('meter_power.imported').catch((err) => this.log("Error adding capability", err));
-         // meter_power.imported is redundant to grid_consumption_daily_capability but unvailable on older Homeys
-        await this.setCapabilityOptions("meter_power.imported", {    
-          "title": {
-            "en": "Imported Power",
-            "de": "Importierte Energie"
-          }
-        }).catch((err) => this.log("Error setting capability options", err));
-      //}
-      //if (this.hasCapability('meter_power.exported') === false) {
-        await this.addCapability('meter_power.exported').catch((err) => this.log("Error adding capability", err));
-         // meter_power.exported is redundant to grid_feed_in_daily_capability but unvailable on older Homeys
-        await this.setCapabilityOptions("meter_power.exported", { 
-          "title": {
-            "en": "Exported Power",
-            "de": "Exportierte Energie"
-          }
-        }).catch((err) => this.log("Error setting capability options", err));; 
-      //}
+    if (this.homey.platform === 'cloud' || this.homey.platformVersion >= 2 /* Homey Pro (early 2023) or later */) {
+      if (energy.cumulative !== true) {
+        this.log('Configure meter_power.imported & meter_power.exported');
+        energy.cumulative = true;
+        energy.cumulativeImportedCapability = 'meter_power.imported';
+        energy.cumulativeExportedCapability = 'meter_power.exported';
+        await this.setEnergy(energy);
+      
+        if (this.hasCapability('meter_power.imported') === false) {
+          await this.addCapability('meter_power.imported');     
+          await this.setCapabilityOptions('meter_power.imported', {    
+            'title': {
+              'en': 'Imported Power',
+              'de': 'Importierte Energie'
+            }
+          })
+        }
+      
+        if (this.hasCapability('meter_power.exported') === false) {
+          await this.addCapability('meter_power.exported')
+          await this.setCapabilityOptions('meter_power.exported', { 
+            'title': {
+              'en': 'Exported Power',
+              'de': 'Exportierte Energie'
+            }
+          }) 
+        }
+        this.log('Applied updated energy settings: ', this.getEnergy());
+      } 
     } else {
-      this.log("This Homey does not support meter_power.imported & meter_power.exported");  
+      this.log('This Homey does not support meter_power.imported & meter_power.exported');  
+      if (energy.cumulative !== true) {
+        energy.cumulative = true;
+        await this.setEnergy(energy);
+        this.log('Applied updated energy settings: ', this.getEnergy());
+      }
     }
   }
 
@@ -165,7 +173,10 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('autarky_capability') === false) {
       await this.addCapability('autarky_capability');
     }
-
+    // remove unneeded capability of 1.3.x with 1.4.x
+    if (this.hasCapability('battery_charging_state') === true) {
+      await this.removeCapability('battery_charging_state');
+    }
   }
 
   /**

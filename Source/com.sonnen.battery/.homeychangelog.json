@@ -72,6 +72,6 @@
     "en": "Bring back internal-batteries."
   },
   "1.4.0": {
-    "en": "Allow sonnenBatterie to meter imported & exported energy. Be sure to exclude e.g. an additional solar panel inverter from Homey energy to avoid that multiple devices report household totals and wrongly all those values add up."
+    "en": "Allow sonnenBatterie to meter imported & exported energy for Energy tab on supported hardware. Fixed measure_power to show charging/discharging as positive/negative values and removing battery charging state."
   }
 }
