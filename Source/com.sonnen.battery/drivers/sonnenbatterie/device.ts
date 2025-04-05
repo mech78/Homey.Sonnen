@@ -61,42 +61,37 @@ class BatteryDevice extends Homey.Device {
     this.log('Current energy config: ', energy, this.homey.platform, this.homey.platformVersion);
 
     if (this.homey.platform === 'cloud' || this.homey.platformVersion >= 2 /* Homey Pro (early 2023) or later */) {
-      if (energy.cumulative !== true) {
-        this.log('Configure meter_power.imported & meter_power.exported');
-        energy.cumulative = true;
-        energy.cumulativeImportedCapability = 'meter_power.imported';
-        energy.cumulativeExportedCapability = 'meter_power.exported';
-        await this.setEnergy(energy);
-      
-        if (this.hasCapability('meter_power.imported') === false) {
-          await this.addCapability('meter_power.imported');     
-          await this.setCapabilityOptions('meter_power.imported', {    
-            'title': {
-              'en': 'Imported Power',
-              'de': 'Importierte Energie'
-            }
-          })
-        }
-      
-        if (this.hasCapability('meter_power.exported') === false) {
-          await this.addCapability('meter_power.exported')
-          await this.setCapabilityOptions('meter_power.exported', { 
-            'title': {
-              'en': 'Exported Power',
-              'de': 'Exportierte Energie'
-            }
-          }) 
-        }
-        this.log('Applied updated energy settings: ', this.getEnergy());
-      } 
-    } else {
-      this.log('This Homey does not support meter_power.imported & meter_power.exported');  
-      if (energy.cumulative !== true) {
-        energy.cumulative = true;
-        await this.setEnergy(energy);
-        this.log('Applied updated energy settings: ', this.getEnergy());
+      this.log('Configure meter_power.imported & meter_power.exported');
+      energy.cumulative = true;
+      energy.cumulativeImportedCapability = 'meter_power.imported';
+      energy.cumulativeExportedCapability = 'meter_power.exported';
+      await this.setEnergy(energy);
+    
+      if (this.hasCapability('meter_power.imported') === false) {
+        await this.addCapability('meter_power.imported');     
+        await this.setCapabilityOptions('meter_power.imported', {    
+          'title': {
+            'en': 'Imported Power',
+            'de': 'Importierte Energie'
+          }
+        })
       }
+    
+      if (this.hasCapability('meter_power.exported') === false) {
+        await this.addCapability('meter_power.exported')
+        await this.setCapabilityOptions('meter_power.exported', { 
+          'title': {
+            'en': 'Exported Power',
+            'de': 'Exportierte Energie'
+          }
+        }) 
+      }   
+    } else {
+      this.log('This Homey does not support meter_power.imported & meter_power.exported');    
+      energy.cumulative = true;
+      await this.setEnergy(energy);
     }
+    this.log('Applied updated energy settings: ', this.getEnergy());
   }
 
   /**
