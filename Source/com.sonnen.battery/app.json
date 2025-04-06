@@ -513,6 +513,7 @@
         "measure_battery",
         "meter_power",
         "production_capability",
+        "production_daily_capability",
         "consumption_capability",
         "consumption_daily_capability",
         "grid_feed_in_capability",
@@ -873,6 +874,28 @@
         "da": "Produktion",
         "de": "Produktion",
         "nl": "productie nu"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kW",
+        "da": "kW",
+        "de": "kW",
+        "nl": "kW"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/house-day-thin.svg"
+    },
+    "production_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "Total production",
+        "da": "Samlet produktion",
+        "de": "Gesamtproduktion",
+        "nl": "Totaal productie"
       },
       "uiComponent": "sensor",
       "getable": true,

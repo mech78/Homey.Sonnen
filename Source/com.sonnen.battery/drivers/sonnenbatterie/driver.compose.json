@@ -9,6 +9,7 @@
     "measure_battery",
     "meter_power",
     "production_capability",
+    "production_daily_capability",
     "consumption_capability",
     "consumption_daily_capability",
     "grid_feed_in_capability",

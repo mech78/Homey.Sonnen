@@ -25,7 +25,9 @@ class BatteryDevice extends Homey.Device {
     // re-initialize from capability values
     this.state = {
       lastUpdate: this.getLocalNow(),
-      totalProduction_Wh: +this.getCapabilityValue('meter_power') * 1000, // TODO: this should be consumption
+      totalConsumption_Wh: +this.getCapabilityValue('meter_power') * 1000,
+      totalDailyProduction_Wh:
+        +this.getCapabilityValue('production_daily_capability') * 1000,
       totalDailyConsumption_Wh:
         +this.getCapabilityValue('consumption_daily_capability') * 1000,
       totalDailyGridFeedIn_Wh:
@@ -139,7 +141,7 @@ class BatteryDevice extends Homey.Device {
 
   private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
-      this.setCapabilityValue('meter_power', +0); // TODO: should one allow reset? This should be cumulative household consumption.
+      this.setCapabilityValue('production_daily_capability', +0);
       this.setCapabilityValue('consumption_daily_capability', +0);
       this.setCapabilityValue('grid_feed_in_daily_capability', +0);
       this.setCapabilityValue('grid_consumption_daily_capability', +0);
@@ -202,6 +204,10 @@ class BatteryDevice extends Homey.Device {
     // remove unneeded capability of 1.3.x with 1.4.x
     if (this.hasCapability('battery_charging_state') === true) {
       await this.removeCapability('battery_charging_state');
+    }
+    // add with 1.5
+    if (this.hasCapability('production_daily_capability') === false) {
+      await this.addCapability('production_daily_capability');
     }
   }
 
@@ -327,6 +333,12 @@ class BatteryDevice extends Homey.Device {
           lastState.lastUpdate,
           currentUpdate
         ),
+        totalConsumption_Wh: this.aggregateTotal(
+          lastState.totalConsumption_Wh,
+          statusJson.Consumption_W,
+          lastState.lastUpdate,
+          currentUpdate
+        ),
         totalDailyGridFeedIn_Wh: this.aggregateDailyTotal(
           lastState.totalDailyGridFeedIn_Wh,
           grid_feed_in_W,
@@ -371,14 +383,18 @@ class BatteryDevice extends Homey.Device {
         +statusJson.Production_W / 1000
       );
       this.setCapabilityValue(
+        'production_daily_capability',
+        currentState.totalDailyProduction_Wh / 1000
+      );
+      this.setCapabilityValue(
         'capacity_capability',
         `${+latestStateJson.FullChargeCapacity / 1000} kWh`
       );
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
-      this.setCapabilityValue( // TODO: this should be consumption
+      this.setCapabilityValue(
         'meter_power',
-        +currentState.totalDailyProduction_Wh / 1000
+        +currentState.totalConsumption_Wh / 1000
       ); // kWh
 
       // charge/discharge
