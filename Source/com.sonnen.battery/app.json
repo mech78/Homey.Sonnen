@@ -509,9 +509,7 @@
       },
       "class": "battery",
       "capabilities": [
-        "measure_power",
         "measure_battery",
-        "meter_power",
         "production_capability",
         "production_daily_capability",
         "consumption_capability",
@@ -520,6 +518,7 @@
         "grid_feed_in_daily_capability",
         "grid_consumption_capability",
         "grid_consumption_daily_capability",
+        "measure_power",
         "to_battery_capability",
         "from_battery_capability",
         "autarky_capability",
@@ -531,6 +530,7 @@
         "state_inverter_capability",
         "state_bms_capability",
         "alarm_generic",
+        "meter_power",
         "button.reset_meter"
       ],
       "capabilitiesOptions": {
@@ -677,10 +677,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "kW",
-        "de": "kW",
-        "da": "kW",
-        "nl": "kW"
+        "en": "kW"
       },
       "min": 0,
       "decimals": 3,
@@ -732,10 +729,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "W",
-        "da": "W",
-        "de": "W",
-        "nl": "W"
+        "en": "W"
       },
       "min": 0,
       "decimals": 0,
@@ -830,10 +824,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "#",
-        "da": "#",
-        "de": "#",
-        "nl": "#"
+        "en": "#"
       },
       "min": 0,
       "decimals": 0,
@@ -879,10 +870,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "kW",
-        "da": "kW",
-        "de": "kW",
-        "nl": "kW"
+        "en": "kW"
       },
       "min": 0,
       "decimals": 3,
@@ -901,10 +889,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "kW",
-        "da": "kW",
-        "de": "kW",
-        "nl": "kW"
+        "en": "kWh"
       },
       "min": 0,
       "decimals": 3,
@@ -969,10 +954,7 @@
       "getable": true,
       "setable": true,
       "units": {
-        "en": "W",
-        "da": "W",
-        "de": "W",
-        "nl": "W"
+        "en": "W"
       },
       "min": 0,
       "decimals": 0,
