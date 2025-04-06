@@ -73,5 +73,8 @@
   },
   "1.4.0": {
     "en": "Allow sonnenBatterie to meter imported & exported energy for Energy tab on supported hardware. Fixed measure_power to show charging/discharging as positive/negative values and removing battery charging state."
+  },
+  "1.5.0": {
+    "en": "Fixed multiple energy related meters and better distinction between daily and cumulative meters."
   }
 }
