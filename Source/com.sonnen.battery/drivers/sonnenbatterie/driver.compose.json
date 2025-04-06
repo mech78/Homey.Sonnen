@@ -5,9 +5,7 @@
   },
   "class": "battery",
   "capabilities": [
-    "measure_power",
     "measure_battery",
-    "meter_power",
     "production_capability",
     "production_daily_capability",
     "consumption_capability",
@@ -16,6 +14,7 @@
     "grid_feed_in_daily_capability",
     "grid_consumption_capability",
     "grid_consumption_daily_capability",
+    "measure_power",
     "to_battery_capability",
     "from_battery_capability",
     "autarky_capability",
@@ -27,6 +26,7 @@
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
+    "meter_power",
     "button.reset_meter"
   ],
   "capabilitiesOptions": {
