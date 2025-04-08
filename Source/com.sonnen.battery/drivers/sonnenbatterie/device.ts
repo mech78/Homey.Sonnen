@@ -73,13 +73,16 @@ class BatteryDevice extends Homey.Device {
 
     if (this.homey.platform === 'cloud' || this.homey.platformVersion >= 2 /* Homey Pro (early 2023) or later */) {
       this.log('Configure new energy meters');
+      /*
       energy.cumulative = true;
       energy.cumulativeImportedCapability = 'meter_power.imported';
       energy.cumulativeExportedCapability = 'meter_power.exported';
+      */
       energy.meterPowerImportedCapability = 'meter_power.charged';
       energy.meterPowerExportedCapability = 'meter_power.discharged';
       await this.setEnergy(energy);
     
+      /*
       if (this.hasCapability('meter_power.imported') === false) {
         await this.addCapability('meter_power.imported');     
         await this.setCapabilityOptions('meter_power.imported', {    
@@ -99,6 +102,7 @@ class BatteryDevice extends Homey.Device {
           }
         }) 
       }   
+      */
 
       if (this.hasCapability('meter_power.charged') === false) {
         await this.addCapability('meter_power.charged');     
@@ -413,13 +417,21 @@ class BatteryDevice extends Homey.Device {
         fromBattery_W
       );
 
+      // TODO: move this to metering device
+      
+      this.log("Emit data...")
+      this.homey.emit('metering_data_updated', currentState, statusJson.Consumption_W);
+      this.log("Data emitted")
+
       // grid consumption and feed in
+      /*
       if (this.hasCapability('meter_power.imported')) {
         this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
       }
       if (this.hasCapability('meter_power.exported')) {
         this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
       }
+      */
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
       this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       

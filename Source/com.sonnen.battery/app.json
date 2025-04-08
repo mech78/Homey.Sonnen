@@ -1,8 +1,8 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.4.0",
-  "compatibility": ">=12.2.0",
+  "version": "1.5.0",
+  "compatibility": ">=12.3.0",
   "sdk": 3,
   "platforms": [
     "local"
@@ -613,6 +613,59 @@
           ]
         }
       ]
+    },
+    {
+      "name": {
+        "en": "sonnenbatterie_meter"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "meter_power.imported",
+        "meter_power.exported"
+      ],
+      "capabilitiesOptions": {
+        "meter_power.imported": {
+          "title": {
+            "en": "Imported Energy"
+          }
+        },
+        "meter_power.exported": {
+          "title": {
+            "en": "Exported Energy"
+          }
+        }
+      },
+      "energy": {
+        "cumulative": true,
+        "cumulativeImportedCapability": "meter_power.imported",
+        "cumulativeExportedCapability": "meter_power.exported"
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie_meter/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_meter/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_meter/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "sonnenbatterie_meter"
     }
   ],
   "widgets": {
