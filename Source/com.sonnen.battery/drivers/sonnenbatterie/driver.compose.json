@@ -27,7 +27,8 @@
     "state_bms_capability",    
     "alarm_generic",
     "meter_power",
-    "button.reset_meter"
+    "button.reset_meter",
+    "battery_charging_state" 
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
