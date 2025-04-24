@@ -12,8 +12,6 @@ class BatteryDevice extends Homey.Device {
   async onInit() {
     this.log('BatteryDevice has been initialized');
 
-    await this.updateEnergyOnInit();
-
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
@@ -25,7 +23,6 @@ class BatteryDevice extends Homey.Device {
     // re-initialize from capability values
     this.state = {
       lastUpdate: this.getLocalNow(),
-      totalConsumption_Wh: +this.getCapabilityValue('meter_power') * 1000,
       totalDailyProduction_Wh:
         +this.getCapabilityValue('production_daily_capability') * 1000,
       totalDailyConsumption_Wh:
@@ -34,15 +31,6 @@ class BatteryDevice extends Homey.Device {
         +this.getCapabilityValue('grid_feed_in_daily_capability') * 1000,
       totalDailyGridConsumption_Wh:
         +this.getCapabilityValue('grid_consumption_daily_capability') * 1000,
-
-      totalGridFeedIn_Wh: (this.hasCapability('meter_power.exported')) ? 
-        +this.getCapabilityValue('meter_power.exported') * 1000 : 0,
-      totalGridConsumption_Wh: (this.hasCapability('meter_power.imported')) ? 
-        +this.getCapabilityValue('meter_power.imported') * 1000 : 0,  
-      totalToBattery_Wh: (this.hasCapability('meter_power.charged')) ? 
-        +this.getCapabilityValue('meter_power.charged') * 1000 : 0,
-      totalFromBattery_Wh: (this.hasCapability('meter_power.discharged')) ? 
-        +this.getCapabilityValue('meter_power.discharged') * 1000 : 0,
     };
 
     // Get latest state:
@@ -62,76 +50,7 @@ class BatteryDevice extends Homey.Device {
     }, batteryPullInterval * 1000);
   }
 
-  /**
-   * Compare https://apps.developer.homey.app/the-basics/devices/energy#measuring-devices and https://apps.developer.homey.app/the-basics/devices/energy#home-batteries
-   * Note: the meterPowerImportedCapability/cumulativeImportedCapability and meterPowerExportedCapability/cumulativeExportedCapability are only used on Homey Pro (Early 2023), or newer, and Homey Cloud.
-   * @since v1.4.0
-   */
-  private async updateEnergyOnInit() {
-    const energy = this.getEnergy();
-    this.log('Current energy config: ', energy, this.homey.platform, this.homey.platformVersion);
 
-    if (this.homey.platform === 'cloud' || this.homey.platformVersion >= 2 /* Homey Pro (early 2023) or later */) {
-      this.log('Configure new energy meters');
-      
-      //energy.cumulative = true;
-      
-      energy.cumulativeImportedCapability = 'meter_power.imported';
-      energy.cumulativeExportedCapability = 'meter_power.exported';
-      
-      //energy.meterPowerImportedCapability = 'meter_power.charged';
-      //energy.meterPowerExportedCapability = 'meter_power.discharged';
-      await this.setEnergy(energy);
-    
-      
-      if (this.hasCapability('meter_power.imported') === false) {
-        await this.addCapability('meter_power.imported');     
-        await this.setCapabilityOptions('meter_power.imported', {    
-          'title': {
-            'en': 'Imported Power',
-            'de': 'Importierte Energie'
-          }
-        })
-      }
-    
-      if (this.hasCapability('meter_power.exported') === false) {
-        await this.addCapability('meter_power.exported')
-        await this.setCapabilityOptions('meter_power.exported', { 
-          'title': {
-            'en': 'Exported Power',
-            'de': 'Exportierte Energie'
-          }
-        }) 
-      }   
-      
-      /*
-      if (this.hasCapability('meter_power.charged') === false) {
-        await this.addCapability('meter_power.charged');     
-        await this.setCapabilityOptions('meter_power.charged', {    
-          'title': {
-            'en': 'Charged Energy',
-            'de': 'Geladene Energie'
-          }
-        })
-      }
-    
-      if (this.hasCapability('meter_power.discharged') === false) {
-        await this.addCapability('meter_power.discharged')
-        await this.setCapabilityOptions('meter_power.discharged', { 
-          'title': {
-            'en': 'Discharged Energy',
-            'de': 'Entladene Energie'
-          }
-        }) 
-      }   
-      */
-    } else {
-      this.log('This Homey does not support detailed energy meters');    
-      energy.cumulative = true;
-      await this.setEnergy(energy);
-    }
-    this.log('Applied updated energy settings: ', this.getEnergy());
-  }
 
   /**
    * Homey SDK3's new Date() is always in UTC but SonnenBatterie timestamps are local,
@@ -398,20 +317,6 @@ class BatteryDevice extends Homey.Device {
       );
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
-      this.setCapabilityValue(
-        'meter_power',
-        +currentState.totalConsumption_Wh / 1000
-      ); // kWh
-
-      // charge/discharge
-      /*
-      if (this.hasCapability('meter_power.charged')) {
-        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
-      }
-      if (this.hasCapability('meter_power.discharged')) {
-        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
-      }
-      */
 
       if ((statusJson.Pac_total_W ?? 0) < 0) {
         this.setCapabilityValue('battery_charging_state', 'charging'); 
@@ -443,15 +348,6 @@ class BatteryDevice extends Homey.Device {
       this.homey.emit('metering_data_updated', currentState, statusJson);
       this.log("Data emitted")
 
-      // grid consumption and feed in
-      /*
-      if (this.hasCapability('meter_power.imported')) {
-        this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
-      }
-      if (this.hasCapability('meter_power.exported')) {
-        this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
-      }
-      */
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
       this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       
@@ -577,10 +473,10 @@ class BatteryDevice extends Homey.Device {
     currentUpdate: Date
   ): number {
     var totalEnergyDailyResult_Wh =
-      currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : totalEnergyDaily_Wh; // reset daily total at local midnight
+      currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : (totalEnergyDaily_Wh ?? 0); // reset daily total at local midnight
     var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
     var sampleEnergy_Wh =
-      currentPower_W * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+      (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyDailyResult_Wh += sampleEnergy_Wh;
     return totalEnergyDailyResult_Wh;
   }
@@ -592,10 +488,10 @@ class BatteryDevice extends Homey.Device {
     lastUpdate: Date,
     currentUpdate: Date
   ): number {
-    var totalEnergyResult_Wh = totalEnergy_Wh; 
+    var totalEnergyResult_Wh = totalEnergy_Wh ?? 0; 
     var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
     var sampleEnergy_Wh =
-      currentPower_W * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+      (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyResult_Wh += sampleEnergy_Wh;
     return totalEnergyResult_Wh;
   }
