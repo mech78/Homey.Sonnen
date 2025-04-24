@@ -134,6 +134,13 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('production_daily_capability') === false) {
       await this.addCapability('production_daily_capability');
     }
+    if (this.hasCapability('meter_power.charged') === false) {
+      await this.addCapability('meter_power.charged');
+    }
+    if (this.hasCapability('meter_power.discharged') === false) {
+      await this.addCapability('meter_power.discharged');
+    }
+    
   }
 
   /**
@@ -326,11 +333,11 @@ class BatteryDevice extends Homey.Device {
         this.setCapabilityValue('battery_charging_state', 'idle');
       }
 
-      if (this.hasCapability('meter_power.imported')) {
-        this.setCapabilityValue('meter_power.imported', currentState.totalToBattery_Wh / 1000);
+      if (this.hasCapability('meter_power.charged')) {
+        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
       }
-      if (this.hasCapability('meter_power.exported')) {
-        this.setCapabilityValue('meter_power.exported', currentState.totalFromBattery_Wh / 1000);
+      if (this.hasCapability('meter_power.discharged')) {
+        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
       }
       
       this.setCapabilityValue(

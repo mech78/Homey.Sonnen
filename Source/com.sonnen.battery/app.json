@@ -531,7 +531,9 @@
         "state_bms_capability",
         "alarm_generic",
         "button.reset_meter",
-        "battery_charging_state"
+        "battery_charging_state",
+        "meter_power.charged",
+        "meter_power.discharged"
       ],
       "capabilitiesOptions": {
         "button.reset_meter": {
@@ -544,13 +546,27 @@
             "en": "Resets today's totals (kWh). This can not be restored.",
             "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden."
           }
+        },
+        "meter_power.charged": {
+          "title": {
+            "en": "Charged Energy",
+            "de": "Geladene Energie"
+          }
+        },
+        "meter_power.discharged": {
+          "title": {
+            "en": "Discharged Energy",
+            "de": "Entladene Energie"
+          }
         }
       },
       "energy": {
         "homeBattery": true,
         "batteries": [
           "INTERNAL"
-        ]
+        ],
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
       },
       "platforms": [
         "local"
