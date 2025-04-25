@@ -565,8 +565,8 @@
         "batteries": [
           "INTERNAL"
         ],
-        "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
+        "cumulativeImportedCapability": "meter_power.charged",
+        "cumulativeExportedCapability": "meter_power.discharged"
       },
       "platforms": [
         "local"
