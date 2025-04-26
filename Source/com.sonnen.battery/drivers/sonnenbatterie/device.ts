@@ -233,7 +233,7 @@ class BatteryDevice extends Homey.Device {
       // update device's batteries to actual number of internal batteries
       var numberBatteries = +latestStateJson.ic_status.nrbatterymodules;
       var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || { homeBattery: true, batteries: [], cumulative: true };
+      var energy = (await this.getEnergy()) || { homeBattery: true, batteries: [] };
 
       if (!_.isEqual(energy.batteries, actualBatteries)) {
         energy.batteries = actualBatteries;
@@ -339,7 +339,7 @@ class BatteryDevice extends Homey.Device {
       if (this.hasCapability('meter_power.discharged')) {
         this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
       }
-      
+
       this.setCapabilityValue(
         'to_battery_capability',
         toBattery_W
