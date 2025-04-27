@@ -249,7 +249,7 @@ class BatteryDevice extends Homey.Device {
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
       this.setCapabilityValue('production_daily_capability', currentState.totalDailyProduction_Wh / 1000);
-      this.setCapabilityValue('capacity_capability', `${+latestStateJson.FullChargeCapacity / 1000} kWh`);
+      this.setCapabilityValue('capacity_capability', +latestStateJson.FullChargeCapacity / 1000);
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
 
