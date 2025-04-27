@@ -12,7 +12,7 @@ module.exports = class HouseholdMeter extends Homey.Device {
       this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
       this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
-      this.setCapabilityValue('measure_power', statusJson.GridFeedIn_W);
+      this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
       this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
       this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
     });
