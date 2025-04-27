@@ -52,6 +52,35 @@
         "en": "Discharged Energy",
         "de": "Entladene Energie"
       }
+    },
+    "battery_charging_state": {
+      "title": { 
+        "en": "Battery Charging State",
+        "de": "Batterie Ladezustand"
+      },
+      "values": [
+        {
+          "id": "charging",
+          "title": { 
+            "en": "Charging",
+            "de": "Laden"
+          }
+        },
+        {
+          "id": "discharging",
+          "title": { 
+            "en": "Discharging",
+            "de": "Entladen"
+          }
+        },
+        {
+          "id": "idle",
+          "title": { 
+            "en": "Idle",
+            "de": "Im Leerlauf"
+          }
+        }
+      ]
     }
   },
   "energy": {
