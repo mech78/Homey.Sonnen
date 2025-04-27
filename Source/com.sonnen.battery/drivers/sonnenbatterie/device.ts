@@ -25,6 +25,8 @@ class BatteryDevice extends Homey.Device {
       totalDailyConsumption_Wh:     +this.getCapabilityValue('consumption_daily_capability') * 1000,
       totalDailyGridFeedIn_Wh:      +this.getCapabilityValue('grid_feed_in_daily_capability') * 1000,
       totalDailyGridConsumption_Wh: +this.getCapabilityValue('grid_consumption_daily_capability') * 1000,
+      totalToBattery_Wh:            +this.getCapabilityValue('meter_power.charged') * 1000,
+      totalFromBattery_Wh:          +this.getCapabilityValue('meter_power.discharged') * 1000,
     };
 
     // Get latest state:
