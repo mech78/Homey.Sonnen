@@ -724,7 +724,7 @@
       "icon": "/assets/images/percentage.svg"
     },
     "capacity_capability": {
-      "type": "string",
+      "type": "number",
       "title": {
         "en": "Capacity",
         "nl": "Capaciteit",

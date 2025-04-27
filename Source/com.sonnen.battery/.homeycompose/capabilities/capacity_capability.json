@@ -1,5 +1,5 @@
 {
-    "type": "string",
+    "type": "number",
     "title": { "en": "Capacity", "nl": "Capaciteit", "dk": "Kapacitet", "de": "Kapazität" },
     "uiComponent": "sensor",
     "getable": true,
