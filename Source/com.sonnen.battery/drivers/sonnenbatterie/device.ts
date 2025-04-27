@@ -253,13 +253,15 @@ class BatteryDevice extends Homey.Device {
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
 
-      if ((statusJson.Pac_total_W ?? 0) < 0) {
-        this.setCapabilityValue('battery_charging_state', 'charging'); 
-      } else if ((statusJson.Pac_total_W ?? 0) > 0) {
-        this.setCapabilityValue('battery_charging_state', 'discharging'); 
+      var chargingState;
+      if (statusJson.Pac_total_W < 0) {
+        chargingState = 'charging';
+      } else if (statusJson.Pac_total_W > 0) {
+        chargingState = 'discharging';
       } else {
-        this.setCapabilityValue('battery_charging_state', 'idle');
+        chargingState = 'idle';
       }
+      this.setCapabilityValue('battery_charging_state', chargingState); 
 
       if (this.hasCapability('meter_power.charged')) {
         this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
