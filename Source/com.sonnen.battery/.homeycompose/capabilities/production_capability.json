@@ -4,7 +4,7 @@
     "uiComponent": "sensor",
     "getable": true,
     "setable": true,
-    "units": { "en": "kW", "da": "kW", "de": "kW", "nl": "kW" },
+    "units": { "en": "kW" },
     "min": 0,
     "decimals": 3,
     "insights": true,

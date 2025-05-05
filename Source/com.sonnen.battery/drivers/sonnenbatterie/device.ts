@@ -12,46 +12,33 @@ class BatteryDevice extends Homey.Device {
   async onInit() {
     this.log('BatteryDevice has been initialized');
 
-    
-    //await this.setEnergy({ homeBattery: true });
-    this.log("Setting up", this.getEnergy());
-
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
-    var batteryPullInterval = +(
-      this.homey.settings.get('BatteryPullInterval') || '30'
-    );
+    var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
     // re-initialize from capability values
     this.state = {
-      lastUpdate: this.getLocalNow(),
-      totalProduction_Wh: +this.getCapabilityValue('meter_power') * 1000,
-      totalConsumption_Wh:
-        +this.getCapabilityValue('consumption_daily_capability') * 1000,
-      totalGridFeedIn_Wh:
-        +this.getCapabilityValue('grid_feed_in_daily_capability') * 1000,
-      totalGridConsumption_Wh:
-        +this.getCapabilityValue('grid_consumption_daily_capability') * 1000,
+      lastUpdate:                    this.getLocalNow(),
+      totalDailyProduction_Wh:      +this.getCapabilityValue('production_daily_capability') * 1000,
+      totalDailyConsumption_Wh:     +this.getCapabilityValue('consumption_daily_capability') * 1000,
+      totalDailyGridFeedIn_Wh:      +this.getCapabilityValue('grid_feed_in_daily_capability') * 1000,
+      totalDailyGridConsumption_Wh: +this.getCapabilityValue('grid_consumption_daily_capability') * 1000,
+      totalToBattery_Wh:            +this.getCapabilityValue('meter_power.charged') * 1000,
+      totalFromBattery_Wh:          +this.getCapabilityValue('meter_power.discharged') * 1000,
     };
 
     // Get latest state:
-    this.state = await this.loadLatestState(
-      batteryAuthToken,
-      this.state,
-      this.getStore().autodiscovery ?? true
-    );
+    this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
 
     // Pull battery status
     this.homey.setInterval(async () => {
-      this.state = await this.loadLatestState(
-        batteryAuthToken,
-        this.state,
-        this.getStore().autodiscovery ?? true
-      );
+      this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
     }, batteryPullInterval * 1000);
   }
+
+
 
   /**
    * Homey SDK3's new Date() is always in UTC but SonnenBatterie timestamps are local,
@@ -67,18 +54,18 @@ class BatteryDevice extends Homey.Device {
 
   private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
-      this.setCapabilityValue('meter_power', +0);
+      this.setCapabilityValue('production_daily_capability', +0);
       this.setCapabilityValue('consumption_daily_capability', +0);
       this.setCapabilityValue('grid_feed_in_daily_capability', +0);
       this.setCapabilityValue('grid_consumption_daily_capability', +0);
       this.setCapabilityValue('self_consumption_capability', +0);
       this.setCapabilityValue('autarky_capability', +0);
       this.state = {
-        lastUpdate: this.getLocalNow(),
-        totalProduction_Wh: 0,
-        totalConsumption_Wh: 0,
-        totalGridFeedIn_Wh: 0,
-        totalGridConsumption_Wh: 0,
+        lastUpdate:                   this.getLocalNow(),
+        totalDailyProduction_Wh:      0,
+        totalDailyConsumption_Wh:     0,
+        totalDailyGridFeedIn_Wh:      0,
+        totalDailyGridConsumption_Wh: 0,
       };
     });
   }
@@ -127,9 +114,21 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('autarky_capability') === false) {
       await this.addCapability('autarky_capability');
     }
+    
     if (this.hasCapability('battery_charging_state') === false) {
       await this.addCapability('battery_charging_state');
     }
+    // add with 1.5
+    if (this.hasCapability('production_daily_capability') === false) {
+      await this.addCapability('production_daily_capability');
+    }
+    if (this.hasCapability('meter_power.charged') === false) {
+      await this.addCapability('meter_power.charged');
+    }
+    if (this.hasCapability('meter_power.discharged') === false) {
+      await this.addCapability('meter_power.discharged');
+    }
+    
   }
 
   /**
@@ -226,130 +225,85 @@ class BatteryDevice extends Homey.Device {
 
       if (!_.isEqual(energy.batteries, actualBatteries)) {
         energy.batteries = actualBatteries;
-        this.log("Energy", "SetEnergy", energy);
+        this.log("Update batteries (once): ", energy);
         await this.setEnergy(energy);
       }
 
       var currentUpdate = new Date(latestStateJson.Timestamp);
-      var grid_feed_in_W =
-        +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
-      var grid_consumption_W =
-        +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
-
+      var grid_feed_in_W     = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
+      var grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
+      var toBattery_W =   (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
+      var fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
+    
       var currentState = {
-        lastUpdate: currentUpdate,
-        totalProduction_Wh: this.aggregateDailyTotal(
-          lastState.totalProduction_Wh,
-          statusJson.Production_W,
-          lastState.lastUpdate,
-          currentUpdate
-        ),
-        totalConsumption_Wh: this.aggregateDailyTotal(
-          lastState.totalConsumption_Wh,
-          statusJson.Consumption_W,
-          lastState.lastUpdate,
-          currentUpdate
-        ),
-        totalGridFeedIn_Wh: this.aggregateDailyTotal(
-          lastState.totalGridFeedIn_Wh,
-          grid_feed_in_W,
-          lastState.lastUpdate,
-          currentUpdate
-        ),
-        totalGridConsumption_Wh: this.aggregateDailyTotal(
-          lastState.totalGridConsumption_Wh,
-          grid_consumption_W,
-          lastState.lastUpdate,
-          currentUpdate
-        ),
+        lastUpdate: currentUpdate, 
+        totalDailyProduction_Wh:      this.aggregateDailyTotal(lastState.totalDailyProduction_Wh,      statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
+        totalDailyConsumption_Wh:     this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh,     statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
+        totalConsumption_Wh:          this.aggregateTotal(lastState.totalConsumption_Wh,               statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
+        totalDailyGridFeedIn_Wh:      this.aggregateDailyTotal(lastState.totalDailyGridFeedIn_Wh,      grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
+        totalDailyGridConsumption_Wh: this.aggregateDailyTotal(lastState.totalDailyGridConsumption_Wh, grid_consumption_W,       lastState.lastUpdate, currentUpdate),
+        totalGridFeedIn_Wh:           this.aggregateTotal(lastState.totalGridFeedIn_Wh,                grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
+        totalGridConsumption_Wh:      this.aggregateTotal(lastState.totalGridConsumption_Wh,           grid_consumption_W,       lastState.lastUpdate, currentUpdate),
+        totalToBattery_Wh:            this.aggregateTotal(lastState.totalToBattery_Wh,                 toBattery_W,              lastState.lastUpdate, currentUpdate),
+        totalFromBattery_Wh:          this.aggregateTotal(lastState.totalFromBattery_Wh,               fromBattery_W,            lastState.lastUpdate, currentUpdate),
       };
 
-      this.setCapabilityValue(
-        'meter_power',
-        +currentState.totalProduction_Wh / 1000
-      ); // kWh
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue(
-        'production_capability',
-        +statusJson.Production_W / 1000
-      );
-      this.setCapabilityValue(
-        'capacity_capability',
-        `${+latestStateJson.FullChargeCapacity / 1000} kWh`
-      );
+      this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
+      this.setCapabilityValue('production_daily_capability', currentState.totalDailyProduction_Wh / 1000);
+      this.setCapabilityValue('capacity_capability', +latestStateJson.FullChargeCapacity / 1000);
+
+      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
+
+      var chargingState;
+      if (statusJson.Pac_total_W < 0) {
+        chargingState = 'charging';
+      } else if (statusJson.Pac_total_W > 0) {
+        chargingState = 'discharging';
+      } else {
+        chargingState = 'idle';
+      }
+      this.setCapabilityValue('battery_charging_state', chargingState); 
+
+      if (this.hasCapability('meter_power.charged')) {
+        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
+      }
+      if (this.hasCapability('meter_power.discharged')) {
+        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
+      }
+
+      this.setCapabilityValue('to_battery_capability', toBattery_W);
+      this.setCapabilityValue('from_battery_capability', fromBattery_W);
+
+      // TODO: move this to metering device
+      
+      this.log("Emit data...")
+      this.homey.emit('metering_data_updated', currentState, statusJson);
+      this.log("Data emitted")
+
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
-      this.setCapabilityValue(
-        'grid_consumption_capability',
-        grid_consumption_W / 1000
-      ); // GridFeedIn_W negative: from grid
-      this.setCapabilityValue(
-        'consumption_capability',
-        +statusJson.Consumption_W / 1000
-      ); // Consumption_W : consumption
-      this.setCapabilityValue('measure_power', +statusJson.Consumption_W);
+      this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
+      
+      this.setCapabilityValue('consumption_capability', +statusJson.Consumption_W / 1000); // Consumption_W : consumption
+    
       this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue(
-        'eclipse_capability',
-        this.resolveCircleColor(latestStateJson.ic_status['Eclipse Led'])
-      );
-      this.setCapabilityValue(
-        'state_bms_capability',
-        this.homey.__(
-          'stateBms.' + latestStateJson.ic_status.statebms.replaceAll(' ', '')
-        )
-      ) ?? latestStateJson.ic_status.statebms;
-      this.setCapabilityValue(
-        'state_inverter_capability',
-        this.homey.__(
-          'stateInverter.' +
-            latestStateJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')
-        ) ?? latestStateJson.ic_status.statecorecontrolmodule
-      );
-      this.setCapabilityValue(
-        'online_capability',
-        !latestStateJson.ic_status['DC Shutdown Reason'].HW_Shutdown
-      );
-      this.setCapabilityValue(
-        'alarm_generic',
-        latestStateJson.ic_status['Eclipse Led']['Solid Red']
-      );
+      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestStateJson.ic_status['Eclipse Led']));
+      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestStateJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestStateJson.ic_status.statebms;
+      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestStateJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestStateJson.ic_status.statecorecontrolmodule);
+      this.setCapabilityValue('online_capability', !latestStateJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
+      this.setCapabilityValue('alarm_generic', latestStateJson.ic_status['Eclipse Led']['Solid Red']);
 
-      this.setCapabilityValue(
-        'from_battery_capability',
-        (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0
-      );
-      this.setCapabilityValue(
-        'to_battery_capability',
-        (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0
-      );
-      this.setCapabilityValue(
-        'consumption_daily_capability',
-        currentState.totalConsumption_Wh / 1000
-      );
-      this.setCapabilityValue(
-        'grid_feed_in_daily_capability',
-        currentState.totalGridFeedIn_Wh / 1000
-      );
-      this.setCapabilityValue(
-        'grid_consumption_daily_capability',
-        currentState.totalGridConsumption_Wh / 1000
-      );
+      this.setCapabilityValue('consumption_daily_capability', currentState.totalDailyConsumption_Wh / 1000);
+      this.setCapabilityValue('grid_feed_in_daily_capability', currentState.totalDailyGridFeedIn_Wh / 1000);
+      this.setCapabilityValue('grid_consumption_daily_capability', currentState.totalDailyGridConsumption_Wh / 1000);
 
-      var percentageGridConsumption =
-        (currentState.totalGridConsumption_Wh /
-          currentState.totalConsumption_Wh) *
-        100;
+      var percentageGridConsumption = (currentState.totalDailyGridConsumption_Wh / currentState.totalDailyConsumption_Wh) * 100;
       var percentageSelfProduction = 100 - percentageGridConsumption;
       this.setCapabilityValue('autarky_capability', +percentageSelfProduction);
 
-      var percentageGridFeedIn =
-        (currentState.totalGridFeedIn_Wh / currentState.totalProduction_Wh) *
-        100;
+      var percentageGridFeedIn = (currentState.totalDailyGridFeedIn_Wh / currentState.totalDailyProduction_Wh) * 100;
       var percentageSelfConsumption = 100 - percentageGridFeedIn;
-      this.setCapabilityValue(
-        'self_consumption_capability',
-        +percentageSelfConsumption
-      );
+      this.setCapabilityValue('self_consumption_capability', +percentageSelfConsumption);
 
       /*
       if (Math.random() < 0.5) {
@@ -403,19 +357,21 @@ class BatteryDevice extends Homey.Device {
     return this.homey.__('eclipseLed.Unknown');
   }
 
-  private aggregateDailyTotal(
-    totalEnergyDaily_Wh: number,
-    currentPower_W: number,
-    lastUpdate: Date,
-    currentUpdate: Date
-  ): number {
-    var totalEnergyDailyResult_Wh =
-      currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : totalEnergyDaily_Wh; // reset daily total at local midnight
+  private aggregateDailyTotal(totalEnergyDaily_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
+    var totalEnergyDailyResult_Wh = currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : (totalEnergyDaily_Wh ?? 0); // reset daily total at local midnight
     var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
-    var sampleEnergy_Wh =
-      currentPower_W * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+    var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyDailyResult_Wh += sampleEnergy_Wh;
     return totalEnergyDailyResult_Wh;
+  }
+
+  // TODO: refactor to aggregate with and without
+  private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
+    var totalEnergyResult_Wh = totalEnergy_Wh ?? 0; 
+    var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
+    var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+    totalEnergyResult_Wh += sampleEnergy_Wh;
+    return totalEnergyResult_Wh;
   }
 
   private resolveDeviceNameWithFallback(): string {

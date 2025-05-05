@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": { "en": "Total production", "da": "Samlet produktion", "de": "Gesamtproduktion", "nl": "Totaal productie" },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": true,
+    "units": { "en": "kWh" },
+    "min": 0,
+    "decimals": 3,
+    "insights": true,
+    "icon": "/assets/images/house-day-thin_daily.svg"
+  }
