@@ -1,6 +1,6 @@
 {
   "name": {
-    "en": "sonnenbatterie_meter"
+    "en": "sonnenbatterie_gridmeter"
   },
   "class": "sensor",
   "capabilities": [

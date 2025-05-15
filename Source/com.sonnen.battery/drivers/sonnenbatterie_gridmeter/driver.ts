@@ -1,13 +1,13 @@
 import Homey from 'homey';
 import axios from 'axios';
 
-module.exports = class HouseholdMeterDriver extends Homey.Driver {
+module.exports = class GridMeterDriver extends Homey.Driver {
 
   /**
    * onInit is called when the driver is initialized.
    */
   async onInit() {
-    this.log('HouseholdMeterDriver has been initialized');
+    this.log('GridMeterDriver has been initialized');
   }
 
   /**
