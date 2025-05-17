@@ -7,6 +7,14 @@ module.exports = class HouseholdMeter extends Homey.Device {
    */
   async onInit() {
     this.log('HouseholdMeter has been initialized');
+
+    this.homey.on('metering_data_updated', (currentState, statusJson) => {
+      this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
+      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
+
+      this.setCapabilityValue('measure_power', statusJson.Consumption_W);
+      this.setCapabilityValue('meter_power', currentState.totalConsumption_Wh);
+    });
   }
 
   /**

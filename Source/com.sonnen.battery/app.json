@@ -503,6 +503,30 @@
   },
   "drivers": [
     {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
       "name": {
         "en": "sonnenBatterie",
         "de": "sonnenBatterie"
@@ -597,29 +621,6 @@
         "meterPowerImportedCapability": "meter_power.charged",
         "meterPowerExportedCapability": "meter_power.discharged"
       },
-      "platforms": [
-        "local"
-      ],
-      "connectivity": [
-        "lan"
-      ],
-      "images": {
-        "small": "/drivers/sonnenbatterie/assets/images/small.png",
-        "large": "/drivers/sonnenbatterie/assets/images/large.png"
-      },
-      "pair": [
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_devices"
-          }
-        },
-        {
-          "id": "add_devices",
-          "template": "add_devices"
-        }
-      ],
       "id": "sonnenbatterie",
       "settings": [
         {
@@ -660,8 +661,32 @@
       ]
     },
     {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie_gridmeter/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_gridmeter/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_gridmeter/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
       "name": {
-        "en": "sonnenbatterie_meter"
+        "en": "sonnenbatterie grid meter"
       },
       "class": "sensor",
       "capabilities": [
@@ -688,6 +713,9 @@
         "cumulativeImportedCapability": "meter_power.imported",
         "cumulativeExportedCapability": "meter_power.exported"
       },
+      "id": "sonnenbatterie_gridmeter"
+    },
+    {
       "platforms": [
         "local"
       ],
@@ -695,9 +723,9 @@
         "lan"
       ],
       "images": {
-        "small": "/drivers/sonnenbatterie_meter/assets/images/small.png",
-        "large": "/drivers/sonnenbatterie_meter/assets/images/large.png",
-        "xlarge": "/drivers/sonnenbatterie_meter/assets/images/xlarge.png"
+        "small": "/drivers/sonnenbatterie_householdmeter/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_householdmeter/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_householdmeter/assets/images/xlarge.png"
       },
       "pair": [
         {
@@ -712,7 +740,18 @@
           "template": "add_devices"
         }
       ],
-      "id": "sonnenbatterie_meter"
+      "name": {
+        "en": "sonnenbatterie household meter"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "meter_power",
+        "measure_power"
+      ],
+      "energy": {
+        "cumulative": true
+      },
+      "id": "sonnenbatterie_householdmeter"
     }
   ],
   "widgets": {

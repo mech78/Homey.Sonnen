@@ -23,9 +23,9 @@ module.exports = class HouseholdMeterDriver extends Homey.Driver {
         const results = [];
         for (const e of response.data) {
           results.push({
-            name: e.info + "_meter",
+            name: e.info + " Household Meter",
             data: {
-              id: e.device + "_meter",
+              id: e.device + "_householdMeter",
             },
             store: {
               lanip: e.lanip,

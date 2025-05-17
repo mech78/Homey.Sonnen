@@ -23,9 +23,9 @@ module.exports = class GridMeterDriver extends Homey.Driver {
         const results = [];
         for (const e of response.data) {
           results.push({
-            name: e.info + "_meter",
+            name: e.info + " Grid Meter",
             data: {
-              id: e.device + "_meter",
+              id: e.device + "_gridMeter",
             },
             store: {
               lanip: e.lanip,
