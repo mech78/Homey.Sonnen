@@ -557,7 +557,8 @@
         "button.reset_meter",
         "battery_charging_state",
         "meter_power.charged",
-        "meter_power.discharged"
+        "meter_power.discharged",
+        "meter_power"
       ],
       "capabilitiesOptions": {
         "button.reset_meter": {
@@ -745,12 +746,9 @@
       },
       "class": "sensor",
       "capabilities": [
-        "meter_power",
         "measure_power"
       ],
-      "energy": {
-        "cumulative": true
-      },
+      "energy": {},
       "id": "sonnenbatterie_householdmeter"
     }
   ],

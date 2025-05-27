@@ -128,6 +128,10 @@ class BatteryDevice extends Homey.Device {
     if (this.hasCapability('meter_power.discharged') === false) {
       await this.addCapability('meter_power.discharged');
     }
+    // add with 1.6
+    if (this.hasCapability('meter_power') === false) {
+      await this.addCapability('meter_power');
+    }
     
   }
 
@@ -239,6 +243,7 @@ class BatteryDevice extends Homey.Device {
         lastUpdate: currentUpdate, 
         totalDailyProduction_Wh:      this.aggregateDailyTotal(lastState.totalDailyProduction_Wh,      statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
         totalDailyConsumption_Wh:     this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh,     statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
+        totalProduction_Wh:           this.aggregateDailyTotal(lastState.totalProduction_Wh,           statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
         totalConsumption_Wh:          this.aggregateTotal(lastState.totalConsumption_Wh,               statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalDailyGridFeedIn_Wh:      this.aggregateDailyTotal(lastState.totalDailyGridFeedIn_Wh,      grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
         totalDailyGridConsumption_Wh: this.aggregateDailyTotal(lastState.totalDailyGridConsumption_Wh, grid_consumption_W,       lastState.lastUpdate, currentUpdate),
@@ -249,6 +254,7 @@ class BatteryDevice extends Homey.Device {
       };
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
+      this.setCapabilityValue('meter_power', +(latestStateJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
       this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
       this.setCapabilityValue('production_daily_capability', currentState.totalDailyProduction_Wh / 1000);
       this.setCapabilityValue('capacity_capability', +latestStateJson.FullChargeCapacity / 1000);

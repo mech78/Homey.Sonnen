@@ -30,7 +30,8 @@
     "button.reset_meter",
     "battery_charging_state",
     "meter_power.charged", 
-    "meter_power.discharged"
+    "meter_power.discharged",
+    "meter_power"
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
