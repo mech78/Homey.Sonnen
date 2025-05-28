@@ -748,7 +748,9 @@
       "capabilities": [
         "measure_power"
       ],
-      "energy": {},
+      "energy": {
+        "cumulative": true
+      },
       "id": "sonnenbatterie_householdmeter"
     }
   ],

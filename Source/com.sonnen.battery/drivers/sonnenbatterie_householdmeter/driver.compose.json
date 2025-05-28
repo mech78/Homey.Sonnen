@@ -8,5 +8,6 @@
     "measure_power"
   ],
   "energy": {
+    "cumulative": true
   }
 }
