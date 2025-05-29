@@ -2,13 +2,8 @@ import Homey from 'homey';
 
 module.exports = class HouseholdMeter extends Homey.Device {
 
-  /**
-   * onInit is called when the device is initialized.
-   */
-  async onInit() {
-    this.log('HouseholdMeter has been initialized');
 
-    this.homey.on('metering_data_updated', (currentState, statusJson) => {
+  handleUpdateEvent(currentState: any, statusJson: any) {
       this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
       this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
@@ -18,7 +13,14 @@ module.exports = class HouseholdMeter extends Homey.Device {
       this.setCapabilityValue('meter_power.imported', currentState.totalProduction_Wh / 1000);
       this.setCapabilityValue('meter_power.exported', currentState.totalConsumption_Wh / 1000);
       */
-    });
+  }
+
+  /**
+   * onInit is called when the device is initialized.
+   */
+  async onInit() {
+    this.log('HouseholdMeter has been initialized');
+    this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent.bind(this));
   }
 
   /**

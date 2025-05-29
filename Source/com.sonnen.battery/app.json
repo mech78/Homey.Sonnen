@@ -795,12 +795,20 @@
       ],
       "name": {
         "en": "sonnenBatterie solar panel",
-        "de": "sonnenBatterie Solarmodul"
+        "de": "sonnenBatterie Solarmodul",
+        "nl": "sonnenBatterie Zonnepaneel"
       },
       "class": "solarpanel",
       "capabilities": [
         "measure_power"
       ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "en": "Generated Power",
+          "de": "Energieproduktion",
+          "nl": "Opgewekte energie"
+        }
+      },
       "id": "sonnenbatterie_solarpanel"
     }
   ],

@@ -2,29 +2,29 @@ import Homey from 'homey';
 
 module.exports = class GridMeter extends Homey.Device {
 
+  handleUpdateEvent(currentState: any, statusJson: any) {
+    this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
+    this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
+
+    this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
+    //this.setCapabilityValue('meter_power', currentState.totalConsumption_Wh / 1000);
+    this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
+    this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
+  }
+
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log('GridMeter has been initialized');
-
-    this.homey.on('metering_data_updated', (currentState, statusJson) => {
-      this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
-      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
-
-      this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
-      //this.setCapabilityValue('meter_power', currentState.totalConsumption_Wh / 1000);
-      this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
-      this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
-    });
-  
+    this.log('GridMeter has been initialized');    
+    this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent.bind(this));
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('GridMeter has been added');
+    this.log('GridMeter has been added');  
   }
 
   /**

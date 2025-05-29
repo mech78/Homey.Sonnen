@@ -2,18 +2,19 @@ import Homey from 'homey';
 
 module.exports = class SolarPanelDevice extends Homey.Device {
 
+  handleUpdateEvent(currentState: any, statusJson: any) {
+      this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
+      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
+
+      this.setCapabilityValue('measure_power', statusJson.Production_W);
+  }
+
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
     this.log('SolarPanelDevice has been initialized');
-
-    this.homey.on('metering_data_updated', (currentState, statusJson) => {
-      this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
-      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
-
-      this.setCapabilityValue('measure_power', statusJson.Production_W);
-    });
+    this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent.bind(this));
   }
 
   /**

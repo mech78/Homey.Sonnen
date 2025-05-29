@@ -280,11 +280,9 @@ class BatteryDevice extends Homey.Device {
 
       this.setCapabilityValue('to_battery_capability', toBattery_W);
       this.setCapabilityValue('from_battery_capability', fromBattery_W);
-
-      // TODO: move this to metering device
       
       this.log("Emit data...")
-      this.homey.emit('metering_data_updated', currentState, statusJson);
+      this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
       this.log("Data emitted")
 
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
