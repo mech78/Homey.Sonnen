@@ -1,7 +1,9 @@
 {
   "$extends": "sonnenbatterie",
   "name": {
-    "en": "sonnenbatterie grid meter"
+    "en": "sonnenBatterie Grid",
+    "de": "sonnenBatterie Netz",
+    "nl": "sonnenBatterie Net"    
   },
   "class": "sensor",
   "capabilities": [
@@ -13,13 +15,15 @@
     "meter_power.imported": {
       "title": {
         "en": "Imported Energy",
-        "de": "Importierte Energie"
+        "de": "Importierte Energie",
+        "nl": "Geïmporteerde Energie"
       }
     },
     "meter_power.exported": {
       "title": {
         "en": "Exported Energy",
-        "de": "Exportierte Energie"
+        "de": "Exportierte Energie",
+        "nl": "Geëxporteerde Energie"
       }
     }
   },

@@ -1,7 +1,9 @@
 {
   "$extends": "sonnenbatterie",
   "name": {
-    "en": "sonnenbatterie household meter"
+    "en": "sonnenBatterie household",
+    "de": "sonnenBatterie Haushalt",
+    "nl": "sonnenBatterie Huishouden"
   },
   "class": "sensor",
   "capabilities": [

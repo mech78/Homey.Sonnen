@@ -3,7 +3,7 @@ import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 
-class SonnenBatterieDriver extends Homey.Driver {
+module.exports = class SonnenBatterieDriver extends Homey.Driver {
 
   /**
    * onInit is called when the driver is initialized.
@@ -240,4 +240,3 @@ class SonnenBatterieDriver extends Homey.Driver {
 
 }
 
-module.exports = SonnenBatterieDriver;
