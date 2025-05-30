@@ -12,20 +12,26 @@
     "meter_power.daily"
   ],
   "capabilitiesOptions": {
-    "measure_power": {
-      "en": "Generated Power",
-      "de": "Energieproduktion",
-      "nl": "Opgewekte energie"
+    "title": {
+      "measure_power": {
+        "en": "Generated Power",
+        "de": "Energieproduktion",
+        "nl": "Opgewekte energie"
+      }
     },
     "meter_power": {
-      "en": "Total production",
-      "de": "Gesamtproduktion",
-      "nl": "Totaal productie"
+      "title": {
+        "en": "Total production",
+        "de": "Gesamtproduktion",
+        "nl": "Totaal productie"
+      }
     },
     "meter_power.daily": {
-      "en": "Total daily production",
-      "de": "Gesamte Tagesproduktion",
-      "nl": "Totaal dagelijkse productie"
+      "title": {
+        "en": "Total daily production",
+        "de": "Gesamte Tagesproduktion",
+        "nl": "Totaal dagelijkse productie"
+      }
     }
   }
 }
