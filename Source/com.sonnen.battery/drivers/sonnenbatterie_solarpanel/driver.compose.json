@@ -12,8 +12,8 @@
     "meter_power.daily"
   ],
   "capabilitiesOptions": {
-    "title": {
-      "measure_power": {
+    "measure_power": {
+      "title": {
         "en": "Generated Power",
         "de": "Energieproduktion",
         "nl": "Opgewekte energie"
