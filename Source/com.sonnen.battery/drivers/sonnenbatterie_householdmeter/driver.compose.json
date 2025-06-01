@@ -9,9 +9,7 @@
   "capabilities": [
     "measure_power"
   ],
-  "energy_exclude": true,
   "energy": {
-    "cumulative": true,
-    "energy_exclude": true
+    "cumulative": true
   }
 }

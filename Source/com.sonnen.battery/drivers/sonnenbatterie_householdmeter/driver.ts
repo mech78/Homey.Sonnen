@@ -1,13 +1,16 @@
 import Homey from 'homey';
 import axios from 'axios';
+import { SonnenDriver } from '../../lib/SonnenDriver';
 
-module.exports = class HouseholdMeterDriver extends Homey.Driver {
+module.exports = class HouseholdMeterDriver extends SonnenDriver {
 
   /**
    * onInit is called when the driver is initialized.
    */
   async onInit() {
-    this.log('HouseholdMeterDriver has been initialized');
+    super.onInit();    
+    this.deviceName = "Haushalt";
+    this.deviceId = "householdMeter";
   }
 
   /**
@@ -15,31 +18,7 @@ module.exports = class HouseholdMeterDriver extends Homey.Driver {
    * This should return an array with the data of devices that are available for pairing.
    */
   async onPairListDevices() {
-    try {
-      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
-
-      if (response.data) {
-        this.log('results found', response.data);
-        const results = [];
-        for (const e of response.data) {
-          results.push({
-            name: e.info + " Household Meter",
-            data: {
-              id: e.device + "_householdMeter",
-            },
-            store: {
-              lanip: e.lanip,
-            },
-          });
-        }
-
-        return results;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    return [];
+    return super.onPairListDevices();
   }
 
 };
