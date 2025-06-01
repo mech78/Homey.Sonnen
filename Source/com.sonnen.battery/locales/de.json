@@ -36,5 +36,11 @@
       "consumption": "Verbrauch",
       "fromBattery": "Batteriebezug",
       "fromGrid": "Netzbezug"
+    },
+    "device": {
+      "solarPanel": "Solarmodul",
+      "battery": "Batterie",
+      "gridMeter": "Netz",
+      "householdMeter": "Haushalt"
     }
   }

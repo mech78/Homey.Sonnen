@@ -36,5 +36,11 @@
       "consumption": "Consumption",
       "fromBattery": "From battery",
       "fromGrid": "From grid"
+    },
+    "device": {
+      "solarPanel": "solar panel",
+      "battery": "battery",
+      "gridMeter": "grid",
+      "householdMeter": "household"
     }
   }

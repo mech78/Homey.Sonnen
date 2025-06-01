@@ -5,7 +5,7 @@ import { SonnenDriver } from '../../lib/SonnenDriver';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   async onInit() {
-    this.deviceName = "Battery";
+    this.deviceName = this.homey.__('device.battery');
     this.deviceId = "sonnenBattery";
     super.onInit();
 
