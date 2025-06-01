@@ -1,16 +1,14 @@
-import Homey from 'homey';
 import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
+import { SonnenDevice } from '../../lib/SonnenDevice';
 
-class BatteryDevice extends Homey.Device {
-  state: any;
+module.exports = class BatteryDevice extends SonnenDevice {
+  private state: any;
 
-  /**
-   * onInit is called when the device is initialized.
-   */
   async onInit() {
-    this.log('BatteryDevice has been initialized');
+    this.deviceName = 'BatterieDevice';
+    super.onInit();
 
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
@@ -38,7 +36,29 @@ class BatteryDevice extends Homey.Device {
     }, batteryPullInterval * 1000);
   }
 
+  async onSettings({
+    oldSettings,
+    newSettings,
+    changedKeys,
+  }: {
+    oldSettings: { [key: string]: boolean | string | number | undefined | null; };
+    newSettings: { [key: string]: boolean | string | number | undefined | null; };
+    changedKeys: string[];
+  }): Promise<string | void> {
+    super.onSettings({ oldSettings, newSettings, changedKeys });
 
+    if (_.contains(changedKeys, "device-ip")){
+      var newDeviceIp = newSettings["device-ip"];
+      this.log("Settings", "IP", newDeviceIp);
+      this.setStoreValue('lanip', newDeviceIp);
+    };
+
+    if (_.contains(changedKeys, "device-discovery")){
+      var blnUseAutoDisovery = newSettings["device-discovery"];
+      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
+      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
+    };
+  }
 
   /**
    * Homey SDK3's new Date() is always in UTC but SonnenBatterie timestamps are local,
@@ -133,61 +153,6 @@ class BatteryDevice extends Homey.Device {
       await this.addCapability('meter_power');
     }
     
-  }
-
-  /**
-   * onAdded is called when the user adds the device, called just after pairing.
-   */
-  async onAdded() {
-    this.log('BatteryDevice has been added');
-  }
-
-  /**
-   * onSettings is called when the user updates the device's settings.
-   * @param {object} event the onSettings event data
-   * @param {object} event.oldSettings The old settings object
-   * @param {object} event.newSettings The new settings object
-   * @param {string[]} event.changedKeys An array of keys changed since the previous version
-   * @returns {Promise<string|void>} return a custom message that will be displayed
-   */
-  async onSettings({
-    oldSettings,
-    newSettings,
-    changedKeys,
-  }: {
-    oldSettings: { [key: string]: boolean | string | number | undefined | null; };
-    newSettings: { [key: string]: boolean | string | number | undefined | null; };
-    changedKeys: string[];
-  }): Promise<string | void> {
-    this.log('BatteryDevice settings where changed');
-
-    if (_.contains(changedKeys, "device-ip")){
-      var newDeviceIp = newSettings["device-ip"];
-      this.log("Settings", "IP", newDeviceIp);
-      this.setStoreValue('lanip', newDeviceIp);
-    };
-
-    if (_.contains(changedKeys, "device-discovery")){
-      var blnUseAutoDisovery = newSettings["device-discovery"];
-      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
-      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
-    };
-  }
-
-  /**
-   * onRenamed is called when the user updates the device's name.
-   * This method can be used this to synchronise the name to the device.
-   * @param {string} name The new name
-   */
-  async onRenamed(name: string) {
-    this.log('BatteryDevice was renamed');
-  }
-
-  /**
-   * onDeleted is called when the user deleted the device.
-   */
-  async onDeleted() {
-    this.log('BatteryDevice has been deleted');
   }
 
   private async loadLatestState(
@@ -384,5 +349,3 @@ class BatteryDevice extends Homey.Device {
   }
 
 }
-
-module.exports = BatteryDevice;

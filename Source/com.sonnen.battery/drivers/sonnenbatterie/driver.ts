@@ -10,7 +10,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
    * onInit is called when the driver is initialized.
   */
   async onInit() {
-    this.driverName = "Battery";
+    this.driverName = "Battery Driver";
     this.driverId = "battery";
     super.onInit();
 
