@@ -7,7 +7,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
   private state: any;
 
   async onInit() {
-    this.deviceName = 'BatteryDevice';
     super.onInit();
 
     await this.gracefullyAddOrRemoveCapabilities();

@@ -13,8 +13,6 @@ module.exports = class GridMeterDevice extends SonnenDevice {
   }
 
   async onInit() {
-    this.deviceName = 'Grid Meter Device';
-
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onInit();
   }

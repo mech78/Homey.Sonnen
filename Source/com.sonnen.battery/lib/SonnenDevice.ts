@@ -2,20 +2,18 @@ import Homey from 'homey';
 
 export abstract class SonnenDevice extends Homey.Device {
 
-  protected deviceName!: string;
-
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log(this.deviceName + ' has been initialized');
+    this.log(this.constructor.name + ' has been initialized');
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log(this.deviceName + ' has been added');
+    this.log(this.constructor.name + ' has been added');
   }
 
   /**
@@ -35,7 +33,7 @@ export abstract class SonnenDevice extends Homey.Device {
     newSettings: { [key: string]: boolean | string | number | undefined | null };
     changedKeys: string[];
   }): Promise<string | void> {
-      this.log(this.deviceName + ' settings where changed: ' +
+      this.log(this.constructor.name + ' settings where changed: ' +
           changedKeys.join(', ') +
           '. old settings: ' + JSON.stringify(oldSettings) +
           ', new settings: ' + JSON.stringify(newSettings));
@@ -47,14 +45,14 @@ export abstract class SonnenDevice extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name: string) {
-    this.log(this.deviceName + ' was renamed');
+    this.log(this.constructor.name + ' was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log(this.deviceName + ' has been deleted');
+    this.log(this.constructor.name + ' has been deleted');
   }
 
 };

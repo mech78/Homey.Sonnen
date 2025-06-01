@@ -12,8 +12,6 @@ module.exports = class SolarPanelDevice extends SonnenDevice {
   }
 
   async onInit() {
-    this.deviceName = 'Solar Panel Device';
-
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onInit();
   }

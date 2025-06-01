@@ -3,8 +3,8 @@ import { SonnenDriver } from '../../lib/SonnenDriver';
 module.exports = class HouseholdMeterDriver extends SonnenDriver {
 
   async onInit() {
-    this.driverName = "Household Meter Driver";
-    this.driverId = "householdMeter";
+    this.deviceName = "Household Meter";
+    this.deviceId = "householdMeter";
     super.onInit();
   }
 

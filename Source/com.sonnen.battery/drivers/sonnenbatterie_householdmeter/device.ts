@@ -15,8 +15,6 @@ module.exports = class HouseholdMeterDevice extends SonnenDevice {
   };
 
   async onInit() {
-    this.deviceName = 'Household Meter Device';
-
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onInit();
   }

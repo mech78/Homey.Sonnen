@@ -3,8 +3,8 @@ import { SonnenDriver } from '../../lib/SonnenDriver';
 module.exports = class SolarPanelDriver extends SonnenDriver {
 
   async onInit() {
-    this.driverName = "Solar Panel Driver";
-    this.driverId = "solarPanel";
+    this.deviceName = "Solar Panel";
+    this.deviceId = "solarPanel";
     super.onInit();
   }
 

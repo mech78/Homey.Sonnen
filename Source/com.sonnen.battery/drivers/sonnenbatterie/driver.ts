@@ -1,17 +1,12 @@
-import Homey from 'homey';
-import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 import { SonnenDriver } from '../../lib/SonnenDriver';
 
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
-  /**
-   * onInit is called when the driver is initialized.
-  */
   async onInit() {
-    this.driverName = "Battery Driver";
-    this.driverId = "battery";
+    this.deviceName = "Battery";
+    this.deviceId = "sonnenBattery";
     super.onInit();
 
     const setToC_card       = this.homey.flow.getActionCard("set-time-of-use");

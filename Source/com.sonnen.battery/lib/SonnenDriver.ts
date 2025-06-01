@@ -3,15 +3,15 @@ import axios from 'axios';
 
 export abstract class SonnenDriver extends Homey.Driver {
 
-  protected driverName!: string;
-  protected driverId!: string;
+  protected deviceName!: string;
+  protected deviceId!: string;
 
   /**
    * onInit is called when the driver is initialized.
    */
   async onInit() {
     super.onInit();
-    this.log(this.driverName + ' has been initialized with ID: ' + this.driverId);
+    this.log(this.constructor.name + ' has been initialized for device: ' + this.deviceName + ' with ID: ' + this.deviceId);
   }
 
   /**
@@ -27,9 +27,9 @@ export abstract class SonnenDriver extends Homey.Driver {
         const results = [];
         for (const e of response.data) {
           results.push({
-            name: e.info + " " + this.driverName,
+            name: e.info + " " + this.deviceName,
             data: {
-              id: e.device + "_" + this.driverId,
+              id: e.device + "_" + this.deviceId,
             },
             store: {
               lanip: e.lanip,
