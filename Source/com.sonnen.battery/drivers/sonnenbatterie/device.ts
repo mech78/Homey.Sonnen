@@ -5,6 +5,7 @@ import { SonnenDevice } from '../../lib/SonnenDevice';
 
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: any;
+  private updateIntervalId: NodeJS.Timeout | undefined;
 
   async onInit() {
     super.onInit();
@@ -30,9 +31,16 @@ module.exports = class BatteryDevice extends SonnenDevice {
     this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
 
     // Pull battery status
-    this.homey.setInterval(async () => {
+    this.updateIntervalId = this.homey.setInterval(async () => {
       this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
     }, batteryPullInterval * 1000);
+  }
+
+  async onDeleted() {
+    if (this.updateIntervalId) {
+      this.homey.clearInterval(this.updateIntervalId);
+    }
+    super.onDeleted();
   }
 
   async onSettings({
