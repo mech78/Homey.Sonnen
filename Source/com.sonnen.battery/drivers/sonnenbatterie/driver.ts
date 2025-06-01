@@ -10,8 +10,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
    * onInit is called when the driver is initialized.
   */
   async onInit() {
-    this.deviceName = "Battery";
-    this.deviceId = "battery";
+    this.driverName = "Battery";
+    this.driverId = "battery";
     super.onInit();
 
     const setToC_card       = this.homey.flow.getActionCard("set-time-of-use");
