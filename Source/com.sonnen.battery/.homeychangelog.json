@@ -76,5 +76,8 @@
   },
   "1.5.0": {
     "en": "Fixed multiple energy related meters and better distinction between daily and cumulative meters."
+  },
+  "1.6.0": {
+    "en": "Added support for solar panel and household meter devices, improved grid meter device and derived all values from (mandatory) battery device."
   }
 }
