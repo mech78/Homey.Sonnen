@@ -2,7 +2,7 @@ import { SonnenDevice } from '../../lib/SonnenDevice';
 
 module.exports = class GridMeterDevice extends SonnenDevice {
 
-  private handleUpdateEvent(currentState: any, statusJson: any) {
+  private readonly handleUpdateEvent = (currentState: any, statusJson: any): void => {
     this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
     this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
@@ -14,8 +14,14 @@ module.exports = class GridMeterDevice extends SonnenDevice {
 
   async onInit() {
     this.deviceName = 'Grid Meter Device';
+
+    this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onInit();
-    this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent.bind(this));
+  }
+
+  async onDeleted() {
+    this.homey.removeListener('sonnenBatterieUpdate', this.handleUpdateEvent);
+    super.onDeleted();
   }
 
 };
