@@ -2,14 +2,17 @@ import Homey from 'homey';
 import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
+import { SonnenDriver } from '../../lib/SonnenDriver';
 
-module.exports = class SonnenBatterieDriver extends Homey.Driver {
+module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   /**
    * onInit is called when the driver is initialized.
   */
   async onInit() {
-    this.log('SonnenBatterieDriver has been initialized');
+    this.deviceName = "Battery";
+    this.deviceId = "battery";
+    super.onInit();
 
     const setToC_card       = this.homey.flow.getActionCard("set-time-of-use");
     const setToCHours_card  = this.homey.flow.getActionCard("set-time-of-use-hours");
@@ -203,39 +206,6 @@ module.exports = class SonnenBatterieDriver extends Homey.Driver {
       return (batteryLevel >= argPercentage);
     });
 
-
-  }
-
-  /**
-   * onPairListDevices is called when a user is adding a device and the 'list_devices' view is called.
-   * This should return an array with the data of devices that are available for pairing.
-   */
-  async onPairListDevices() {
-    try {
-      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
-
-      if (response.data) {
-        this.log('results found', response.data);
-        const results = [];
-        for (const e of response.data) {
-          results.push({
-            name: e.info,
-            data: {
-              id: e.device,
-            },
-            store: {
-              lanip: e.lanip,
-            },
-          });
-        }
-
-        return results;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    return [];
   }
 
 }

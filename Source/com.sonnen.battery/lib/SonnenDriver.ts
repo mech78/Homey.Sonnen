@@ -2,15 +2,16 @@ import Homey from 'homey';
 import axios from 'axios';
 
 export abstract class SonnenDriver extends Homey.Driver {
-  deviceName?: string;
-  deviceId?: string;
+
+  protected deviceName!: string;
+  protected deviceId!: string;
 
   /**
    * onInit is called when the driver is initialized.
    */
   async onInit() {
     super.onInit();
-    this.log(this.deviceName + ' has been initialized');
+    this.log(this.deviceName + ' has been initialized with ID: ' + this.deviceId);
   }
 
   /**
