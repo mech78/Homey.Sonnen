@@ -134,7 +134,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.hasCapability('autarky_capability') === false) {
       await this.addCapability('autarky_capability');
     }
-    
+
     if (this.hasCapability('battery_charging_state') === false) {
       await this.addCapability('battery_charging_state');
     }
@@ -152,7 +152,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.hasCapability('meter_power') === false) {
       await this.addCapability('meter_power');
     }
-    
+
   }
 
   private async loadLatestState(
@@ -336,7 +336,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   // TODO: refactor to aggregate with and without
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
-    var totalEnergyResult_Wh = totalEnergy_Wh ?? 0; 
+    var totalEnergyResult_Wh = totalEnergy_Wh ?? 0;
     var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
     var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
     totalEnergyResult_Wh += sampleEnergy_Wh;
