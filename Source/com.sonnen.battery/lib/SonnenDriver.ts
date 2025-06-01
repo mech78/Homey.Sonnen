@@ -27,9 +27,9 @@ export abstract class SonnenDriver extends Homey.Driver {
         const results = [];
         for (const e of response.data) {
           results.push({
-            name: e.info + " " + this.deviceName,
+            name: e.info + " " + this.driverName,
             data: {
-              id: e.device + "_" + this.deviceId,
+              id: e.device + "_" + this.driverId,
             },
             store: {
               lanip: e.lanip,
