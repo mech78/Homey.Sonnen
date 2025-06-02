@@ -1,6 +1,11 @@
 {
   "type": "boolean",
-  "title": { "en": "Active", "da": "Aktiv", "nl": "Actief", "de": "Aktiv" },
+  "title": {
+    "en": "Active",
+    "da": "Aktiv",
+    "nl": "Actief",
+    "de": "Aktiv"
+  },
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",

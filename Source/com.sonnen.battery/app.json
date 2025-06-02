@@ -871,9 +871,9 @@
       "type": "number",
       "title": {
         "en": "Capacity",
-        "nl": "Capaciteit",
-        "dk": "Kapacitet",
-        "de": "Kapazität"
+        "da": "Kapacitet",
+        "de": "Kapazität",
+        "nl": "Capaciteit"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -907,10 +907,10 @@
     "consumption_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total consumption",
-        "da": "Samlet forbrug",
-        "de": "Gesamtverbrauch",
-        "nl": "Totaal verbruik"
+        "en": "Total daily consumption",
+        "da": "Dagligt samlet forbrug",
+        "de": "Täglicher Gesamtverbrauch",
+        "nl": "Dagelijks totaal verbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -978,10 +978,10 @@
     "grid_consumption_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total grid consumption",
-        "da": "Samlet netforbrug",
-        "de": "Gesamter Netzbezug",
-        "nl": "Totaal netverbruik"
+        "en": "Total daily grid consumption",
+        "da": "Samlet dagligt netforbrug",
+        "de": "Gesamter täglicher Netzbezug",
+        "nl": "Dagelijks totaal netverbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1016,10 +1016,10 @@
     "grid_feed_in_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total grid feed-in",
-        "da": "Samlet nettilførsel",
-        "de": "Gesamte Netzeinspeisung",
-        "nl": "Totale netinvoeding"
+        "en": "Total daily grid feed-in",
+        "da": "Samlet daglig nettilførsel",
+        "de": "Gesamte tägliche Netzeinspeisung",
+        "nl": "Dagelijks totaal netinvoer"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1100,10 +1100,10 @@
     "production_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total production",
-        "da": "Samlet produktion",
-        "de": "Gesamtproduktion",
-        "nl": "Totaal productie"
+        "en": "Total daily production",
+        "da": "Samlet daglig produktion",
+        "de": "Gesamte tägliche Produktion",
+        "nl": "Dagelijks totaal productie"
       },
       "uiComponent": "sensor",
       "getable": true,

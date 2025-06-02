@@ -1,12 +1,19 @@
 {
-    "type": "number",
-    "title": { "en": "To battery", "da": "Til batteri", "de": "Ladeleistung", "nl": "Naar batterij" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "W" },
-    "min": 0,
-    "decimals": 0,
-    "insights": true,
-    "icon": "/assets/images/to-battery.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "To battery",
+    "da": "Til batteri",
+    "de": "Ladeleistung",
+    "nl": "Naar batterij"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/images/to-battery.svg"
+}

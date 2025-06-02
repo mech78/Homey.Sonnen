@@ -1,12 +1,19 @@
 {
-    "type": "number",
-    "title": { "en": "#Batteries", "da": "#Batterier", "de": "#Batterien", "nl": "#Batterijen" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "#" },
-    "min": 0,
-    "decimals": 0,
-    "insights": true,
-    "icon": "/assets/images/car-battery-sharp-light.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "#Batteries",
+    "da": "#Batterier",
+    "de": "#Batterien",
+    "nl": "#Batterijen"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "#"
+  },
+  "min": 0,
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/images/car-battery-sharp-light.svg"
+}

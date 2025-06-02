@@ -1,12 +1,19 @@
 {
-    "type": "number",
-    "title": { "en": "Total grid feed-in", "da": "Samlet nettilførsel", "de":"Gesamte Netzeinspeisung", "nl": "Totale netinvoeding" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "kWh" },
-    "min": 0,
-    "decimals": 3,
-    "insights": true,
-    "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "Total grid feed-in (daily)",
+    "da": "Samlet nettilslutning (dagligt)",
+    "de": "Gesamte Netzeinspeisung (täglich)",
+    "nl": "Totaal netinvoer (dagelijks)"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kWh"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+}

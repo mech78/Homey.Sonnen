@@ -1,12 +1,19 @@
 {
-    "type": "number",
-    "title": { "en": "From grid", "da": "Fra net", "de":"Netzbezug", "nl": "Uit rooster" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "kW" },
-    "min": 0,
-    "decimals": 3,
-    "insights": true,
-    "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "From grid",
+    "da": "Fra net",
+    "de": "Netzbezug",
+    "nl": "Uit rooster"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kW"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+}
