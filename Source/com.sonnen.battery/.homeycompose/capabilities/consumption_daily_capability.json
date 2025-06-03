@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "Total consumption (daily)",	
-    "da": "Samlet forbrug (dagligt)",
-    "de": "Gesamtverbrauch (täglich)",
-    "nl": "Totaal verbruik (dagelijks)"
+    "en": "∑d consumption",	
+    "da": "∑d forbrug",
+    "de": "∑d Verbrauch",
+    "nl": "∑d verbruik"
   },
   "uiComponent": "sensor",
   "getable": true,

@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "Total grid consumption (daily)",
-    "da": "Samlet netforbrug (dagligt)",
-    "de": "Gesamter Netzbezug (täglich",
-    "nl": "Totaal netverbruik (dagelijks)"
+    "en": "∑d grid consumption",
+    "da": "∑d netforbrug",
+    "de": "∑d Netzbezug",
+    "nl": "∑d netverbruik"
   },
   "uiComponent": "sensor",
   "getable": true,
