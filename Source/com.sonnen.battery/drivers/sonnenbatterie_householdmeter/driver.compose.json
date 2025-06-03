@@ -9,6 +9,15 @@
   "capabilities": [
     "measure_power"
   ],
+    "capabilitiesOptions": {
+    "measure_power": {
+      "title": {
+        "en": "Consumption",
+        "de": "Verbrauch",
+        "nl": "Verbruik"
+      }
+    }
+  },
   "energy": {
     "cumulative": true
   }

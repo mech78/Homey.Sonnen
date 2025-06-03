@@ -12,18 +12,25 @@
     "meter_power.exported"
   ],
   "capabilitiesOptions": {
+    "measure_power": {
+      "title": {
+        "en": "Grid Power",
+        "de": "Netzleistung",
+        "nl": "Roostervermogen"
+      }
+    },
     "meter_power.imported": {
       "title": {
-        "en": "∑ Imported Energy",
-        "de": "∑ Energieimport",
-        "nl": "∑ Geïmporteerde Energie"
+        "en": "∑ Grid import",
+        "de": "∑ Netzbezug",
+        "nl": "∑ Roosterverbruik"
       }
     },
     "meter_power.exported": {
       "title": {
-        "en": "∑ Exported Energy",
-        "de": "∑ Energieexport",
-        "nl": "∑ Geëxporteerde Energie"
+        "en": "∑ Grid export",
+        "de": "∑ Einspeisung",
+        "nl": "∑ Roosterinvoer"
       }
     }
   },

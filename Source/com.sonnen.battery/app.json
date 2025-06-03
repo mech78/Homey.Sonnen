@@ -707,18 +707,25 @@
         "meter_power.exported"
       ],
       "capabilitiesOptions": {
+        "measure_power": {
+          "title": {
+            "en": "Grid Power",
+            "de": "Netzleistung",
+            "nl": "Roostervermogen"
+          }
+        },
         "meter_power.imported": {
           "title": {
-            "en": "∑ Imported Energy",
-            "de": "∑ Energieimport",
-            "nl": "∑ Geïmporteerde Energie"
+            "en": "∑ Grid import",
+            "de": "∑ Netzbezug",
+            "nl": "∑ Roosterverbruik"
           }
         },
         "meter_power.exported": {
           "title": {
-            "en": "∑ Exported Energy",
-            "de": "∑ Energieexport",
-            "nl": "∑ Geëxporteerde Energie"
+            "en": "∑ Grid export",
+            "de": "∑ Einspeisung",
+            "nl": "∑ Roosterinvoer"
           }
         }
       },
@@ -763,6 +770,15 @@
       "capabilities": [
         "measure_power"
       ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "title": {
+            "en": "Consumption",
+            "de": "Verbrauch",
+            "nl": "Verbruik"
+          }
+        }
+      },
       "energy": {
         "cumulative": true
       },
@@ -807,22 +823,22 @@
       "capabilitiesOptions": {
         "measure_power": {
           "title": {
-            "en": "Production",
-            "de": "Produktion",
-            "nl": "Productie"
+            "en": "Solar Power",
+            "de": "Solarleistung",
+            "nl": "Zonnevermogen"
           }
         },
         "meter_power": {
           "title": {
-            "en": "∑ production",
-            "de": "∑ Produktion",
+            "en": "∑ Generation",
+            "de": "∑ Erzeugung",
             "nl": "∑ productie"
           }
         },
         "meter_power.daily": {
           "title": {
-            "en": "∑d production",
-            "de": "∑d Produktion",
+            "en": "∑d Generation",
+            "de": "∑d Erzeugung",
             "nl": "∑d productie"
           }
         }

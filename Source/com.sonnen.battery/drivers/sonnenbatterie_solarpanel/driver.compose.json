@@ -14,22 +14,22 @@
   "capabilitiesOptions": {
     "measure_power": {
       "title": {
-        "en": "Production",
-        "de": "Produktion",
-        "nl": "Productie"
+        "en": "Solar Power",
+        "de": "Solarleistung",
+        "nl": "Zonnevermogen"
       }
     },
     "meter_power": {
       "title": {
-        "en": "∑ production",
-        "de": "∑ Produktion",
+        "en": "∑ Generation",
+        "de": "∑ Erzeugung",
         "nl": "∑ productie"
       }
     },
     "meter_power.daily": {
       "title": {
-        "en": "∑d production",
-        "de": "∑d Produktion",
+        "en": "∑d Generation",
+        "de": "∑d Erzeugung",
         "nl": "∑d productie"
       }
     }
