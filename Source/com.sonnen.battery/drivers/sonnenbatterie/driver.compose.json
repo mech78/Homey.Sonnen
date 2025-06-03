@@ -48,23 +48,23 @@
     },
     "meter_power.charged": {
       "title": { 
-        "en": "Charged Energy",
-        "de": "Geladene Energie",
-        "nl": "Opgeladen Energie"
+        "en": "∑ Charged Energy",
+        "de": "∑ Geladene Energie",
+        "nl": "∑ Opgeladen Energie"
       }
     },
     "meter_power.discharged": {
       "title": { 
-        "en": "Discharged Energy",
-        "de": "Entladene Energie",
-        "nl": "Ontladen Energie"
+        "en": "∑ Discharged Energy",
+        "de": "∑ Entladene Energie",
+        "nl": "∑ Ontladen Energie"
       }
     },
     "battery_charging_state": {
       "title": { 
-        "en": "Battery Charging State",
-        "de": "Batterie Ladezustand",
-        "nl": "Batterij Laadstatus"
+        "en": "Charging State",
+        "de": "Ladezustand",
+        "nl": "Laadstatus"
       },
       "values": [
         {

@@ -14,16 +14,16 @@
   "capabilitiesOptions": {
     "meter_power.imported": {
       "title": {
-        "en": "Imported Energy",
-        "de": "Importierte Energie",
-        "nl": "Geïmporteerde Energie"
+        "en": "∑ Imported Energy",
+        "de": "∑ Energieimport",
+        "nl": "∑ Geïmporteerde Energie"
       }
     },
     "meter_power.exported": {
       "title": {
-        "en": "Exported Energy",
-        "de": "Exportierte Energie",
-        "nl": "Geëxporteerde Energie"
+        "en": "∑ Exported Energy",
+        "de": "∑ Energieexport",
+        "nl": "∑ Geëxporteerde Energie"
       }
     }
   },
