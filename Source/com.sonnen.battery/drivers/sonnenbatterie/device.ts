@@ -9,22 +9,22 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   async onInit() {
     super.onInit();
-
+  
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
-
+  
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
     var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
-
-    // re-initialize from capability values
-    this.state = {
+  
+    // Retrieve stored state
+    this.state = this.homey.settings.get('deviceState') || {
       lastUpdate:                    this.getLocalNow(),
-      totalDailyProduction_Wh:      +this.getCapabilityValue('production_daily_capability') * 1000,
-      totalDailyConsumption_Wh:     +this.getCapabilityValue('consumption_daily_capability') * 1000,
-      totalDailyGridFeedIn_Wh:      +this.getCapabilityValue('grid_feed_in_daily_capability') * 1000,
-      totalDailyGridConsumption_Wh: +this.getCapabilityValue('grid_consumption_daily_capability') * 1000,
-      totalToBattery_Wh:            +this.getCapabilityValue('meter_power.charged') * 1000,
-      totalFromBattery_Wh:          +this.getCapabilityValue('meter_power.discharged') * 1000,
+      totalDailyProduction_Wh:      0,
+      totalDailyConsumption_Wh:     0,
+      totalDailyGridFeedIn_Wh:      0,
+      totalDailyGridConsumption_Wh: 0,
+      totalToBattery_Wh:            0,
+      totalFromBattery_Wh:          0,
     };
 
     // Get latest state:
@@ -40,6 +40,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.updateIntervalId) {
       this.homey.clearInterval(this.updateIntervalId);
     }
+    // Store updated state
+    this.homey.settings.set('deviceState', this.state);
     super.onDeleted();
   }
 
@@ -53,18 +55,24 @@ module.exports = class BatteryDevice extends SonnenDevice {
     changedKeys: string[];
   }): Promise<string | void> {
     super.onSettings({ oldSettings, newSettings, changedKeys });
-
+    
     if (_.contains(changedKeys, "device-ip")){
       var newDeviceIp = newSettings["device-ip"];
       this.log("Settings", "IP", newDeviceIp);
       this.setStoreValue('lanip', newDeviceIp);
     };
-
+  
     if (_.contains(changedKeys, "device-discovery")){
       var blnUseAutoDisovery = newSettings["device-discovery"];
       this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
       this.setStoreValue('autodiscovery', blnUseAutoDisovery);
     };
+  }
+  
+  async onUninit() {
+    // Store updated state
+    this.homey.settings.set('deviceState', this.state);
+    super.onUninit();
   }
 
   /**

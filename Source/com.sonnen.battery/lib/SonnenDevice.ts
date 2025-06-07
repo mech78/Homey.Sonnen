@@ -10,6 +10,13 @@ export abstract class SonnenDevice extends Homey.Device {
   }
 
   /**
+   * onUninit is called when the device is uninitialized.
+   */
+  async onUninit(): Promise<void> {
+    this.log(this.constructor.name + ' has been uninitialized');
+  }
+
+  /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
