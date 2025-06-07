@@ -1,5 +1,5 @@
 export class SonnenCommandResult {
 
-    constructor(public HasError: boolean, public error: string){}
+  constructor(public HasError: boolean, public error: string) { }
 
 }

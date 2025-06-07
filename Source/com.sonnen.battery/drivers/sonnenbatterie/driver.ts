@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
+import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDriver } from '../../lib/SonnenDriver';
 
 module.exports = class SonnenBatterieDriver extends SonnenDriver {

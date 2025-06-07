@@ -1,8 +1,8 @@
 import axios from 'axios';
 import _ from 'underscore';
-import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
+import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
-import { SonnenState } from '../../Domain/SonnenState';
+import { SonnenState } from '../../domain/SonnenState';
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState({});
   private updateIntervalId: NodeJS.Timeout | undefined;
