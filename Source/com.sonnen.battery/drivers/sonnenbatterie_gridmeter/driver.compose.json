@@ -8,6 +8,8 @@
   "class": "sensor",
   "capabilities": [
     "measure_power",
+    "meter_power.importedDaily",
+    "meter_power.exportedDaily",
     "meter_power.imported",
     "meter_power.exported"
   ],
@@ -17,6 +19,20 @@
         "en": "Grid Power",
         "de": "Netzleistung",
         "nl": "Roostervermogen"
+      }
+    },
+    "meter_power.importedDaily": {
+      "title": {
+        "en": "∑d Grid import",
+        "de": "∑d Netzbezug",
+        "nl": "∑d Roosterverbruik"
+      }
+    },
+    "meter_power.exportedDaily": {
+      "title": {
+        "en": "∑d Grid export",
+        "de": "∑d Einspeisung",
+        "nl": "∑d Roosterinvoer"
       }
     },
     "meter_power.imported": {

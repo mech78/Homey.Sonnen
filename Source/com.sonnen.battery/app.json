@@ -710,6 +710,8 @@
       "class": "sensor",
       "capabilities": [
         "measure_power",
+        "meter_power.importedDaily",
+        "meter_power.exportedDaily",
         "meter_power.imported",
         "meter_power.exported"
       ],
@@ -719,6 +721,20 @@
             "en": "Grid Power",
             "de": "Netzleistung",
             "nl": "Roostervermogen"
+          }
+        },
+        "meter_power.importedDaily": {
+          "title": {
+            "en": "∑d Grid import",
+            "de": "∑d Netzbezug",
+            "nl": "∑d Roosterverbruik"
+          }
+        },
+        "meter_power.exportedDaily": {
+          "title": {
+            "en": "∑d Grid export",
+            "de": "∑d Einspeisung",
+            "nl": "∑d Roosterinvoer"
           }
         },
         "meter_power.imported": {
@@ -775,7 +791,9 @@
       },
       "class": "sensor",
       "capabilities": [
-        "measure_power"
+        "measure_power",
+        "meter_power.daily",
+        "meter_power"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -783,6 +801,20 @@
             "en": "Consumption",
             "de": "Verbrauch",
             "nl": "Verbruik"
+          }
+        },
+        "meter_power.daily": {
+          "title": {
+            "en": "∑d Consumption",
+            "de": "∑d Verbrauch",
+            "nl": "∑d Verbruik"
+          }
+        },
+        "meter_power": {
+          "title": {
+            "en": "∑ Consumption",
+            "de": "∑ Verbrauch",
+            "nl": "∑ Verbruik"
           }
         }
       },
@@ -824,8 +856,8 @@
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
-        "meter_power",
-        "meter_power.daily"
+        "meter_power.daily",
+        "meter_power"
       ],
       "capabilitiesOptions": {
         "measure_power": {

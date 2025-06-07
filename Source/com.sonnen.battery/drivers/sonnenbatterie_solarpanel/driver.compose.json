@@ -8,8 +8,8 @@
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
-    "meter_power",
-    "meter_power.daily"
+    "meter_power.daily",
+    "meter_power"
   ],
   "capabilitiesOptions": {
     "measure_power": {
