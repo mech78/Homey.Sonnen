@@ -172,7 +172,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
     authKey: string,
     lastState: any,
     retryOnError = true
-  ): Promise<any> {
+  ): Promise<SonnenState> {
     // Arrange
     var options = {
       method: 'get',
@@ -217,7 +217,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       var toBattery_W =   (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
       var fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
     
-      var currentState = {
+      var currentState = new SonnenState({
         lastUpdate: currentUpdate, 
         totalDailyProduction_Wh:      this.aggregateDailyTotal(lastState.totalDailyProduction_Wh,      statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
         totalDailyConsumption_Wh:     this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh,     statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
@@ -229,7 +229,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         totalGridConsumption_Wh:      this.aggregateTotal(lastState.totalGridConsumption_Wh,           grid_consumption_W,       lastState.lastUpdate, currentUpdate),
         totalToBattery_Wh:            this.aggregateTotal(lastState.totalToBattery_Wh,                 toBattery_W,              lastState.lastUpdate, currentUpdate),
         totalFromBattery_Wh:          this.aggregateTotal(lastState.totalFromBattery_Wh,               fromBattery_W,            lastState.lastUpdate, currentUpdate),
-      };
+      });
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue('meter_power', +(latestStateJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
