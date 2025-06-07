@@ -233,6 +233,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
         totalFromBattery_Wh:          this.aggregateTotal(lastState.totalFromBattery_Wh,               fromBattery_W,            lastState.lastUpdate, currentUpdate),
       });
 
+      this.log("Emit data...")
+      this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
+      this.log("Data emitted")
+
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue('meter_power', +(latestDataJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
       this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
@@ -261,10 +265,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('to_battery_capability', toBattery_W);
       this.setCapabilityValue('from_battery_capability', fromBattery_W);
       
-      this.log("Emit data...")
-      this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
-      this.log("Data emitted")
-
       this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
       this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
       
