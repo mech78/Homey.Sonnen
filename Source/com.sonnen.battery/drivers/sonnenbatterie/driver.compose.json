@@ -22,6 +22,7 @@
     "autarky_capability",
     "self_consumption_capability",
     "online_capability",
+    "meter_power",
     "capacity_capability",
     "number_battery_capability",
     "eclipse_capability",
@@ -31,8 +32,7 @@
     "button.reset_meter",
     "battery_charging_state",
     "meter_power.charged", 
-    "meter_power.discharged",
-    "meter_power"
+    "meter_power.discharged"
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
@@ -45,6 +45,13 @@
           "en": "Resets today's totals (kWh). This can not be restored.", 
           "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
           "nl": "Reset de dagelijkse totalen (kWh). Dit kan niet worden hersteld."}
+    },
+    "meter_power": {
+      "title": { 
+        "en": "Stored Energy",
+        "de": "Gespeicherte Energie",
+        "nl": "Opgeslagen Energie"
+      }
     },
     "meter_power.charged": {
       "title": { 
