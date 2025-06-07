@@ -4,7 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 module.exports = class BatteryDevice extends SonnenDevice {
-  private state: SonnenState = new SonnenState({});
+  private state: SonnenState = new SonnenState({ lastUpdate: this.getLocalNow() });
   private updateIntervalId: NodeJS.Timeout | undefined;
 
   async onInit() {
