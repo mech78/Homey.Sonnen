@@ -17,8 +17,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
     var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
     
     // Retrieve stored state
-    this.log('Retrieve stored state');
-    this.state.updateState(this.homey.settings.get('deviceState') || {});
+    this.state.updateState(this.homey.settings.get('deviceState') || { lastUpdate: this.getLocalNow() });
+    this.state.lastUpdate = new Date(this.state.lastUpdate); // fixes lastUpdate being restored as string, not Date
+    this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
 
     // Get latest state:
     this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
@@ -170,7 +171,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       // Act
       var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
 
-      this.log("Fetching data from `${baseUrl}/api/v2/latestdata` and `${baseUrl}/api/v2/status`");
+      this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
 
       var response = await axios
         .get(`${baseUrl}/api/v2/latestdata`, options)
@@ -195,8 +196,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
 
       var currentUpdate = new Date(latestDataJson.Timestamp);
-      this.log('Fetched at ' + currentUpdate?.toISOString() + ', compute changes since ' + lastState.lastUpdate?.toISOString());
-      
+      this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
+     
       var grid_feed_in_W     = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
       var grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
       var toBattery_W =   (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
@@ -216,9 +217,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
         totalFromBattery_Wh:          this.aggregateTotal(lastState.totalFromBattery_Wh,               fromBattery_W,            lastState.lastUpdate, currentUpdate),
       });
 
-      this.log("Emit data...")
+      this.log("Emitting data update for other devices...");
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
-      this.log("Data emitted")
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue('meter_power', +(latestDataJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
