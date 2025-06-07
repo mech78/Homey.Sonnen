@@ -17,11 +17,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
     var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
     
     // Retrieve stored state
-    this.state = new SonnenState(this.homey.settings.get('deviceState') || {});
-    
+    this.state.updateState(this.homey.settings.get('deviceState') || {});
+
     // Get latest state:
+    this.state.updateState({ lastUpdate: new Date() });
     this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
-    
+
     // Pull battery status
     this.updateIntervalId = this.homey.setInterval(async () => {
       this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
@@ -81,6 +82,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
+      // TODO probably do not reset capabilities, just the state...
       this.setCapabilityValue('production_daily_capability', +0);
       this.setCapabilityValue('consumption_daily_capability', +0);
       this.setCapabilityValue('grid_feed_in_daily_capability', +0);
@@ -197,11 +199,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
         .get(`${baseUrl}/api/v2/status`, options)
         .then();
 
-      var latestStateJson = response.data;
+      var latestDataJson = response.data;
       var statusJson = statusResponse.data;
 
       // update device's batteries to actual number of internal batteries
-      var numberBatteries = +latestStateJson.ic_status.nrbatterymodules;
+      var numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
       var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
       var energy = (await this.getEnergy()) || { homeBattery: true, batteries: [] };
 
@@ -211,7 +213,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         await this.setEnergy(energy);
       }
 
-      var currentUpdate = new Date(latestStateJson.Timestamp);
+      var currentUpdate = new Date(latestDataJson.Timestamp);
       var grid_feed_in_W     = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
       var grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
       var toBattery_W =   (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
@@ -232,10 +234,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
       });
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue('meter_power', +(latestStateJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
+      this.setCapabilityValue('meter_power', +(latestDataJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
       this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
       this.setCapabilityValue('production_daily_capability', currentState.totalDailyProduction_Wh / 1000);
-      this.setCapabilityValue('capacity_capability', +latestStateJson.FullChargeCapacity / 1000);
+      this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
 
@@ -269,11 +271,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('consumption_capability', +statusJson.Consumption_W / 1000); // Consumption_W : consumption
     
       this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestStateJson.ic_status['Eclipse Led']));
-      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestStateJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestStateJson.ic_status.statebms;
-      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestStateJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestStateJson.ic_status.statecorecontrolmodule);
-      this.setCapabilityValue('online_capability', !latestStateJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
-      this.setCapabilityValue('alarm_generic', latestStateJson.ic_status['Eclipse Led']['Solid Red']);
+      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
+      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
+      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
+      this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
+      this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
 
       this.setCapabilityValue('consumption_daily_capability', currentState.totalDailyConsumption_Wh / 1000);
       this.setCapabilityValue('grid_feed_in_daily_capability', currentState.totalDailyGridFeedIn_Wh / 1000);
