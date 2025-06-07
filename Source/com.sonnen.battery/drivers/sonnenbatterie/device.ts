@@ -25,6 +25,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
       totalDailyGridConsumption_Wh: 0,
       totalToBattery_Wh:            0,
       totalFromBattery_Wh:          0,
+      totalProduction_Wh:           0,
+      totalConsumption_Wh:          0,
+      totalGridFeedIn_Wh:           0,
+      totalGridConsumption_Wh:      0,
     };
 
     // Get latest state:
