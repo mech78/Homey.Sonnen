@@ -21,7 +21,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
     this.state.updateState(this.homey.settings.get('deviceState') || {});
 
     // Get latest state:
-    this.state.updateState({ lastUpdate: new Date() });
     this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
 
     // Pull battery status
@@ -83,26 +82,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
-      // TODO probably do not reset capabilities, just the state...
-      this.setCapabilityValue('production_daily_capability', +0);
-      this.setCapabilityValue('consumption_daily_capability', +0);
-      this.setCapabilityValue('grid_feed_in_daily_capability', +0);
-      this.setCapabilityValue('grid_consumption_daily_capability', +0);
-      this.setCapabilityValue('self_consumption_capability', +0);
-      this.setCapabilityValue('autarky_capability', +0);
-      this.state.updateState({
-        lastUpdate:                   this.getLocalNow(),
-        totalDailyProduction_Wh:      0,
-        totalDailyConsumption_Wh:     0,
-        totalDailyGridFeedIn_Wh:      0,
-        totalDailyGridConsumption_Wh: 0,
-        totalToBattery_Wh:            0,
-        totalFromBattery_Wh:          0,
-        totalProduction_Wh:           0,
-        totalConsumption_Wh:          0,
-        totalGridFeedIn_Wh:           0,
-        totalGridConsumption_Wh:      0,
-      });
+      this.state = new SonnenState({ lastUpdate: this.getLocalNow() });
     });
   }
 
