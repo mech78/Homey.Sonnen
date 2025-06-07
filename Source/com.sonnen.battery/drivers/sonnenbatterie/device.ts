@@ -2,41 +2,29 @@ import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../Service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
-
+import { SonnenState } from '../../Domain/SonnenState';
 module.exports = class BatteryDevice extends SonnenDevice {
-  private state: any;
+  private state: SonnenState = new SonnenState({});
   private updateIntervalId: NodeJS.Timeout | undefined;
 
   async onInit() {
     super.onInit();
-  
+    
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
-  
+    
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
     var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
-  
+    
     // Retrieve stored state
-    this.state = this.homey.settings.get('deviceState') || {
-      lastUpdate:                    this.getLocalNow(),
-      totalDailyProduction_Wh:      0,
-      totalDailyConsumption_Wh:     0,
-      totalDailyGridFeedIn_Wh:      0,
-      totalDailyGridConsumption_Wh: 0,
-      totalToBattery_Wh:            0,
-      totalFromBattery_Wh:          0,
-      totalProduction_Wh:           0,
-      totalConsumption_Wh:          0,
-      totalGridFeedIn_Wh:           0,
-      totalGridConsumption_Wh:      0,
-    };
-
+    this.state = new SonnenState(this.homey.settings.get('deviceState') || {});
+    
     // Get latest state:
-    this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
-
+    this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
+    
     // Pull battery status
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state = await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true);
+      this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
     }, batteryPullInterval * 1000);
   }
 
@@ -99,13 +87,19 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('grid_consumption_daily_capability', +0);
       this.setCapabilityValue('self_consumption_capability', +0);
       this.setCapabilityValue('autarky_capability', +0);
-      this.state = {
+      this.state.updateState({
         lastUpdate:                   this.getLocalNow(),
         totalDailyProduction_Wh:      0,
         totalDailyConsumption_Wh:     0,
         totalDailyGridFeedIn_Wh:      0,
         totalDailyGridConsumption_Wh: 0,
-      };
+        totalToBattery_Wh:            0,
+        totalFromBattery_Wh:          0,
+        totalProduction_Wh:           0,
+        totalConsumption_Wh:          0,
+        totalGridFeedIn_Wh:           0,
+        totalGridConsumption_Wh:      0,
+      });
     });
   }
 
