@@ -220,6 +220,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Emitting data update for other devices...");
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
+      // FIXME: remove non battery-related capabilities as these are now in the other devices
+      // e.g. production (to panel device) and consumption (to household device) should disappear, as well as feed-in and feed-out (both to grid device). Autarky and self-consumption would als fit better elsewhere, probably household meter as not to crowded.
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       this.setCapabilityValue('meter_power', +(latestDataJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
       this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
