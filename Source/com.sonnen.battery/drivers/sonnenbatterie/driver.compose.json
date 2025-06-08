@@ -14,6 +14,10 @@
     "battery_charging_state",
     "capacity_remaining_capability",
     "capacity_capability",
+    "to_battery_daily_capability",
+    "from_battery_daily_capability",
+    "to_battery_total_capability",
+    "from_battery_total_capability",
     "online_capability",
     "number_battery_capability",
     "eclipse_capability",
@@ -40,18 +44,10 @@
       "uiComponent": null
     },
     "meter_power.charged": {
-      "title": { 
-        "en": "∑ Charged Energy",
-        "de": "∑ Geladene Energie",
-        "nl": "∑ Opgeladen Energie"
-      }
+      "uiComponent": null
     },
     "meter_power.discharged": {
-      "title": { 
-        "en": "∑ Discharged Energy",
-        "de": "∑ Entladene Energie",
-        "nl": "∑ Ontladen Energie"
-      }
+      "uiComponent": null
     },
     "battery_charging_state": {
       "title": { 

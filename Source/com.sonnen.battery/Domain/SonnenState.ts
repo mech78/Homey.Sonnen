@@ -1,5 +1,7 @@
 export class SonnenState {
   lastUpdate: Date;
+  totalDailyToBattery_Wh: number;
+  totalDailyFromBattery_Wh: number;
   totalDailyProduction_Wh: number;
   totalDailyConsumption_Wh: number;
   totalDailyGridFeedIn_Wh: number;
@@ -13,6 +15,8 @@ export class SonnenState {
 
   constructor(initialState?: Partial<SonnenState>) {
     this.lastUpdate = initialState?.lastUpdate || new Date();
+    this.totalDailyToBattery_Wh = initialState?.totalDailyToBattery_Wh || 0;
+    this.totalDailyFromBattery_Wh = initialState?.totalDailyFromBattery_Wh || 0;
     this.totalDailyProduction_Wh = initialState?.totalDailyProduction_Wh || 0;
     this.totalDailyConsumption_Wh = initialState?.totalDailyConsumption_Wh || 0;
     this.totalDailyGridFeedIn_Wh = initialState?.totalDailyGridFeedIn_Wh || 0;

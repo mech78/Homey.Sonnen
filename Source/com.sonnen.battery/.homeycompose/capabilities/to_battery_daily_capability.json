@@ -1,0 +1,19 @@
+{
+  "type": "number",
+  "title": {
+    "en": "∑d Charged energy",
+    "da": "∑d Opladet energi",
+    "de": "∑d Geladene Energie",
+    "nl": "∑d Geladen energie"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kWh"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/to-battery.svg"
+}

@@ -1,0 +1,19 @@
+{
+  "type": "number",
+  "title": {
+    "en": "∑ Discharged energy",
+    "da": "∑ Udladet energi",
+    "nl": "∑ Ontladen energie",
+    "de": "∑ Entladene Energie"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kWh"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/from-battery.svg"
+}

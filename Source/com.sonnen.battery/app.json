@@ -541,6 +541,10 @@
         "battery_charging_state",
         "capacity_remaining_capability",
         "capacity_capability",
+        "to_battery_daily_capability",
+        "from_battery_daily_capability",
+        "to_battery_total_capability",
+        "from_battery_total_capability",
         "online_capability",
         "number_battery_capability",
         "eclipse_capability",
@@ -569,18 +573,10 @@
           "uiComponent": null
         },
         "meter_power.charged": {
-          "title": {
-            "en": "∑ Charged Energy",
-            "de": "∑ Geladene Energie",
-            "nl": "∑ Opgeladen Energie"
-          }
+          "uiComponent": null
         },
         "meter_power.discharged": {
-          "title": {
-            "en": "∑ Discharged Energy",
-            "de": "∑ Entladene Energie",
-            "nl": "∑ Ontladen Energie"
-          }
+          "uiComponent": null
         },
         "battery_charging_state": {
           "title": {
@@ -875,10 +871,10 @@
     "capacity_remaining_capability": {
       "type": "number",
       "title": {
-        "en": "Stored Energy",
-        "da": "Oplagret energi",
-        "de": "Gespeicherte Energie",
-        "nl": "Opgeslagen Energie"
+        "en": "Charged",
+        "da": "Opladet",
+        "de": "Gespeichert",
+        "nl": "Opgeslagen"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -995,6 +991,44 @@
       },
       "min": 0,
       "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/from-battery.svg"
+    },
+    "from_battery_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑d Discharged energy",
+        "da": "∑d Udladet energi",
+        "nl": "∑d Ontladen energie",
+        "de": "∑d Entladene Energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/from-battery.svg"
+    },
+    "from_battery_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Discharged energy",
+        "da": "∑ Udladet energi",
+        "nl": "∑ Ontladen energie",
+        "de": "∑ Entladene Energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
       "insights": true,
       "icon": "/assets/images/from-battery.svg"
     },
@@ -1331,6 +1365,44 @@
       },
       "min": 0,
       "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/to-battery.svg"
+    },
+    "to_battery_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑d Charged energy",
+        "da": "∑d Opladet energi",
+        "de": "∑d Geladene Energie",
+        "nl": "∑d Geladen energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/to-battery.svg"
+    },
+    "to_battery_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Charged Energy",
+        "da": "∑ Opladet energi",
+        "de": "∑ Geladene Energie",
+        "nl": "∑ Geladen energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
       "insights": true,
       "icon": "/assets/images/to-battery.svg"
     }

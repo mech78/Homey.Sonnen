@@ -210,6 +210,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
     
       var currentState = new SonnenState({
         lastUpdate: currentUpdate, 
+        totalDailyToBattery_Wh:       this.aggregateDailyTotal(lastState.totalDailyToBattery_Wh,       toBattery_W,              lastState.lastUpdate, currentUpdate),
+        totalDailyFromBattery_Wh:     this.aggregateDailyTotal(lastState.totalDailyFromBattery_Wh,     fromBattery_W,            lastState.lastUpdate, currentUpdate),
         totalDailyProduction_Wh:      this.aggregateDailyTotal(lastState.totalDailyProduction_Wh,      statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
         totalDailyConsumption_Wh:     this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh,     statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalProduction_Wh:           this.aggregateDailyTotal(lastState.totalProduction_Wh,           statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
@@ -252,7 +254,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       this.setCapabilityValue('to_battery_capability', toBattery_W);
       this.setCapabilityValue('from_battery_capability', fromBattery_W);
-      
+      this.setCapabilityValue('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
+      this.setCapabilityValue('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
+      this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
+      this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
+
       this.setCapabilityValue('number_battery_capability', numberBatteries);
       this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
       this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
