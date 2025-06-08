@@ -83,7 +83,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   private registerResetMetersButton() {
     this.registerCapabilityListener('button.reset_meter', async () => {
-      this.state = new SonnenState({ lastUpdate: this.getLocalNow() });
+      this.state = new SonnenState({ lastUpdate: this.getLocalNow() }); // TODO: currently deletes all sums, not just daily sums. Might want to split into two buttons, one for daily reset and one for total reset.
     });
   }
 

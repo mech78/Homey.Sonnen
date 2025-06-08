@@ -38,13 +38,13 @@
     "button.reset_meter": {
       "maintenanceAction": true,
       "title": { 
-          "en": "Reset daily totals", 
-          "de": "Tagessummen zurücksetzen",
-          "nl": "Dagelijkse totalen resetten"},
+          "en": "Reset totals", 
+          "de": "Summen zurücksetzen",
+          "nl": "Totalen resetten"},
       "desc": { 
-          "en": "Resets today's totals (kWh). This can not be restored.", 
-          "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
-          "nl": "Reset de dagelijkse totalen (kWh). Dit kan niet worden hersteld."}
+          "en": "Resets totals (kWh). This can not be restored.", 
+          "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
+          "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."}
     },
     "meter_power": {
       "title": { 

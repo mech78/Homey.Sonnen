@@ -10,7 +10,8 @@
     "measure_power",
     "consumption_current_capability",
     "consumption_daily_capability",
-    "consumption_total_capability"
+    "consumption_total_capability",
+    "autarky_capability"
   ],
     "capabilitiesOptions": {
     "measure_power": {

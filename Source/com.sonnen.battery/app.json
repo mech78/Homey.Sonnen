@@ -772,7 +772,8 @@
         "measure_power",
         "consumption_current_capability",
         "consumption_daily_capability",
-        "consumption_total_capability"
+        "consumption_total_capability",
+        "autarky_capability"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -819,7 +820,8 @@
         "measure_power",
         "production_current_capability",
         "production_daily_capability",
-        "production_total_capability"
+        "production_total_capability",
+        "self_consumption_capability"
       ],
       "capabilitiesOptions": {
         "measure_power": {
