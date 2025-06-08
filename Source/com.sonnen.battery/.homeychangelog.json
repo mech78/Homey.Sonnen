@@ -79,5 +79,8 @@
   },
   "1.6.0": {
     "en": "Added support for solar panel and household meter devices, improved grid meter device and derived all values from (mandatory) battery device."
+  },
+  "1.7.0": {
+    "en": "Relocated sonnenBatterie capabilities to solarpanel, household and grid devices. Preserve totals during reinstallations. Known issues: All four devices need to be recreated & household device should be excluded from Energy manually."
   }
 }
