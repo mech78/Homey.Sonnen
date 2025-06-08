@@ -7,69 +7,25 @@
   },
   "class": "sensor",
   "capabilities": [
+    "grid_consumption_current_capability",
+    "grid_feed_in_current_capability",
+    "grid_consumption_daily_capability",
+    "grid_feed_in_daily_capability",
+    "grid_consumption_total_capability",
+    "grid_feed_in_total_capability",
     "measure_power",
-    "measure_power.imported",
-    "measure_power.exported",
-    "meter_power.importedDaily",
-    "meter_power.exportedDaily",
     "meter_power.imported",
     "meter_power.exported"
   ],
   "capabilitiesOptions": {
     "measure_power": {
-      "title": {
-        "en": "Grid Power",
-        "de": "Netzleistung",
-        "nl": "Roostervermogen"
-      }
-    },
-    "measure_power.imported": {
-      "title": {
-        "en": "Grid consumption",
-        "de": "Netzbezug",
-        "nl": "Roosterverbruik"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
-    },
-    "measure_power.exported": {
-      "title": {
-        "en": "Grid feed-in",
-        "de": "Einspeisung",
-        "nl": "Roosterinvoer"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
-    },
-    "meter_power.importedDaily": {
-      "title": {
-        "en": "∑d Grid consumption",
-        "de": "∑d Netzbezug",
-        "nl": "∑d Roosterverbruik"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
-    },
-    "meter_power.exportedDaily": {
-      "title": {
-        "en": "∑d Grid feed-in",
-        "de": "∑d Einspeisung",
-        "nl": "∑d Roosterinvoer"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+      "uiComponent": null
     },
     "meter_power.imported": {
-      "title": {
-        "en": "∑ Grid consumption",
-        "de": "∑ Netzbezug",
-        "nl": "∑ Roosterverbruik"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+      "uiComponent": null
     },
     "meter_power.exported": {
-      "title": {
-        "en": "∑ Grid feed-in",
-        "de": "∑ Einspeisung",
-        "nl": "∑ Roosterinvoer"
-      },
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+      "uiComponent": null
     }
   },
   "energy": {
