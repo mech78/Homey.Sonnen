@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "∑d Production",
-    "da": "∑d Produktion",
-    "de": "∑d Erzeugung",
-    "nl": "∑d Productie"
+    "en": "∑ Production",
+    "da": "∑ Produktion",
+    "de": "∑ Erzeugung",
+    "nl": "∑ Productie"
   },
   "uiComponent": "sensor",
   "getable": true,

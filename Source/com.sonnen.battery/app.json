@@ -861,33 +861,13 @@
       "class": "solarpanel",
       "capabilities": [
         "measure_power",
-        "meter_power.daily",
-        "meter_power"
+        "production_current_capability",
+        "production_daily_capability",
+        "production_total_capability"
       ],
       "capabilitiesOptions": {
         "measure_power": {
-          "title": {
-            "en": "Solar Power",
-            "de": "Solarleistung",
-            "nl": "Zonnevermogen"
-          },
-          "icon": "/assets/images/house-day-thin.svg"
-        },
-        "meter_power": {
-          "title": {
-            "en": "∑ Generation",
-            "de": "∑ Erzeugung",
-            "nl": "∑ productie"
-          },
-          "icon": "/assets/images/house-day-thin.svg"
-        },
-        "meter_power.daily": {
-          "title": {
-            "en": "∑d Generation",
-            "de": "∑d Erzeugung",
-            "nl": "∑d productie"
-          },
-          "icon": "/assets/images/house-day-thin_daily.svg"
+          "uiComponent": null
         }
       },
       "id": "sonnenbatterie_solarpanel"
@@ -1184,7 +1164,7 @@
         "en": "Production now",
         "da": "Produktion",
         "de": "Produktion",
-        "nl": "productie nu"
+        "nl": "Productie nu"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1197,13 +1177,50 @@
       "insights": true,
       "icon": "/assets/images/house-day-thin.svg"
     },
+    "production_current_capability": {
+      "type": "number",
+      "title": {
+        "en": "Solar Power",
+        "da": "Solenergi",
+        "de": "Solarleistung",
+        "nl": "Zonnevermogen"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/house-day-thin.svg"
+    },
     "production_daily_capability": {
       "type": "number",
       "title": {
-        "en": "∑d production",
-        "da": "∑d produktion",
-        "de": "∑d Produktion",
-        "nl": "∑d productie"
+        "en": "∑d Production",
+        "da": "∑d Produktion",
+        "de": "∑d Erzeugung",
+        "nl": "∑d Productie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/house-day-thin_daily.svg"
+    },
+    "production_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Production",
+        "da": "∑ Produktion",
+        "de": "∑ Erzeugung",
+        "nl": "∑ Productie"
       },
       "uiComponent": "sensor",
       "getable": true,

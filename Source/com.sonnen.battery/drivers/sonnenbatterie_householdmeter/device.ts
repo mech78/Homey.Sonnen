@@ -7,10 +7,10 @@ module.exports = class HouseholdMeterDevice extends SonnenDevice {
     this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
     this.setCapabilityValue('measure_power', statusJson.Consumption_W);
-    this.setCapabilityValue('consumption_current_capability', statusJson.Consumption_W);
-    this.setCapabilityValue('consumption_total_capability', currentState.totalConsumption_Wh / 1000);
+
+    this.setCapabilityValue('consumption_current_capability', statusJson.Consumption_W);    
     this.setCapabilityValue('consumption_daily_capability', currentState.totalDailyConsumption_Wh / 1000);
-  
+    this.setCapabilityValue('consumption_total_capability', currentState.totalConsumption_Wh / 1000);
   };
 
   async onInit() {

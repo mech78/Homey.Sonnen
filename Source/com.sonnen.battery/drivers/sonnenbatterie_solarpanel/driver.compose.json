@@ -8,33 +8,13 @@
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
-    "meter_power.daily",
-    "meter_power"
+    "production_current_capability",
+    "production_daily_capability",
+    "production_total_capability"
   ],
   "capabilitiesOptions": {
     "measure_power": {
-      "title": {
-        "en": "Solar Power",
-        "de": "Solarleistung",
-        "nl": "Zonnevermogen"
-      },
-      "icon": "/assets/images/house-day-thin.svg"
-    },
-    "meter_power": {
-      "title": {
-        "en": "∑ Generation",
-        "de": "∑ Erzeugung",
-        "nl": "∑ productie"
-      },
-      "icon": "/assets/images/house-day-thin.svg"
-    },
-    "meter_power.daily": {
-      "title": {
-        "en": "∑d Generation",
-        "de": "∑d Erzeugung",
-        "nl": "∑d productie"
-      },
-      "icon": "/assets/images/house-day-thin_daily.svg"
+      "uiComponent": null
     }
   }
 }
