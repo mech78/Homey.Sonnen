@@ -7,8 +7,8 @@ module.exports = class GridMeterDevice extends SonnenDevice {
     this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
     this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
-    this.setCapabilityValue('meter_power.import', currentState.totalGridConsumption_Wh / 1000);
-    this.setCapabilityValue('meter_power.export', currentState.totalGridFeedIn_Wh / 1000);
+    this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
+    this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
 
     this.setCapabilityValue('grid_consumption_current_capability', +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0);
     this.setCapabilityValue('grid_consumption_daily_capability', currentState.totalDailyGridConsumption_Wh / 1000);
