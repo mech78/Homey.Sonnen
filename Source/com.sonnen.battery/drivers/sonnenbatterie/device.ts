@@ -192,7 +192,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
       // update device's batteries to actual number of internal batteries
       var numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
       var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || { homeBattery: true, batteries: [] };
+      var energy = (await this.getEnergy()) || { 
+        homeBattery: true, 
+        batteries: [], 
+        "meterPowerImportedCapability": "meter_power.charged", 
+        "meterPowerExportedCapability": "meter_power.discharged" 
+      };
 
       if (!_.isEqual(energy.batteries, actualBatteries)) {
         energy.batteries = actualBatteries;
@@ -210,30 +215,40 @@ module.exports = class BatteryDevice extends SonnenDevice {
     
       var currentState = new SonnenState({
         lastUpdate: currentUpdate, 
+
         totalDailyToBattery_Wh:       this.aggregateDailyTotal(lastState.totalDailyToBattery_Wh,       toBattery_W,              lastState.lastUpdate, currentUpdate),
         totalDailyFromBattery_Wh:     this.aggregateDailyTotal(lastState.totalDailyFromBattery_Wh,     fromBattery_W,            lastState.lastUpdate, currentUpdate),
         totalDailyProduction_Wh:      this.aggregateDailyTotal(lastState.totalDailyProduction_Wh,      statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
         totalDailyConsumption_Wh:     this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh,     statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
-        totalProduction_Wh:           this.aggregateDailyTotal(lastState.totalProduction_Wh,           statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
-        totalConsumption_Wh:          this.aggregateTotal(lastState.totalConsumption_Wh,               statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalDailyGridFeedIn_Wh:      this.aggregateDailyTotal(lastState.totalDailyGridFeedIn_Wh,      grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
         totalDailyGridConsumption_Wh: this.aggregateDailyTotal(lastState.totalDailyGridConsumption_Wh, grid_consumption_W,       lastState.lastUpdate, currentUpdate),
-        totalGridFeedIn_Wh:           this.aggregateTotal(lastState.totalGridFeedIn_Wh,                grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
-        totalGridConsumption_Wh:      this.aggregateTotal(lastState.totalGridConsumption_Wh,           grid_consumption_W,       lastState.lastUpdate, currentUpdate),
+      
         totalToBattery_Wh:            this.aggregateTotal(lastState.totalToBattery_Wh,                 toBattery_W,              lastState.lastUpdate, currentUpdate),
         totalFromBattery_Wh:          this.aggregateTotal(lastState.totalFromBattery_Wh,               fromBattery_W,            lastState.lastUpdate, currentUpdate),
+        totalProduction_Wh:           this.aggregateDailyTotal(lastState.totalProduction_Wh,           statusJson.Production_W,  lastState.lastUpdate, currentUpdate),
+        totalConsumption_Wh:          this.aggregateTotal(lastState.totalConsumption_Wh,               statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
+        totalGridFeedIn_Wh:           this.aggregateTotal(lastState.totalGridFeedIn_Wh,                grid_feed_in_W,           lastState.lastUpdate, currentUpdate),
+        totalGridConsumption_Wh:      this.aggregateTotal(lastState.totalGridConsumption_Wh,           grid_consumption_W,       lastState.lastUpdate, currentUpdate),
       });
 
       this.log("Emitting data update for other devices...");
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
+      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
+      this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
+      this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
+      
+      this.setCapabilityValue('to_battery_capability', toBattery_W);
+      this.setCapabilityValue('from_battery_capability', fromBattery_W);
+      this.setCapabilityValue('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
+      this.setCapabilityValue('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
+      this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
+      this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
+      
       var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100); 
-     
       this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000); 
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
-
-      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
 
       var chargingState;
       if (statusJson.Pac_total_W < 0) {
@@ -244,20 +259,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
         chargingState = 'idle';
       }
       this.setCapabilityValue('battery_charging_state', chargingState); 
-
-      if (this.hasCapability('meter_power.charged')) {
-        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
-      }
-      if (this.hasCapability('meter_power.discharged')) {
-        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
-      }
-
-      this.setCapabilityValue('to_battery_capability', toBattery_W);
-      this.setCapabilityValue('from_battery_capability', fromBattery_W);
-      this.setCapabilityValue('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
-      this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
 
       this.setCapabilityValue('number_battery_capability', numberBatteries);
       this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
