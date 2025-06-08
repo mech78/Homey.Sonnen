@@ -981,7 +981,7 @@
         "en": "From battery",
         "da": "Fra batteri",
         "nl": "Van de batterij",
-        "de": "Endladeleistung"
+        "de": "Entladeleistung"
       },
       "uiComponent": "sensor",
       "getable": true,
