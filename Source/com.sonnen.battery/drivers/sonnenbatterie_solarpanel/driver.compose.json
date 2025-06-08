@@ -17,21 +17,24 @@
         "en": "Solar Power",
         "de": "Solarleistung",
         "nl": "Zonnevermogen"
-      }
+      },
+      "icon": "/assets/images/house-day-thin.svg"
     },
     "meter_power": {
       "title": {
         "en": "∑ Generation",
         "de": "∑ Erzeugung",
         "nl": "∑ productie"
-      }
+      },
+      "icon": "/assets/images/house-day-thin.svg"
     },
     "meter_power.daily": {
       "title": {
         "en": "∑d Generation",
         "de": "∑d Erzeugung",
         "nl": "∑d productie"
-      }
+      },
+      "icon": "/assets/images/house-day-thin_daily.svg"
     }
   }
 }

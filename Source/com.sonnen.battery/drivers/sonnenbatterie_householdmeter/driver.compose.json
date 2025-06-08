@@ -17,21 +17,24 @@
         "en": "Consumption",
         "de": "Verbrauch",
         "nl": "Verbruik"
-      }
+      },
+      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
     },
     "meter_power.daily": {
       "title": {
         "en": "∑d Consumption",
         "de": "∑d Verbrauch",
         "nl": "∑d Verbruik"
-      }
+      },
+      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
     },
     "meter_power": {
       "title": {
         "en": "∑ Consumption",
         "de": "∑ Verbrauch",
         "nl": "∑ Verbruik"
-      }
+      },
+      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
     }
   },
   "energy": {

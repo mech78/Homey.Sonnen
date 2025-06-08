@@ -710,6 +710,8 @@
       "class": "sensor",
       "capabilities": [
         "measure_power",
+        "measure_power.imported",
+        "measure_power.exported",
         "meter_power.importedDaily",
         "meter_power.exportedDaily",
         "meter_power.imported",
@@ -723,33 +725,53 @@
             "nl": "Roostervermogen"
           }
         },
+        "measure_power.imported": {
+          "title": {
+            "en": "Grid consumption",
+            "de": "Netzbezug",
+            "nl": "Roosterverbruik"
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+        },
+        "measure_power.exported": {
+          "title": {
+            "en": "Grid feed-in",
+            "de": "Einspeisung",
+            "nl": "Roosterinvoer"
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+        },
         "meter_power.importedDaily": {
           "title": {
-            "en": "∑d Grid import",
+            "en": "∑d Grid consumption",
             "de": "∑d Netzbezug",
             "nl": "∑d Roosterverbruik"
-          }
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
         },
         "meter_power.exportedDaily": {
           "title": {
-            "en": "∑d Grid export",
+            "en": "∑d Grid feed-in",
             "de": "∑d Einspeisung",
             "nl": "∑d Roosterinvoer"
-          }
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
         },
         "meter_power.imported": {
           "title": {
-            "en": "∑ Grid import",
+            "en": "∑d Grid consumption",
             "de": "∑ Netzbezug",
             "nl": "∑ Roosterverbruik"
-          }
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
         },
         "meter_power.exported": {
           "title": {
-            "en": "∑ Grid export",
+            "en": "∑ Grid feed-in",
             "de": "∑ Einspeisung",
             "nl": "∑ Roosterinvoer"
-          }
+          },
+          "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
         }
       },
       "energy": {
@@ -801,21 +823,24 @@
             "en": "Consumption",
             "de": "Verbrauch",
             "nl": "Verbruik"
-          }
+          },
+          "icon": "/assets/images/light-house-blank-circle-bolt.svg"
         },
         "meter_power.daily": {
           "title": {
             "en": "∑d Consumption",
             "de": "∑d Verbrauch",
             "nl": "∑d Verbruik"
-          }
+          },
+          "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
         },
         "meter_power": {
           "title": {
             "en": "∑ Consumption",
             "de": "∑ Verbrauch",
             "nl": "∑ Verbruik"
-          }
+          },
+          "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
         }
       },
       "energy": {
@@ -865,21 +890,24 @@
             "en": "Solar Power",
             "de": "Solarleistung",
             "nl": "Zonnevermogen"
-          }
+          },
+          "icon": "/assets/images/house-day-thin.svg"
         },
         "meter_power": {
           "title": {
             "en": "∑ Generation",
             "de": "∑ Erzeugung",
             "nl": "∑ productie"
-          }
+          },
+          "icon": "/assets/images/house-day-thin.svg"
         },
         "meter_power.daily": {
           "title": {
             "en": "∑d Generation",
             "de": "∑d Erzeugung",
             "nl": "∑d productie"
-          }
+          },
+          "icon": "/assets/images/house-day-thin_daily.svg"
         }
       },
       "id": "sonnenbatterie_solarpanel"
