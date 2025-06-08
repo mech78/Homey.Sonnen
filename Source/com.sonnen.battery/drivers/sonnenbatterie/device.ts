@@ -16,13 +16,16 @@ module.exports = class BatteryDevice extends SonnenDevice {
     var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
     var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
     
-    // Retrieve stored state
-    this.state.updateState(this.homey.settings.get('deviceState') || { lastUpdate: this.getLocalNow() });
-    this.state.lastUpdate = new Date(this.state.lastUpdate); // fixes lastUpdate being restored as string, not Date
+    var storedState: SonnenState;
+    try {
+      this.log('Retrieving stored state...');
+      storedState = this.homey.settings.get('deviceState') || this.state;
+    } catch (e) {
+      this.log('Failed to retrieve stored state, use new state', e); 
+      storedState = this.state;
+    } 
+    this.state.updateState(storedState); // apply stored state to current state
     this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
-
-    // Get latest state:
-    this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
 
     // Pull battery status
     this.updateIntervalId = this.homey.setInterval(async () => {
@@ -34,9 +37,17 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.updateIntervalId) {
       this.homey.clearInterval(this.updateIntervalId);
     }
-    // Store updated state
+    // Store current state
     this.homey.settings.set('deviceState', this.state);
+   
     super.onDeleted();
+  }
+
+  async onUninit() {
+    // Store current state
+    this.homey.settings.set('deviceState', this.state);
+
+    super.onUninit();
   }
 
   async onSettings({
@@ -63,12 +74,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
     };
   }
   
-  async onUninit() {
-    // Store updated state
-    this.homey.settings.set('deviceState', this.state);
-    super.onUninit();
-  }
-
   /**
    * Homey SDK3's new Date() is always in UTC but SonnenBatterie timestamps are local,
    * so match with Homey's local timezone

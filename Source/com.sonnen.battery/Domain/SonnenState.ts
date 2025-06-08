@@ -1,5 +1,15 @@
+import _ from 'underscore';
+
 export class SonnenState {
-  lastUpdate: Date;
+  private _lastUpdate: string;
+
+  get lastUpdate(): Date {
+    return new Date(this._lastUpdate);
+  }
+
+  set lastUpdate(value: Date) {
+    this._lastUpdate = value.toISOString();
+  }
   totalDailyToBattery_Wh: number;
   totalDailyFromBattery_Wh: number;
   totalDailyProduction_Wh: number;
@@ -14,7 +24,7 @@ export class SonnenState {
   totalGridConsumption_Wh: number;
 
   constructor(initialState?: Partial<SonnenState>) {
-    this.lastUpdate = initialState?.lastUpdate || new Date();
+    this._lastUpdate = (initialState?.lastUpdate ? initialState.lastUpdate.toISOString() : new Date().toISOString());
     this.totalDailyToBattery_Wh = initialState?.totalDailyToBattery_Wh || 0;
     this.totalDailyFromBattery_Wh = initialState?.totalDailyFromBattery_Wh || 0;
     this.totalDailyProduction_Wh = initialState?.totalDailyProduction_Wh || 0;
@@ -30,6 +40,9 @@ export class SonnenState {
   }
 
   updateState(newState: Partial<SonnenState>) {
-    Object.assign(this, newState);
+    if (newState.lastUpdate) {
+      this.lastUpdate = newState.lastUpdate;
+    }
+    Object.assign(this, _.omit(newState, 'lastUpdate'));
   }
 }
