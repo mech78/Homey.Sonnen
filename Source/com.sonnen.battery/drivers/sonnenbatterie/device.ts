@@ -99,6 +99,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       await this.addCapability('to_battery_capability');
     }
 
+    /*
     // added/altered after 1.0.11
     // TODO: how to achieve the same UI ordering as it would happen for fresh devices as ordered in driver.compose.json?
     // Upgrading works, but all new capability icons are appended to the bottom just in the order below.
@@ -131,14 +132,17 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.hasCapability('autarky_capability') === false) {
       await this.addCapability('autarky_capability');
     }
+    */
 
     if (this.hasCapability('battery_charging_state') === false) {
       await this.addCapability('battery_charging_state');
     }
+    /*
     // add with 1.5
     if (this.hasCapability('production_daily_capability') === false) {
       await this.addCapability('production_daily_capability');
     }
+    */
     if (this.hasCapability('meter_power.charged') === false) {
       await this.addCapability('meter_power.charged');
     }
@@ -220,12 +224,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Emitting data update for other devices...");
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
-      // FIXME: remove non battery-related capabilities as these are now in the other devices
-      // e.g. production (to panel device) and consumption (to household device) should disappear, as well as feed-in and feed-out (both to grid device). Autarky and self-consumption would als fit better elsewhere, probably household meter as not to crowded.
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue('meter_power', +(latestDataJson.FullChargeCapacity / 1000) * (statusJson.USOC/ 100)); 
-      this.setCapabilityValue('production_capability', +statusJson.Production_W / 1000);
-      this.setCapabilityValue('production_daily_capability', currentState.totalDailyProduction_Wh / 1000);
+      var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100); 
+      this.setCapabilityValue('meter_power', remaining_energy_Wh / 1000);
+      this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000); 
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 
       this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
@@ -250,29 +252,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('to_battery_capability', toBattery_W);
       this.setCapabilityValue('from_battery_capability', fromBattery_W);
       
-      this.setCapabilityValue('grid_feed_in_capability', grid_feed_in_W / 1000); // GridFeedIn_W positive: to grid
-      this.setCapabilityValue('grid_consumption_capability', grid_consumption_W / 1000); // GridFeedIn_W negative: from grid
-      
-      this.setCapabilityValue('consumption_capability', +statusJson.Consumption_W / 1000); // Consumption_W : consumption
-    
       this.setCapabilityValue('number_battery_capability', numberBatteries);
       this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
       this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
       this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
-
-      this.setCapabilityValue('consumption_daily_capability', currentState.totalDailyConsumption_Wh / 1000);
-      this.setCapabilityValue('grid_feed_in_daily_capability', currentState.totalDailyGridFeedIn_Wh / 1000);
-      this.setCapabilityValue('grid_consumption_daily_capability', currentState.totalDailyGridConsumption_Wh / 1000);
-
-      var percentageGridConsumption = (currentState.totalDailyGridConsumption_Wh / currentState.totalDailyConsumption_Wh) * 100;
-      var percentageSelfProduction = 100 - percentageGridConsumption;
-      this.setCapabilityValue('autarky_capability', +percentageSelfProduction);
-
-      var percentageGridFeedIn = (currentState.totalDailyGridFeedIn_Wh / currentState.totalDailyProduction_Wh) * 100;
-      var percentageSelfConsumption = 100 - percentageGridFeedIn;
-      this.setCapabilityValue('self_consumption_capability', +percentageSelfConsumption);
 
       /*
       if (Math.random() < 0.5) {

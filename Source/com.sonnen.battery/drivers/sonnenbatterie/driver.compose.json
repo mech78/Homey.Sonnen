@@ -8,29 +8,20 @@
   "class": "battery",
   "capabilities": [
     "measure_battery",
-    "production_capability",
-    "production_daily_capability",
-    "consumption_capability",
-    "consumption_daily_capability",
-    "grid_feed_in_capability",
-    "grid_feed_in_daily_capability",
-    "grid_consumption_capability",
-    "grid_consumption_daily_capability",
     "measure_power",
     "to_battery_capability",
     "from_battery_capability",
-    "autarky_capability",
-    "self_consumption_capability",
-    "online_capability",
-    "meter_power",
+    "battery_charging_state",
+    "capacity_remaining_capability",
     "capacity_capability",
+    "online_capability",
     "number_battery_capability",
     "eclipse_capability",
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
     "button.reset_meter",
-    "battery_charging_state",
+    "meter_power",
     "meter_power.charged", 
     "meter_power.discharged"
   ],
@@ -46,12 +37,11 @@
           "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
           "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."}
     },
+    "measure_power": {
+      "uiComponent": null
+    },
     "meter_power": {
-      "title": { 
-        "en": "Stored Energy",
-        "de": "Gespeicherte Energie",
-        "nl": "Opgeslagen Energie"
-      }
+      "uiComponent": null
     },
     "meter_power.charged": {
       "title": { 

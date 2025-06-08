@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Stored Energy",
+    "da": "Oplagret energi",
+    "de": "Gespeicherte Energie",
+    "nl": "Opgeslagen Energie"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kWh"
+  },
+  "min": 0,
+  "decimals": 3,
+  "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
+}
