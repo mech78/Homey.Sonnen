@@ -10,10 +10,9 @@
   "getable": true,
   "setable": true,
   "units": {
-    "en": "kW"
+    "en": "W"
   },
   "min": 0,
-  "decimals": 3,
   "insights": true,
   "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
 }
