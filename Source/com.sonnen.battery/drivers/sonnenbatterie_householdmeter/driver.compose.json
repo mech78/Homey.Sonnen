@@ -14,11 +14,7 @@
   ],
     "capabilitiesOptions": {
     "measure_power": {
-      "title": {
-        "en": "Consumption",
-        "de": "Verbrauch",
-        "nl": "Verbruik"
-      }
+      "uiComponent": null
     }
   },
   "energy": {
