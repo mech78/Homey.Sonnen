@@ -57,7 +57,7 @@
     },
     "meter_power.imported": {
       "title": {
-        "en": "∑d Grid consumption",
+        "en": "∑ Grid consumption",
         "de": "∑ Netzbezug",
         "nl": "∑ Roosterverbruik"
       },
