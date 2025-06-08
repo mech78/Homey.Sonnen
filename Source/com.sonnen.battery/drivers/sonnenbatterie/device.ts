@@ -149,11 +149,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (this.hasCapability('meter_power.discharged') === false) {
       await this.addCapability('meter_power.discharged');
     }
+    /**
     // add with 1.6
     if (this.hasCapability('meter_power') === false) {
       await this.addCapability('meter_power');
     }
-
+    */
   }
 
   private async loadLatestState(
@@ -226,7 +227,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
       var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100); 
-      this.setCapabilityValue('meter_power', remaining_energy_Wh / 1000);
+     
       this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000); 
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 

@@ -548,7 +548,6 @@
         "state_bms_capability",
         "alarm_generic",
         "button.reset_meter",
-        "meter_power",
         "meter_power.charged",
         "meter_power.discharged"
       ],
@@ -567,9 +566,6 @@
           }
         },
         "measure_power": {
-          "uiComponent": null
-        },
-        "meter_power": {
           "uiComponent": null
         },
         "meter_power.charged": {
