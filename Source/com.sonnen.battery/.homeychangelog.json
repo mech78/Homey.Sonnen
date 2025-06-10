@@ -82,5 +82,8 @@
   },
   "1.7.0": {
     "en": "Relocated sonnenBatterie capabilities to solarpanel, household and grid devices. Preserve totals during reinstallations. Known issues: All four devices need to be recreated & household device should be excluded from Energy manually."
+  },
+  "1.7.1": {
+    "en": "Fix solarpanel device regression having omitted meter_power"
   }
 }

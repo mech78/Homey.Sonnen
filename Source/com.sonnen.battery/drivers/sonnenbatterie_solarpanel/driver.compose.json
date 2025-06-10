@@ -8,6 +8,7 @@
   "class": "solarpanel",
   "capabilities": [
     "measure_power",
+    "meter_power",
     "production_current_capability",
     "production_daily_capability",
     "production_total_capability",
@@ -15,6 +16,9 @@
   ],
   "capabilitiesOptions": {
     "measure_power": {
+      "uiComponent": null
+    },
+    "meter_power": {
       "uiComponent": null
     }
   }
