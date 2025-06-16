@@ -130,8 +130,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (!this.isEnergyFullySupported()) {
       toRemoveAfter1_3_1 = [
         ...toRemoveAfter1_3_1,
-        'meter_power.imported',
-        'meter_power.exported'
+        'meter_power.charged',
+        'meter_power.discharged'
       ];
     }
 
