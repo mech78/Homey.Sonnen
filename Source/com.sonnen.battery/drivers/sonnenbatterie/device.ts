@@ -208,16 +208,16 @@ module.exports = class BatteryDevice extends SonnenDevice {
       var currentState = new SonnenState({
         lastUpdate: currentUpdate,
 
-        totalDailyToBattery_Wh: this.aggregateDailyTotal(lastState.totalDailyToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate),
-        totalDailyFromBattery_Wh: this.aggregateDailyTotal(lastState.totalDailyFromBattery_Wh, fromBattery_W, lastState.lastUpdate, currentUpdate),
-        totalDailyProduction_Wh: this.aggregateDailyTotal(lastState.totalDailyProduction_Wh, statusJson.Production_W, lastState.lastUpdate, currentUpdate),
-        totalDailyConsumption_Wh: this.aggregateDailyTotal(lastState.totalDailyConsumption_Wh, statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
-        totalDailyGridFeedIn_Wh: this.aggregateDailyTotal(lastState.totalDailyGridFeedIn_Wh, grid_feed_in_W, lastState.lastUpdate, currentUpdate),
-        totalDailyGridConsumption_Wh: this.aggregateDailyTotal(lastState.totalDailyGridConsumption_Wh, grid_consumption_W, lastState.lastUpdate, currentUpdate),
+        totalDailyToBattery_Wh: this.aggregateTotal(lastState.totalDailyToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate, true),
+        totalDailyFromBattery_Wh: this.aggregateTotal(lastState.totalDailyFromBattery_Wh, fromBattery_W, lastState.lastUpdate, currentUpdate, true),
+        totalDailyProduction_Wh: this.aggregateTotal(lastState.totalDailyProduction_Wh, statusJson.Production_W, lastState.lastUpdate, currentUpdate, true),
+        totalDailyConsumption_Wh: this.aggregateTotal(lastState.totalDailyConsumption_Wh, statusJson.Consumption_W, lastState.lastUpdate, currentUpdate, true),
+        totalDailyGridFeedIn_Wh: this.aggregateTotal(lastState.totalDailyGridFeedIn_Wh, grid_feed_in_W, lastState.lastUpdate, currentUpdate, true),
+        totalDailyGridConsumption_Wh: this.aggregateTotal(lastState.totalDailyGridConsumption_Wh, grid_consumption_W, lastState.lastUpdate, currentUpdate, true),
 
         totalToBattery_Wh: this.aggregateTotal(lastState.totalToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate),
         totalFromBattery_Wh: this.aggregateTotal(lastState.totalFromBattery_Wh, fromBattery_W, lastState.lastUpdate, currentUpdate),
-        totalProduction_Wh: this.aggregateDailyTotal(lastState.totalProduction_Wh, statusJson.Production_W, lastState.lastUpdate, currentUpdate),
+        totalProduction_Wh: this.aggregateTotal(lastState.totalProduction_Wh, statusJson.Production_W, lastState.lastUpdate, currentUpdate, true),
         totalConsumption_Wh: this.aggregateTotal(lastState.totalConsumption_Wh, statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalGridFeedIn_Wh: this.aggregateTotal(lastState.totalGridFeedIn_Wh, grid_feed_in_W, lastState.lastUpdate, currentUpdate),
         totalGridConsumption_Wh: this.aggregateTotal(lastState.totalGridConsumption_Wh, grid_consumption_W, lastState.lastUpdate, currentUpdate),
@@ -312,21 +312,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
     return this.homey.__('eclipseLed.Unknown');
   }
 
-  private aggregateDailyTotal(totalEnergyDaily_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
-    var totalEnergyDailyResult_Wh = currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : (totalEnergyDaily_Wh ?? 0); // reset daily total at local midnight
-    var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
-    var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
-    totalEnergyDailyResult_Wh += sampleEnergy_Wh;
-    return totalEnergyDailyResult_Wh;
-  }
-
-  // TODO: refactor to aggregate with and without
-  private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date): number {
-    var totalEnergyResult_Wh = totalEnergy_Wh ?? 0;
-    var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
-    var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
-    totalEnergyResult_Wh += sampleEnergy_Wh;
-    return totalEnergyResult_Wh;
+  private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {
+      var totalEnergyResult_Wh = resetDaily && currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : (totalEnergy_Wh ?? 0);
+      var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
+      var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+      totalEnergyResult_Wh += sampleEnergy_Wh;
+      return totalEnergyResult_Wh;
   }
 
   private resolveDeviceNameWithFallback(): string {
