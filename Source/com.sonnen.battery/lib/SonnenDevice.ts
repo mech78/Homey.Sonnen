@@ -62,4 +62,11 @@ export abstract class SonnenDevice extends Homey.Device {
     this.log(this.constructor.name + ' has been deleted');
   }
 
+  /**
+   * @returns {boolean} true if the device supports energy features as Cloud or Homey Pro (early 2023) or later , false otherwise
+   */
+  isEnergyFullySupported(): boolean {
+    return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
+  }
+
 };

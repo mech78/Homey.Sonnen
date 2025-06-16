@@ -8,7 +8,6 @@
   "class": "battery",
   "capabilities": [
     "measure_battery",
-    "measure_power",
     "to_battery_capability",
     "from_battery_capability",
     "battery_charging_state",
@@ -25,6 +24,8 @@
     "state_bms_capability",    
     "alarm_generic",
     "button.reset_meter",
+    
+    "measure_power",
     "meter_power.charged", 
     "meter_power.discharged"
   ],
