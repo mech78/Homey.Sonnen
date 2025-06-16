@@ -757,11 +757,11 @@
       },
       "class": "sensor",
       "capabilities": [
-        "measure_power",
         "consumption_current_capability",
         "consumption_daily_capability",
         "consumption_total_capability",
-        "autarky_capability"
+        "autarky_capability",
+        "measure_power"
       ],
       "capabilitiesOptions": {
         "measure_power": {
@@ -806,12 +806,12 @@
       },
       "class": "solarpanel",
       "capabilities": [
-        "measure_power",
-        "meter_power",
         "production_current_capability",
         "production_daily_capability",
         "production_total_capability",
-        "self_consumption_capability"
+        "self_consumption_capability",
+        "measure_power",
+        "meter_power"
       ],
       "capabilitiesOptions": {
         "measure_power": {
