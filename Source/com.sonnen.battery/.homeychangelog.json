@@ -88,5 +88,8 @@
   },
   "1.7.2": {
     "en": "Fix widget regression and obtain values from individual devices"
+  },
+  "1.7.3": {
+    "en": "Do not create redundant insights, if possible. Known issues: existing insights need to be deleted manually and for default power measurements it is not possible."
   }
 }
