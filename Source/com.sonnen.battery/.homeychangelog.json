@@ -85,5 +85,8 @@
   },
   "1.7.1": {
     "en": "Fix solarpanel device regression having omitted meter_power"
+  },
+  "1.7.2": {
+    "en": "Fix widget regression and obtain values from individual devices"
   }
 }
