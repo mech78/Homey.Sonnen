@@ -7,12 +7,13 @@
   },
   "class": "solarpanel",
   "capabilities": [
-    "measure_power",
-    "meter_power",
     "production_current_capability",
     "production_daily_capability",
     "production_total_capability",
-    "self_consumption_capability"
+    "self_consumption_capability",
+
+    "measure_power",
+    "meter_power"
   ],
   "capabilitiesOptions": {
     "measure_power": {

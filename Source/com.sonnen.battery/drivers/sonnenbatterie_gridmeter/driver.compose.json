@@ -13,6 +13,7 @@
     "grid_feed_in_daily_capability",
     "grid_consumption_total_capability",
     "grid_feed_in_total_capability",
+    
     "measure_power",
     "meter_power.imported",
     "meter_power.exported"

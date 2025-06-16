@@ -7,11 +7,12 @@
   },
   "class": "sensor",
   "capabilities": [
-    "measure_power",
     "consumption_current_capability",
     "consumption_daily_capability",
     "consumption_total_capability",
-    "autarky_capability"
+    "autarky_capability",
+
+    "measure_power"
   ],
   "capabilitiesOptions": {
     "measure_power": {

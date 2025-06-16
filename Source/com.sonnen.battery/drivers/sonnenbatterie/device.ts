@@ -114,7 +114,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       ];
     }
 
-    const toRemoveAfter1_3_1 = [
+    var toRemoveAfter1_3_1 = [
       'meter_power',
       'production_capability',
       'consumption_capability',
@@ -127,16 +127,22 @@ module.exports = class BatteryDevice extends SonnenDevice {
       'self_consumption_capability'
     ];
 
+    if (!this.isEnergyFullySupported()) {
+      toRemoveAfter1_3_1 = [
+        ...toRemoveAfter1_3_1,
+        'meter_power.imported',
+        'meter_power.exported'
+      ];
+    }
+
     for (const capability of toAddAfter1_3_1) {
       if (!this.hasCapability(capability)) {
-        this.log('Adding: ' + capability);
         await this.addCapability(capability);
       }
     }
 
     for (const capability of toRemoveAfter1_3_1) {
       if (this.hasCapability(capability)) {
-        this.log('Removing: ' + capability);
         await this.removeCapability(capability);
       }
     }

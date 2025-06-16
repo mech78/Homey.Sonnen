@@ -22,7 +22,24 @@ module.exports = class GridMeterDevice extends SonnenDevice {
 
   async onInit() {
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
+    await this.gracefullyAddOrRemoveCapabilities();
     super.onInit();
+  }
+
+  private async gracefullyAddOrRemoveCapabilities() {
+    if (!this.isEnergyFullySupported()) {
+
+      const unsupportedForOlderHomeys = [
+        'meter_power.imported',
+        'meter_power.exported'
+      ];
+
+      for (const capability of unsupportedForOlderHomeys) {
+        if (this.hasCapability(capability)) {
+          await this.removeCapability(capability);
+        }
+      }
+    }
   }
 
   async onDeleted() {
