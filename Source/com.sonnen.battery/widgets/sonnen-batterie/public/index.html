@@ -94,8 +94,8 @@
     <!-- Column 3-->
     <div class="app-item-container">
       <img src="icon.svg" class="app-icon"></img>
-      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Batterie</p>
-      <p class="homey-text-bold homey-text-align-center"><span id="lblBatterie">0</span> W</p>
+      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
       <!-- <span class="homey-font-weight-regular hoemy-font-size-small">FROM</span> -->
     </div>
     <!-- Column 4-->
@@ -113,7 +113,7 @@
         <div id="batteryLevel"></div>
       </div>
       <div class="batteryBump"></div>
-      <span class="homey-font-size-default homey-font-weight-regular" id="batteriePercentage" style="padding-left: var(--homey-su-2);">-%</span>
+      <span class="homey-font-size-default homey-font-weight-regular" id="batteryPercentage" style="padding-left: var(--homey-su-2);">-%</span>
     </div>
   </div>
 
@@ -141,15 +141,15 @@
 
       try {
         Homey.api("GET", `/`).then((response) => {
-          var batterieData = response;
+          var batteryData = response;
 
-          document.getElementById('lblProduction').innerText  = batterieData["production"];
-          document.getElementById('lblConsumption').innerText = batterieData["consumption"];
-          document.getElementById('lblBatterie').innerText    = batterieData["batterie"];
-          document.getElementById('lblGrid').innerText        = batterieData["from_grid"];
+          document.getElementById('lblProduction').innerText     = batteryData["production"];
+          document.getElementById('lblConsumption').innerText    = batteryData["consumption"];
+          document.getElementById('lblBattery').innerText        = batteryData["battery"];
+          document.getElementById('lblGrid').innerText           = batteryData["from_grid"];
 
-          document.getElementById('batteryLevel').style.width = batterieData["percentage"] + 'px';
-          document.getElementById('batteriePercentage').innerText = batterieData["percentage"] + '%';
+          document.getElementById('batteryLevel').style.width    = batteryData["percentage"] + 'px';
+          document.getElementById('batteryPercentage').innerText = batteryData["percentage"] + '%';
         });
       } catch (e) {
         //document.getElementById('lblDebug').innerText = 'E: ' + e;

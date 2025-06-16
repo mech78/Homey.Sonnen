@@ -14,7 +14,7 @@ module.exports = {
           const state = device.getState();
           if (id === 'sonnenbatterie') {
             data['percentage'] = state.measure_battery;
-            data['batterie'] = state.from_battery_capability;
+            data['battery'] = state.from_battery_capability;
           }
           if (id === 'sonnenbatterie_gridmeter') {
             data['from_grid'] = state.grid_consumption_current_capability;
@@ -34,7 +34,7 @@ module.exports = {
         production: 0,
         consumption: 0,
         from_grid: 0,
-        batterie: 0,
+        battery: 0,
         percentage: 0,
       };
     }
