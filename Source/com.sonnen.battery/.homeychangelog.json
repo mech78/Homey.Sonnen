@@ -93,6 +93,6 @@
     "en": "Do not create redundant insights, if possible. Known issues: existing insights need to be deleted manually and for default power measurements it is not possible."
   },
   "1.7.4": {
-    "en": "Allow in-place upgrade from v1.3.1 and only add some capabilities supported by Homey Pro (Early 2023) and later."
+    "en": "Allow in-place upgrade from v1.3.1 and only add some capabilities if supported by Homey Pro (Early 2023) and later. Hints: Must at least add the sonnenBatterie device. Also be sure to manually exclude the household device from energy. Recreating devices is recommended for proper capability ordering."
   }
 }
