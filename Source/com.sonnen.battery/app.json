@@ -570,13 +570,16 @@
           }
         },
         "measure_power": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "meter_power.charged": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "meter_power.discharged": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "battery_charging_state": {
           "title": {
@@ -703,13 +706,16 @@
       ],
       "capabilitiesOptions": {
         "measure_power": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "meter_power.imported": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "meter_power.exported": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         }
       },
       "energy": {
@@ -759,7 +765,8 @@
       ],
       "capabilitiesOptions": {
         "measure_power": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         }
       },
       "energy": {
@@ -808,10 +815,12 @@
       ],
       "capabilitiesOptions": {
         "measure_power": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         },
         "meter_power": {
-          "uiComponent": null
+          "uiComponent": null,
+          "preventInsights": true
         }
       },
       "id": "sonnenbatterie_solarpanel"

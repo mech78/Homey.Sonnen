@@ -16,10 +16,12 @@
   ],
   "capabilitiesOptions": {
     "measure_power": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     }
   }
 }

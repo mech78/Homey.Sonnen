@@ -41,13 +41,16 @@
           "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."}
     },
     "measure_power": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.charged": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.discharged": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "battery_charging_state": {
       "title": { 

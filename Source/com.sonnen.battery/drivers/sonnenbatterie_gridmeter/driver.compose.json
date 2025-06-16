@@ -19,13 +19,16 @@
   ],
   "capabilitiesOptions": {
     "measure_power": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.imported": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.exported": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     }
   },
   "energy": {

@@ -13,9 +13,10 @@
     "consumption_total_capability",
     "autarky_capability"
   ],
-    "capabilitiesOptions": {
+  "capabilitiesOptions": {
     "measure_power": {
-      "uiComponent": null
+      "uiComponent": null,
+      "preventInsights": true
     }
   },
   "energy": {
