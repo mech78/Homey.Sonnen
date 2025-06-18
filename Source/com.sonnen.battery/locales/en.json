@@ -11,7 +11,9 @@
       "authToken": "Auth Token",
       "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
       "savedOk": "Settings saved. You can close this dialog now.",
-      "savedError": "An error occured."
+      "savedError": "An error occured.",
+      "settings.deviceState": "Device State (JSON)",
+      "settings.deviceStateHint": "Shows the current state of the devices."
     },
     "eclipseLed": {
       "BlinkingRed": "blinking red",
@@ -36,5 +38,11 @@
       "consumption": "Consumption",
       "fromBattery": "From battery",
       "fromGrid": "From grid"
+    },
+    "device": {
+      "solarPanel": "solar panel",
+      "battery": "battery",
+      "gridMeter": "grid",
+      "householdMeter": "household"
     }
   }

@@ -1,13 +1,17 @@
 import Homey from 'homey';
 import axios from 'axios';
 
-module.exports = class HouseholdMeterDriver extends Homey.Driver {
+export abstract class SonnenDriver extends Homey.Driver {
+
+  protected deviceName!: string;
+  protected deviceId!: string;
 
   /**
    * onInit is called when the driver is initialized.
    */
   async onInit() {
-    this.log('HouseholdMeterDriver has been initialized');
+    super.onInit();
+    this.log(this.constructor.name + ' has been initialized for device: ' + this.deviceName + ' with ID: ' + this.deviceId);
   }
 
   /**
@@ -23,9 +27,9 @@ module.exports = class HouseholdMeterDriver extends Homey.Driver {
         const results = [];
         for (const e of response.data) {
           results.push({
-            name: e.info + "_meter",
+            name: e.info + " " + this.deviceName,
             data: {
-              id: e.device + "_meter",
+              id: e.device + "_" + this.deviceId,
             },
             store: {
               lanip: e.lanip,

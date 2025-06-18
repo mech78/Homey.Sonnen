@@ -1,12 +1,19 @@
 {
-    "type": "number",
-    "title": { "en": "Production now", "da": "Produktion", "de": "Produktion", "nl": "productie nu" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "kW" },
-    "min": 0,
-    "decimals": 3,
-    "insights": true,
-    "icon": "/assets/images/house-day-thin.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "Production now",
+    "da": "Produktion",
+    "de": "Produktion",
+    "nl": "Productie nu"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kW"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/house-day-thin.svg"
+}

@@ -76,5 +76,23 @@
   },
   "1.5.0": {
     "en": "Fixed multiple energy related meters and better distinction between daily and cumulative meters."
+  },
+  "1.6.0": {
+    "en": "Added support for solar panel and household meter devices, improved grid meter device and derived all values from (mandatory) battery device."
+  },
+  "1.7.0": {
+    "en": "Relocated sonnenBatterie capabilities to solarpanel, household and grid devices. Preserve totals during reinstallations. Known issues: All four devices need to be recreated & household device should be excluded from Energy manually."
+  },
+  "1.7.1": {
+    "en": "Fix solarpanel device regression having omitted meter_power"
+  },
+  "1.7.2": {
+    "en": "Fix widget regression and obtain values from individual devices"
+  },
+  "1.7.3": {
+    "en": "Do not create redundant insights, if possible. Known issues: existing insights need to be deleted manually and for default power measurements it is not possible."
+  },
+  "1.7.4": {
+    "en": "Allow in-place upgrade from v1.3.1 and only add some capabilities if supported by Homey Pro (Early 2023) and later. Hints: Must at least add the sonnenBatterie device. Also be sure to manually exclude the household device from energy. Recreating devices is recommended for proper capability ordering."
   }
 }

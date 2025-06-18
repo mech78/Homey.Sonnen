@@ -36,6 +36,12 @@
             <small class="text-muted" data-i18n="settings.frequencyHint">Frequency in seconds. How often to pull for data. Default is 30 seconds (30).</small>
         </div>
 
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="inputDeviceStateValue" data-i18n="settings.deviceState">Device State (JSON)</label>
+            <input class="homey-form-input"  id="inputDeviceStateValue" type="text" value="" placeholder="Device State" />
+            <small class="text-muted" data-i18n="settings.deviceStateHint">Device State (JSON)</small>
+        </div>
+
         <hr />
 
         <div class="homey-form-group">
@@ -54,6 +60,7 @@
             //var inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
             var inputBatteryAuthTokenElement   = document.getElementById("inputBatteryAuthToken");
             var inputPullIntervalValueElement  = document.getElementById("inputPullIntervalValue");
+            var inputDeviceStateValueElement   = document.getElementById("inputDeviceStateValue");
             var saveElement = document.getElementById("save");
 
             // Homey.get("BatteryBaseUrl", function (err, baseUrl) {
@@ -69,6 +76,11 @@
             Homey.get("BatteryPullInterval", function (err, pullInterval) {
                 if (err) return Homey.alert(err);
                 inputPullIntervalValueElement.value = pullInterval ?? "30";
+            });
+
+            Homey.get("deviceState", function (err, deviceState) {
+                if (err) return Homey.alert(err);
+                inputDeviceStateValueElement.value = JSON.stringify(deviceState, null, 2) ?? "{}";
             });
 
             saveElement.addEventListener("click", function (e) {
