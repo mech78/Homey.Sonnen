@@ -1,29 +1,26 @@
 import Homey from 'homey';
 
-module.exports = class HouseholdMeter extends Homey.Device {
+export abstract class SonnenDevice extends Homey.Device {
 
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log('HouseholdMeter has been initialized');
+    this.log(this.constructor.name + ' has been initialized');
+  }
 
-    this.homey.on('metering_data_updated', (currentState, statusJson) => {
-      this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
-      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
-
-      this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
-      this.setCapabilityValue('meter_power.imported', currentState.totalGridConsumption_Wh / 1000);
-      this.setCapabilityValue('meter_power.exported', currentState.totalGridFeedIn_Wh / 1000);
-    });
-  
+  /**
+   * onUninit is called when the device is uninitialized.
+   */
+  async onUninit(): Promise<void> {
+    this.log(this.constructor.name + ' has been uninitialized');
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('HouseholdMeter has been added');
+    this.log(this.constructor.name + ' has been added');
   }
 
   /**
@@ -43,7 +40,10 @@ module.exports = class HouseholdMeter extends Homey.Device {
     newSettings: { [key: string]: boolean | string | number | undefined | null };
     changedKeys: string[];
   }): Promise<string | void> {
-    this.log("HouseholdMeter settings where changed");
+      this.log(this.constructor.name + ' settings where changed: ' +
+          changedKeys.join(', ') +
+          '. old settings: ' + JSON.stringify(oldSettings) +
+          ', new settings: ' + JSON.stringify(newSettings));
   }
 
   /**
@@ -52,14 +52,21 @@ module.exports = class HouseholdMeter extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name: string) {
-    this.log('HouseholdMeter was renamed');
+    this.log(this.constructor.name + ' was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log('HouseholdMeter has been deleted');
+    this.log(this.constructor.name + ' has been deleted');
+  }
+
+  /**
+   * @returns {boolean} true if the device supports energy features as Cloud or Homey Pro (early 2023) or later , false otherwise
+   */
+  isEnergyFullySupported(): boolean {
+    return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
   }
 
 };

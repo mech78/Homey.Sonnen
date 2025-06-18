@@ -1,0 +1,26 @@
+{
+  "$extends": "sonnenbatterie",
+  "name": {
+    "en": "sonnenBatterie household",
+    "de": "sonnenBatterie Haushalt",
+    "nl": "sonnenBatterie Huishouden"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "consumption_current_capability",
+    "consumption_daily_capability",
+    "consumption_total_capability",
+    "autarky_capability",
+
+    "measure_power"
+  ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "uiComponent": null,
+      "preventInsights": true
+    }
+  },
+  "energy": {
+    "cumulative": true
+  }
+}

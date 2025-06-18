@@ -1,8 +1,8 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.5.0",
-  "compatibility": ">=12.3.0",
+  "version": "1.7.4",
+  "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
     "local"
@@ -503,100 +503,6 @@
   },
   "drivers": [
     {
-      "name": {
-        "en": "sonnenBatterie",
-        "de": "sonnenBatterie"
-      },
-      "class": "battery",
-      "capabilities": [
-        "measure_battery",
-        "production_capability",
-        "production_daily_capability",
-        "consumption_capability",
-        "consumption_daily_capability",
-        "grid_feed_in_capability",
-        "grid_feed_in_daily_capability",
-        "grid_consumption_capability",
-        "grid_consumption_daily_capability",
-        "measure_power",
-        "to_battery_capability",
-        "from_battery_capability",
-        "autarky_capability",
-        "self_consumption_capability",
-        "online_capability",
-        "capacity_capability",
-        "number_battery_capability",
-        "eclipse_capability",
-        "state_inverter_capability",
-        "state_bms_capability",
-        "alarm_generic",
-        "button.reset_meter",
-        "battery_charging_state",
-        "meter_power.charged",
-        "meter_power.discharged"
-      ],
-      "capabilitiesOptions": {
-        "button.reset_meter": {
-          "maintenanceAction": true,
-          "title": {
-            "en": "Reset daily totals",
-            "de": "Tagessummen zurücksetzen"
-          },
-          "desc": {
-            "en": "Resets today's totals (kWh). This can not be restored.",
-            "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden."
-          }
-        },
-        "meter_power.charged": {
-          "title": {
-            "en": "Charged Energy",
-            "de": "Geladene Energie"
-          }
-        },
-        "meter_power.discharged": {
-          "title": {
-            "en": "Discharged Energy",
-            "de": "Entladene Energie"
-          }
-        },
-        "battery_charging_state": {
-          "title": {
-            "en": "Battery Charging State",
-            "de": "Batterie Ladezustand"
-          },
-          "values": [
-            {
-              "id": "charging",
-              "title": {
-                "en": "Charging",
-                "de": "Laden"
-              }
-            },
-            {
-              "id": "discharging",
-              "title": {
-                "en": "Discharging",
-                "de": "Entladen"
-              }
-            },
-            {
-              "id": "idle",
-              "title": {
-                "en": "Idle",
-                "de": "Im Leerlauf"
-              }
-            }
-          ]
-        }
-      },
-      "energy": {
-        "homeBattery": true,
-        "batteries": [
-          "INTERNAL"
-        ],
-        "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
-      },
       "platforms": [
         "local"
       ],
@@ -605,7 +511,8 @@
       ],
       "images": {
         "small": "/drivers/sonnenbatterie/assets/images/small.png",
-        "large": "/drivers/sonnenbatterie/assets/images/large.png"
+        "large": "/drivers/sonnenbatterie/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie/assets/images/xlarge.png"
       },
       "pair": [
         {
@@ -620,6 +527,102 @@
           "template": "add_devices"
         }
       ],
+      "name": {
+        "en": "sonnenBatterie",
+        "de": "sonnenBatterie",
+        "nl": "sonnenBatterie"
+      },
+      "class": "battery",
+      "capabilities": [
+        "measure_battery",
+        "to_battery_capability",
+        "from_battery_capability",
+        "battery_charging_state",
+        "capacity_remaining_capability",
+        "capacity_capability",
+        "to_battery_daily_capability",
+        "from_battery_daily_capability",
+        "to_battery_total_capability",
+        "from_battery_total_capability",
+        "online_capability",
+        "number_battery_capability",
+        "eclipse_capability",
+        "state_inverter_capability",
+        "state_bms_capability",
+        "alarm_generic",
+        "button.reset_meter",
+        "measure_power",
+        "meter_power.charged",
+        "meter_power.discharged"
+      ],
+      "capabilitiesOptions": {
+        "button.reset_meter": {
+          "maintenanceAction": true,
+          "title": {
+            "en": "Reset totals",
+            "de": "Summen zurücksetzen",
+            "nl": "Totalen resetten"
+          },
+          "desc": {
+            "en": "Resets totals (kWh). This can not be restored.",
+            "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
+            "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."
+          }
+        },
+        "measure_power": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "meter_power.charged": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "meter_power.discharged": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "battery_charging_state": {
+          "title": {
+            "en": "Charging State",
+            "de": "Ladezustand",
+            "nl": "Laadstatus"
+          },
+          "values": [
+            {
+              "id": "charging",
+              "title": {
+                "en": "Charging",
+                "de": "Laden",
+                "nl": "Opladen"
+              }
+            },
+            {
+              "id": "discharging",
+              "title": {
+                "en": "Discharging",
+                "de": "Entladen",
+                "nl": "Ontladen"
+              }
+            },
+            {
+              "id": "idle",
+              "title": {
+                "en": "Idle",
+                "de": "Im Leerlauf",
+                "nl": "Inactief"
+              }
+            }
+          ]
+        }
+      },
+      "energy": {
+        "homeBattery": true,
+        "batteries": [
+          "INTERNAL"
+        ],
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
+      },
       "id": "sonnenbatterie",
       "settings": [
         {
@@ -660,34 +663,6 @@
       ]
     },
     {
-      "name": {
-        "en": "sonnenbatterie_meter"
-      },
-      "class": "sensor",
-      "capabilities": [
-        "measure_power",
-        "meter_power.imported",
-        "meter_power.exported"
-      ],
-      "capabilitiesOptions": {
-        "meter_power.imported": {
-          "title": {
-            "en": "Imported Energy",
-            "de": "Importierte Energie"
-          }
-        },
-        "meter_power.exported": {
-          "title": {
-            "en": "Exported Energy",
-            "de": "Exportierte Energie"
-          }
-        }
-      },
-      "energy": {
-        "cumulative": true,
-        "cumulativeImportedCapability": "meter_power.imported",
-        "cumulativeExportedCapability": "meter_power.exported"
-      },
       "platforms": [
         "local"
       ],
@@ -695,9 +670,9 @@
         "lan"
       ],
       "images": {
-        "small": "/drivers/sonnenbatterie_meter/assets/images/small.png",
-        "large": "/drivers/sonnenbatterie_meter/assets/images/large.png",
-        "xlarge": "/drivers/sonnenbatterie_meter/assets/images/xlarge.png"
+        "small": "/drivers/sonnenbatterie_gridmeter/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_gridmeter/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_gridmeter/assets/images/xlarge.png"
       },
       "pair": [
         {
@@ -712,7 +687,143 @@
           "template": "add_devices"
         }
       ],
-      "id": "sonnenbatterie_meter"
+      "name": {
+        "en": "sonnenBatterie Grid",
+        "de": "sonnenBatterie Netz",
+        "nl": "sonnenBatterie Net"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "grid_consumption_current_capability",
+        "grid_feed_in_current_capability",
+        "grid_consumption_daily_capability",
+        "grid_feed_in_daily_capability",
+        "grid_consumption_total_capability",
+        "grid_feed_in_total_capability",
+        "measure_power",
+        "meter_power.imported",
+        "meter_power.exported"
+      ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "meter_power.imported": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "meter_power.exported": {
+          "uiComponent": null,
+          "preventInsights": true
+        }
+      },
+      "energy": {
+        "cumulative": true,
+        "cumulativeImportedCapability": "meter_power.imported",
+        "cumulativeExportedCapability": "meter_power.exported"
+      },
+      "id": "sonnenbatterie_gridmeter"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie_householdmeter/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_householdmeter/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_householdmeter/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "name": {
+        "en": "sonnenBatterie household",
+        "de": "sonnenBatterie Haushalt",
+        "nl": "sonnenBatterie Huishouden"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "consumption_current_capability",
+        "consumption_daily_capability",
+        "consumption_total_capability",
+        "autarky_capability",
+        "measure_power"
+      ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "uiComponent": null,
+          "preventInsights": true
+        }
+      },
+      "energy": {
+        "cumulative": true
+      },
+      "id": "sonnenbatterie_householdmeter"
+    },
+    {
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/sonnenbatterie_solarpanel/assets/images/small.png",
+        "large": "/drivers/sonnenbatterie_solarpanel/assets/images/large.png",
+        "xlarge": "/drivers/sonnenbatterie_solarpanel/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "name": {
+        "en": "sonnenBatterie solar panel",
+        "de": "sonnenBatterie Solarmodul",
+        "nl": "sonnenBatterie Zonnepaneel"
+      },
+      "class": "solarpanel",
+      "capabilities": [
+        "production_current_capability",
+        "production_daily_capability",
+        "production_total_capability",
+        "self_consumption_capability",
+        "measure_power",
+        "meter_power"
+      ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "uiComponent": null,
+          "preventInsights": true
+        },
+        "meter_power": {
+          "uiComponent": null,
+          "preventInsights": true
+        }
+      },
+      "id": "sonnenbatterie_solarpanel"
     }
   ],
   "widgets": {
@@ -756,9 +867,27 @@
       "type": "number",
       "title": {
         "en": "Capacity",
-        "nl": "Capaciteit",
-        "dk": "Kapacitet",
-        "de": "Kapazität"
+        "da": "Kapacitet",
+        "de": "Kapazität",
+        "nl": "Capaciteit"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
+    },
+    "capacity_remaining_capability": {
+      "type": "number",
+      "title": {
+        "en": "Charged",
+        "da": "Opladet",
+        "de": "Gespeichert",
+        "nl": "Opgeslagen"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -789,13 +918,50 @@
       "insights": true,
       "icon": "/assets/images/light-house-blank-circle-bolt.svg"
     },
+    "consumption_current_capability": {
+      "type": "number",
+      "title": {
+        "en": "Consumption",
+        "da": "Forbrug",
+        "de": "Verbrauch",
+        "nl": "Uitgaven"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+    },
     "consumption_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total consumption",
-        "da": "Samlet forbrug",
-        "de": "Gesamtverbrauch",
-        "nl": "Totaal verbruik"
+        "en": "∑d consumption",
+        "da": "∑d forbrug",
+        "de": "∑d Verbrauch",
+        "nl": "∑d verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
+    },
+    "consumption_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ consumption",
+        "da": "∑ forbrug",
+        "de": "∑ Verbrauch",
+        "nl": "∑ verbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -828,7 +994,7 @@
         "en": "From battery",
         "da": "Fra batteri",
         "nl": "Van de batterij",
-        "de": "Endladeleistung"
+        "de": "Entladeleistung"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -841,13 +1007,51 @@
       "insights": true,
       "icon": "/assets/images/from-battery.svg"
     },
+    "from_battery_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑d Discharged energy",
+        "da": "∑d Udladet energi",
+        "nl": "∑d Ontladen energie",
+        "de": "∑d Entladene Energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/from-battery.svg"
+    },
+    "from_battery_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Discharged energy",
+        "da": "∑ Udladet energi",
+        "nl": "∑ Ontladen energie",
+        "de": "∑ Entladene Energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/from-battery.svg"
+    },
     "grid_consumption_capability": {
       "type": "number",
       "title": {
-        "en": "From grid",
-        "da": "Fra net",
+        "en": "Grid consumption",
+        "da": "Netforbrug",
         "de": "Netzbezug",
-        "nl": "Uit rooster"
+        "nl": "Roosterverbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -860,13 +1064,50 @@
       "insights": true,
       "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
     },
+    "grid_consumption_current_capability": {
+      "type": "number",
+      "title": {
+        "en": "Grid consumption",
+        "da": "Netforbrug",
+        "de": "Netzbezug",
+        "nl": "Roosterverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+    },
     "grid_consumption_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total grid consumption",
-        "da": "Samlet netforbrug",
-        "de": "Gesamter Netzbezug",
-        "nl": "Totaal netverbruik"
+        "en": "∑d Grid consumption",
+        "da": "∑d Netforbrug",
+        "de": "∑d Netzbezug",
+        "nl": "∑d Roosterverbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+    },
+    "grid_consumption_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Grid consumption",
+        "da": "∑ Netforbrug",
+        "de": "∑ Netzbezug",
+        "nl": "∑ Roosterverbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -882,10 +1123,10 @@
     "grid_feed_in_capability": {
       "type": "number",
       "title": {
-        "en": "To grid",
+        "en": "Grid feed-in",
         "da": "Til net",
         "de": "Netzeinspeisung",
-        "nl": "Naar rooster"
+        "nl": "Roosterinvoer"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -898,13 +1139,50 @@
       "insights": true,
       "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
     },
+    "grid_feed_in_current_capability": {
+      "type": "number",
+      "title": {
+        "en": "Grid feed-in",
+        "da": "Til net",
+        "de": "Netzeinspeisung",
+        "nl": "Roosterinvoer"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+    },
     "grid_feed_in_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total grid feed-in",
-        "da": "Samlet nettilførsel",
-        "de": "Gesamte Netzeinspeisung",
-        "nl": "Totale netinvoeding"
+        "en": "∑d Grid feed-in",
+        "da": "∑d Nettilslutning",
+        "de": "∑d Netzeinspeisung",
+        "nl": "∑d Roosterinvoer"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+    },
+    "grid_feed_in_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Grid feed-in",
+        "da": "∑ Nettilslutning",
+        "de": "∑ Netzeinspeisung",
+        "nl": "∑ Roosterinvoer"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -969,7 +1247,7 @@
         "en": "Production now",
         "da": "Produktion",
         "de": "Produktion",
-        "nl": "productie nu"
+        "nl": "Productie nu"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -982,13 +1260,50 @@
       "insights": true,
       "icon": "/assets/images/house-day-thin.svg"
     },
+    "production_current_capability": {
+      "type": "number",
+      "title": {
+        "en": "Solar Power",
+        "da": "Solenergi",
+        "de": "Solarleistung",
+        "nl": "Zonnevermogen"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/house-day-thin.svg"
+    },
     "production_daily_capability": {
       "type": "number",
       "title": {
-        "en": "Total production",
-        "da": "Samlet produktion",
-        "de": "Gesamtproduktion",
-        "nl": "Totaal productie"
+        "en": "∑d Production",
+        "da": "∑d Produktion",
+        "de": "∑d Erzeugung",
+        "nl": "∑d Productie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/house-day-thin_daily.svg"
+    },
+    "production_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Production",
+        "da": "∑ Produktion",
+        "de": "∑ Erzeugung",
+        "nl": "∑ Productie"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1063,6 +1378,44 @@
       },
       "min": 0,
       "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/to-battery.svg"
+    },
+    "to_battery_daily_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑d Charged energy",
+        "da": "∑d Opladet energi",
+        "de": "∑d Geladene Energie",
+        "nl": "∑d Geladen energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
+      "insights": true,
+      "icon": "/assets/images/to-battery.svg"
+    },
+    "to_battery_total_capability": {
+      "type": "number",
+      "title": {
+        "en": "∑ Charged Energy",
+        "da": "∑ Opladet energi",
+        "de": "∑ Geladene Energie",
+        "nl": "∑ Geladen energie"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "kWh"
+      },
+      "min": 0,
+      "decimals": 3,
       "insights": true,
       "icon": "/assets/images/to-battery.svg"
     }

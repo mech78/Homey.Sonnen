@@ -1,33 +1,31 @@
 {
+  "$extends": "sonnenbatterie",
   "name": {
     "en": "sonnenBatterie",
-    "de": "sonnenBatterie"
+    "de": "sonnenBatterie",
+    "nl": "sonnenBatterie"
   },
   "class": "battery",
   "capabilities": [
     "measure_battery",
-    "production_capability",
-    "production_daily_capability",
-    "consumption_capability",
-    "consumption_daily_capability",
-    "grid_feed_in_capability",
-    "grid_feed_in_daily_capability",
-    "grid_consumption_capability",
-    "grid_consumption_daily_capability",
-    "measure_power",
     "to_battery_capability",
     "from_battery_capability",
-    "autarky_capability",
-    "self_consumption_capability",
-    "online_capability",
+    "battery_charging_state",
+    "capacity_remaining_capability",
     "capacity_capability",
+    "to_battery_daily_capability",
+    "from_battery_daily_capability",
+    "to_battery_total_capability",
+    "from_battery_total_capability",
+    "online_capability",
     "number_battery_capability",
     "eclipse_capability",
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
     "button.reset_meter",
-    "battery_charging_state",
+    
+    "measure_power",
     "meter_power.charged", 
     "meter_power.discharged"
   ],
@@ -35,49 +33,55 @@
     "button.reset_meter": {
       "maintenanceAction": true,
       "title": { 
-          "en": "Reset daily totals", 
-          "de": "Tagessummen zurücksetzen" },
+          "en": "Reset totals", 
+          "de": "Summen zurücksetzen",
+          "nl": "Totalen resetten"},
       "desc": { 
-          "en": "Resets today's totals (kWh). This can not be restored.", 
-          "de": "Setzt die heutigen Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden." }
+          "en": "Resets totals (kWh). This can not be restored.", 
+          "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
+          "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."}
+    },
+    "measure_power": {
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.charged": {
-      "title": { 
-        "en": "Charged Energy",
-        "de": "Geladene Energie"
-      }
+      "uiComponent": null,
+      "preventInsights": true
     },
     "meter_power.discharged": {
-      "title": { 
-        "en": "Discharged Energy",
-        "de": "Entladene Energie"
-      }
+      "uiComponent": null,
+      "preventInsights": true
     },
     "battery_charging_state": {
       "title": { 
-        "en": "Battery Charging State",
-        "de": "Batterie Ladezustand"
+        "en": "Charging State",
+        "de": "Ladezustand",
+        "nl": "Laadstatus"
       },
       "values": [
         {
           "id": "charging",
           "title": { 
             "en": "Charging",
-            "de": "Laden"
+            "de": "Laden",
+            "nl": "Opladen"
           }
         },
         {
           "id": "discharging",
           "title": { 
             "en": "Discharging",
-            "de": "Entladen"
+            "de": "Entladen",
+            "nl": "Ontladen"
           }
         },
         {
           "id": "idle",
           "title": { 
             "en": "Idle",
-            "de": "Im Leerlauf"
+            "de": "Im Leerlauf",
+            "nl": "Inactief"
           }
         }
       ]
@@ -87,31 +91,6 @@
     "homeBattery": true,
     "batteries": [ "INTERNAL" ],
     "meterPowerImportedCapability": "meter_power.charged",
-		"meterPowerExportedCapability": "meter_power.discharged"
-  },
-
-  
-  "platforms": [
-    "local"
-  ],
-  "connectivity": [
-    "lan"
-  ],
-  "images": {
-    "small": "{{driverAssetsPath}}/images/small.png",
-    "large": "{{driverAssetsPath}}/images/large.png"
-  },
-  "pair": [
-    {
-      "id": "list_devices",
-      "template": "list_devices",
-      "navigation": {
-        "next": "add_devices"
-      }
-    },
-    {
-      "id": "add_devices",
-      "template": "add_devices"
-    }
-  ]
+    "meterPowerExportedCapability": "meter_power.discharged"
+  }
 }

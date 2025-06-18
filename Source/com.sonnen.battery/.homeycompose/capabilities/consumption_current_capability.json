@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Consumption",
+    "da": "Forbrug",
+    "de": "Verbrauch",
+    "nl": "Uitgaven"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+}

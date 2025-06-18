@@ -1,11 +1,18 @@
 {
-    "type": "number",
-    "title": { "en": "Capacity", "nl": "Capaciteit", "dk": "Kapacitet", "de": "Kapazität" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "units": { "en": "kWh" },
-    "min": 0,
-    "decimals": 3,
-    "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
-  }
+  "type": "number",
+  "title": {
+    "en": "Capacity",
+    "da": "Kapacitet",
+    "de": "Kapazität",
+    "nl": "Capaciteit"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "kWh"
+  },
+  "min": 0,
+  "decimals": 3,
+  "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
+}

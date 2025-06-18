@@ -1,0 +1,28 @@
+{
+  "$extends": "sonnenbatterie",
+  "name": {
+    "en": "sonnenBatterie solar panel",
+    "de": "sonnenBatterie Solarmodul",
+    "nl": "sonnenBatterie Zonnepaneel"
+  },
+  "class": "solarpanel",
+  "capabilities": [
+    "production_current_capability",
+    "production_daily_capability",
+    "production_total_capability",
+    "self_consumption_capability",
+
+    "measure_power",
+    "meter_power"
+  ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "uiComponent": null,
+      "preventInsights": true
+    },
+    "meter_power": {
+      "uiComponent": null,
+      "preventInsights": true
+    }
+  }
+}

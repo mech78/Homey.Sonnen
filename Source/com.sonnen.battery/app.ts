@@ -1,6 +1,6 @@
 import Homey from 'homey';
 
-class BatteryApp extends Homey.App {
+module.exports = class BatteryApp extends Homey.App {
 
   /**
    * onInit is called when the app is initialized.
@@ -10,5 +10,3 @@ class BatteryApp extends Homey.App {
   }
 
 }
-
-module.exports = BatteryApp;

@@ -1,8 +1,13 @@
 {
-    "type": "string",
-    "title": { "en": "BMS", "da": "BMS", "de": "BMS", "nl": "BMS" },
-    "uiComponent": "sensor",
-    "getable": true,
-    "setable": true,
-    "icon": "/assets/images/wave-pulse-regular.svg"
-  }
+  "type": "string",
+  "title": {
+    "en": "BMS",
+    "da": "BMS",
+    "de": "BMS",
+    "nl": "BMS"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "icon": "/assets/images/wave-pulse-regular.svg"
+}
