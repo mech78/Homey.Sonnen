@@ -103,7 +103,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       'from_battery_daily_capability',
       'to_battery_total_capability',
       'from_battery_total_capability',
-      'capacity_remaining_capability'
+      'capacity_remaining_capability',
+      'meter_power'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -115,7 +116,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
     }
 
     var toRemoveAfter1_3_1 = [
-      'meter_power',
       'production_capability',
       'consumption_capability',
       'consumption_daily_capability',
@@ -257,6 +257,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
       this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000);
+      this.setCapabilityValue('meter_power', remaining_energy_Wh / 1000); // https://apps.developer.homey.app/the-basics/devices/energy#home-batteries - By default the meter_power capability will be used to determine the energy charged by the battery. 
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 
       var chargingState;

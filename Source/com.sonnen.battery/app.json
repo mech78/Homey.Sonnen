@@ -551,6 +551,7 @@
         "state_bms_capability",
         "alarm_generic",
         "button.reset_meter",
+        "meter_power",
         "measure_power",
         "meter_power.charged",
         "meter_power.discharged"
