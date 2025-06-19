@@ -227,7 +227,22 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
+
+      /*
+        https://apps.developer.homey.app/the-basics/devices/energy#home-batteries 
+        * Home batteries should have the measure_power capability. 
+        * This represents the real-time power consumption of the home battery in Watts. 
+        * Provide positive values to indicate the battery is consuming power (charging), 
+        * provide negative values to indicate the battery is delivering power back to the home (discharging).
+
+        http://<sb-...>/api/doc.html#tag/Read-API/operation/Status - 
+        * Pac_total_W: AC Power greater than ZERO is discharging Inverter AC Power less than ZERO is charging
+        
+        Hence inverted Pac_total_W to match the Homey Energy measure_power expectation.
+        this.log('Inverted Pac_total_W: ' + -statusJson.Pac_total_W + "W vs. measure_power: " + this.getCapabilityValue('measure_power') + "W");
+      */
+      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W);
+     
       if (this.isEnergyFullySupported()) {
         this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
         this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
