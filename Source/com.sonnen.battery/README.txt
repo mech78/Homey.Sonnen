@@ -9,5 +9,16 @@ Reset Time-Of-Use is very handy, because once schedule is set - the schedule is 
 
 Be aware, atm. only one schedule/Time-Of-Use is supported - and not multiple like example: 10-14:charge:2000 AND 17-23:charge:2000
 
+Usage notes:
+
+Be sure to create at least a "sonnenBatterie" home battery device. 
+This device is mandatory to provide data to all other derived devices such as "household", "grid" and "solar panel".
+The derived devices offer nicely grouped capabilities, convenient insights and dedicated status indicators.  
+Also you can associate your solar panel with your home's roof zone, your grid device and home battery with cellar or whatever zone fits.
+
+Instead of using this app's derived devices also dedicated apps providing smart meter or solar panel/inverter devices can be used.
+However when having multiple devices providing the same type of data, be sure to exclude all but one from Energy tab by using the device's "Exclude from Energy" setting.
+Also consider excluding the household device from Energy. 
+
 
 Please visit the settings page, after installing this application. Configuration-fields are mandatory. 
