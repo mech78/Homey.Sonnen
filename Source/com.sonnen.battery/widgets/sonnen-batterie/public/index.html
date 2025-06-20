@@ -18,10 +18,11 @@
     }
 
     .app-item-container {
-      margin: 10px 0px;
-      flex: 1 1 25%;
+      margin: 0px 0px;
+      
+      flex: 1 1 24%;
       /* Each item takes 25% of the width (adjust as needed) */
-      max-width: 25%;
+      max-width: 24%;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -37,6 +38,7 @@
       /* background-color: var(--homey-color-mono-400); */
       /* padding: 16px, 16px, 16px, 16px; */
       padding-bottom: var(--homey-su);
+      /* color: var(--homey-color-mono-800) !important; */
     }
 
     .batteryContainer {
@@ -71,36 +73,70 @@
       width: 0px;
       height: 31px;
     }
+
+    .homey-custom-icon-panel {
+      --homey-icon-color: var(--homey-icon-color-dark);
+      padding-bottom: var(--homey-su);
+      width: 36px;
+      height: 28px;
+      -webkit-mask-image: url('solar-panel-sharp-thin.svg');
+      mask-image: url('solar-panel-sharp-thin.svg');
+    } 
+
+    .homey-custom-icon-house {
+      --homey-icon-color: var(--homey-icon-color-dark);
+      
+      padding-bottom: var(--homey-su);
+      width: 36px;
+      height: 28px;
+      -webkit-mask-image: url('house-sharp-thin.svg');
+      mask-image: url('house-sharp-thin.svg');
+    } 
+
+    .homey-custom-icon-pole {
+      --homey-icon-color: var(--homey-icon-color-dark);
+      padding-bottom: var(--homey-su);
+      width: 36px;
+      height: 28px;
+      -webkit-mask-image: url('utility-pole-sharp-thin.svg');
+      mask-image: url('utility-pole-sharp-thin.svg');
+    } 
+    
+    .sonnen-icon {
+      width: 36px;
+      height: 28px;
+    }
+
   </style>
 </head>
 
-<body class="homey-widget">
+<body class="homey-widget-small">
   <!-- <img src="homey-logo.png" alt="Homey logo" class="custom-image-class" /> -->
   <!-- <p class="homey-text-regular homey-text-align-center">Edit public/index.html and hit refresh.</p> -->
 
   <div class="app-container">
     <!-- Column 1-->
-    <div class="app-item-container">
-      <img src="solar-panel-sharp-thin.svg" class="app-icon homey-text-small-light"></img>
+    <div class="app-item-container" >
+      <div class="homey-custom-icon-panel"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.production">Production</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblProduction">0</span> W</p>
     </div>
     <!-- Column 2-->
     <div class="app-item-container">
-      <img src="house-sharp-thin.svg" class="app-icon homey-text-small-light"></img>
+      <div class="homey-custom-icon-house"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.consumption">Consumption</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblConsumption">0</span> W</p>
     </div>
     <!-- Column 3-->
     <div class="app-item-container">
-      <img src="icon.svg" class="app-icon"></img>
+      <img src="icon.svg" class="app-icon sonnen-icon"></img>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
       <!-- <span class="homey-font-weight-regular hoemy-font-size-small">FROM</span> -->
     </div>
     <!-- Column 4-->
     <div class="app-item-container">
-      <img src="utility-pole-sharp-thin.svg" class="app-icon"></img>
+      <div class="homey-custom-icon-pole"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromGrid">Grid</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblGrid">0</span> W</p>
       <!-- <span class="homey-font-weight-regular hoemy-font-size-small">TO</span> -->
