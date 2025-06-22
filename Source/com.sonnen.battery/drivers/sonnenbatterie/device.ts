@@ -4,7 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 module.exports = class BatteryDevice extends SonnenDevice {
-  private state: SonnenState = new SonnenState({ lastUpdate: this.getLocalNow() });
+  private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
 
   async onInit() {
@@ -25,6 +25,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       storedState = this.state;
     }
     this.state.updateState(storedState); // apply stored state to current state
+    this.state.updateState({ lastUpdate: null });
     this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
 
     // Pull battery status
@@ -198,6 +199,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
 
       var currentUpdate = new Date(latestDataJson.Timestamp);
+      if (!lastState.lastUpdate) {
+        lastState.lastUpdate = currentUpdate; // if no last update, use current update
+      }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
       var grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
