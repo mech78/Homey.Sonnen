@@ -11,7 +11,7 @@ module.exports = class GridMeterDriver extends SonnenDriver {
     const fromGridTrigger       = this.homey.flow.getConditionCard("consumption-from-grid");
 
     toGridTrigger.registerRunListener(async (args) => {
-      var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability") * 1000;
+      var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability");
       this.log("TRIGGER", "toGrid", toGridValue, "arg", args.Power, "VALID", toGridValue > 0);
       
       if (toGridValue > 0)
@@ -21,7 +21,7 @@ module.exports = class GridMeterDriver extends SonnenDriver {
     });
 
     fromGridTrigger.registerRunListener(async (args) => {      
-      var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability") * 1000;      
+      var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability");      
       this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue < 0);
 
       if (fromGridValue < 0)
