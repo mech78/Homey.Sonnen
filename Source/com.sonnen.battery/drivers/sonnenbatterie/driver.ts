@@ -154,16 +154,19 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     });
 
     // Conditions:
+    // deprecate from & to battery conditions as the Homey default card for battery_charging_state does just that.
+    // unfortunately it is not yet localized, but hopefully that will get fixed..
     const fromBatteryTrigger = this.homey.flow.getConditionCard("power-from-battery");
     const toBatteryTrigger = this.homey.flow.getConditionCard("power-to-battery");
+
     const batteryLevelBelowCard = this.homey.flow.getConditionCard("battery-level-below");
     const batteryLevelAboveCard = this.homey.flow.getConditionCard("battery-level-above");
 
-    fromBatteryTrigger.registerRunListener(async (args) => {
+    fromBatteryTrigger.registerRunListener(async (args) => { // Deprecated, use battery_charging_state instead
       return (+this.getDevices()[0].getCapabilityValue("from_battery_capability")) > 0;
     });
 
-    toBatteryTrigger.registerRunListener(async (args) => {
+    toBatteryTrigger.registerRunListener(async (args) => { // Deprecated, use battery_charging_state instead
       return (+this.getDevices()[0].getCapabilityValue("to_battery_capability")) > 0;
     });
 

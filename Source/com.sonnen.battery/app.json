@@ -203,6 +203,7 @@
         "id": "deliver-to-grid"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Power from battery",
           "da": "Strøm fra batteri",
@@ -218,6 +219,7 @@
         "id": "power-from-battery"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Power to battery",
           "da": "Strøm til batteri",
