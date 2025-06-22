@@ -35,8 +35,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
 
     });
 
@@ -59,8 +60,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
 
     });
 
@@ -86,8 +88,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
 
     });
 
@@ -100,8 +103,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Reset ToC.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
 
     });
 
@@ -115,9 +119,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause ToC between ${timeStart} and ${timeEnd}.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
-
+      }
     });
 
     startToC_card.registerRunListener(async (args) => {
@@ -129,8 +133,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start ToC.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
     });
 
     stopToC_card.registerRunListener(async () => {
@@ -142,8 +147,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Stop ToC.` });
 
-      if (commandResult.HasError)
+      if (commandResult.HasError) {
         throw Error(commandResult.error);
+      }
 
     });
 
