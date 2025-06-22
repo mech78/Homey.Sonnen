@@ -202,6 +202,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
+      if (this.isNewDay(currentUpdate, lastState.lastUpdate)) {
+        this.homey.settings.set('deviceState', this.state); // backup state at least once a day as there seems to be no proper hook during an app shutdown/restart one can use.
+      }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
       var grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
@@ -317,11 +320,15 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }
 
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {
-      var totalEnergyResult_Wh = resetDaily && currentUpdate.getDay() !== lastUpdate.getDay() ? 0 : (totalEnergy_Wh ?? 0);
+      var totalEnergyResult_Wh = resetDaily && this.isNewDay(currentUpdate, lastUpdate) ? 0 : (totalEnergy_Wh ?? 0);
       var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
       var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
       totalEnergyResult_Wh += sampleEnergy_Wh;
       return totalEnergyResult_Wh;
+  }
+
+  private isNewDay(currentUpdate: Date, lastUpdate: Date) {
+    return currentUpdate.getDay() !== lastUpdate.getDay();
   }
 
   private resolveDeviceNameWithFallback(): string {
