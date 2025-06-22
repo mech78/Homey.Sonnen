@@ -150,8 +150,6 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     // Conditions:
     const fromBatteryTrigger    = this.homey.flow.getConditionCard("power-from-battery");
     const toBatteryTrigger      = this.homey.flow.getConditionCard("power-to-battery");
-    const toGridTrigger         = this.homey.flow.getConditionCard("deliver-to-grid");
-    const fromGridTrigger       = this.homey.flow.getConditionCard("consumption-from-grid");
     const batteryLevelBelowCard = this.homey.flow.getConditionCard("battery-level-below");
     const batteryLevelAboveCard = this.homey.flow.getConditionCard("battery-level-above");
 
@@ -161,26 +159,6 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     toBatteryTrigger.registerRunListener(async (args) => {
       return (+this.getDevices()[0].getCapabilityValue("to_battery_capability")) > 0;
-    });
-
-    toGridTrigger.registerRunListener(async (args) => {
-      var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_capability") * 1000;
-      this.log("TRIGGER", "toGrid", toGridValue, "arg", args.Power, "VALID", toGridValue > 0);
-      
-      if (toGridValue > 0)
-        return false; // not current feeding  grid
-
-        return (toGridValue < args.Power);
-    });
-
-    fromGridTrigger.registerRunListener(async (args) => {      
-      var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_capability") * 1000;      
-      this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue < 0);
-
-      if (fromGridValue < 0)
-        return false; // not current consuming from grid
-
-      return (fromGridValue > args.Power);
     });
 
     batteryLevelBelowCard.registerRunListener(async (args) => {      
