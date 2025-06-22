@@ -131,6 +131,7 @@
         "id": "battery-level-below"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Consumption from grid",
           "da": "Forbrug fra net",
@@ -166,6 +167,7 @@
         "id": "consumption-from-grid"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Deliver to grid",
           "da": "Leverer til net",
