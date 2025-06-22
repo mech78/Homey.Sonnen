@@ -1,5 +1,9 @@
 import { SonnenDriver } from '../../lib/SonnenDriver';
 
+interface TriggerArgs {
+  Power: number;
+}
+
 module.exports = class GridMeterDriver extends SonnenDriver {
 
   async onInit() {
@@ -7,29 +11,40 @@ module.exports = class GridMeterDriver extends SonnenDriver {
     this.deviceId = "gridMeter";
     super.onInit();
 
+    // Deprecated app based
     const toGridTrigger = this.homey.flow.getConditionCard("deliver-to-grid");
     const fromGridTrigger = this.homey.flow.getConditionCard("consumption-from-grid");
 
-    toGridTrigger.registerRunListener(async (args) => {
-      var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability"); // always positive
-      this.log("TRIGGER", "toGrid", toGridValue, "arg", args.Power, "VALID", toGridValue >= 0);
+    toGridTrigger.registerRunListener(async (args) => this.handleGridFeedInCurrent(args));
+    fromGridTrigger.registerRunListener(async (args) => this.handleGridConsumptionCurrent(args));
 
-      if (toGridValue < 0) {
-        return false; 
-      }
-      return (toGridValue > args.Power);
-    });
+    // New device-based
+    const gridFeedInCurrentCondition = this.homey.flow.getConditionCard("grid_feed_in_current");
+    const gridConsumptionCurrentCondition = this.homey.flow.getConditionCard("grid_consumption_current");
 
-    fromGridTrigger.registerRunListener(async (args) => {
-      var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability"); // always positive
-      this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue >= 0);
+    gridFeedInCurrentCondition.registerRunListener(async (args) => this.handleGridFeedInCurrent(args));
+    gridConsumptionCurrentCondition.registerRunListener(async (args) => this.handleGridConsumptionCurrent(args));
+  }
 
-      if (fromGridValue < 0) {
-        return false;
-      }
+  async handleGridFeedInCurrent(args: any) {
+    var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability"); // always positive
+    this.log("TRIGGER", "toGrid", toGridValue, "arg", args.Power, "VALID", toGridValue >= 0);
 
-      return (fromGridValue > args.Power);
-    });
+    if (toGridValue < 0) {
+      return false;
+    }
+    return (toGridValue > args.Power);
+  }
+
+  async handleGridConsumptionCurrent(args: any) {
+    var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability"); // always positive
+    this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.Power, "VALID", fromGridValue >= 0);
+
+    if (fromGridValue < 0) {
+      return false;
+    }
+
+    return (fromGridValue > args.Power);
   }
 
 };
