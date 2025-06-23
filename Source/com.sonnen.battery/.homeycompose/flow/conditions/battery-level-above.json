@@ -1,4 +1,5 @@
 {
+  "deprecated": true,
   "title": {
     "en": "Battery level above",
     "da": "Batteriniveau over",
@@ -6,10 +7,10 @@
     "nl": "Batterijniveau boven"
   },
   "titleFormatted": {
-    "en": "Battery level !{{is|isn't}} above [[Percentage]]%",
-    "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%",
-    "de": "Batteriestand !{{liegt|liegt nicht}} über [[Percentage]]%",
-    "nl": "Batterijniveau !{{is|is niet}} hoger [[Percentage]]%"
+    "en": "Battery level !{{is|isn't}} above [[percentage]]%",
+    "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
+    "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
+    "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
   },
   "hint": {
     "en": "Battery level above or equal percentage provided.",
@@ -20,7 +21,7 @@
   "args": [
     {
       "type": "number",
-      "name": "Percentage",
+      "name": "percentage",
       "placeholder": {
         "en": "Battery percentage level",
         "da": "Batteriniveau",

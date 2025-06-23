@@ -148,15 +148,15 @@
         "en": "Resets the schedule for Time-Of-Use",
         "de": "Zurücksetzen des Zeitplans der zeitabhängigen Steuerung"
       },
-      "highlight":true
+      "highlight": true
     },
     {
       "id": "pause-time-of-use",
       "title": {
         "en": "Pause Time-Of-Use",
         "de": "Pausieren der zeitabhängigen Steuerung"
-      },            
-      "highlight":true,
+      },
+      "highlight": true,
       "titleFormatted": {
         "en": "Pause Time-Of-Use starting [[Start]] and ending [[End]]. Battery will be paused within this period.",
         "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[Start]] und endend um [[End]]. Die Batterie wird während dieser Zeitspanne pausiert."
@@ -181,6 +181,80 @@
             "en": "Enter end time for the new charge event",
             "de": "Endzeit für neues Ladeereignis eingeben"
           }
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "battery_level_above_or_equal",
+      "title": {
+        "en": "Battery level above",
+        "da": "Batteriniveau over",
+        "de": "Batteriestand über",
+        "nl": "Batterijniveau boven"
+      },
+      "titleFormatted": {
+        "en": "Battery level !{{is|isn't}} above [[percentage]]%",
+        "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
+        "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
+        "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
+      },
+      "hint": {
+        "en": "Battery level above or equal percentage provided.",
+        "da": "Batteriniveau er over eller lig med procent angivet.",
+        "de": "Batteriestand über oder gleich dem angegebenen Prozentsatz.",
+        "nl": "Batterijniveau boven of gelijk percentage verstrekt."
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "percentage",
+          "placeholder": {
+            "en": "Battery percentage level",
+            "da": "Batteriniveau",
+            "de": "Prozentualer Batteriestand",
+            "nl": "Batterijpercentageniveau"
+          },
+          "min": 0,
+          "max": 100,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "battery_level_below",
+      "title": {
+        "en": "Battery level below",
+        "da": "Batteriniveau under",
+        "de": "Batteriestand unter",
+        "nl": "Batterijniveau hieronder"
+      },
+      "titleFormatted": {
+        "en": "Battery level !{{is|isn't}} below [[percentage]]%",
+        "da": "Batteriniveau !{{er|er ikke}} under [[percentage]]%",
+        "de": "Batteriestand !{{ist|ist nicht}} unter [[percentage]]%",
+        "nl": "Het batterijniveau !{{is|is niet}} lager [[percentage]]%"
+      },
+      "hint": {
+        "en": "Battery level below percentage provided.",
+        "da": "Batteriniveau er under procent angivet.",
+        "de": "Batteriestand unter dem angegebenen Prozentsatz.",
+        "nl": "Batterijniveau lager dan aangegeven percentage"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "percentage",
+          "placeholder": {
+            "en": "Battery percentage level",
+            "da": "Batteriniveau",
+            "de": "Prozentualer Batteriestand",
+            "nl": "Batterijpercentageniveau"
+          },
+          "min": 0,
+          "max": 100,
+          "step": 1
         }
       ]
     }

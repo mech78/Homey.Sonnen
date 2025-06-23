@@ -59,6 +59,7 @@
   "flow": {
     "conditions": [
       {
+        "deprecated": true,
         "title": {
           "en": "Battery level above",
           "da": "Batteriniveau over",
@@ -66,10 +67,10 @@
           "nl": "Batterijniveau boven"
         },
         "titleFormatted": {
-          "en": "Battery level !{{is|isn't}} above [[Percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} over [[Percentage]]%",
-          "de": "Batteriestand !{{liegt|liegt nicht}} über [[Percentage]]%",
-          "nl": "Batterijniveau !{{is|is niet}} hoger [[Percentage]]%"
+          "en": "Battery level !{{is|isn't}} above [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
+          "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
+          "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
@@ -80,7 +81,7 @@
         "args": [
           {
             "type": "number",
-            "name": "Percentage",
+            "name": "percentage",
             "placeholder": {
               "en": "Battery percentage level",
               "da": "Batteriniveau",
@@ -95,6 +96,7 @@
         "id": "battery-level-above"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Battery level below",
           "da": "Batteriniveau under",
@@ -102,10 +104,10 @@
           "nl": "Batterijniveau hieronder"
         },
         "titleFormatted": {
-          "en": "Battery level !{{is|isn't}} below [[Percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} under [[Percentage]]%",
-          "de": "Batteriestand !{{ist|ist nicht}} unter [[Percentage]]%",
-          "nl": "Het batterijniveau !{{is|is niet}} lager [[Percentage]]%"
+          "en": "Battery level !{{is|isn't}} below [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} under [[percentage]]%",
+          "de": "Batteriestand !{{ist|ist nicht}} unter [[percentage]]%",
+          "nl": "Het batterijniveau !{{is|is niet}} lager [[percentage]]%"
         },
         "hint": {
           "en": "Battery level below percentage provided.",
@@ -116,7 +118,7 @@
         "args": [
           {
             "type": "number",
-            "name": "Percentage",
+            "name": "percentage",
             "placeholder": {
               "en": "Battery percentage level",
               "da": "Batteriniveau",
@@ -233,6 +235,88 @@
           "nl": "Batterij !{{wordt opgeladen|laadt niet op}}"
         },
         "id": "power-to-battery"
+      },
+      {
+        "id": "battery_level_above_or_equal",
+        "title": {
+          "en": "Battery level above",
+          "da": "Batteriniveau over",
+          "de": "Batteriestand über",
+          "nl": "Batterijniveau boven"
+        },
+        "titleFormatted": {
+          "en": "Battery level !{{is|isn't}} above [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
+          "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
+          "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
+        },
+        "hint": {
+          "en": "Battery level above or equal percentage provided.",
+          "da": "Batteriniveau er over eller lig med procent angivet.",
+          "de": "Batteriestand über oder gleich dem angegebenen Prozentsatz.",
+          "nl": "Batterijniveau boven of gelijk percentage verstrekt."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "number",
+            "name": "percentage",
+            "placeholder": {
+              "en": "Battery percentage level",
+              "da": "Batteriniveau",
+              "de": "Prozentualer Batteriestand",
+              "nl": "Batterijpercentageniveau"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "battery_level_below",
+        "title": {
+          "en": "Battery level below",
+          "da": "Batteriniveau under",
+          "de": "Batteriestand unter",
+          "nl": "Batterijniveau hieronder"
+        },
+        "titleFormatted": {
+          "en": "Battery level !{{is|isn't}} below [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} under [[percentage]]%",
+          "de": "Batteriestand !{{ist|ist nicht}} unter [[percentage]]%",
+          "nl": "Het batterijniveau !{{is|is niet}} lager [[percentage]]%"
+        },
+        "hint": {
+          "en": "Battery level below percentage provided.",
+          "da": "Batteriniveau er under procent angivet.",
+          "de": "Batteriestand unter dem angegebenen Prozentsatz.",
+          "nl": "Batterijniveau lager dan aangegeven percentage"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "number",
+            "name": "percentage",
+            "placeholder": {
+              "en": "Battery percentage level",
+              "da": "Batteriniveau",
+              "de": "Prozentualer Batteriestand",
+              "nl": "Batterijpercentageniveau"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
       },
       {
         "id": "grid_consumption_current",

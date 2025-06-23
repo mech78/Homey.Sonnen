@@ -159,6 +159,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const fromBatteryTrigger = this.homey.flow.getConditionCard("power-from-battery");
     const toBatteryTrigger = this.homey.flow.getConditionCard("power-to-battery");
 
+    // deprecated by device specific flow cards
     const batteryLevelBelowCard = this.homey.flow.getConditionCard("battery-level-below");
     const batteryLevelAboveCard = this.homey.flow.getConditionCard("battery-level-above");
 
@@ -170,24 +171,34 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       return (+this.getDevices()[0].getCapabilityValue("to_battery_capability")) > 0;
     });
 
-    batteryLevelBelowCard.registerRunListener(async (args) => {
-      var argPercentage = args.Percentage;
-      var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
+    batteryLevelBelowCard.registerRunListener(async (args) => this.handleBatteryLevelBelow(args)); // deprecated
 
-      this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
+    batteryLevelAboveCard.registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args)); // deprecated
 
-      return (batteryLevel < argPercentage);
-    });
+    // New device-specific conditions
+    const batteryLevelBelowCondition = this.homey.flow.getConditionCard("battery_level_below");
+    const batteryLevelAboveOrEqualCondition = this.homey.flow.getConditionCard("battery_level_above_or_equal");
+    
+    batteryLevelBelowCondition.registerRunListener(async (args) => this.handleBatteryLevelBelow(args));
+    batteryLevelAboveOrEqualCondition.registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
+  }
 
-    batteryLevelAboveCard.registerRunListener(async (args) => {
-      var argPercentage = args.Percentage;
-      var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
+  async handleBatteryLevelBelow(args: any) {
+    var argPercentage = args.percentage;
+    var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
 
-      this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
+    this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
 
-      return (batteryLevel >= argPercentage);
-    });
+    return (batteryLevel < argPercentage);   
+  }
 
+  async handleBatteryLevelAboveOrEqual(args: any) {
+    var argPercentage = args.percentage;
+    var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
+
+    this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
+
+    return (batteryLevel >= argPercentage); 
   }
 
 }
