@@ -1,26 +1,33 @@
 import Homey from 'homey';
 
-export abstract class SonnenDevice extends Homey.Device {
+export abstract class SonnenDevice {
+
+  protected device: Homey.Device;
+  
+  constructor(device: Homey.Device) {
+    this.device = device;
+  }
+  
 
   /**
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log(this.constructor.name + ' has been initialized');
+    this.device.log(this.constructor.name + ' has been initialized');
   }
 
   /**
    * onUninit is called when the device is uninitialized.
    */
   async onUninit(): Promise<void> {
-    this.log(this.constructor.name + ' has been uninitialized');
+    this.device.log(this.constructor.name + ' has been uninitialized');
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log(this.constructor.name + ' has been added');
+    this.device.log(this.constructor.name + ' has been added');
   }
 
   /**
@@ -40,7 +47,7 @@ export abstract class SonnenDevice extends Homey.Device {
     newSettings: { [key: string]: boolean | string | number | undefined | null };
     changedKeys: string[];
   }): Promise<string | void> {
-      this.log(this.constructor.name + ' settings where changed: ' +
+      this.device.log(this.constructor.name + ' settings where changed: ' +
           changedKeys.join(', ') +
           '. old settings: ' + JSON.stringify(oldSettings) +
           ', new settings: ' + JSON.stringify(newSettings));
@@ -52,21 +59,21 @@ export abstract class SonnenDevice extends Homey.Device {
    * @param {string} name The new name
    */
   async onRenamed(name: string) {
-    this.log(this.constructor.name + ' was renamed');
+    this.device.log(this.constructor.name + ' was renamed');
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
   async onDeleted() {
-    this.log(this.constructor.name + ' has been deleted');
+    this.device.log(this.constructor.name + ' has been deleted');
   }
 
   /**
    * @returns {boolean} true if the device supports energy features as Cloud or Homey Pro (early 2023) or later , false otherwise
    */
   isEnergyFullySupported(): boolean {
-    return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
+    return (this.device.homey.platform === "cloud" || (this.device.homey.platformVersion ?? 0) >= 2);
   }
 
 };

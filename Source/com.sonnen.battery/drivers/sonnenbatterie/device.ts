@@ -1,52 +1,88 @@
 import axios from 'axios';
 import _ from 'underscore';
+import Homey from 'homey';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
-import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
-module.exports = class SonnenBatteryDevice extends SonnenDevice {
+import { BatteryDevice } from './battery/BatteryDevice';
+import { GridMeterDevice } from './gridmeter/GridMeterDevice';
+import { HouseholdMeterDevice } from './householdmeter/HouseholdMeterDevice';
+import { SolarPanelDevice } from './solarpanel/SolarPanelDevice';
+module.exports = class SonnenBatteryDevice extends Homey.Device {
   private state: SonnenState = new SonnenState({ lastUpdate: this.getLocalNow() });
   private updateIntervalId: NodeJS.Timeout | undefined;
 
+  private batteryDevice?: BatteryDevice;
+  private gridMeterDevice?: GridMeterDevice;
+  private householdMeterDevice?: HouseholdMeterDevice;
+  private solarPanelDevice?: SolarPanelDevice;
+
   async onInit() {
-    super.onInit();
+    if (this.getClass() === 'service') {
+      super.onInit();
 
-    this.registerResetMetersButton();
+      this.registerResetMetersButton();
 
-    var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
-    var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
+      var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
+      var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
-    var storedState: SonnenState;
-    try {
-      this.log('Retrieving stored state...');
-      storedState = this.homey.settings.get('deviceState') || this.state;
-    } catch (e) {
-      this.log('Failed to retrieve stored state, use new state', e);
-      storedState = this.state;
+      var storedState: SonnenState;
+      try {
+        this.log('Retrieving stored state...');
+        storedState = this.homey.settings.get('deviceState') || this.state;
+      } catch (e) {
+        this.log('Failed to retrieve stored state, use new state', e);
+        storedState = this.state;
+      }
+      this.state.updateState(storedState); // apply stored state to current state
+      this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
+
+      // Pull battery status
+      this.updateIntervalId = this.homey.setInterval(async () => {
+        this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
+      }, batteryPullInterval * 1000);
     }
-    this.state.updateState(storedState); // apply stored state to current state
-    this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
 
-    // Pull battery status
-    this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
-    }, batteryPullInterval * 1000);
+    const deviceId: String = this.getData()['id'];
+    if (deviceId.endsWith('_battery')) {
+      this.batteryDevice = new BatteryDevice(this);  
+      this.batteryDevice.onInit();
+    }
+
+    if (deviceId.endsWith('gridMeter')) {
+      this.gridMeterDevice = new GridMeterDevice(this);  
+      this.gridMeterDevice.onInit();
+    }
+
+    if (deviceId.endsWith('householdMeter')) {
+      this.householdMeterDevice = new HouseholdMeterDevice(this);  
+      this.householdMeterDevice.onInit();
+    }
+
+    if (deviceId.endsWith('solarPanel')) {
+      this.solarPanelDevice = new SolarPanelDevice(this);  
+      this.solarPanelDevice.onInit();
+    }
   }
 
   async onDeleted() {
-    if (this.updateIntervalId) {
-      this.homey.clearInterval(this.updateIntervalId);
-    }
-    // Store current state
-    this.homey.settings.set('deviceState', this.state);
+    if (this.getClass() === 'service') {
+      if (this.updateIntervalId) {
+        this.homey.clearInterval(this.updateIntervalId);
+      }
+      // Store current state
+      this.homey.settings.set('deviceState', this.state);
 
-    super.onDeleted();
+      super.onDeleted();
+    }
   }
 
   async onUninit() {
-    // Store current state
-    this.homey.settings.set('deviceState', this.state);
+    if (this.getClass() === 'service') {
+      // Store current state
+      this.homey.settings.set('deviceState', this.state);
 
-    super.onUninit();
+      super.onUninit();
+    }
   }
 
   async onSettings({
@@ -58,19 +94,21 @@ module.exports = class SonnenBatteryDevice extends SonnenDevice {
     newSettings: { [key: string]: boolean | string | number | undefined | null; };
     changedKeys: string[];
   }): Promise<string | void> {
-    super.onSettings({ oldSettings, newSettings, changedKeys });
+    if (this.getClass() === 'service') {
+      super.onSettings({ oldSettings, newSettings, changedKeys });
 
-    if (_.contains(changedKeys, "device-ip")) {
-      var newDeviceIp = newSettings["device-ip"];
-      this.log("Settings", "IP", newDeviceIp);
-      this.setStoreValue('lanip', newDeviceIp);
-    };
+      if (_.contains(changedKeys, "device-ip")) {
+        var newDeviceIp = newSettings["device-ip"];
+        this.log("Settings", "IP", newDeviceIp);
+        this.setStoreValue('lanip', newDeviceIp);
+      };
 
-    if (_.contains(changedKeys, "device-discovery")) {
-      var blnUseAutoDisovery = newSettings["device-discovery"];
-      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
-      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
-    };
+      if (_.contains(changedKeys, "device-discovery")) {
+        var blnUseAutoDisovery = newSettings["device-discovery"];
+        this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
+        this.setStoreValue('autodiscovery', blnUseAutoDisovery);
+      };
+    }
   }
 
   /**
