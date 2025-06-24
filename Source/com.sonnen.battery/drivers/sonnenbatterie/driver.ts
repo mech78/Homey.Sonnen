@@ -22,6 +22,95 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
             store: {
               lanip: e.lanip,
             },
+            icon: "/battery/icon.svg", 
+            class: "battery",
+            capabilities: [
+              "measure_battery",
+              "to_battery_capability",
+              "from_battery_capability",
+              "battery_charging_state",
+              "capacity_remaining_capability",
+              "capacity_capability",
+              "to_battery_daily_capability",
+              "from_battery_daily_capability",
+              "to_battery_total_capability",
+              "from_battery_total_capability",
+              "online_capability",
+              "number_battery_capability",
+              "eclipse_capability",
+              "state_inverter_capability",
+              "state_bms_capability",    
+              "alarm_generic",
+              "button.reset_meter",
+              
+              "measure_power",
+              "meter_power.charged", 
+              "meter_power.discharged"
+            ],
+            capabilitiesOptions: {
+              "button.reset_meter": {
+                maintenanceAction: true,
+                title: { 
+                    en: "Reset totals", 
+                    de: "Summen zurücksetzen",
+                    nl: "Totalen resetten"},
+                desc: { 
+                    en: "Resets totals (kWh). This can not be restored.", 
+                    de: "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
+                    nl: "Reset de totalen (kWh). Dit kan niet worden hersteld."}
+              },
+              "measure_power": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "meter_power.charged": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "meter_power.discharged": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "battery_charging_state": {
+                title: { 
+                  en: "Charging State",
+                  de: "Ladezustand",
+                  nl: "Laadstatus"
+                },
+                values: [
+                  {
+                    id: "charging",
+                    title: { 
+                      en: "Charging",
+                      de: "Laden",
+                      nl: "Opladen"
+                    }
+                  },
+                  {
+                    id: "discharging",
+                    title: { 
+                      en: "Discharging",
+                      de: "Entladen",
+                      nl: "Ontladen"
+                    }
+                  },
+                  {
+                    id: "idle",
+                    title: { 
+                      en: "Idle",
+                      de: "Im Leerlauf",
+                      nl: "Inactief"
+                    }
+                  }
+                ]
+              }
+            },
+            energy: {
+              homeBattery: true,
+              batteries: [ "INTERNAL" ],
+              meterPowerImportedCapability: "meter_power.charged",
+              meterPowerExportedCapability: "meter_power.discharged"
+            }
           });
 
           results.push({
