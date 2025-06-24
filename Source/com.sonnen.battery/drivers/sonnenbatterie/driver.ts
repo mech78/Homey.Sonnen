@@ -32,7 +32,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
             store: {
               lanip: e.lanip,
             },
-            icon: "../../sonnenbatterie_gridmeter/assets/icon.svg",
+            icon: "icon_gridmeter.svg",
             class: "sensor",
             capabilities: [
               "grid_consumption_current_capability",
@@ -75,7 +75,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
             store: {
               lanip: e.lanip,
             },
-            icon: "../../sonnenbatterie_householdmeter/assets/icon.svg",
+            icon: "icon_householdmeter.svg",
             class: "sensor",
             capabilities: [
               "consumption_current_capability",
@@ -104,7 +104,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
             store: {
               lanip: e.lanip,
             },
-            icon: "../../sonnenbatterie_solarpanel/assets/icon.svg",
+            icon: "icon_solarpanel.svg",
             class: "solarpanel",
             capabilities: [
               "production_current_capability",
