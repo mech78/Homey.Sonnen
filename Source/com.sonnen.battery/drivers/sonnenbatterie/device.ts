@@ -106,10 +106,9 @@ module.exports = class SonnenBatteryDevice extends SonnenDevice {
       },
     };
 
-    this.log('Updating for ' + this.getName(), this.getClass(), this.getCapabilityOptions, this.getData()['id']);
+    this.log('Updating: ' + this.getName(), this.getClass(), this.getData()['id']);
 
     try {
-      // Act
       var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
 
       this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
@@ -124,27 +123,6 @@ module.exports = class SonnenBatteryDevice extends SonnenDevice {
 
       var latestDataJson = response.data;
       var statusJson = statusResponse.data;
-
-      // update device's batteries to actual number of internal batteries
-      var numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
-
-      /*
-      FIXME: do in battery device
-
-      var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || {
-        homeBattery: true,
-        batteries: [],
-        "meterPowerImportedCapability": "meter_power.charged",
-        "meterPowerExportedCapability": "meter_power.discharged"
-      };
-
-      if (!_.isEqual(energy.batteries, actualBatteries)) {
-        energy.batteries = actualBatteries;
-        this.log("Update batteries (once): ", energy);
-        await this.setEnergy(energy);
-      }
-      */
 
       var currentUpdate = new Date(latestDataJson.Timestamp);
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
@@ -173,46 +151,7 @@ module.exports = class SonnenBatteryDevice extends SonnenDevice {
       });
 
       this.log("Emitting data update for other devices...");
-      this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
-
-      /*
-      TODO: remove as to be done in battery subdevice
-
-      this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
-      if (this.isEnergyFullySupported()) {
-        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
-        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
-      }
-
-      this.setCapabilityValue('to_battery_capability', toBattery_W);
-      this.setCapabilityValue('from_battery_capability', fromBattery_W);
-      this.setCapabilityValue('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
-      this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
-
-      var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
-      this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000);
-      this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
-
-      var chargingState;
-      if (statusJson.Pac_total_W < 0) {
-        chargingState = 'charging';
-      } else if (statusJson.Pac_total_W > 0) {
-        chargingState = 'discharging';
-      } else {
-        chargingState = 'idle';
-      }
-      this.setCapabilityValue('battery_charging_state', chargingState);
-
-      this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
-      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
-      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
-      this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
-      this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
-      */
+      this.homey.emit('sonnenBatterieUpdate', currentState, statusJson, latestDataJson);
 
       /*
       if (Math.random() < 0.5) {
