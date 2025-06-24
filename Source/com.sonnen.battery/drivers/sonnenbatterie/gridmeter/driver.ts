@@ -1,4 +1,4 @@
-import { SonnenDriver } from '../../lib/SonnenDriver';
+import { SonnenDriver } from '../../../lib/SonnenDriver';
 
 module.exports = class GridMeterDriver extends SonnenDriver {
 

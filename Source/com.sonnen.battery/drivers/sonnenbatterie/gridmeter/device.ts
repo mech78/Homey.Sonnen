@@ -1,4 +1,4 @@
-import { SonnenDevice } from '../../lib/SonnenDevice';
+import { SonnenDevice } from '../../../lib/SonnenDevice';
 
 module.exports = class GridMeterDevice extends SonnenDevice {
 
