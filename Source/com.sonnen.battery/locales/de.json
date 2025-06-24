@@ -40,6 +40,7 @@
       "fromGrid": "Netzbezug"
     },
     "device": {
+      "sonnenBatterie": "Service",
       "solarPanel": "Solarmodul",
       "battery": "Batterie",
       "gridMeter": "Netz",

@@ -40,6 +40,7 @@
       "fromGrid": "From grid"
     },
     "device": {
+      "sonnenBatterie": "service",
       "solarPanel": "solar panel",
       "battery": "battery",
       "gridMeter": "grid",

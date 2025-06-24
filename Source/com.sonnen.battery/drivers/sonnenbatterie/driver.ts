@@ -15,9 +15,19 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
         for (const e of response.data) {
 
           results.push({
+            name: e.info + " " + this.homey.__('device.sonnenBatterie'),
+            data: {
+              id: e.device + "_" + "sonnenBatterie",
+            },
+            store: {
+              lanip: e.lanip,
+            },
+          });
+
+          results.push({
             name: e.info + " " + this.homey.__('device.battery'),
             data: {
-              id: e.device + "_" + "sonnenBattery",
+              id: e.device + "_" + "battery",
             },
             store: {
               lanip: e.lanip,
