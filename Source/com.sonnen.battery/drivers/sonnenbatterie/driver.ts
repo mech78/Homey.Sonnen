@@ -1,8 +1,142 @@
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDriver } from '../../lib/SonnenDriver';
-
+import axios from 'axios';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
+
+ async onPairListDevices() {
+  this.log('pairing');
+    try {
+      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
+
+      if (response.data) {
+        this.log('results found', response.data);
+        const results = [];
+        for (const e of response.data) {
+
+          results.push({
+            name: e.info + " " + this.homey.__('device.battery'),
+            data: {
+              id: e.device + "_" + "sonnenBattery",
+            },
+            store: {
+              lanip: e.lanip,
+            },
+          });
+
+          results.push({
+            name: e.info + " " + this.homey.__('device.gridMeter'),
+            data: {
+              id: e.device + "_" + "gridMeter",
+            },
+            store: {
+              lanip: e.lanip,
+            },
+            icon: "../../sonnenbatterie_gridmeter/assets/icon.svg",
+            class: "sensor",
+            capabilities: [
+              "grid_consumption_current_capability",
+              "grid_feed_in_current_capability",
+              "grid_consumption_daily_capability",
+              "grid_feed_in_daily_capability",
+              "grid_consumption_total_capability",
+              "grid_feed_in_total_capability",
+              
+              "measure_power",
+              "meter_power.imported",
+              "meter_power.exported"
+            ],
+            capabilitiesOptions: {
+              "measure_power": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "meter_power.imported": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "meter_power.exported": {
+                uiComponent: null,
+                preventInsights: true
+              }
+            },
+            energy: {
+              cumulative: true,
+              cumulativeImportedCapability: "meter_power.imported",
+              cumulativeExportedCapability: "meter_power.exported"
+            }
+          });
+
+          results.push({
+            name: e.info + " " + this.homey.__('device.householdMeter'),
+            data: {
+              id: e.device + "_" + "householdMeter",
+            },
+            store: {
+              lanip: e.lanip,
+            },
+            icon: "../../sonnenbatterie_householdmeter/assets/icon.svg",
+            class: "sensor",
+            capabilities: [
+              "consumption_current_capability",
+              "consumption_daily_capability",
+              "consumption_total_capability",
+              "autarky_capability",
+
+              "measure_power"
+            ],
+            capabilitiesOptions: {
+              "measure_power": {
+                uiComponent: null,
+                preventInsights: true
+              }
+            },
+            energy: {
+              cumulative: true
+            }
+          });
+
+          results.push({
+            name: e.info + " " + this.homey.__('device.solarPanel'),
+            data: {
+              id: e.device + "_" + "solarPanel",
+            },
+            store: {
+              lanip: e.lanip,
+            },
+            icon: "../../sonnenbatterie_solarpanel/assets/icon.svg",
+            class: "solarpanel",
+            capabilities: [
+              "production_current_capability",
+              "production_daily_capability",
+              "production_total_capability",
+              "self_consumption_capability",
+
+              "measure_power",
+              "meter_power"
+            ],
+            capabilitiesOptions: {
+              "measure_power": {
+                uiComponent: null,
+                preventInsights: true
+              },
+              "meter_power": {
+                uiComponent: null,
+                preventInsights: true
+              }
+            }
+          });
+        }
+        
+
+        return results;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return [];
+  }
 
   async onInit() {
     this.deviceName = this.homey.__('device.battery');

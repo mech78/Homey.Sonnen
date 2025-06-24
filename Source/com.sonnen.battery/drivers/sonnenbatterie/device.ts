@@ -164,6 +164,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       },
     };
 
+    this.log('Updating for ' + this.getName(), this.getClass(), this.getCapabilityOptions, this.getData()['id']);
+
     try {
       // Act
       var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
