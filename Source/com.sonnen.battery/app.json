@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.7.4",
+  "version": "1.8.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -131,6 +131,7 @@
         "id": "battery-level-below"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Consumption from grid",
           "da": "Forbrug fra net",
@@ -138,10 +139,10 @@
           "nl": "Verbruik uit net"
         },
         "titleFormatted": {
-          "en": "Consuming watts from grid !{{is|isn't}} greater than [[Power]] W",
-          "da": "Watt forbrug fra net !{{er|er ikke}} over [[Power]] W",
-          "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[Power]] W",
-          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[Power]] W"
+          "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
+          "da": "Watt forbrug fra net !{{er|er ikke}} over [[power]] W",
+          "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
+          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
         },
         "hint": {
           "en": "Is consuming power from grid.",
@@ -152,7 +153,7 @@
         "args": [
           {
             "type": "number",
-            "name": "Power",
+            "name": "power",
             "placeholder": {
               "en": "Power (W)",
               "da": "Watt (W)",
@@ -166,6 +167,7 @@
         "id": "consumption-from-grid"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Deliver to grid",
           "da": "Leverer til net",
@@ -173,10 +175,10 @@
           "nl": "Leveren aan het net"
         },
         "titleFormatted": {
-          "en": "Deliver to grid !{{is|isn't}} greater than [[Power]] W",
-          "da": "Leverer til net !{{er|er ikke}} mere end [[Power]] W",
-          "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[Power]] W",
-          "nl": "Leveren aan net !{{is|is niet}} groter dan [[Power]] W"
+          "en": "Deliver to grid !{{is|isn't}} greater than [[power]] W",
+          "da": "Leverer til net !{{er|er ikke}} mere end [[power]] W",
+          "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
+          "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W"
         },
         "hint": {
           "en": "Deliverying power to grid",
@@ -187,7 +189,7 @@
         "args": [
           {
             "type": "number",
-            "name": "Power",
+            "name": "power",
             "placeholder": {
               "en": "Power (W)",
               "da": "Watt (W)",
@@ -201,6 +203,7 @@
         "id": "deliver-to-grid"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Power from battery",
           "da": "Strøm fra batteri",
@@ -216,6 +219,7 @@
         "id": "power-from-battery"
       },
       {
+        "deprecated": true,
         "title": {
           "en": "Power to battery",
           "da": "Strøm til batteri",
@@ -229,6 +233,86 @@
           "nl": "Batterij !{{wordt opgeladen|laadt niet op}}"
         },
         "id": "power-to-battery"
+      },
+      {
+        "id": "grid_consumption_current",
+        "title": {
+          "en": "Consumption from grid",
+          "da": "Forbrug fra net",
+          "de": "Netzbezug",
+          "nl": "Verbruik uit net"
+        },
+        "titleFormatted": {
+          "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
+          "da": "Watt forbrug fra net !{{er|er ikke}} over [[power]] W",
+          "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
+          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
+        },
+        "hint": {
+          "en": "Is consuming power from grid.",
+          "da": "Henter forbrug fra net",
+          "de": "Bezug aus dem Stromnetz",
+          "nl": "Verbruikt stroom van het elektriciteitsnet"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie_gridmeter"
+          },
+          {
+            "type": "number",
+            "name": "power",
+            "placeholder": {
+              "en": "Power (W)",
+              "da": "Watt (W)",
+              "de": "Leistung (W)",
+              "nl": "Power (W)"
+            },
+            "min": 1,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "grid_feed_in_current",
+        "title": {
+          "en": "Feed-in to grid",
+          "da": "Leverer til net",
+          "de": "Netzeinspeisung",
+          "nl": "Leveren aan het net"
+        },
+        "titleFormatted": {
+          "en": "Feed-in to grid !{{is|isn't}} greater than [[power]] W",
+          "da": "Leverer til net !{{er|er ikke}} mere end [[power]] W",
+          "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
+          "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W"
+        },
+        "hint": {
+          "en": "Feeding-in power to grid",
+          "da": "Leverer strøm til nettet",
+          "de": "Einspeisung in das Stromnetz",
+          "nl": "Stroom leveren aan het net"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie_gridmeter"
+          },
+          {
+            "type": "number",
+            "name": "power",
+            "placeholder": {
+              "en": "Power (W)",
+              "da": "Watt (W)",
+              "de": "Leistung (W)",
+              "nl": "Power (W)"
+            },
+            "min": 1,
+            "step": 1
+          }
+        ]
       }
     ],
     "actions": [
