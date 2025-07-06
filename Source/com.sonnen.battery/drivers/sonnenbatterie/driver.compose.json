@@ -23,8 +23,7 @@
     "state_inverter_capability",
     "state_bms_capability",    
     "alarm_generic",
-    "button.reset_meter",
-    
+    "button.reset_meter",    
     "measure_power",
     "meter_power.charged", 
     "meter_power.discharged"
