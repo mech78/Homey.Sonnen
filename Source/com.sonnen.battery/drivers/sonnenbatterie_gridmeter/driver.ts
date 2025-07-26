@@ -7,19 +7,13 @@ module.exports = class GridMeterDriver extends SonnenDriver {
     this.deviceId = "gridMeter";
     super.onInit();
 
-    // Deprecated app based
-    const toGridTrigger = this.homey.flow.getConditionCard("deliver-to-grid");
-    const fromGridTrigger = this.homey.flow.getConditionCard("consumption-from-grid");
+    // Device-based conditions:
 
-    toGridTrigger.registerRunListener(async (args) => this.handleGridFeedInCurrent(args));
-    fromGridTrigger.registerRunListener(async (args) => this.handleGridConsumptionCurrent(args));
-
-    // New device-based
-    const gridFeedInCurrentCondition = this.homey.flow.getConditionCard("grid_feed_in_current");
-    const gridConsumptionCurrentCondition = this.homey.flow.getConditionCard("grid_consumption_current");
-
-    gridFeedInCurrentCondition.registerRunListener(async (args) => this.handleGridFeedInCurrent(args));
-    gridConsumptionCurrentCondition.registerRunListener(async (args) => this.handleGridConsumptionCurrent(args));
+    this.homey.flow.getConditionCard("grid_feed_in_current")
+      .registerRunListener(async (args) => this.handleGridFeedInCurrent(args));
+      
+    this.homey.flow.getConditionCard("grid_consumption_current")
+      .registerRunListener(async (args) => this.handleGridConsumptionCurrent(args));
   }
 
   async handleGridFeedInCurrent(args: any) {
