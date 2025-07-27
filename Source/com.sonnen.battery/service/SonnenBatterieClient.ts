@@ -28,8 +28,9 @@ export class SonnenBatterieClient {
       .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
       .then();
 
-    if (response == null)
+    if (response == null) {
       return new SonnenCommandResult(true, "No valid response received.");
+    }
 
     var responseData = response.data;
     if (responseData.error != null) {
@@ -65,8 +66,9 @@ export class SonnenBatterieClient {
       .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
       .then();
 
-    if (response == null)
+    if (response == null) {
       return new SonnenCommandResult(true, "No valid response received.");
+    }
 
     var responseData = response.data;
     if (responseData.error != null)
