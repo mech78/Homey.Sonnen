@@ -2,12 +2,11 @@ import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
 import { SonnenDriver } from '../../lib/SonnenDriver';
-
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   private sonnenBatterieClient!: SonnenBatterieClient;
 
-  async onInit() {
+  async onInit(): Promise<void> {
     this.deviceName = this.homey.__('device.battery');
     this.deviceId = "sonnenBattery";
     super.onInit();
@@ -47,11 +46,11 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
   }
 
-  private async handleSetTimeOfUse(args: { start: string, end: string, maxPower: number }) {
-    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
-    const timeStart: string = args.start;
-    const timeEnd: string = args.end;
-    const maxPower: number = args.maxPower;
+  private async handleSetTimeOfUse(args: { start: string, end: string, maxPower: number }): Promise<void> {
+    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
+    const timeStart = args.start;
+    const timeEnd = args.end;
+    const maxPower = args.maxPower;
 
     this.log("handleSetTimeOfUse", args.start, args.end, args.maxPower);
     this.log("handleSetTimeOfUse", typeof args.start, typeof args.end, typeof args.maxPower);
@@ -66,20 +65,20 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   };
 
-  private async handleSetTimeOfUseByStartTimeAndHours(args: { start: string, hours: number, maxPower: number }) {
-    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
-    const timeStart: string = args.start;
-    const hours: number = args.hours;
-    const maxPower: number = args.maxPower;
+  private async handleSetTimeOfUseByStartTimeAndHours(args: { start: string, hours: number, maxPower: number }): Promise<void> {
+    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
+    const timeStart = args.start;
+    const hours = args.hours;
+    const maxPower = args.maxPower;
 
     this.log("handleSetTimeOfUseByStartTimeAndHours", args.start, args.hours, args.maxPower);
     this.log("handleSetTimeOfUseByStartTimeAndHours", typeof args.start, typeof args.hours, typeof args.maxPower);
 
     // Calculate end from timeStart and hours.
-    const timeStartHours: number = +timeStart.split(":", 1)[0];
-    const timeStartMinutes: string = timeStart.split(":", 2)[1];
-    const timeEndHours: number = (timeStartHours + hours) % 24; // Handle overflow.
-    const timeEndHoursFormatted: string = this.zeroPad(timeEndHours, 2);
+    const timeStartHours = +timeStart.split(":", 1)[0];
+    const timeStartMinutes = timeStart.split(":", 2)[1];
+    const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+    const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
 
     const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
@@ -93,8 +92,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   }
 
-  private async handleClearTimeOfUse() {
-    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
+  private async handleClearTimeOfUse(): Promise<void> {
+    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set empty schedule
 
     const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.clearSchedule(baseUrl);
@@ -107,10 +106,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   }
 
-  private async handlePauseTimeOfUse(args: { start: string; end: string }) {
-    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
-    const timeStart: string = args.start;
-    const timeEnd: string = args.end;
+  private async handlePauseTimeOfUse(args: { start: string; end: string }): Promise<void> {
+    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
+    const timeStart = args.start;
+    const timeEnd = args.end;
 
     const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, 0);
     this.log("Result", commandResult, args.start, args.end);
@@ -122,8 +121,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   }
 
-  private async handleStartTimeOfUse(args: { power: number }) {
-    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
+  private async handleStartTimeOfUse(args: { power: number }): Promise<void> {
+    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set full schedule
 
     const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, "00:00", "23:59", args.power);
@@ -136,18 +135,18 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   }
 
-  private async handleBatteryLevelBelow(args: { percentage: number }) {
-    const argPercentage: number = args.percentage;
-    const batteryLevel: number = +this.getDevices()[0].getCapabilityValue("measure_battery");
+  private async handleBatteryLevelBelow(args: { percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
 
     this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
 
     return (batteryLevel < argPercentage);
   }
 
-  private async handleBatteryLevelAboveOrEqual(args: { percentage: number }) {
-    const argPercentage: number = args.percentage;
-    const batteryLevel: number = +this.getDevices()[0].getCapabilityValue("measure_battery");
+  private async handleBatteryLevelAboveOrEqual(args: { percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
 
     this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
 
