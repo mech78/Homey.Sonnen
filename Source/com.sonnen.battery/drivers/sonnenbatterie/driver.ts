@@ -26,7 +26,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
     this.homey.flow.getActionCard("reset_time_of_use")
-      .registerRunListener(async () => this.resetTimeOfUse());
+      .registerRunListener(async () => this.clearTimeOfUse());
 
     this.homey.flow.getActionCard("pause_time_of_use")
       .registerRunListener(async (args) => this.pauseTimeOfUse(args));
@@ -35,7 +35,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.startTimeOfUse(args));
 
     this.homey.flow.getActionCard("stop_charge")
-      .registerRunListener(async () => this.stopTimeOfUse());
+      .registerRunListener(async () => this.clearTimeOfUse());
 
     // Device-specific conditions:
 
@@ -93,14 +93,14 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   }
 
-  async resetTimeOfUse() {
+  async clearTimeOfUse() {
     var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set empty schedule
 
     var commandResult = await this.sonnenBatterieClient.ClearSchedule(baseUrl);
     this.log("Result", commandResult);
 
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Reset time-of-use.` });
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
 
     if (commandResult.HasError) {
       throw Error(commandResult.error);
@@ -137,20 +137,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   }
 
-  async stopTimeOfUse() {
-    var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-    // Set empty schedule
-
-    var commandResult = await this.sonnenBatterieClient.ClearSchedule(baseUrl);
-    this.log("Result", commandResult);
-
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Stop time-of-use.` });
-
-    if (commandResult.HasError) {
-      throw Error(commandResult.error);
-    }
-
-  }
+ 
 
   async handleBatteryLevelBelow(args: any) {
     var argPercentage = args.percentage;
