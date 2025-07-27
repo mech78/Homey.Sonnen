@@ -13,10 +13,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
-    var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
-    var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
+    const batteryAuthToken = this.homey.settings.get('BatteryAuthToken') as string;
+    const batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
-    var storedState: SonnenState;
+    let storedState: SonnenState;
     try {
       this.log('Retrieving stored state...');
       storedState = this.homey.settings.get('deviceState') || this.state;
@@ -63,13 +63,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
     super.onSettings({ oldSettings, newSettings, changedKeys });
 
     if (_.contains(changedKeys, "device-ip")) {
-      var newDeviceIp = newSettings["device-ip"];
+      const newDeviceIp = newSettings["device-ip"] as string;
       this.log("Settings", "IP", newDeviceIp);
       this.setStoreValue('lanip', newDeviceIp);
     };
 
     if (_.contains(changedKeys, "device-discovery")) {
-      var blnUseAutoDisovery = newSettings["device-discovery"];
+      const blnUseAutoDisovery = newSettings["device-discovery"] as boolean;
       this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
       this.setStoreValue('autodiscovery', blnUseAutoDisovery);
     };
@@ -81,7 +81,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
    * @returns {Date}
    */
   private getLocalNow(): Date {
-    var timezone = this.homey.clock.getTimezone();
+    const timezone = this.homey.clock.getTimezone() as string;
     return new Date(
       new Date().toLocaleString('en-US', { hour12: false, timeZone: timezone })
     );
@@ -97,7 +97,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
     // https://apps.developer.homey.app/guides/how-to-breaking-changes
 
     // Baseline version 1.3.1
-    var toAddAfter1_3_1 = [    
+    let toAddAfter1_3_1: string[] = [
       'to_battery_capability',
       'from_battery_capability',
       'to_battery_daily_capability',
@@ -115,7 +115,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       ];
     }
 
-    var toRemoveAfter1_3_1 = [
+    let toRemoveAfter1_3_1: string[] = [
       'meter_power',
       'production_capability',
       'consumption_capability',
@@ -156,7 +156,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
     retryOnError = true
   ): Promise<SonnenState> {
     // Arrange
-    var options = {
+    const options = {
       method: 'get',
       headers: {
         'Auth-Token': `${authKey}`,
@@ -167,25 +167,25 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
     try {
       // Act
-      var baseUrl = SonnenBatterieClient.getBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+      const baseUrl = SonnenBatterieClient.getBaseUrl(this.getStore().lanip); // This may change/update at runtime.
 
       this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
 
-      var response = await axios
+      const response = await axios
         .get(`${baseUrl}/api/v2/latestdata`, options)
         .then();
 
-      var statusResponse = await axios
+      const statusResponse = await axios
         .get(`${baseUrl}/api/v2/status`, options)
         .then();
 
-      var latestDataJson = response.data;
-      var statusJson = statusResponse.data;
+      const latestDataJson = response.data;
+      const statusJson = statusResponse.data;
 
       // update device's batteries to actual number of internal batteries
-      var numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
-      var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || {
+      const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
+      const actualBatteries = new Array(numberBatteries).fill('INTERNAL');
+      const energy = (await this.getEnergy()) || {
         homeBattery: true,
         batteries: [],
         "meterPowerImportedCapability": "meter_power.charged",
@@ -198,7 +198,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         await this.setEnergy(energy);
       }
 
-      var currentUpdate = new Date(latestDataJson.Timestamp);
+      const currentUpdate = new Date(latestDataJson.Timestamp);
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
@@ -207,10 +207,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
-      var grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
-      var grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
-      var toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
-      var fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
+      const grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
+      const grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
+      const toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
+      const fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
 
       var currentState = new SonnenState({
         lastUpdate: currentUpdate,
@@ -247,11 +247,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
       this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
 
-      var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
+      const remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
       this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000);
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 
-      var chargingState;
+      let chargingState: string;
       if (statusJson.Pac_total_W < 0) {
         chargingState = 'charging';
       } else if (statusJson.Pac_total_W > 0) {
@@ -311,7 +311,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }
 
   private resolveCircleColor(eclipseLed: any): string {
-    for (var key of Object.keys(eclipseLed)) {
+    for (const key of Object.keys(eclipseLed)) {
       if (eclipseLed[key] === true) {
         return this.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
       }
@@ -320,9 +320,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }
 
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {
-      var totalEnergyResult_Wh = resetDaily && this.isNewDay(currentUpdate, lastUpdate) ? 0 : (totalEnergy_Wh ?? 0);
-      var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
-      var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+      let totalEnergyResult_Wh = resetDaily && this.isNewDay(currentUpdate, lastUpdate) ? 0 : (totalEnergy_Wh ?? 0);
+      const sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
+      const sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
       totalEnergyResult_Wh += sampleEnergy_Wh;
       return totalEnergyResult_Wh;
   }
@@ -332,7 +332,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }
 
   private resolveDeviceNameWithFallback(): string {
-    var name = this.getName() || 'sonnenBatterie';
+    const name = this.getName() || 'sonnenBatterie';
     return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
 
