@@ -23,7 +23,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
     this.homey.flow.getActionCard("set_time_of_use_hours_string")
-      .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeStringAndHours(args));
+      .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
     this.homey.flow.getActionCard("reset_time_of_use")
       .registerRunListener(async () => this.resetTimeOfUse());
@@ -46,14 +46,17 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
   }
 
-  async handleSetTimeOfUse(args: any) {
+  async handleSetTimeOfUse(args: {start: string, end: string, maxPower: number}) {
     var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
     var timeStart = args.start;
     var timeEnd = args.end;
     var maxPower = args.maxPower;
 
+    this.log("handleSetTimeOfUse", args.start, args.end, args.maxPower);
+    this.log("handleSetTimeOfUse", typeof args.start, typeof args.end, typeof args.maxPower);
+
     var commandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.power);
+    this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
@@ -62,11 +65,14 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     }
   };
 
-  async handleSetTimeOfUseByStartTimeAndHours(args: any) {
+  async handleSetTimeOfUseByStartTimeAndHours(args: { start: string, hours: number, maxPower: number }) {
     var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
     var timeStart = args.start;
     var hours = args.hours;
     var maxPower = args.maxPower;
+
+    this.log("handleSetTimeOfUseByStartTimeAndHours", args.start, args.hours, args.maxPower);
+    this.log("handleSetTimeOfUseByStartTimeAndHours", typeof args.start, typeof args.hours, typeof args.maxPower);
 
     // Calculate end from timeStart and hours.
     var timeStartHours = +timeStart.split(":", 1)[0];
@@ -77,35 +83,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
     var commandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.power);
-
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
-
-    if (commandResult.HasError) {
-      throw Error(commandResult.error);
-    }
-
-  }
-
-  async handleSetTimeOfUseByStartTimeStringAndHours(args: any) {
-    var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-    var timeStart = args.start;
-    var hours = args.hours;
-    var maxPower = args.maxPower;
-
-    // Calculate end from timeStart and hours.
-    var timeStartHours = +timeStart.split(":", 1)[0];
-    var timeStartMinutes = timeStart.split(":", 2)[1].trim();
-    var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
-    var timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
-
-    timeStart = `${this.zeroPad(timeStartHours, 2)}:${this.zeroPad(timeStartMinutes, 2)}`;
-    var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
-
-    //this.log("INPUT", timeStart, timeEnd, maxPower);
-
-    var commandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.power);
+    this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
 
