@@ -2,15 +2,15 @@ import axios from "axios";
 import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 
 export class SonnenBatterieClient {
-  constructor(public authToken: string) {}
+  constructor(private authToken: string) {}
 
-  public async SetSchedule(
+  public async setSchedule(
     batteryBaseUrl: string,
     timeStart: string,
     timeEnd: string,
     maxPower: number
   ): Promise<SonnenCommandResult> {
-    var options = {
+    const options = {
       method: "put",
       headers: {
         "Auth-Token": `${this.authToken}`,
@@ -19,12 +19,12 @@ export class SonnenBatterieClient {
       },
     };
 
-    var body = {
+    const body = {
       EM_ToU_Schedule: `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`,
     };
 
     // Act
-    var response = await axios
+    const response = await axios
       .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
       .then();
 
@@ -32,7 +32,7 @@ export class SonnenBatterieClient {
       return new SonnenCommandResult(true, "No valid response received.");
     }
 
-    var responseData = response.data;
+    const responseData = response.data;
     if (responseData.error != null) {
       return new SonnenCommandResult(
         true,
@@ -45,10 +45,10 @@ export class SonnenBatterieClient {
     return new SonnenCommandResult(false, "-");
   }
 
-  public async ClearSchedule(
+  public async clearSchedule(
     batteryBaseUrl: string
   ): Promise<SonnenCommandResult> {
-    var options = {
+    const options = {
       method: "put",
       headers: {
         "Auth-Token": `${this.authToken}`,
@@ -57,12 +57,12 @@ export class SonnenBatterieClient {
       },
     };
 
-    var body = {
+    const body = {
       EM_ToU_Schedule: `[]`,
     };
 
     // Act
-    var response = await axios
+    const response = await axios
       .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
       .then();
 
@@ -70,14 +70,14 @@ export class SonnenBatterieClient {
       return new SonnenCommandResult(true, "No valid response received.");
     }
 
-    var responseData = response.data;
+    const responseData = response.data;
     if (responseData.error != null)
       return new SonnenCommandResult(true, responseData.error);
 
     return new SonnenCommandResult(false, "-");
   }
 
-  public static GetBaseUrl(ipAddress: string): string {
+  public static getBaseUrl(ipAddress: string): string {
     return `http://${ipAddress}:80`;
   }
 }

@@ -48,7 +48,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleSetTimeOfUse(args: { start: string, end: string, maxPower: number }) {
-    const baseUrl: string = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
+    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart: string = args.start;
     const timeEnd: string = args.end;
     const maxPower: number = args.maxPower;
@@ -56,18 +56,18 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.log("handleSetTimeOfUse", args.start, args.end, args.maxPower);
     this.log("handleSetTimeOfUse", typeof args.start, typeof args.end, typeof args.maxPower);
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
+    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
-    if (commandResult.HasError) {
+    if (commandResult.hasError) {
       throw Error(commandResult.error);
     }
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { start: string, hours: number, maxPower: number }) {
-    const baseUrl: string = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
+    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart: string = args.start;
     const hours: number = args.hours;
     const maxPower: number = args.maxPower;
@@ -83,55 +83,55 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
+    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
 
-    if (commandResult.HasError) {
+    if (commandResult.hasError) {
       throw Error(commandResult.error);
     }
   }
 
   private async handleClearTimeOfUse() {
-    const baseUrl: string = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
+    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set empty schedule
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.ClearSchedule(baseUrl);
+    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.clearSchedule(baseUrl);
     this.log("Result", commandResult);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
 
-    if (commandResult.HasError) {
+    if (commandResult.hasError) {
       throw Error(commandResult.error);
     }
   }
 
   private async handlePauseTimeOfUse(args: { start: string; end: string }) {
-    const baseUrl: string = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
+    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart: string = args.start;
     const timeEnd: string = args.end;
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, 0);
+    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, 0);
     this.log("Result", commandResult, args.start, args.end);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
 
-    if (commandResult.HasError) {
+    if (commandResult.hasError) {
       throw Error(commandResult.error);
     }
   }
 
   private async handleStartTimeOfUse(args: { power: number }) {
-    const baseUrl: string = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
+    const baseUrl: string = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set full schedule
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.SetSchedule(baseUrl, "00:00", "23:59", args.power);
+    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, "00:00", "23:59", args.power);
     this.log("Result", commandResult, args.power);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });
 
-    if (commandResult.HasError) {
+    if (commandResult.hasError) {
       throw Error(commandResult.error);
     }
   }
