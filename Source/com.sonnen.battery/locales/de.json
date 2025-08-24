@@ -44,5 +44,11 @@
       "battery": "Batterie",
       "gridMeter": "Netz",
       "householdMeter": "Haushalt"
+    },
+    "operatingMode": {
+      "1": "Manuell",
+      "2": "Eigenverbrauch",
+      "6": "Modulerweiterung (30%)",
+      "10": "Time-of-Use"
     }
   }

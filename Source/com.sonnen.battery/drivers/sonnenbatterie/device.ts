@@ -104,7 +104,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       'from_battery_daily_capability',
       'to_battery_total_capability',
       'from_battery_total_capability',
-      'capacity_remaining_capability'
+      'capacity_remaining_capability',
+      'operating_mode_capability',
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -179,8 +180,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
         .get(`${baseUrl}/api/v2/status`, options)
         .then();
 
+      const configResponse = await axios
+        .get(`${baseUrl}/api/v2/configurations`, options)
+        .then();  
+
       const latestDataJson = response.data;
       const statusJson = statusResponse.data;
+      const configurations = configResponse.data;
 
       // update device's batteries to actual number of internal batteries
       const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
@@ -267,6 +273,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
+
+      this.setCapabilityValue('operating_mode_capability', configurations['EM_OperatingMode']);
 
       /*
       if (Math.random() < 0.5) {
