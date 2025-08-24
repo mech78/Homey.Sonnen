@@ -310,13 +310,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
     }
   }
 
-  private resolveCircleColor(eclipseLed: any): string {
-    for (const key of Object.keys(eclipseLed)) {
-      if (eclipseLed[key] === true) {
-        return this.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
-      }
+  private resolveCircleColor(eclipseLed: Record<string, boolean>): string {
+    let key = 'Unknown';
+    if (eclipseLed) {
+      key = Object.keys(eclipseLed).find(key => eclipseLed[key] === true) ?? key; 
     }
-    return this.homey.__('eclipseLed.Unknown');
+    return this.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
   }
 
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {
