@@ -57,11 +57,11 @@
             // Tell Homey we're ready to be displayed
             Homey.ready();
 
-            //var inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
-            var inputBatteryAuthTokenElement   = document.getElementById("inputBatteryAuthToken");
-            var inputPullIntervalValueElement  = document.getElementById("inputPullIntervalValue");
-            var inputDeviceStateValueElement   = document.getElementById("inputDeviceStateValue");
-            var saveElement = document.getElementById("save");
+            //const inputBatteryBaseUrlElement     = document.getElementById("inputBatteryBaseUrl");
+            const inputBatteryAuthTokenElement   = document.getElementById("inputBatteryAuthToken");
+            const inputPullIntervalValueElement  = document.getElementById("inputPullIntervalValue");
+            const inputDeviceStateValueElement   = document.getElementById("inputDeviceStateValue");
+            const saveElement = document.getElementById("save");
 
             // Homey.get("BatteryBaseUrl", function (err, baseUrl) {
             //     if (err) return Homey.alert(err);
@@ -84,7 +84,7 @@
             });
 
             saveElement.addEventListener("click", function (e) {
-                var anySaveErrors = false;
+                let anySaveErrors = false;
 
                 // Homey.set("BatteryBaseUrl", inputBatteryBaseUrlElement.value, function (err) {
                 //     if (err) {

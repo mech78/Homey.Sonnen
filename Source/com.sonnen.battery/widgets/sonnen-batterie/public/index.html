@@ -177,7 +177,7 @@
 
       try {
         Homey.api("GET", `/`).then((response) => {
-          var batteryData = response;
+          const batteryData = response;
 
           document.getElementById('lblProduction').innerText     = batteryData["production"];
           document.getElementById('lblConsumption').innerText    = batteryData["consumption"];
