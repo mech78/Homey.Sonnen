@@ -6,7 +6,7 @@ module.exports = {
     try {
       const data = {};
       for (const id in drivers) {
-        console.log('driver', id);
+        homey.log('driver', id);
         const devices = drivers[id].getDevices();
         const device = devices[0];
 

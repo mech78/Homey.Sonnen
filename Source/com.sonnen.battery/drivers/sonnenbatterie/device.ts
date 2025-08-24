@@ -275,7 +275,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       */
 
       return currentState;
-    } catch (e: any) {
+    } catch (e) {
       this.error('Error occured fetching data. Retry: ' + retryOnError, e)
       if (retryOnError) {
         // Maybe IP has changed, lets try and fix this...

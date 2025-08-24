@@ -40,7 +40,7 @@ export abstract class SonnenDriver extends Homey.Driver {
         return results;
       }
     } catch (error) {
-      console.error(error);
+      this.error('Error occured while pairing', error);
     }
 
     return [];
