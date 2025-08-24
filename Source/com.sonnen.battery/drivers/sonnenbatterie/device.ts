@@ -212,7 +212,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
       const fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
 
-      var currentState = new SonnenState({
+      const currentState = new SonnenState({
         lastUpdate: currentUpdate,
 
         totalDailyToBattery_Wh: this.aggregateTotal(lastState.totalDailyToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate, true),

@@ -17,7 +17,7 @@ module.exports = class GridMeterDriver extends SonnenDriver {
   }
 
   async handleGridFeedInCurrent(args: any) {
-    var toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability"); // always positive
+    const toGridValue = +this.getDevices()[0].getCapabilityValue("grid_feed_in_current_capability"); // always positive
     this.log("TRIGGER", "toGrid", toGridValue, "arg", args.power, "VALID", toGridValue >= 0);
 
     if (toGridValue < 0) {
@@ -27,7 +27,7 @@ module.exports = class GridMeterDriver extends SonnenDriver {
   }
 
   async handleGridConsumptionCurrent(args: any) {
-    var fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability"); // always positive
+    const fromGridValue = +this.getDevices()[0].getCapabilityValue("grid_consumption_current_capability"); // always positive
     this.log("TRIGGER", "fromGrid", fromGridValue, "arg", args.power, "VALID", fromGridValue >= 0);
 
     if (fromGridValue < 0) {

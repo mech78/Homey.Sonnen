@@ -13,8 +13,8 @@ module.exports = class SolarPanelDevice extends SonnenDevice {
     this.setCapabilityValue('production_total_capability', currentState.totalProduction_Wh / 1000);
     this.setCapabilityValue('meter_power', currentState.totalProduction_Wh / 1000);
 
-    var percentageGridFeedIn = (currentState.totalDailyGridFeedIn_Wh / currentState.totalDailyProduction_Wh) * 100;
-    var percentageSelfConsumption = 100 - percentageGridFeedIn;
+    const percentageGridFeedIn = (currentState.totalDailyGridFeedIn_Wh / currentState.totalDailyProduction_Wh) * 100;
+    const percentageSelfConsumption = 100 - percentageGridFeedIn;
     this.setCapabilityValue('self_consumption_capability', +percentageSelfConsumption);
   }
 
