@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
 import { SonnenDriver } from '../../lib/SonnenDriver';
