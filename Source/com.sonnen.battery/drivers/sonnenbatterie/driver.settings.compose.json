@@ -2,6 +2,72 @@
   {
     "type": "group",
     "label": {
+      "en": "Battery Settings",
+      "de": "Batterie Einstellungen"
+    },
+    "children": [
+      {
+        "id": "operating-mode",
+        "type": "dropdown",
+        "value": "2",
+        "label": {
+          "en": "Operating Mode",
+          "de": "Betriebsmodus"
+        },
+        "values": [
+          {
+            "id": "1",
+            "label": {
+              "en": "Manual",
+              "de": "Manuell"
+            }
+          },
+          {
+            "id": "2",
+            "label": {
+              "en": "Self consumption",
+              "de": "Eigenverbrauch"
+            }
+          },
+          {
+            "id": "6",
+            "label": {
+              "en": "Module extension (30%)",
+              "de": "Modulerweiterung (30%)"
+            }
+          },
+          {
+            "id": "10",
+            "label": {
+              "en": "Time-of-Use",
+              "de": "Time-of-Use"
+            }
+          }
+        ]
+      },
+      {
+        "id": "time-of-use-schedule",
+        "type": "textarea",
+        "label": {
+          "en": "Time-of-Use Schedule",
+          "de": "Time-of-Use Zeitplan"
+        },
+        "value": ""
+      },
+      {
+        "id": "prognosis-charging",
+        "type": "checkbox",
+        "label": {
+          "en": "Prognosis Charging",
+          "de": "Prognosebasiertes Laden"
+        },
+        "value": false
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
       "en": "Connection",
       "de": "Verbindung"
     },

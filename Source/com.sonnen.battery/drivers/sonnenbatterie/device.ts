@@ -3,7 +3,7 @@ import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
-import { TimeOfUseSchedule } from '../../lib/TimeOfUse';
+import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
@@ -29,10 +29,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
     this.state.updateState({ lastUpdate: null });
     this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
 
-    // Pull battery status
+    // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
       this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
     }, batteryPullInterval * 1000);
+
+    // Do an initial load
+    this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
   }
 
   async onDeleted() {
@@ -279,13 +282,17 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const scheduleRaw = configurations['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
       this.log('Parsed Time-of-Use schedule:', tou.toString());
-      
+      this.setSettings({ 'time-of-use-schedule': tou.toJSONString() });
+
       const operatingMode = configurations['EM_OperatingMode'];
-      const operatingModeText = this.resolveOperatingMode(operatingMode); 
+      const operatingModeText = this.resolveOperatingMode(operatingMode);
       this.setCapabilityValue('operating_mode_capability', operatingModeText);
+      this.setSettings({ 'operating-mode': '' + operatingMode });
 
       const prognosisCharging = configurations['EM_Prognosis_Charging'];
-      this.setCapabilityValue('prognosis_charging_capability', prognosisCharging === "1");
+      const prognosisChargingMode = prognosisCharging === "1";
+      this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
+      this.setSettings({ 'prognosis-charging': prognosisChargingMode });
  
       /*
       if (Math.random() < 0.5) {
