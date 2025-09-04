@@ -280,7 +280,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const tou = new TimeOfUseSchedule(scheduleRaw);
       this.log('Parsed Time-of-Use schedule:', tou.toString());
       
-      //// + ((operatingMode === "10") ? this.formatTimeRanges(schedule) : '');
       const operatingMode = configurations['EM_OperatingMode'];
       const operatingModeText = this.resolveOperatingMode(operatingMode); 
       this.setCapabilityValue('operating_mode_capability', operatingModeText);
@@ -358,17 +357,5 @@ module.exports = class BatteryDevice extends SonnenDevice {
     const name = this.getName() || 'sonnenBatterie';
     return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
-
-
-  /*
-  private formatTimeRanges(timeRanges: Array<{start: string, stop: string, threshold_p_max: number}>): string {
-    if (!timeRanges) {
-      return '';
-    }
-    return timeRanges.map(range => 
-      `${range.start}-${range.stop} (${range.threshold_p_max}W)`
-    ).join(', ');
-  }
-    */
 
 }
