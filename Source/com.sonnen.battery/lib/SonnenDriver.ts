@@ -1,5 +1,7 @@
 import Homey from 'homey';
-import axios from 'axios';
+
+import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
+import { SonnenBatteryDevices } from '../domain/SonnenBatteryDevices';
 
 export abstract class SonnenDriver extends Homey.Driver {
 
@@ -20,22 +22,19 @@ export abstract class SonnenDriver extends Homey.Driver {
     */
   override async onPairListDevices(): Promise<Array<{ name: string; data: { id: string }; store: { lanip: string } }>> {
     try {
-      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
+      const devices: SonnenBatteryDevices = await SonnenBatterieClient.discoverDevices();
 
-      if (response.data) {
-        this.log('results found', response.data);
-        const results = [];
-        for (const e of response.data) {
-          results.push({
-            name: e.info + " " + this.deviceName,
-            data: {
-              id: e.device + "_" + this.deviceId,
-            },
-            store: {
-              lanip: e.lanip,
-            },
-          });
-        }
+      if (devices) {
+        this.log('Devices found: ', devices);
+        const results = devices.map(device => ({
+          name: device.info + " " + this.deviceName,
+          data: {
+            id: device.device + "_" + this.deviceId,
+          },
+          store: {
+            lanip: device.lanip,
+          },
+        }));
 
         return results;
       }
