@@ -3,6 +3,7 @@ import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
+import { TimeOfUseSchedule } from '../../lib/TimeOfUse';
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
@@ -276,8 +277,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
       
       const scheduleRaw = configurations['EM_ToU_Schedule'];
-      const schedule = this.safeJsonParse(scheduleRaw.replaceAll('\\', ', '));;
-      this.log('Parsed schedule:', JSON.stringify(schedule, null, 2));
+      const tou = new TimeOfUseSchedule(scheduleRaw);
+      this.log('Parsed Time-of-Use schedule:', tou.toString());
       
       //// + ((operatingMode === "10") ? this.formatTimeRanges(schedule) : '');
       const operatingMode = configurations['EM_OperatingMode'];
@@ -358,14 +359,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
     return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
 
-  private safeJsonParse(str: string, defaultValue = null) {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      this.log('Failed to parse JSON: ' + str, e);
-      return defaultValue;
-    }
-  }
 
   /*
   private formatTimeRanges(timeRanges: Array<{start: string, stop: string, threshold_p_max: number}>): string {
