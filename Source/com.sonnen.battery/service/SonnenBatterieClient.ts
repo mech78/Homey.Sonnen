@@ -3,22 +3,31 @@ import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 import { SonnenBatteryDevices } from "../domain/SonnenBatteryDevices";
 
 export class SonnenBatterieClient {
-  constructor(private authToken: string) {}
+
+  optionsPut: { method: string; headers: { [key: string]: string } };
+  optionsGet: { method: string; headers: { [key: string]: string } };
+
+  constructor(private authToken: string, private ipAddress: string) {
+      const headers = {
+        "Auth-Token": `${this.authToken}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      }
+      this.optionsPut = {
+        method: "put",
+        headers: headers
+      };
+      this.optionsGet = {
+        method: "get",
+        headers: headers
+      };
+  }
 
   public async setSchedule(
-    batteryBaseUrl: string,
     timeStart: string,
     timeEnd: string,
     maxPower: number
   ): Promise<SonnenCommandResult> {
-    const options = {
-      method: "put",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
 
     const body = {
       EM_ToU_Schedule: `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`,
@@ -26,7 +35,7 @@ export class SonnenBatterieClient {
 
     // Act
     const response = await axios
-      .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
+      .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
       .then();
 
     if (response === null) {
@@ -47,16 +56,7 @@ export class SonnenBatterieClient {
   }
 
   public async clearSchedule(
-    batteryBaseUrl: string
   ): Promise<SonnenCommandResult> {
-    const options = {
-      method: "put",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
 
     const body = {
       EM_ToU_Schedule: `[]`,
@@ -64,7 +64,7 @@ export class SonnenBatterieClient {
 
     // Act
     const response = await axios
-      .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
+      .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
       .then();
 
     if (response === null) {
@@ -79,56 +79,27 @@ export class SonnenBatterieClient {
     return new SonnenCommandResult(false, "-");
   }
 
-  public static getBaseUrl(ipAddress: string): string {
-    return `http://${ipAddress}:80`;
-  }
-
-  public async getLatestData(batteryBaseUrl: string): Promise<any> {
-    const options = {
-      method: "get",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
+  public async getLatestData(): Promise<any> {
 
     const response = await axios
-      .get(`${batteryBaseUrl}/api/v2/latestdata`, options)
+      .get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet)
       .then();
 
     return response.data;
   }
 
-  public async getStatus(batteryBaseUrl: string): Promise<any> {
-    const options = {
-      method: "get",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
+  public async getStatus(): Promise<any> {
+   
     const response = await axios
-      .get(`${batteryBaseUrl}/api/v2/status`, options)
+      .get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet)
       .then();
 
     return response.data;
   }
 
-  public async getConfigurations(batteryBaseUrl: string): Promise<any> {
-    const options = {
-      method: "get",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
+  public async getConfigurations(): Promise<any> {
     const response = await axios
-      .get(`${batteryBaseUrl}/api/v2/configurations`, options)
+      .get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet)
       .then();
 
     return response.data;
@@ -140,5 +111,9 @@ export class SonnenBatterieClient {
       .then();
 
     return response.data;
+  }
+
+  private getBaseUrl(): string {
+    return `http://${this.ipAddress}:80`;
   }
 }

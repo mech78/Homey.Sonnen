@@ -1,18 +1,12 @@
 import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
 import { SonnenDriver } from '../../lib/SonnenDriver';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
-
-  private sonnenBatterieClient!: SonnenBatterieClient;
 
   async onInit(): Promise<void> {
     this.deviceName = this.homey.__('device.battery');
     this.deviceId = "sonnenBattery";
     super.onInit();
-
-    const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
-    this.sonnenBatterieClient = new SonnenBatterieClient(batteryAuthToken);
 
     // Device-specific actions:
 
@@ -47,7 +41,6 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleSetTimeOfUse(args: { start: string, end: string, maxPower: number }): Promise<void> {
-    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart = args.start;
     const timeEnd = args.end;
     const maxPower = args.maxPower;
@@ -55,7 +48,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.log("handleSetTimeOfUse", args.start, args.end, args.maxPower);
     this.log("handleSetTimeOfUse", typeof args.start, typeof args.end, typeof args.maxPower);
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, maxPower);
+    const commandResult: SonnenCommandResult = await this.createSonnenBatterieClient().setSchedule(timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
@@ -66,7 +59,6 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { start: string, hours: number, maxPower: number }): Promise<void> {
-    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart = args.start;
     const hours = args.hours;
     const maxPower = args.maxPower;
@@ -82,7 +74,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, maxPower);
+    const commandResult: SonnenCommandResult = await this.createSonnenBatterieClient().setSchedule(timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
@@ -93,10 +85,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleClearTimeOfUse(): Promise<void> {
-    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set empty schedule
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.clearSchedule(baseUrl);
+    const commandResult: SonnenCommandResult = await this.createSonnenBatterieClient().clearSchedule();
     this.log("Result", commandResult);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
@@ -107,11 +98,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handlePauseTimeOfUse(args: { start: string; end: string }): Promise<void> {
-    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     const timeStart = args.start;
     const timeEnd = args.end;
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, timeStart, timeEnd, 0);
+    const commandResult: SonnenCommandResult = await this.createSonnenBatterieClient().setSchedule(timeStart, timeEnd, 0);
     this.log("Result", commandResult, args.start, args.end);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
@@ -122,10 +112,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleStartTimeOfUse(args: { power: number }): Promise<void> {
-    const baseUrl = SonnenBatterieClient.getBaseUrl(this.getDevices()[0].getStore().lanip);
     // Set full schedule
 
-    const commandResult: SonnenCommandResult = await this.sonnenBatterieClient.setSchedule(baseUrl, "00:00", "23:59", args.power);
+    const commandResult: SonnenCommandResult = await this.createSonnenBatterieClient().setSchedule("00:00", "23:59", args.power);
     this.log("Result", commandResult, args.power);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });

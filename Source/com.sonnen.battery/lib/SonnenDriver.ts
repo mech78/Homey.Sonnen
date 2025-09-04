@@ -44,4 +44,9 @@ export abstract class SonnenDriver extends Homey.Driver {
 
     return [];
   }
+
+  protected createSonnenBatterieClient(): SonnenBatterieClient {
+    const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
+    return new SonnenBatterieClient(batteryAuthToken, this.getDevices()[0].getStore().lanip);
+  }
 };

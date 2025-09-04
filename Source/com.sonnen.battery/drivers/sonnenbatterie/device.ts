@@ -15,7 +15,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
-    const batteryAuthToken = this.homey.settings.get('BatteryAuthToken') as string;
     const batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
     let storedState: SonnenState;
@@ -32,11 +31,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
+      this.state.updateState(await this.loadLatestState(this.state, this.getStore().autodiscovery ?? true)); //FIXME: autodiscovery could not be changed at runtime...
     }, batteryPullInterval * 1000);
 
     // Do an initial load
-    this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
+    this.state.updateState(await this.loadLatestState(this.state, this.getStore().autodiscovery ?? true));
   }
 
   async onDeleted() {
@@ -70,13 +69,16 @@ module.exports = class BatteryDevice extends SonnenDevice {
     if (_.contains(changedKeys, "device-ip")) {
       const newDeviceIp = newSettings["device-ip"] as string;
       this.log("Settings", "IP", newDeviceIp);
-      this.setStoreValue('lanip', newDeviceIp);
+      this.setStoreValue('lanip', newDeviceIp); // FIXME: should set autodiscovery to false?
     };
 
     if (_.contains(changedKeys, "device-discovery")) {
       const blnUseAutoDisovery = newSettings["device-discovery"] as boolean;
       this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
       this.setStoreValue('autodiscovery', blnUseAutoDisovery);
+      if (blnUseAutoDisovery) {
+        this.setSettings({ "device-ip": "192.168.1.xxx" }); // FIXME: should auto-detect current IP
+      }
     };
   }
 
@@ -157,21 +159,15 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   }
 
-  private async loadLatestState(
-    authKey: string,
-    lastState: SonnenState,
-    retryOnError = true
-  ): Promise<SonnenState> {
+  private async loadLatestState(lastState: SonnenState, retryOnError = true): Promise<SonnenState> {
     try {
-      // Act
-      const baseUrl = SonnenBatterieClient.getBaseUrl(this.getStore().lanip); // This may change/update at runtime.
-      const client = new SonnenBatterieClient(authKey);
+      const client = this.createSonnenBatterieClient();
 
-      this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
+      this.log("Fetching data...");
 
-      const latestDataJson = await client.getLatestData(baseUrl);
-      const statusJson = await client.getStatus(baseUrl);
-      const configurations = await client.getConfigurations(baseUrl);
+      const latestDataJson = await client.getLatestData();
+      const statusJson = await client.getStatus();
+      const configurations = await client.getConfigurations();
 
       // update device's batteries to actual number of internal batteries
       const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
@@ -299,11 +295,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
                   await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${device.lanip}` });
 
                   // Try and reload data
-                  return await this.loadLatestState(
-                    authKey,
-                    lastState,
-                    false
-                  );
+                  return await this.loadLatestState(lastState, false);
                 }
               }
             }

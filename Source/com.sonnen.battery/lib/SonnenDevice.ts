@@ -1,4 +1,5 @@
 import Homey from 'homey';
+import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
 
 export abstract class SonnenDevice extends Homey.Device {
 
@@ -67,6 +68,11 @@ export abstract class SonnenDevice extends Homey.Device {
    */
   protected isEnergyFullySupported(): boolean {
     return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
+  }
+
+  protected createSonnenBatterieClient(): SonnenBatterieClient {
+    const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
+    return new SonnenBatterieClient(batteryAuthToken, this.getStore().lanip);
   }
 
 };
