@@ -81,4 +81,63 @@ export class SonnenBatterieClient {
   public static getBaseUrl(ipAddress: string): string {
     return `http://${ipAddress}:80`;
   }
+
+  public async getLatestData(batteryBaseUrl: string): Promise<any> {
+    const options = {
+      method: "get",
+      headers: {
+        "Auth-Token": `${this.authToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    const response = await axios
+      .get(`${batteryBaseUrl}/api/v2/latestdata`, options)
+      .then();
+
+    return response.data;
+  }
+
+  public async getStatus(batteryBaseUrl: string): Promise<any> {
+    const options = {
+      method: "get",
+      headers: {
+        "Auth-Token": `${this.authToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    const response = await axios
+      .get(`${batteryBaseUrl}/api/v2/status`, options)
+      .then();
+
+    return response.data;
+  }
+
+  public async getConfigurations(batteryBaseUrl: string): Promise<any> {
+    const options = {
+      method: "get",
+      headers: {
+        "Auth-Token": `${this.authToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+    const response = await axios
+      .get(`${batteryBaseUrl}/api/v2/configurations`, options)
+      .then();
+
+    return response.data;
+  }
+
+  public static async discoverDevices(): Promise<any> {
+    const response = await axios
+      .get('https://find-my.sonnen-batterie.com/find')
+      .then();
+
+    return response.data;
+  }
 }

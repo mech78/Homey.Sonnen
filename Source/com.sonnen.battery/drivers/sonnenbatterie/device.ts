@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
@@ -161,37 +161,16 @@ module.exports = class BatteryDevice extends SonnenDevice {
     lastState: SonnenState,
     retryOnError = true
   ): Promise<SonnenState> {
-    // Arrange
-    const options = {
-      method: 'get',
-      headers: {
-        'Auth-Token': `${authKey}`,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    };
-
     try {
       // Act
       const baseUrl = SonnenBatterieClient.getBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+      const client = new SonnenBatterieClient(authKey);
 
       this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
 
-      const response = await axios
-        .get(`${baseUrl}/api/v2/latestdata`, options)
-        .then();
-
-      const statusResponse = await axios
-        .get(`${baseUrl}/api/v2/status`, options)
-        .then();
-
-      const configResponse = await axios
-        .get(`${baseUrl}/api/v2/configurations`, options)
-        .then();  
-
-      const latestDataJson = response.data;
-      const statusJson = statusResponse.data;
-      const configurations = configResponse.data;
+      const latestDataJson = await client.getLatestData(baseUrl);
+      const statusJson = await client.getStatus(baseUrl);
+      const configurations = await client.getConfigurations(baseUrl);
 
       // update device's batteries to actual number of internal batteries
       const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
@@ -305,32 +284,32 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.error('Error occured fetching data. Retry: ' + retryOnError, e)
       if (retryOnError) {
         // Maybe IP has changed, lets try and fix this...
-        await axios
-          .get('https://find-my.sonnen-batterie.com/find')
-          .then(async (res) => {
-            if (res.data) {
-              for (const e of res.data) {
-                if (this.resolveDeviceNameWithFallback() === e.info) {
-                  this.log(`Found device ${e.device} with IP ${e.lanip}`);
-                  const currentIP = this.getStoreValue('lanip');
-                  if (currentIP !== e.lanip) {
-                    this.log(`Device: ${e.device} changed IP from ${currentIP} to ${e.lanip}. Retrying...`);
-                    this.setStoreValue('lanip', e.lanip);
+        try {
+          const devices = await SonnenBatterieClient.discoverDevices();
+          if (devices) {
+            for (const device of devices) {
+              if (this.resolveDeviceNameWithFallback() === device.info) {
+                this.log(`Found device ${device.device} with IP ${device.lanip}`);
+                const currentIP = this.getStoreValue('lanip');
+                if (currentIP !== device.lanip) {
+                  this.log(`Device: ${device.device} changed IP from ${currentIP} to ${device.lanip}. Retrying...`);
+                  this.setStoreValue('lanip', device.lanip);
 
-                    await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${e.lanip}` });
+                  await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${device.lanip}` });
 
-                    // Try and reload data
-                    return await this.loadLatestState(
-                      authKey,
-                      lastState,
-                      false
-                    );
-                  }
+                  // Try and reload data
+                  return await this.loadLatestState(
+                    authKey,
+                    lastState,
+                    false
+                  );
                 }
               }
             }
-          })
-          .catch((err) => this.log('Failed to find sonnen batteries', err));
+          }
+        } catch (err) {
+          this.log('Failed to find sonnen batteries', err);
+        }
       }
       return lastState; // always return some valid state 
     }
