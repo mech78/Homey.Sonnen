@@ -106,6 +106,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       'from_battery_total_capability',
       'capacity_remaining_capability',
       'operating_mode_capability',
+      'prognosis_charging_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -273,9 +274,19 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
+      
+      const scheduleRaw = configurations['EM_ToU_Schedule'];
+      const schedule = this.safeJsonParse(scheduleRaw.replaceAll('\\', ', '));;
+      this.log('Parsed schedule:', JSON.stringify(schedule, null, 2));
+      
+      //// + ((operatingMode === "10") ? this.formatTimeRanges(schedule) : '');
+      const operatingMode = configurations['EM_OperatingMode'];
+      const operatingModeText = this.resolveOperatingMode(operatingMode); 
+      this.setCapabilityValue('operating_mode_capability', operatingModeText);
 
-      this.setCapabilityValue('operating_mode_capability', configurations['EM_OperatingMode']);
-
+      const prognosisCharging = configurations['EM_Prognosis_Charging'];
+      this.setCapabilityValue('prognosis_charging_capability', prognosisCharging === "1");
+ 
       /*
       if (Math.random() < 0.5) {
         throw new Error("random");
@@ -318,6 +329,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
     }
   }
 
+  private resolveOperatingMode(mode: string): string {
+    return this.homey.__('operatingMode.' + mode) ?? mode;
+  }
+
   private resolveCircleColor(eclipseLed: Record<string, boolean>): string {
     let key = 'Unknown';
     if (eclipseLed) {
@@ -342,5 +357,25 @@ module.exports = class BatteryDevice extends SonnenDevice {
     const name = this.getName() || 'sonnenBatterie';
     return String(name).charAt(0).toLowerCase() + String(name).slice(1);
   }
+
+  private safeJsonParse(str: string, defaultValue = null) {
+    try {
+      return JSON.parse(str);
+    } catch (e) {
+      this.log('Failed to parse JSON: ' + str, e);
+      return defaultValue;
+    }
+  }
+
+  /*
+  private formatTimeRanges(timeRanges: Array<{start: string, stop: string, threshold_p_max: number}>): string {
+    if (!timeRanges) {
+      return '';
+    }
+    return timeRanges.map(range => 
+      `${range.start}-${range.stop} (${range.threshold_p_max}W)`
+    ).join(', ');
+  }
+    */
 
 }

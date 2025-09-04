@@ -1,5 +1,5 @@
 {
-  "type": "enum",
+  "type": "string",
   "title": {
     "en": "Operating Mode",
     "da": "Driftstilstand",
@@ -7,44 +7,6 @@
     "nl": "Bedrijfsmodus"
   },
   "uiComponent": "sensor",
-  "values": [
-    {
-      "id": "1",
-      "title": {
-        "en": "Manual",
-        "da": "Manuel",
-        "de": "Manuell",
-        "nl": "Handmatig"
-      }
-    },
-    {
-      "id": "2",
-      "title": {
-        "en": "Self consumption",
-        "da": "Eget forbrug",
-        "de": "Eigenverbrauch",
-        "nl": "Eigen verbruik"
-      }
-    },
-    {
-      "id": "6",
-      "title": {
-        "en": "Module extension (30%)",
-        "da": "Moduludvidelse (30%)",
-        "de": "Modulerweiterung (30%)",
-        "nl": "Modulextensie (30%)"
-      }
-    },
-    {
-      "id": "10",
-      "title": {
-        "en": "Time-of-Use",
-        "da": "Tidsafhængigt forbrug",
-        "de": "Time-of-Use",
-        "nl": "Tijdsgebonden verbruik"
-      }
-    }
-  ],
   "getable": true,
   "setable": true,
   "icon": "/assets/images/car-battery-sharp-light.svg"

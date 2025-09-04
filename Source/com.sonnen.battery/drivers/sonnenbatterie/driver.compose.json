@@ -20,6 +20,7 @@
     "online_capability",
     "number_battery_capability",
     "operating_mode_capability",
+    "prognosis_charging_capability",
     "eclipse_capability",
     "state_inverter_capability",
     "state_bms_capability",    

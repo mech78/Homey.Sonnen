@@ -1,0 +1,13 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Prognosis Charging",
+    "da": "Prognosebaseret opladning",
+    "de": "Prognosebasiertes Laden",
+    "nl": "Prognose laden"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "icon": "/assets/images/prognosis-charging.svg"
+}
