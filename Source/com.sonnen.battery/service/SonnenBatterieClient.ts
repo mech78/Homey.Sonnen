@@ -32,21 +32,21 @@ export class SonnenBatterieClient {
     const body = {
       EM_ToU_Schedule: `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`,
     };
-
+    
     // Act
     const response = await axios
       .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
       .then();
 
-    if (response === null) {
+    if (response == null) {
       return new SonnenCommandResult(true, "No valid response received.");
     }
 
     const responseData = response.data;
-    if (responseData.error !== null) {
+    if (responseData.error != null) {
       return new SonnenCommandResult(
         true,
-        responseData.details !== null
+        responseData.details != null
           ? responseData.details.EM_ToU_Schedule ?? responseData.error
           : responseData.error
       );
@@ -67,12 +67,12 @@ export class SonnenBatterieClient {
       .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
       .then();
 
-    if (response === null) {
+    if (response == null) {
       return new SonnenCommandResult(true, "No valid response received.");
     }
 
     const responseData = response.data;
-    if (responseData.error !== null) {
+    if (responseData.error != null) {
       return new SonnenCommandResult(true, responseData.error);
     }
 

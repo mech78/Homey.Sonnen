@@ -45,7 +45,7 @@ module.exports = [
       'no-duplicate-imports': 'error',
       'no-console': 'warn',
       'no-alert': 'error',
-      'eqeqeq': 'error',
+      'eqeqeq': [ 'error', 'smart' ],
       'curly': 'error',
     },
   },
