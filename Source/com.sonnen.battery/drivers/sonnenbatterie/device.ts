@@ -4,7 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
-import { SonnenBatteryDevices } from '../../domain/SonnenBatteryDevices';
+import { SonnenBatteryDevices, SonnenBatteryDevice } from '../../domain/SonnenBatteryDevices';
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
@@ -289,7 +289,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
           const devices: SonnenBatteryDevices = await SonnenBatterieClient.discoverDevices();
           if (devices) {
             for (const device of devices) {
-              if (this.resolveDeviceNameWithFallback() === device.info) {
+              if (this.isSameDevice(device)) {
                 this.log(`Found device ${device.device} with IP ${device.lanip}`);
                 const currentIP = this.getStoreValue('lanip');
                 if (currentIP !== device.lanip) {
@@ -340,9 +340,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
     return currentUpdate.getDay() !== lastUpdate.getDay();
   }
 
-  private resolveDeviceNameWithFallback(): string {
-    const name = this.getName() || 'sonnenBatterie';
-    return String(name).charAt(0).toLowerCase() + String(name).slice(1);
+  /**
+   * onPairListDevices() used the serial number of the sonnenBatterie as prefix part for the unique device ID
+   */
+  private isSameDevice(device: SonnenBatteryDevice): boolean {
+    const serialNumber = "" + device.device;
+    const deviceId = this.getData().id as string;
+    return deviceId.startsWith(serialNumber);
   }
 
 }
