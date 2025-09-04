@@ -4,6 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
+import { SonnenBatteryDevices } from '../../domain/SonnenBatteryDevices';
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
@@ -285,7 +286,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (retryOnError) {
         // Maybe IP has changed, lets try and fix this...
         try {
-          const devices = await SonnenBatterieClient.discoverDevices();
+          const devices: SonnenBatteryDevices = await SonnenBatterieClient.discoverDevices();
           if (devices) {
             for (const device of devices) {
               if (this.resolveDeviceNameWithFallback() === device.info) {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SonnenCommandResult } from "../domain/SonnenCommandResult";
+import { SonnenBatteryDevices } from "../domain/SonnenBatteryDevices";
 
 export class SonnenBatterieClient {
   constructor(private authToken: string) {}
@@ -133,7 +134,7 @@ export class SonnenBatterieClient {
     return response.data;
   }
 
-  public static async discoverDevices(): Promise<any> {
+  public static async discoverDevices(): Promise<SonnenBatteryDevices> {
     const response = await axios
       .get('https://find-my.sonnen-batterie.com/find')
       .then();
