@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 import { SonnenBatteryDevices } from "../domain/SonnenBatteryDevices";
+import { TimeOfUseSchedule } from "../domain/TimeOfUse";
 
 export class SonnenBatterieClient {
 
@@ -23,17 +24,12 @@ export class SonnenBatterieClient {
       };
   }
 
-  public async setSchedule(
-    timeStart: string,
-    timeEnd: string,
-    maxPower: number
-  ): Promise<SonnenCommandResult> {
-
+  public async setSchedules(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
     const body = {
-      EM_ToU_Schedule: `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`,
+      EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
-    
-    // Act
+
+     // Act
     const response = await axios
       .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
       .then();
@@ -55,8 +51,12 @@ export class SonnenBatterieClient {
     return new SonnenCommandResult(false, "-");
   }
 
-  public async clearSchedule(
-  ): Promise<SonnenCommandResult> {
+  public async setSchedule(timeStart: string, timeEnd: string, maxPower: number): Promise<SonnenCommandResult> {
+    // FIXME: add error handling or change to TimeOfUseEvent
+    return this.setSchedules(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
+  }
+
+  public async clearSchedule(): Promise<SonnenCommandResult> {
 
     const body = {
       EM_ToU_Schedule: `[]`,

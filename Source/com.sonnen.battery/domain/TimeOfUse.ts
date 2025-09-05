@@ -28,9 +28,32 @@ export class TimeOfUseSchedule {
    * Creates a new TimeOfUseSchedule instance
    * @param jsonString The JSON string representation of the schedule
    */
-  constructor(jsonString: string) {
-    // console.log('Initializing TimeOfUseSchedule with JSON:', jsonString);
-    this.schedule = this.parseSchedule(jsonString);
+  constructor(jsonString: string);
+  /**
+   * Creates a new TimeOfUseSchedule instance from a single TimeOfUseEvent
+   * @param event The TimeOfUseEvent to create the schedule from
+   */
+  constructor(event: TimeOfUseEvent);
+  /**
+   * Creates a new TimeOfUseSchedule instance from multiple TimeOfUseEvents
+   * @param events Array of TimeOfUseEvents to create the schedule from
+   */
+  constructor(events: TimeOfUseEvent[]);
+  /**
+   * Creates a new TimeOfUseSchedule instance
+   * @param source The source to create the schedule from (JSON string, single event, or array of events)
+   */
+  constructor(source: string | TimeOfUseEvent | TimeOfUseEvent[]) {
+    if (typeof source === 'string') {
+      // console.log('Initializing TimeOfUseSchedule with JSON:', source);
+      this.schedule = this.parseSchedule(source);
+    } else if (Array.isArray(source)) {
+      // console.log('Initializing TimeOfUseSchedule with array of events:', source);
+      this.schedule = this.validateAndCopyEvents(source);
+    } else {
+      // console.log('Initializing TimeOfUseSchedule with single event:', source);
+      this.schedule = this.validateAndCopyEvents([source]);
+    }
   }
   
   /**
@@ -84,6 +107,31 @@ export class TimeOfUseSchedule {
   private isValidTimeFormat(time: string): boolean {
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     return timeRegex.test(time);
+  }
+  
+  /**
+   * Validates and copies an array of TimeOfUseEvent objects
+   * @param events Array of TimeOfUseEvent objects to validate and copy
+   * @returns Validated and copied array of TimeOfUseEvent objects
+   */
+  private validateAndCopyEvents(events: TimeOfUseEvent[]): TimeOfUseEvent[] {
+    return events.map((event, index) => {
+      // Check required properties
+      if (typeof event.start !== 'string' || typeof event.stop !== 'string' || typeof event.threshold_p_max !== 'number') {
+        throw new Error(`Invalid schedule item at index ${index}: missing required properties`);
+      }
+      
+      // Validate time format (HH:MM)
+      if (!this.isValidTimeFormat(event.start) || !this.isValidTimeFormat(event.stop)) {
+        throw new Error(`Invalid schedule item at index ${index}: invalid time format`);
+      }
+      
+      return {
+        start: event.start,
+        stop: event.stop,
+        threshold_p_max: event.threshold_p_max
+      };
+    });
   }
   
   /**
