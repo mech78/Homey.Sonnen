@@ -44,42 +44,35 @@ export class TimeOfUseSchedule {
    * @param source The source to create the schedule from (JSON string, single event, or array of events)
    */
   constructor(source: string | TimeOfUseEvent | TimeOfUseEvent[]) {
+    let events: TimeOfUseEvent[];
+    
     if (typeof source === 'string') {
-      // console.log('Initializing TimeOfUseSchedule with JSON:', source);
-      this.schedule = this.parseSchedule(source);
+      // Parse JSON string to get array of events
+      try {
+        const parsed = JSON.parse(source);
+        
+        // Validate that it's an array
+        if (!Array.isArray(parsed)) {
+          throw new Error('Invalid schedule format: expected an array');
+        }
+        
+        events = parsed;
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          throw new Error(`Failed to parse schedule JSON: ${error.message}`);
+        }
+        throw error;
+      }
     } else if (Array.isArray(source)) {
-      // console.log('Initializing TimeOfUseSchedule with array of events:', source);
-      this.schedule = this.validateAndCopyEvents(source);
+      events = source;
     } else {
-      // console.log('Initializing TimeOfUseSchedule with single event:', source);
-      this.schedule = this.validateAndCopyEvents([source]);
+      events = [source];
     }
+    
+    // Validate and copy all events
+    this.schedule = this.validateAndCopyEvents(events);
   }
   
-  /**
-   * Parses the JSON string into an array of TimeOfUseItem objects
-   * @param jsonString The JSON string representation of the schedule
-   * @returns Array of TimeOfUseItem objects
-   */
-  private parseSchedule(jsonString: string): TimeOfUseEvent[] {
-    try {
-      // Parse the JSON string
-      const parsed = JSON.parse(jsonString);
-      
-      // Validate that it's an array
-      if (!Array.isArray(parsed)) {
-        throw new Error('Invalid schedule format: expected an array');
-      }
-      
-      // Validate and copy each item in the array
-      return this.validateAndCopyEvents(parsed);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(`Failed to parse schedule JSON: ${error.message}`);
-      }
-      throw error;
-    }
-  }
   
   /**
    * Validates if a string is in HH:MM format
