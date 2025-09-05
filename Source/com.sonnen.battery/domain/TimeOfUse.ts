@@ -71,26 +71,8 @@ export class TimeOfUseSchedule {
         throw new Error('Invalid schedule format: expected an array');
       }
       
-      // Validate each item in the array
-      const schedule: TimeOfUseEvent[] = parsed.map((item, index: number) => {
-        // Check required properties
-        if (typeof item.start !== 'string' || typeof item.stop !== 'string' || typeof item.threshold_p_max !== 'number') {
-          throw new Error(`Invalid schedule item at index ${index}: missing required properties`);
-        }
-        
-        // Validate time format (HH:MM)
-        if (!this.isValidTimeFormat(item.start) || !this.isValidTimeFormat(item.stop)) {
-          throw new Error(`Invalid schedule item at index ${index}: invalid time format`);
-        }
-        
-        return {
-          start: item.start,
-          stop: item.stop,
-          threshold_p_max: item.threshold_p_max
-        };
-      });
-      
-      return schedule;
+      // Validate and copy each item in the array
+      return this.validateAndCopyEvents(parsed);
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error(`Failed to parse schedule JSON: ${error.message}`);
