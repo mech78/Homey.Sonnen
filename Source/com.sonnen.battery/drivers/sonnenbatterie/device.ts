@@ -4,7 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
-import { SonnenBatteryDevices, SonnenBatteryDevice } from '../../domain/SonnenBatteryDevices';
+
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
@@ -279,33 +279,29 @@ module.exports = class BatteryDevice extends SonnenDevice {
       return currentState;
     } catch (e) {
       this.error('Error occured fetching data. Retry: ' + retryOnError, e)
-      if (retryOnError) {
-        // Maybe IP has changed, lets try and fix this...
-        try {
-          const devices: SonnenBatteryDevices = await SonnenBatterieClient.discoverDevices();
-          if (devices) {
-            for (const device of devices) {
-              if (this.isSameDevice(device)) {
-                this.log(`Found device ${device.device} with IP ${device.lanip}`);
-                const currentIP = this.getStoreValue('lanip');
-                if (currentIP !== device.lanip) {
-                  this.log(`Device: ${device.device} changed IP from ${currentIP} to ${device.lanip}. Retrying...`);
-                  this.setStoreValue('lanip', device.lanip);
-
-                  await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${device.lanip}` });
-
-                  // Try and reload data
-                  return await this.loadLatestState(lastState, false);
-                }
-              }
-            }
-          }
-        } catch (err) {
-          this.log('Failed to find sonnen batteries', err);
-        }
-      }
-      return lastState; // always return some valid state 
+      return this.mayRetryWithAutoDiscovery(lastState, retryOnError); 
     }
+  }
+
+  private async mayRetryWithAutoDiscovery(lastState: SonnenState, retryOnError: boolean): Promise<SonnenState> {
+    if (retryOnError) {
+      try {
+        const homeyDeviceId = this.getData().id; // as set by onPairListDevices() in driver.ts
+        const currentIP = await SonnenBatterieClient.findBatteryIP(homeyDeviceId); // Maybe IP has changed, lets try and fix this...
+        if (currentIP) {
+          this.log(`Found device ${homeyDeviceId} with IP ${currentIP}`);
+          const storedIP = this.getStoreValue('lanip');
+          if (storedIP !== currentIP) {
+            this.setStoreValue('lanip', currentIP);
+            await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${currentIP}` });
+            return await this.loadLatestState(lastState, false); // Try and reload data
+          }
+        }
+      } catch (err) {
+        this.log('Failed to find sonnen batteries', err);
+      }
+    }
+    return lastState; // always return some valid state even on error
   }
 
   private resolveOperatingMode(mode: string): string {
@@ -330,15 +326,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
   private isNewDay(currentUpdate: Date, lastUpdate: Date) {
     return currentUpdate.getDay() !== lastUpdate.getDay();
-  }
-
-  /**
-   * onPairListDevices() used the serial number of the sonnenBatterie as prefix part for the unique device ID
-   */
-  private isSameDevice(device: SonnenBatteryDevice): boolean {
-    const serialNumber = "" + device.device;
-    const deviceId = this.getData().id as string;
-    return deviceId.startsWith(serialNumber);
   }
 
 }

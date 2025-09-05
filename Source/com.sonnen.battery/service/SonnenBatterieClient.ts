@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SonnenCommandResult } from "../domain/SonnenCommandResult";
-import { SonnenBatteryDevices } from "../domain/SonnenBatteryDevices";
+import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
 import { TimeOfUseSchedule } from "../domain/TimeOfUse";
 
 export class SonnenBatterieClient {
@@ -86,12 +86,32 @@ export class SonnenBatterieClient {
     return response.data;
   }
 
-  public static async discoverDevices(): Promise<SonnenBatteryDevices> {
+  public static async discoverBatteries(): Promise<SonnenBatteries> {
     const response = await axios
       .get('https://find-my.sonnen-batterie.com/find')
       .then();
 
     return response.data;
+  }
+
+  public static async findBatteryIP(homeyDeviceId: string): Promise<string | null> {
+    const batteries: SonnenBatteries = await SonnenBatterieClient.discoverBatteries();
+    if (batteries) {
+      for (const battery of batteries) {
+        if (SonnenBatterieClient.isSameDevice(battery.device, homeyDeviceId)) {
+          return battery.lanip;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * onPairListDevices() used the serial number of the sonnenBatterie as prefix part for the unique device ID
+   */
+  public static isSameDevice(device: number, homeyDeviceId: string): boolean {
+    const batterySerialNumber = "" + device;
+    return homeyDeviceId.startsWith(batterySerialNumber);
   }
 
   private getBaseUrl(): string {

@@ -1,7 +1,7 @@
 import Homey from 'homey';
 
 import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
-import { SonnenBatteryDevices } from '../domain/SonnenBatteryDevices';
+import { SonnenBatteries } from '../domain/SonnenBatteryDevices';
 
 export abstract class SonnenDriver extends Homey.Driver {
 
@@ -22,17 +22,17 @@ export abstract class SonnenDriver extends Homey.Driver {
     */
   override async onPairListDevices(): Promise<Array<{ name: string; data: { id: string }; store: { lanip: string } }>> {
     try {
-      const devices: SonnenBatteryDevices = await SonnenBatterieClient.discoverDevices();
+      const batteries: SonnenBatteries = await SonnenBatterieClient.discoverBatteries();
 
-      if (devices) {
-        this.log('Devices found: ', devices);
-        const results = devices.map(device => ({
-          name: device.info + " " + this.deviceName,
+      if (batteries) {
+        this.log('Devices found: ', batteries);
+        const results = batteries.map(battery => ({
+          name: battery.info + " " + this.deviceName,
           data: {
-            id: device.device + "_" + this.deviceId,
+            id: battery.device + "_" + this.deviceId,
           },
           store: {
-            lanip: device.lanip,
+            lanip: battery.lanip,
           },
         }));
 
