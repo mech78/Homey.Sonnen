@@ -52,31 +52,12 @@ export class SonnenBatterieClient {
   }
 
   public async setSchedule(timeStart: string, timeEnd: string, maxPower: number): Promise<SonnenCommandResult> {
-    // FIXME: add error handling or change to TimeOfUseEvent
+    // TODO: add error handling or change to TimeOfUseEvent
     return this.setSchedules(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
   }
 
   public async clearSchedule(): Promise<SonnenCommandResult> {
-
-    const body = {
-      EM_ToU_Schedule: `[]`,
-    };
-
-    // Act
-    const response = await axios
-      .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
-      .then();
-
-    if (response == null) {
-      return new SonnenCommandResult(true, "No valid response received.");
-    }
-
-    const responseData = response.data;
-    if (responseData.error != null) {
-      return new SonnenCommandResult(true, responseData.error);
-    }
-
-    return new SonnenCommandResult(false, "-");
+    return this.setSchedules(new TimeOfUseSchedule([]));
   }
 
   public async getLatestData(): Promise<any> {
