@@ -29,10 +29,7 @@ export class SonnenBatterieClient {
       EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
 
-     // Act
-    const response = await axios
-      .put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut)
-      .then();
+    const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
 
     if (response == null) {
       return new SonnenCommandResult(true, "No valid response received.");
@@ -60,31 +57,32 @@ export class SonnenBatterieClient {
     return this.setSchedules(new TimeOfUseSchedule([]));
   }
 
-  public async getLatestData(): Promise<any> {
-    const response = await axios
-      .get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet)
-      .then();
+  public async setOperationMode(mode: number) {
+    await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.optionsPut);
+  }
+
+  public async setPrognosisCharging(active: boolean) {
+    const prognosis_charging = active ? 1 : 0;
+    await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.optionsPut);
+  }
+
+  public async getLatestData() {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet);
     return response.data;
   }
 
-  public async getStatus(): Promise<any> {
-    const response = await axios
-      .get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet)
-      .then();
+  public async getStatus() {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet);
     return response.data;
   }
 
-  public async getConfigurations(): Promise<any> {
-    const response = await axios
-      .get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet)
-      .then();
+  public async getConfigurations(){
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet);
     return response.data;
   }
 
   public static async discoverBatteries(): Promise<SonnenBatteries> {
-    const response = await axios
-      .get('https://find-my.sonnen-batterie.com/find')
-      .then();
+    const response = await axios.get('https://find-my.sonnen-batterie.com/find');
     return response.data;
   }
 
@@ -110,5 +108,9 @@ export class SonnenBatterieClient {
 
   private getBaseUrl(): string {
     return `http://${this.ipAddress}:80`;
+  }
+
+  public static isAxiosError<T>(error: unknown): error is axios.AxiosError<T> {
+    return (error as axios.AxiosError<T>).isAxiosError === true;
   }
 }

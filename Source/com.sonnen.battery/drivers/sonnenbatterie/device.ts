@@ -90,8 +90,40 @@ module.exports = class BatteryDevice extends SonnenDevice {
           throw new Error(this.homey.__("settings.error_no_batteries"));
         }
       }
+    }
 
-    };
+    if (_.contains(changedKeys, "operating-mode")) {
+      const operatingMode = newSettings["operating-mode"] as number;
+      this.log("Settings", "OperatingMode", operatingMode);
+
+      try {
+        await this.createSonnenBatterieClient().setOperationMode(operatingMode);
+      } catch (error) {
+        this.throwErrorMessageForKnownErrors(error);
+        throw error;
+      }
+    }
+
+    if (_.contains(changedKeys, "prognosis-charging")) {
+      const prognosisCharging = newSettings["prognosis-charging"] as boolean;
+      this.log("Settings", "PrognosisCharging", prognosisCharging);
+
+      try {
+        await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
+      } catch (error) {
+        this.throwErrorMessageForKnownErrors(error);
+        throw error;
+      }
+    }
+
+  }
+
+  private throwErrorMessageForKnownErrors(error: unknown) {
+    if (SonnenBatterieClient.isAxiosError(error)) {
+      if (error?.response?.status === 401) {
+        throw new Error(this.homey.__("settings.invalid_auth"));
+      }
+    }
   }
 
   /**

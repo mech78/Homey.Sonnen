@@ -15,7 +15,8 @@
       "settings.deviceState": "Device State (JSON)",
       "settings.deviceStateHint": "Shows the current state of the devices.",
       "error_no_batteries": "Could not find any Sonnen batteries on the local network. Please check your network and try again or provide static IP.",
-      "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address."
+      "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address.",
+      "invalid_auth": "Unauthorized: Invalid Auth-Token or Write API not enabled."
     },
     "eclipseLed": {
       "BlinkingRed": "blinking red",
