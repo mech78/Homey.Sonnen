@@ -71,11 +71,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "IP", newDeviceIP);
 
       if (!newDeviceIP || _.isEmpty(newDeviceIP.trim())) {
-        //this.unsetStoreValue('lanip');
       } else {
-        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
         if (ipv4Regex.test(newDeviceIP)) {
-          //this.setStoreValue('lanip', newDeviceIP);
         } else {
           throw new Error('Invalid IP address format. Please enter a valid IPv4 address.');
         }
@@ -89,7 +87,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (useAutoDiscovery) {
         this.discoverAndStoreLanIp();
       }
-      //this.setStoreValue('autodiscovery', useAutoDiscovery);
     };
   }
 

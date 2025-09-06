@@ -89,8 +89,8 @@
         "id": "device-discovery",
         "type": "checkbox",
         "label": {
-          "en": "Auto-discover IPv4 address",
-          "de": "IPv4 Adresse automatisch ermitteln"
+          "en": "Auto-discover IP address",
+          "de": "IP Adresse automatisch ermitteln"
         },
         "value": true,
         "hint": {
