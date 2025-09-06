@@ -79,22 +79,22 @@
           "en": "IP address",
           "de": "IP Adresse"
         },
-        "value": "192.168.1.xxx",
+        "value": "",
         "hint": {
-          "en": "Specify the ip of the Sonnen Batterie.",
-          "de": "IP Adresse der Sonnen Batterie angeben."
+          "en": "Shows the current IP of the Sonnen Batterie. Optional: Disable auto-discovery and set the static IPv4 address (e.g. 192.168.1.xxx) manually.",
+          "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben."
         }
       },
       {
         "id": "device-discovery",
         "type": "checkbox",
         "label": {
-          "en": "Auto-discover IP address",
-          "de": "Selbsterkennung IP Adresse"
+          "en": "Auto-discover IPv4 address",
+          "de": "IPv4 Adresse automatisch ermitteln"
         },
         "value": true,
         "hint": {
-          "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my IP address. Requires local-network.",
+          "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of the IP address. Requires local-network.",
           "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk."
         }
       }

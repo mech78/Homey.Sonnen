@@ -72,7 +72,7 @@ export abstract class SonnenDevice extends Homey.Device {
 
   protected createSonnenBatterieClient(): SonnenBatterieClient {
     const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
-    return new SonnenBatterieClient(batteryAuthToken, this.getStore().lanip);
+    return new SonnenBatterieClient(batteryAuthToken, this.getSetting("device-ip") as string);
   }
 
 };

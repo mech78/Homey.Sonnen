@@ -31,11 +31,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(this.state, this.getStore().autodiscovery ?? true)); //FIXME: autodiscovery could not be changed at runtime...
+      this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device-discovery") ?? true));
     }, batteryPullInterval * 1000);
 
     // Do an initial load
-    this.state.updateState(await this.loadLatestState(this.state, this.getStore().autodiscovery ?? true));
+    this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device-discovery") ?? true));
   }
 
   async onDeleted() {
@@ -67,19 +67,39 @@ module.exports = class BatteryDevice extends SonnenDevice {
     super.onSettings({ oldSettings, newSettings, changedKeys });
 
     if (_.contains(changedKeys, "device-ip")) {
-      const newDeviceIp = newSettings["device-ip"] as string;
-      this.log("Settings", "IP", newDeviceIp);
-      this.setStoreValue('lanip', newDeviceIp); // FIXME: should set autodiscovery to false?
-    };
+      const newDeviceIP = newSettings["device-ip"] as string;
+      this.log("Settings", "IP", newDeviceIP);
+
+      if (!newDeviceIP || _.isEmpty(newDeviceIP.trim())) {
+        //this.unsetStoreValue('lanip');
+      } else {
+        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+        if (ipv4Regex.test(newDeviceIP)) {
+          //this.setStoreValue('lanip', newDeviceIP);
+        } else {
+          throw new Error('Invalid IP address format. Please enter a valid IPv4 address.');
+        }
+      }
+    }
 
     if (_.contains(changedKeys, "device-discovery")) {
-      const blnUseAutoDisovery = newSettings["device-discovery"] as boolean;
-      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
-      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
-      if (blnUseAutoDisovery) {
-        this.setSettings({ "device-ip": "192.168.1.xxx" }); // FIXME: should auto-detect current IP
+      const useAutoDiscovery = newSettings["device-discovery"] as boolean;
+      this.log("Settings", "AutoDiscovery", useAutoDiscovery);
+
+      if (useAutoDiscovery) {
+        this.discoverAndStoreLanIp();
       }
+      //this.setStoreValue('autodiscovery', useAutoDiscovery);
     };
+  }
+
+  private async discoverAndStoreLanIp() {
+    const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
+    if (discoveredIP) {
+      //this.setStoreValue('lanip', discoveredIP);
+    } else {
+      throw new Error('Could not find the battery on the local network. Please check your network and try again or provide static IP.');
+    }
   }
 
   /**
@@ -157,6 +177,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
+    // TODO: maybe add a gracefully migration from store-based "autodiscovery" and "lanip" to settings-based "device-discovery" and "device-ip"
   }
 
   private async loadLatestState(lastState: SonnenState, retryOnError = true): Promise<SonnenState> {
@@ -290,9 +311,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
         const currentIP = await SonnenBatterieClient.findBatteryIP(homeyDeviceId); // Maybe IP has changed, lets try and fix this...
         if (currentIP) {
           this.log(`Found device ${homeyDeviceId} with IP ${currentIP}`);
-          const storedIP = this.getStoreValue('lanip');
+          const storedIP = this.getSetting("device-ip") as string;
           if (storedIP !== currentIP) {
-            this.setStoreValue('lanip', currentIP);
+            this.setSettings({ "device-ip": currentIP });
             await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${currentIP}` });
             return await this.loadLatestState(lastState, false); // Try and reload data
           }

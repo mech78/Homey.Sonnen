@@ -72,7 +72,8 @@ This is a Homey app for integrating with Sonnen Battery systems, specifically fo
   - `onDeleted()` for removal cleanup
   - `onSettings()` for handling setting changes
 - Use capability listeners for real-time updates
-- Store device-specific data using `setStoreValue()` and `getStoreValue()`
+- Store device-specific backend data using `setStoreValue()` and read using `getStoreValue()`
+- Store device-specific frontend or user changeable data using `setSettings()` and read using `getSetting()`
 
 ### 3.3 Flow Cards
 

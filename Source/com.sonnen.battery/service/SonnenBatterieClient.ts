@@ -61,20 +61,16 @@ export class SonnenBatterieClient {
   }
 
   public async getLatestData(): Promise<any> {
-
     const response = await axios
       .get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet)
       .then();
-
     return response.data;
   }
 
   public async getStatus(): Promise<any> {
-   
     const response = await axios
       .get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet)
       .then();
-
     return response.data;
   }
 
@@ -82,7 +78,6 @@ export class SonnenBatterieClient {
     const response = await axios
       .get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet)
       .then();
-
     return response.data;
   }
 
@@ -90,7 +85,6 @@ export class SonnenBatterieClient {
     const response = await axios
       .get('https://find-my.sonnen-batterie.com/find')
       .then();
-
     return response.data;
   }
 
