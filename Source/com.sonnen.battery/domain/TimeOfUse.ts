@@ -130,8 +130,41 @@ export class TimeOfUseSchedule {
    * @returns A formatted string representation
    */
   public toString(): string {
-    return this.schedule.map(item => 
+    return this.schedule.map(item =>
       `${item.start}-${item.stop}: ${item.threshold_p_max}W`
-    ).join(', ');
+    ).join('\n');
+  }
+
+  /**
+   * Creates a TimeOfUseSchedule from a formatted string representation
+   * @param str The string representation of the schedule
+   * @returns A new TimeOfUseSchedule instance
+   */
+  public static fromString(str: string): TimeOfUseSchedule {
+    if (!str || str.trim() === '') {
+      return new TimeOfUseSchedule([]);
+    }
+
+    const lines = str.split('\n').filter(line => line.trim() !== '');
+    const events: TimeOfUseEvent[] = [];
+
+    for (const line of lines) {
+      // Match format: HH:MM-HH:MM: XXXXW
+      const match = line.match(/^(\d{2}:\d{2})-(\d{2}:\d{2}):\s*(\d+)W?$/);
+      if (!match) {
+        throw new Error(`Invalid schedule line format: "${line}"`);
+      }
+
+      const [, start, stop, thresholdStr] = match;
+      const threshold_p_max = parseInt(thresholdStr, 10);
+
+      events.push({
+        start,
+        stop,
+        threshold_p_max
+      });
+    }
+
+    return new TimeOfUseSchedule(events);
   }
 }

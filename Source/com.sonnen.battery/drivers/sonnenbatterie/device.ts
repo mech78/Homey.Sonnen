@@ -116,6 +116,19 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
+    if (_.contains(changedKeys, "time-of-use-schedule")) {
+      const scheduleRaw = newSettings["time-of-use-schedule"] as string;
+      this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
+
+      try {
+        const schedule = TimeOfUseSchedule.fromString(scheduleRaw);
+        await this.createSonnenBatterieClient().setSchedules(schedule);
+      } catch (error) {
+        this.throwErrorMessageForKnownErrors(error);
+        throw error;
+      }
+    }
+
   }
 
   private throwErrorMessageForKnownErrors(error: unknown) {
@@ -302,8 +315,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       
       const scheduleRaw = configurations['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
-      this.log('Parsed Time-of-Use schedule:', tou.toString());
-      this.setSettings({ 'time-of-use-schedule': tou.toJSONString() });
+      this.log('Parsed Time-of-Use schedule:', tou.toJSONString());
+      this.setSettings({ 'time-of-use-schedule': tou.toString() });
 
       const operatingMode = configurations['EM_OperatingMode'];
       const operatingModeText = this.resolveOperatingMode(operatingMode);
