@@ -14,6 +14,10 @@
           "en": "Operating Mode",
           "de": "Betriebsmodus"
         },
+        "hint": {
+          "en": "Refer to Sonnen Batterie manual for more information.",
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        },
         "values": [
           {
             "id": "1",
@@ -52,7 +56,11 @@
           "en": "Time-of-Use Schedule",
           "de": "Time-of-Use Zeitplan"
         },
-        "value": ""
+        "value": "",
+        "hint": {
+          "en": "The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
+          "de": "Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        }
       },
       {
         "id": "prognosis-charging",
@@ -61,7 +69,11 @@
           "en": "Prognosis Charging",
           "de": "Prognosebasiertes Laden"
         },
-        "value": false
+        "value": false,
+        "hint": {
+          "en": "Refer to Sonnen Batterie manual for more information.",
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        }
       }
     ]
   },
