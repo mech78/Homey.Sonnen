@@ -297,6 +297,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
       */
 
+      this.unsetWarning(); // clear any previous warning
       return currentState;
     } catch (e) {
       this.error('Error occured fetching data. Retry: ' + retryOnError, e)
@@ -314,7 +315,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
           const storedIP = this.getSetting("device-ip") as string;
           if (storedIP !== currentIP) {
             this.setSettings({ "device-ip": currentIP });
-            await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${currentIP}` });
+            await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${currentIP}` });    
             return await this.loadLatestState(lastState, false); // Try and reload data
           }
         }
@@ -322,6 +323,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         this.log('Failed to find sonnen batteries', err);
       }
     }
+    await this.setWarning(`Could not connect to the battery with IP '${this.getSetting("device-ip")}'. Please check the device settings.`);
     return lastState; // always return some valid state even on error
   }
 
