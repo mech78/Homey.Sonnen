@@ -75,7 +75,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
         if (ipv4Regex.test(newDeviceIP)) {
         } else {
-          throw new Error('Invalid IP address format. Please enter a valid IPv4 address.');
+          throw new Error(this.homey.__("settings.invalid_ip_format"));
         }
       }
     }
@@ -85,18 +85,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "AutoDiscovery", useAutoDiscovery);
 
       if (useAutoDiscovery) {
-        this.discoverAndStoreLanIp();
+        const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
+        if (!discoveredIP) {
+          throw new Error(this.homey.__("settings.error_no_batteries"));
+        }
       }
-    };
-  }
 
-  private async discoverAndStoreLanIp() {
-    const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
-    if (discoveredIP) {
-      //this.setStoreValue('lanip', discoveredIP);
-    } else {
-      throw new Error('Could not find the battery on the local network. Please check your network and try again or provide static IP.');
-    }
+    };
   }
 
   /**
@@ -312,7 +307,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
           const storedIP = this.getSetting("device-ip") as string;
           if (storedIP !== currentIP) {
             this.setSettings({ "device-ip": currentIP });
-            await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${currentIP}` });    
+            const notification = this.homey.__("connection.notification_ip_changed", { ip: currentIP });
+            await this.homey.notifications.createNotification({ excerpt: notification });    
             return await this.loadLatestState(lastState, false); // Try and reload data
           }
         }
@@ -320,7 +316,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
         this.log('Failed to find sonnen batteries', err);
       }
     }
-    await this.setWarning(`Could not connect to the battery with IP '${this.getSetting("device-ip")}'. Please check the device settings.`);
+   
+    await this.setWarning(this.homey.__("connection.error", { ip: this.getSetting("device-ip") }));
     return lastState; // always return some valid state even on error
   }
 

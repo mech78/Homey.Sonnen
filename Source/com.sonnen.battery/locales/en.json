@@ -13,7 +13,9 @@
       "savedOk": "Settings saved. You can close this dialog now.",
       "savedError": "An error occured.",
       "settings.deviceState": "Device State (JSON)",
-      "settings.deviceStateHint": "Shows the current state of the devices."
+      "settings.deviceStateHint": "Shows the current state of the devices.",
+      "error_no_batteries": "Could not find any Sonnen batteries on the local network. Please check your network and try again or provide static IP.",
+      "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address."
     },
     "eclipseLed": {
       "BlinkingRed": "blinking red",
@@ -50,5 +52,9 @@
       "2": "Self consumption",
       "6": "Module extension (30%)",
       "10": "Time-of-Use"
+    },
+    "connection": {
+      "notification_ip_changed": "Sonnen Batterie: Change of IP address detected. New IP address: __ip__",
+      "error": "Could not connect to the battery with IP '__ip__'. Please check the device settings."
     }
   }

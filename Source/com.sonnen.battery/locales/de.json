@@ -13,7 +13,9 @@
       "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
       "savedError": "Ein Fehler ist aufgetreten.",
       "settings.deviceState": "Gerätezustand (JSON)",
-      "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an."
+      "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an.",
+      "error_no_batteries": "Keine Sonnen-Batterien im lokalen Netzwerk gefunden. Bitte Netzwerk überprüfen und erneut versuchen oder eine statische IP-Adresse angeben.",
+      "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben."
     },
     "eclipseLed": {
       "BlinkingRed": "blinkt rot",
@@ -50,5 +52,9 @@
       "2": "Eigenverbrauch",
       "6": "Modulerweiterung (30%)",
       "10": "Time-of-Use"
+    },
+    "connection": {
+      "notification_ip_changed": "Sonnen Batterie: IP-Adressänderung erkannt. Neue IP-Adresse: __ip__",
+      "error": "Keine Verbindung zur Batterie mit der IP '__ip__' hergestellt. Bitte Geräteeinstellungen überprüfen."
     }
   }
