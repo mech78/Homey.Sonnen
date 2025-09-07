@@ -1,5 +1,4 @@
 import axios from "axios";
-import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
 import { TimeOfUseSchedule } from "../domain/TimeOfUse";
 
@@ -24,36 +23,30 @@ export class SonnenBatterieClient {
       };
   }
 
-  public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
+  public async setSchedule(schedule: TimeOfUseSchedule) {
     const body = {
       EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
 
-    const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
-
-    if (response == null) {
-      return new SonnenCommandResult(true, "No valid response received.");
+    try {
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
+      // happy path: HTTP 200
+      console.log("Some response: ", response); 
+      console.log("Some response data: ", response.data); // e.g. { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' }
+    } catch (error) {
+      // HTTP 400/500 etc.
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        console.log("Error response: ", error.response);
+      } 
     }
-
-    const responseData = response.data;
-    if (responseData.error != null) {
-      return new SonnenCommandResult(
-        true,
-        responseData.details != null
-          ? responseData.details.EM_ToU_Schedule ?? responseData.error
-          : responseData.error
-      );
-    }
-
-    return new SonnenCommandResult(false, "-");
   }
 
-  public async setScheduleEntry(timeStart: string, timeEnd: string, maxPower: number): Promise<SonnenCommandResult> {
+  public async setScheduleEntry(timeStart: string, timeEnd: string, maxPower: number) {
     // TODO: add error handling or change to TimeOfUseEntry
     return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
   }
 
-  public async clearSchedule(): Promise<SonnenCommandResult> {
+  public async clearSchedule() {
     return this.setSchedule(new TimeOfUseSchedule([]));
   }
 
