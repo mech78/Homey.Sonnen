@@ -72,12 +72,10 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const newDeviceIP = newSettings["device-ip"] as string;
       this.log("Settings", "IP", newDeviceIP);
 
-      if (!newDeviceIP || _.isEmpty(newDeviceIP.trim())) {
-      } else {
+      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
         const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
-        if (ipv4Regex.test(newDeviceIP)) {
-        } else {
-          throw new Error(this.homey.__("settings.invalid_ip_format"));
+        if (!ipv4Regex.test(newDeviceIP)) {
+          this.throwLocalizedErrorMessageForKnownErrors(new LocalizedError("error.validation.invalid_ip_format"));
         }
       }
     }
@@ -89,7 +87,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (useAutoDiscovery) {
         const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
         if (!discoveredIP) {
-          throw new Error(this.homey.__("settings.error_no_batteries"));
+          this.throwLocalizedErrorMessageForKnownErrors(new LocalizedError("connection.error_no_batteries"));
         }
       }
     }

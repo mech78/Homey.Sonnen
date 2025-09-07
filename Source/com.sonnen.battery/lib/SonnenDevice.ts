@@ -1,6 +1,5 @@
 import Homey from 'homey';
 import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
-
 export abstract class SonnenDevice extends Homey.Device {
 
   /**

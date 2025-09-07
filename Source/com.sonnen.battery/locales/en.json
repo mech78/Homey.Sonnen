@@ -1,80 +1,80 @@
 {
-    "settings": {
-      "title": "Sonnen Batterie settings",
-      "subtitle": "Please provide information for api-usage.",
-      "baseUrl": "Base URL",
-      "save": "Save changes",
-      "remark": "Remark:",
-      "note": "Please restart the app, after changing settings.",
-      "frequency": "Pull data interval",
-      "frequencyHint": "Frequency in seconds. How often to pull for data. Default is 30 seconds (30).",
-      "authToken": "Auth Token",
-      "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
-      "savedOk": "Settings saved. You can close this dialog now.",
-      "savedError": "An error occured.",
-      "settings.deviceState": "Device State (JSON)",
-      "settings.deviceStateHint": "Shows the current state of the devices.",
-      "error_no_batteries": "Could not find any Sonnen batteries on the local network. Please check your network and try again or provide static IP.",
-      "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address."
+  "settings": {
+    "title": "Sonnen Batterie settings",
+    "subtitle": "Please provide information for api-usage.",
+    "baseUrl": "Base URL",
+    "save": "Save changes",
+    "remark": "Remark:",
+    "note": "Please restart the app, after changing settings.",
+    "frequency": "Pull data interval",
+    "frequencyHint": "Frequency in seconds. How often to pull for data. Default is 30 seconds (30).",
+    "authToken": "Auth Token",
+    "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
+    "savedOk": "Settings saved. You can close this dialog now.",
+    "savedError": "An error occured.",
+    "settings.deviceState": "Device State (JSON)",
+    "settings.deviceStateHint": "Shows the current state of the devices."
+  },
+  "eclipseLed": {
+    "BlinkingRed": "blinking red",
+    "PulsingGreen": "pulsing green",
+    "PulsingOrange": "pulsing orange",
+    "PulsingWhite": "pulsing white",
+    "SolidRed": "solid red",
+    "Unknown": "unknown"
+  },
+  "stateBms": {
+    "ready": "ready",
+    "notready": "not ready"
+  },
+  "stateInverter": {
+    "ready": "ready",
+    "notready": "not ready",
+    "ongrid": "on grid",
+    "offgrid": "off grid"
+  },
+  "widget": {
+    "production": "Production",
+    "consumption": "Consumption",
+    "fromBattery": "From battery",
+    "fromGrid": "From grid"
+  },
+  "device": {
+    "solarPanel": "solar panel",
+    "battery": "battery",
+    "gridMeter": "grid",
+    "householdMeter": "household"
+  },
+  "operatingMode": {
+    "1": "Manual",
+    "2": "Self consumption",
+    "6": "Module extension (30%)",
+    "10": "Time-of-Use"
+  },
+  "connection": {
+    "error_no_batteries": "Could not find any Sonnen batteries on the local network. Please check your network and try again or provide static IP.",
+    "notification_ip_changed": "Sonnen Batterie: Change of IP address detected. New IP address: __ip__",
+    "error": "Could not connect to the battery with IP '__ip__'. Please check the device settings."
+  },
+  "error": {
+    "unknown": "An unknown error occurred: __error__",
+    "http": {
+      "400": "Bad request. Invalid data or validation failed",
+      "401": "Invalid Auth Token or required Read/Write API not enabled.",
+      "other": "Unexpected HTTP __statusCode__ error occurred"
     },
-    "eclipseLed": {
-      "BlinkingRed": "blinking red",
-      "PulsingGreen": "pulsing green",
-      "PulsingOrange": "pulsing orange",
-      "PulsingWhite": "pulsing white",
-      "SolidRed": "solid red",
-      "Unknown": "unknown"
-    },
-    "stateBms": {
-      "ready": "ready",
-      "notready": "not ready"
-    },
-    "stateInverter": {
-      "ready": "ready",
-      "notready": "not ready",
-      "ongrid": "on grid",
-      "offgrid": "off grid"
-    },
-    "widget": {
-      "production": "Production",
-      "consumption": "Consumption",
-      "fromBattery": "From battery",
-      "fromGrid": "From grid"
-    },
-    "device": {
-      "solarPanel": "solar panel",
-      "battery": "battery",
-      "gridMeter": "grid",
-      "householdMeter": "household"
-    },
-    "operatingMode": {
-      "1": "Manual",
-      "2": "Self consumption",
-      "6": "Module extension (30%)",
-      "10": "Time-of-Use"
-    },
-    "connection": {
-      "notification_ip_changed": "Sonnen Batterie: Change of IP address detected. New IP address: __ip__",
-      "error": "Could not connect to the battery with IP '__ip__'. Please check the device settings."
-    },
-    "error": {
-      "unknown": "An unknown error occurred: __error__",
-      "http": {
-        "400": "Bad request. Invalid data or validation failed",
-        "401": "Invalid Auth Token or required Read/Write API not enabled.", 
-        "other": "Unexpected HTTP __statusCode__ error occurred"
-      },
-      "validation": {
-        "failed": "Validation failed",
-        "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__",
-        "invalid_schedule_format": "Invalid schedule format: expected an array",
-        "invalid_schedule_item_missing_properties": "Invalid schedule item at index __index__: missing required properties",
-        "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format",
-        "invalid_schedule_line_format": "Invalid schedule line format: \"__line__\"",
-        "ToU": {
-          "invalid threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
-          "ToU windows overlap": "Time-of-Use windows must not overlap."
-        }
+    "validation": {
+      "failed": "Validation failed",
+      "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__",
+      "invalid_schedule_format": "Invalid schedule format: expected an array",
+      "invalid_schedule_item_missing_properties": "Invalid schedule item at index __index__: missing required properties",
+      "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format",
+      "invalid_schedule_line_format": "Invalid schedule line format: \"__line__\"",
+      "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address.",
+      "ToU": {
+        "invalid threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
+        "ToU windows overlap": "Time-of-Use windows must not overlap."
       }
     }
   }
+}

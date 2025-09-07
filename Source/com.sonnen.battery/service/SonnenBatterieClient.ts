@@ -31,7 +31,7 @@ export class SonnenBatterieClient {
 
     try {
       const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
-      return new SonnenCommandResult(false, this.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         if (error.response?.data != null) {
@@ -68,7 +68,7 @@ export class SonnenBatterieClient {
   public async setOperationMode(mode: number): Promise<SonnenCommandResult> {
     try {
       const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.optionsPut);
-      return new SonnenCommandResult(false, this.safeToString(response.data), response.status);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         return new SonnenCommandResult(true, error.message, error.response?.status);
@@ -81,7 +81,7 @@ export class SonnenBatterieClient {
     const prognosis_charging = active ? 1 : 0;
     try {
       const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.optionsPut);
-      return new SonnenCommandResult(false, this.safeToString(response.data), response.status); 
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         return new SonnenCommandResult(true, error.message, error.response?.status);
@@ -105,13 +105,23 @@ export class SonnenBatterieClient {
     return response.data;
   }
 
-  public static async discoverBatteries(): Promise<SonnenBatteries> {
-    const response = await axios.get('https://find-my.sonnen-batterie.com/find');
-    return response.data;
+  public static async discoverBatteries(): Promise<SonnenCommandResult> {
+    try {
+      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
+      const commandResult = new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
+      commandResult.payload = response.data as SonnenBatteries;
+      return commandResult
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        return new SonnenCommandResult(true, error.message, error.response?.status);
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+    }
   }
 
   public static async findBatteryIP(homeyDeviceId: string): Promise<string | null> {
-    const batteries: SonnenBatteries = await SonnenBatterieClient.discoverBatteries();
+    const result = await SonnenBatterieClient.discoverBatteries(); // TODO: handle errors passed in SonnenCommandResult
+    const batteries: SonnenBatteries = result.payload as SonnenBatteries;
     if (batteries) {
       for (const battery of batteries) {
         if (SonnenBatterieClient.isSameDevice(battery.device, homeyDeviceId)) {
@@ -138,7 +148,7 @@ export class SonnenBatterieClient {
     return (error as axios.AxiosError<T>).isAxiosError === true;
   }
 
-  private safeToString(value: unknown): string {
+  private static safeToString(value: unknown): string {
     if (typeof value === "string") { return value; }
     if (value instanceof Error) { return value.message; }
     if (typeof value === "object" && value !== null) { return JSON.stringify(value); }
