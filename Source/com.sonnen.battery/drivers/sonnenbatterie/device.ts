@@ -122,7 +122,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       try {
         const schedule = TimeOfUseSchedule.fromString(scheduleRaw);
-        await this.createSonnenBatterieClient().setSchedules(schedule);
+        await this.createSonnenBatterieClient().setSchedule(schedule);
       } catch (error) {
         this.throwErrorMessageForKnownErrors(error);
         throw error;

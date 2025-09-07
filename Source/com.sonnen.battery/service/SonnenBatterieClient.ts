@@ -24,7 +24,7 @@ export class SonnenBatterieClient {
       };
   }
 
-  public async setSchedules(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
+  public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
     const body = {
       EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
@@ -48,13 +48,13 @@ export class SonnenBatterieClient {
     return new SonnenCommandResult(false, "-");
   }
 
-  public async setSchedule(timeStart: string, timeEnd: string, maxPower: number): Promise<SonnenCommandResult> {
-    // TODO: add error handling or change to TimeOfUseEvent
-    return this.setSchedules(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
+  public async setScheduleEntry(timeStart: string, timeEnd: string, maxPower: number): Promise<SonnenCommandResult> {
+    // TODO: add error handling or change to TimeOfUseEntry
+    return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
   }
 
   public async clearSchedule(): Promise<SonnenCommandResult> {
-    return this.setSchedules(new TimeOfUseSchedule([]));
+    return this.setSchedule(new TimeOfUseSchedule([]));
   }
 
   public async setOperationMode(mode: number) {

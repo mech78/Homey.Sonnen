@@ -1,7 +1,7 @@
 /**
- * Interface representing a single Time-of-Use schedule event
+ * Interface representing a single Time-of-Use schedule entry
  */
-export interface TimeOfUseEvent {
+export interface TimeOfUseEntry {
   /**
    * Start time in HH:MM format
    */
@@ -22,7 +22,7 @@ export interface TimeOfUseEvent {
  * Class for parsing and managing Time-of-Use schedules
  */
 export class TimeOfUseSchedule {
-  private schedule: TimeOfUseEvent[];
+  private schedule: TimeOfUseEntry[];
   
   /**
    * Creates a new TimeOfUseSchedule instance
@@ -30,21 +30,21 @@ export class TimeOfUseSchedule {
    */
   constructor(jsonString: string);
   /**
-   * Creates a new TimeOfUseSchedule instance from a single TimeOfUseEvent
-   * @param event The TimeOfUseEvent to create the schedule from
+   * Creates a new TimeOfUseSchedule instance from a single TimeOfUseEntry
+   * @param entry The TimeOfUseEntry to create the schedule from
    */
-  constructor(event: TimeOfUseEvent);
+  constructor(entry: TimeOfUseEntry);
   /**
-   * Creates a new TimeOfUseSchedule instance from multiple TimeOfUseEvents
-   * @param events Array of TimeOfUseEvents to create the schedule from
+   * Creates a new TimeOfUseSchedule instance from multiple TimeOfUseEntrys
+   * @param entries Array of TimeOfUseEntrys to create the schedule from
    */
-  constructor(events: TimeOfUseEvent[]);
+  constructor(entries: TimeOfUseEntry[]);
   /**
    * Creates a new TimeOfUseSchedule instance
    * @param source The source to create the schedule from (JSON string, single event, or array of events)
    */
-  constructor(source: string | TimeOfUseEvent | TimeOfUseEvent[]) {
-    let events: TimeOfUseEvent[];
+  constructor(source: string | TimeOfUseEntry | TimeOfUseEntry[]) {
+    let entries: TimeOfUseEntry[];
     
     if (typeof source === 'string') {
       // Parse JSON string to get array of events
@@ -56,7 +56,7 @@ export class TimeOfUseSchedule {
           throw new Error('Invalid schedule format: expected an array');
         }
         
-        events = parsed;
+        entries = parsed;
       } catch (error) {
         if (error instanceof SyntaxError) {
           throw new Error(`Failed to parse schedule JSON: ${error.message}`);
@@ -64,13 +64,13 @@ export class TimeOfUseSchedule {
         throw error;
       }
     } else if (Array.isArray(source)) {
-      events = source;
+      entries = source;
     } else {
-      events = [source];
+      entries = [source];
     }
     
     // Validate and copy all events
-    this.schedule = this.validateAndCopyEvents(events);
+    this.schedule = this.validateAndCopyEvents(entries);
   }
   
   
@@ -85,11 +85,11 @@ export class TimeOfUseSchedule {
   }
   
   /**
-   * Validates and copies an array of TimeOfUseEvent objects
-   * @param events Array of TimeOfUseEvent objects to validate and copy
-   * @returns Validated and copied array of TimeOfUseEvent objects
+   * Validates and copies an array of TimeOfUseEntry objects
+   * @param events Array of TimeOfUseEntry objects to validate and copy
+   * @returns Validated and copied array of TimeOfUseEntry objects
    */
-  private validateAndCopyEvents(events: TimeOfUseEvent[]): TimeOfUseEvent[] {
+  private validateAndCopyEvents(events: TimeOfUseEntry[]): TimeOfUseEntry[] {
     return events.map((event, index) => {
       // Check required properties
       if (typeof event.start !== 'string' || typeof event.stop !== 'string' || typeof event.threshold_p_max !== 'number') {
@@ -113,7 +113,7 @@ export class TimeOfUseSchedule {
    * Gets the entire schedule
    * @returns Array of TimeOfUseItem objects
    */
-  public getSchedule(): TimeOfUseEvent[] {
+  public getSchedule(): TimeOfUseEntry[] {
     return [...this.schedule]; // Return a copy to prevent external modification
   }
   
@@ -146,7 +146,7 @@ export class TimeOfUseSchedule {
     }
 
     const lines = str.split('\n').filter(line => line.trim() !== '');
-    const events: TimeOfUseEvent[] = [];
+    const events: TimeOfUseEntry[] = [];
 
     for (const line of lines) {
       // Match format: HH:MM-HH:MM: XXXXW

@@ -688,8 +688,8 @@
               },
               "value": "",
               "hint": {
-                "en": "Format of each line: 'HH:MM-HH:MM: nW', e.g.\n'00:00-09:00: 2000W\n\n09:00-12:00: 3000W\n\n12:00-24:00: 2000W'.\n\nThe operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
-                "de": "Format jeder Zeile: 'HH:MM-HH:MM: nW', z.B.\n'00:00-09:00: 2000W\n\n09:00-12:00: 3000W\n\n12:00-24:00: 2000W'.\n\nDer Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen."
+                "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
+                "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen."
               }
             },
             {
