@@ -37,6 +37,7 @@ export class SonnenBatterieClient {
       // HTTP 400/500 etc.
       if (SonnenBatterieClient.isAxiosError(error)) {
         console.log("Error response: ", error.response);
+        console.log("Error response data: ", error.response?.data); // e.g. for HTTP400 Bad Request data: { details: { EM_ToU_Schedule: 'invalid threshold' }, error: 'validation failed'}
       } 
     }
   }
