@@ -4,6 +4,7 @@ import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
+import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
 
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -120,15 +121,28 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const scheduleRaw = newSettings["time-of-use-schedule"] as string;
       this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
 
-      try {
-        const schedule = TimeOfUseSchedule.fromString(scheduleRaw);
-        await this.createSonnenBatterieClient().setSchedule(schedule);
-      } catch (error) {
-        this.throwErrorMessageForKnownErrors(error);
-        throw error;
-      }
+      const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localization of errors
+      const result = await this.createSonnenBatterieClient().setSchedule(schedule);
+      this.throwLocalizedErrorMessageForKnownErrors(result)
     }
 
+  }
+
+  private throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult) {
+    this.log('Command result: ' + result?.toString());
+    if (result?.hasError) {
+      if (result.i18nKey) {
+        const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
+        throw new Error(message);
+      } else if (result.statusCode) {
+        if (result.statusCode === 401) {
+          throw new Error(this.homey.__("error.http.401"));
+        }  
+        throw new Error(this.homey.__("error.http.other", { "statusCode": result.statusCode }));
+      } else {
+        throw new Error(this.homey.__("error.unknown", { "error": result.error }));
+      }
+    }
   }
 
   private throwErrorMessageForKnownErrors(error: unknown) {

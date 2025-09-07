@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
 import { TimeOfUseSchedule } from "../domain/TimeOfUse";
+import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 
 export class SonnenBatterieClient {
 
@@ -23,23 +24,45 @@ export class SonnenBatterieClient {
       };
   }
 
-  public async setSchedule(schedule: TimeOfUseSchedule) {
+  public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
     const body = {
       EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
 
     try {
       const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
-      // happy path: HTTP 200
-      console.log("Some response: ", response); 
-      console.log("Some response data: ", response.data); // e.g. { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' }
+      return new SonnenCommandResult(false, response.data.EM_ToU_Schedule, response.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
     } catch (error) {
-      // HTTP 400/500 etc.
       if (SonnenBatterieClient.isAxiosError(error)) {
+        if (error.response?.data != null) {
+          const responseData = error.response.data as { details: { EM_ToU_Schedule?: string }, error: string };
+          //console.log(responseData);
+          // console.log(responseData?.error + " " + error.response.status + " " + responseData?.details?.EM_ToU_Schedule);
+          
+          let i18nKey;
+          if (error.response.status === 400 && responseData.error === 'validation failed') {
+            if (responseData?.details?.EM_ToU_Schedule === "invalid threshold") {
+              i18nKey = "error.validation.invalid_ToU_power_threshold"
+            } else if (responseData?.details?.EM_ToU_Schedule === "ToU windows overlap") {
+              i18nKey = "error.validation.overlapping_ToU_windows";
+            }
+          }
+
+          return new SonnenCommandResult(
+            true, 
+            responseData.details?.EM_ToU_Schedule ?? responseData.error, 
+            error.response.status, // e.g. for HTTP 400 Bad Request data: { details: { EM_ToU_Schedule: 'invalid threshold' }, error: 'validation failed'}
+            i18nKey,
+          ); 
+        }
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+      /*
         console.log("Error response: ", error.response);
-        console.log("Error response data: ", error.response?.data); // e.g. for HTTP400 Bad Request data: { details: { EM_ToU_Schedule: 'invalid threshold' }, error: 'validation failed'}
-      } 
+        console.log("Error response data: ", error.response?.data); 
+      */
     }
+
   }
 
   public async setScheduleEntry(timeStart: string, timeEnd: string, maxPower: number) {

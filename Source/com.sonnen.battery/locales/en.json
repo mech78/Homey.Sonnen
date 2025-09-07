@@ -57,5 +57,17 @@
     "connection": {
       "notification_ip_changed": "Sonnen Batterie: Change of IP address detected. New IP address: __ip__",
       "error": "Could not connect to the battery with IP '__ip__'. Please check the device settings."
+    },
+    "error": {
+      "unknown": "An unknown error occurred: __error__",
+      "http": {
+        "400": "Bad request. Invalid data or validation failed",
+        "401": "Invalid Auth Token or required Read/Write API not enabled.", 
+        "other": "Unexpected HTTP __statusCode__ error occurred"
+      },
+      "validation": {
+        "invalid_ToU_power_threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
+        "overlapping_ToU_windows": "Time-of-Use windows must not overlap."
+      }
     }
   }
