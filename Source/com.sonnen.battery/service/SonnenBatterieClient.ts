@@ -41,11 +41,7 @@ export class SonnenBatterieClient {
           
           let i18nKey;
           if (error.response.status === 400 && responseData.error === 'validation failed') {
-            if (responseData?.details?.EM_ToU_Schedule === "invalid threshold") {
-              i18nKey = "error.validation.invalid_ToU_power_threshold"
-            } else if (responseData?.details?.EM_ToU_Schedule === "ToU windows overlap") {
-              i18nKey = "error.validation.overlapping_ToU_windows";
-            }
+            i18nKey = "error.validation.ToU." + (responseData?.details?.EM_ToU_Schedule ?? "error.validation.failed");
           }
 
           return new SonnenCommandResult(

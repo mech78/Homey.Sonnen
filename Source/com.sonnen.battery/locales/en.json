@@ -66,8 +66,11 @@
         "other": "Unexpected HTTP __statusCode__ error occurred"
       },
       "validation": {
-        "invalid_ToU_power_threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
-        "overlapping_ToU_windows": "Time-of-Use windows must not overlap."
+        "failed": "Validation failed",
+        "ToU": {
+          "invalid threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
+          "ToU windows overlap": "Time-of-Use windows must not overlap."
+        }
       }
     }
   }
