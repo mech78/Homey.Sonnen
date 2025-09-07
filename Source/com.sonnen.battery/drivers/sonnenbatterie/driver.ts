@@ -1,6 +1,7 @@
 import Homey from 'homey';
 import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenDriver } from '../../lib/SonnenDriver';
+//import { LocalizedError } from '../../domain/LocalizedError';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   async onInit(): Promise<void> {
@@ -45,16 +46,16 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const timeEnd = args.end;
     const maxPower = args.maxPower;
 
-    await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-    this.log("Result", args.start, args.end, args.maxPower);
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
+    this.log("Result", commandResult, args.start, args.end, args.maxPower);
 
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
-    /*
+  
     if (commandResult.hasError) {
-      throw Error(commandResult.error);
+      throw Error(commandResult.message);
     }
-    */
+  
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { device: Homey.Device, start: string, hours: number, maxPower: number }): Promise<void> {

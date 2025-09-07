@@ -1,3 +1,5 @@
+import { LocalizedError } from './LocalizedError';
+
 /**
  * Interface representing a single Time-of-Use schedule entry
  */
@@ -53,13 +55,21 @@ export class TimeOfUseSchedule {
         
         // Validate that it's an array
         if (!Array.isArray(parsed)) {
-          throw new Error('Invalid schedule format: expected an array');
+          throw new LocalizedError(
+            'error.validation.invalid_schedule_format',
+            undefined,
+            'Invalid schedule format: expected an array'
+          );
         }
         
         entries = parsed;
       } catch (error) {
         if (error instanceof SyntaxError) {
-          throw new Error(`Failed to parse schedule JSON: ${error.message}`);
+          throw new LocalizedError(
+            'error.validation.failed_to_parse_schedule_json',
+            { error: error.message },
+            `Failed to parse schedule JSON: ${error.message}`
+          );
         }
         throw error;
       }
@@ -93,12 +103,20 @@ export class TimeOfUseSchedule {
     return events.map((event, index) => {
       // Check required properties
       if (typeof event.start !== 'string' || typeof event.stop !== 'string' || typeof event.threshold_p_max !== 'number') {
-        throw new Error(`Invalid schedule item at index ${index}: missing required properties`);
+        throw new LocalizedError(
+          'error.validation.invalid_schedule_item_missing_properties',
+          { index: index.toString() },
+          `Invalid schedule item at index ${index}: missing required properties`
+        );
       }
       
       // Validate time format (HH:MM)
       if (!this.isValidTimeFormat(event.start) || !this.isValidTimeFormat(event.stop)) {
-        throw new Error(`Invalid schedule item at index ${index}: invalid time format`);
+        throw new LocalizedError(
+          'error.validation.invalid_schedule_item_time_format',
+          { index: index.toString() },
+          `Invalid schedule item at index ${index}: invalid time format`
+        );
       }
       
       return {
@@ -152,7 +170,11 @@ export class TimeOfUseSchedule {
       // Match format: HH:MM-HH:MM: XXXXW
       const match = line.match(/^(\d{2}:\d{2})-(\d{2}:\d{2}):\s*(\d+)W?$/);
       if (!match) {
-        throw new Error(`Invalid schedule line format: "${line}"`);
+        throw new LocalizedError(
+          'error.validation.invalid_schedule_line_format',
+          { line: line },
+          `Invalid schedule line format: "${line}"`
+        );
       }
 
       const [, start, stop, thresholdStr] = match;

@@ -15,8 +15,7 @@
       "settings.deviceState": "Gerätezustand (JSON)",
       "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an.",
       "error_no_batteries": "Keine Sonnen-Batterien im lokalen Netzwerk gefunden. Bitte Netzwerk überprüfen und erneut versuchen oder eine statische IP-Adresse angeben.",
-      "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
-      "invalid_auth": "Nicht autorisiert: Ungültiges Auth-Token oder Write API nicht aktiviert."
+      "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben."
     },
     "eclipseLed": {
       "BlinkingRed": "blinkt rot",

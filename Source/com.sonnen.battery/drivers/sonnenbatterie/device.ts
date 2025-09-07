@@ -5,6 +5,7 @@ import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
+import { LocalizedError } from '../../domain/LocalizedError';
 
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -97,60 +98,57 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const operatingMode = newSettings["operating-mode"] as number;
       this.log("Settings", "OperatingMode", operatingMode);
 
-      try {
-        await this.createSonnenBatterieClient().setOperationMode(operatingMode);
-      } catch (error) {
-        this.throwErrorMessageForKnownErrors(error);
-        throw error;
-      }
+      const result = await this.createSonnenBatterieClient().setOperationMode(operatingMode);
+      this.throwLocalizedErrorMessageForKnownErrors(result);
     }
 
     if (_.contains(changedKeys, "prognosis-charging")) {
       const prognosisCharging = newSettings["prognosis-charging"] as boolean;
       this.log("Settings", "PrognosisCharging", prognosisCharging);
 
-      try {
-        await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
-      } catch (error) {
-        this.throwErrorMessageForKnownErrors(error);
-        throw error;
-      }
+      const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
+      this.throwLocalizedErrorMessageForKnownErrors(result);  
     }
 
     if (_.contains(changedKeys, "time-of-use-schedule")) {
       const scheduleRaw = newSettings["time-of-use-schedule"] as string;
       this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
 
-      const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localization of errors
+      const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       const result = await this.createSonnenBatterieClient().setSchedule(schedule);
-      this.throwLocalizedErrorMessageForKnownErrors(result)
+      this.throwLocalizedErrorMessageForKnownErrors(result);
     }
 
   }
 
-  private throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult) {
-    this.log('Command result: ' + result?.toString());
-    if (result?.hasError) {
-      if (result.i18nKey) {
-        const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
-        throw new Error(message);
-      } else if (result.statusCode) {
-        if (result.statusCode === 401) {
-          throw new Error(this.homey.__("error.http.401"));
-        }  
-        throw new Error(this.homey.__("error.http.other", { "statusCode": result.statusCode }));
-      } else {
-        throw new Error(this.homey.__("error.unknown", { "error": result.error }));
-      }
+  private throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult | Error) {
+    // Handle LocalizedError
+    if (result instanceof LocalizedError) {
+      const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
+      throw new Error(message);
     }
-  }
 
-  private throwErrorMessageForKnownErrors(error: unknown) {
-    if (SonnenBatterieClient.isAxiosError(error)) {
-      if (error?.response?.status === 401) {
-        throw new Error(this.homey.__("settings.invalid_auth"));
+    // Handle SonnenCommandResult
+    if (result instanceof SonnenCommandResult) {
+      this.log('Command result: ' + result?.toString());
+      if (result?.hasError) {
+        if (result.i18nKey) {
+          const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
+          throw new Error(message);
+        } else if (result.statusCode) {
+          if (result.statusCode === 401) {
+            throw new Error(this.homey.__("error.http.401"));
+          }
+          throw new Error(this.homey.__("error.http.other", { "statusCode": result.statusCode }));
+        } else {
+          throw new Error(this.homey.__("error.unknown", { "error": result.message }));
+        }
       }
+      return; // no error
     }
+
+    // Fallback for regular errors
+    throw result;
   }
 
   /**
