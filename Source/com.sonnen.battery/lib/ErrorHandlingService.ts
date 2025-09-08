@@ -26,26 +26,28 @@ export class ErrorHandlingService {
   }
 
   public throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult | Error): void {
+    const homey = this.app.homey;
+    
     // Handle LocalizedError
     if (result instanceof LocalizedError) {
-      const message = result.i18nArgs ? this.app.homey.__(result.i18nKey, result.i18nArgs) : this.app.homey.__(result.i18nKey);
+      const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
       throw new Error(message);
     }
 
     // Handle SonnenCommandResult
     if (result instanceof SonnenCommandResult) {
-      this.app.homey.log('Command result: ' + result?.toString());
+      homey.log('Command result: ' + result?.toString());
       if (result?.hasError) {
         if (result.i18nKey) {
-          const message = result.i18nArgs ? this.app.homey.__(result.i18nKey, result.i18nArgs) : this.app.homey.__(result.i18nKey);
+          const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
           throw new Error(message);
         } else if (result.statusCode) {
           if (result.statusCode === 401) {
-            throw new Error(this.app.homey.__("error.http.401"));
+            throw new Error(homey.__("error.http.401"));
           }
-          throw new Error(this.app.homey.__("error.http.other", { "statusCode": result.statusCode }));
+          throw new Error(homey.__("error.http.other", { "statusCode": result.statusCode }));
         } else {
-          throw new Error(this.app.homey.__("error.unknown", { "error": result.message }));
+          throw new Error(homey.__("error.unknown", { "error": result.message }));
         }
       }
       return; // no error
