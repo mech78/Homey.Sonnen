@@ -4,7 +4,7 @@ import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
-import { ErrorHandlingHelper } from '../../lib/ErrorHandlingHelper';
+import { ErrorHandlingService } from '../../lib/ErrorHandlingService';
 
 
 module.exports = class BatteryDevice extends SonnenDevice {
@@ -75,7 +75,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
         const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
         if (!ipv4Regex.test(newDeviceIP)) {
-          ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, new LocalizedError("error.validation.invalid_ip_format"));
+          ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(new LocalizedError("error.validation.invalid_ip_format"));
         }
       }
     }
@@ -87,7 +87,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (useAutoDiscovery) {
         const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
         if (!discoveredIP) {
-          ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, new LocalizedError("connection.error_no_batteries"));
+          ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(new LocalizedError("connection.error_no_batteries"));
         }
       }
     }
@@ -97,7 +97,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "OperatingMode", operatingMode);
 
       const result = await this.createSonnenBatterieClient().setOperationMode(operatingMode);
-      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
+      ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(result);
     }
 
     if (_.contains(changedKeys, "prognosis-charging")) {
@@ -105,7 +105,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "PrognosisCharging", prognosisCharging);
 
       const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
-      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
+      ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(result);
     }
 
     if (_.contains(changedKeys, "time-of-use-schedule")) {
@@ -114,7 +114,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       const result = await this.createSonnenBatterieClient().setSchedule(schedule);
-      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
+      ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(result);
     }
 
   }
