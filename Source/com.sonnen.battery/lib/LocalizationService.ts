@@ -21,7 +21,6 @@ export class LocalizationService {
     if (!this.instance) {
       throw new Error('LocalizationService has not been initialized. Call initialize() first.');
     }
-    
     return this.instance;
   }
 
