@@ -10,7 +10,7 @@ module.exports = class BatteryApp extends Homey.App {
     this.log('BatteryApp has been initialized');
     
     // Initialize the error handling service
-    ErrorHandlingService.getInstance().initialize(this.homey);
+    ErrorHandlingService.initialize(this);
     
     this.homey.on('unload', this.onUninitialize);
   }
