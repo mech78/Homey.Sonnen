@@ -2,8 +2,8 @@ import Homey from 'homey';
 import { SonnenCommandResult } from '../domain/SonnenCommandResult';
 import { LocalizedError } from '../domain/LocalizedError';
 
-export class ErrorHandlingService {
-  private static instance: ErrorHandlingService;
+export class LocalizationService {
+  private static instance: LocalizationService;
   private app: Homey.App;
 
   private constructor(app: Homey.App) {
@@ -12,14 +12,14 @@ export class ErrorHandlingService {
 
   public static initialize(app: Homey.App) {
     if (this.instance) {
-      throw new Error('ErrorHandlingService has already been initialized');
+      throw new Error('LocalizationService has already been initialized');
     }
-    this.instance = new ErrorHandlingService(app);
+    this.instance = new LocalizationService(app);
   }
 
-  public static getInstance(): ErrorHandlingService {
+  public static getInstance(): LocalizationService {
     if (!this.instance) {
-      throw new Error('ErrorHandlingService has not been initialized. Call initialize() first.');
+      throw new Error('LocalizationService has not been initialized. Call initialize() first.');
     }
     
     return this.instance;

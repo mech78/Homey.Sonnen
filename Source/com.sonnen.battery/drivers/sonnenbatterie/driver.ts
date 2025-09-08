@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenDriver } from '../../lib/SonnenDriver';
-import { ErrorHandlingService } from '../../lib/ErrorHandlingService';
+import { LocalizationService } from '../../lib/LocalizationService';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   async onInit(): Promise<void> {
@@ -51,7 +51,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
 
-ErrorHandlingService.getInstance().throwLocalizedErrorMessageForKnownErrors(commandResult);
+LocalizationService.getInstance().throwLocalizedErrorMessageForKnownErrors(commandResult);
 
   
   };
