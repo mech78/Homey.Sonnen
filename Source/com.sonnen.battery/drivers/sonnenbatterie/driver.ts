@@ -1,7 +1,7 @@
 import Homey from 'homey';
 import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenDriver } from '../../lib/SonnenDriver';
-//import { LocalizedError } from '../../domain/LocalizedError';
+import { ErrorHandlingHelper } from '../../lib/ErrorHandlingHelper';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   async onInit(): Promise<void> {
@@ -48,13 +48,11 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.start, args.end, args.maxPower);
+await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
 
-  
-    if (commandResult.hasError) {
-      throw Error(commandResult.message);
-    }
+ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, commandResult);
+
   
   };
 

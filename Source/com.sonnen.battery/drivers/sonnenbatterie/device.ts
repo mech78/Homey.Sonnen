@@ -1,11 +1,11 @@
-
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
-import { SonnenCommandResult } from '../../domain/SonnenCommandResult';
 import { LocalizedError } from '../../domain/LocalizedError';
+import { ErrorHandlingHelper } from '../../lib/ErrorHandlingHelper';
+
 
 module.exports = class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -75,7 +75,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
         const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
         if (!ipv4Regex.test(newDeviceIP)) {
-          this.throwLocalizedErrorMessageForKnownErrors(new LocalizedError("error.validation.invalid_ip_format"));
+          ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, new LocalizedError("error.validation.invalid_ip_format"));
         }
       }
     }
@@ -87,7 +87,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       if (useAutoDiscovery) {
         const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
         if (!discoveredIP) {
-          this.throwLocalizedErrorMessageForKnownErrors(new LocalizedError("connection.error_no_batteries"));
+          ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, new LocalizedError("connection.error_no_batteries"));
         }
       }
     }
@@ -97,7 +97,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "OperatingMode", operatingMode);
 
       const result = await this.createSonnenBatterieClient().setOperationMode(operatingMode);
-      this.throwLocalizedErrorMessageForKnownErrors(result);
+      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
     }
 
     if (_.contains(changedKeys, "prognosis-charging")) {
@@ -105,7 +105,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.log("Settings", "PrognosisCharging", prognosisCharging);
 
       const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
-      this.throwLocalizedErrorMessageForKnownErrors(result);  
+      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
     }
 
     if (_.contains(changedKeys, "time-of-use-schedule")) {
@@ -114,39 +114,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       const result = await this.createSonnenBatterieClient().setSchedule(schedule);
-      this.throwLocalizedErrorMessageForKnownErrors(result);
+      ErrorHandlingHelper.throwLocalizedErrorMessageForKnownErrors(this.homey, result);
     }
 
-  }
-
-  private throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult | Error) {
-    // Handle LocalizedError
-    if (result instanceof LocalizedError) {
-      const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
-      throw new Error(message);
-    }
-
-    // Handle SonnenCommandResult
-    if (result instanceof SonnenCommandResult) {
-      this.log('Command result: ' + result?.toString());
-      if (result?.hasError) {
-        if (result.i18nKey) {
-          const message = result.i18nArgs ? this.homey.__(result.i18nKey, result.i18nArgs) : this.homey.__(result.i18nKey);
-          throw new Error(message);
-        } else if (result.statusCode) {
-          if (result.statusCode === 401) {
-            throw new Error(this.homey.__("error.http.401"));
-          }
-          throw new Error(this.homey.__("error.http.other", { "statusCode": result.statusCode }));
-        } else {
-          throw new Error(this.homey.__("error.unknown", { "error": result.message }));
-        }
-      }
-      return; // no error
-    }
-
-    // Fallback for regular errors
-    throw result;
   }
 
   /**
