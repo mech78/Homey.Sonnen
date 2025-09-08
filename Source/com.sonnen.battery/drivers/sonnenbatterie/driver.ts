@@ -48,12 +48,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
     this.log("Result", commandResult, args.start, args.end, args.maxPower);
-await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
-
-
-LocalizationService.getInstance().throwLocalizedErrorMessageForKnownErrors(commandResult);
-
-  
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });  
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { device: Homey.Device, start: string, hours: number, maxPower: number }): Promise<void> {
@@ -69,62 +65,38 @@ LocalizationService.getInstance().throwLocalizedErrorMessageForKnownErrors(comma
 
     const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-    await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-    this.log("Result", args.start, args.hours, args.maxPower);
-
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
+    this.log("Result", commandResult, args.start, args.hours, args.maxPower);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
-
-    /*
-    if (commandResult.hasError) {
-      throw Error(commandResult.error);
-    }
-    */
   }
 
   private async handleClearTimeOfUse(args: { device: Homey.Device }): Promise<void> {
     // Set empty schedule
 
-    await this.createSonnenBatterieClient(args.device).clearSchedule();
-    this.log("Result");
-
+    const commandResult = await this.createSonnenBatterieClient(args.device).clearSchedule();
+    this.log("Result", commandResult);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
-
-    /*
-    if (commandResult.hasError) {
-      throw Error(commandResult.error);
-    }
-    */
   }
 
   private async handlePauseTimeOfUse(args: { device: Homey.Device, start: string; end: string }): Promise<void> {
     const timeStart = args.start;
     const timeEnd = args.end;
 
-    await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
-    this.log("Result", args.start, args.end);
-
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
+    this.log("Result", commandResult, args.start, args.end);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
-
-    /*
-    if (commandResult.hasError) {
-      throw Error(commandResult.error);
-    }
-    */
   }
 
   private async handleStartTimeOfUse(args: { device: Homey.Device, power: number }): Promise<void> {
     // Set full schedule
 
-    await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power);
-    this.log("Result", args.power);
-
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power);
+    this.log("Result", commandResult, args.power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });
-
-    /*
-    if (commandResult.hasError) {
-      throw Error(commandResult.error);
-    }
-    */
   }
 
   private async handleBatteryLevelBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {

@@ -25,35 +25,36 @@ export class LocalizationService {
     return this.instance;
   }
 
-  public throwLocalizedErrorMessageForKnownErrors(result: SonnenCommandResult | Error): void {
+  public throwLocalizedError(error: Error): void {
     const homey = this.app.homey;
     
     // Handle LocalizedError
-    if (result instanceof LocalizedError) {
-      const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
+    if (error instanceof LocalizedError) {
+      const message = error.i18nArgs ? homey.__(error.i18nKey, error.i18nArgs) : homey.__(error.i18nKey);
       throw new Error(message);
     }
 
-    // Handle SonnenCommandResult
-    if (result instanceof SonnenCommandResult) {
-      homey.log('Command result: ' + result?.toString());
-      if (result?.hasError) {
-        if (result.i18nKey) {
-          const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
-          throw new Error(message);
-        } else if (result.statusCode) {
-          if (result.statusCode === 401) {
-            throw new Error(homey.__("error.http.401"));
-          }
-          throw new Error(homey.__("error.http.other", { "statusCode": result.statusCode }));
-        } else {
-          throw new Error(homey.__("error.unknown", { "error": result.message }));
-        }
-      }
-      return; // no error
-    }
-
     // Fallback for regular errors
-    throw result;
+    throw error;
+  }
+
+  public throwLocalizedErrorIfAny(result: SonnenCommandResult): void {
+    const homey = this.app.homey;
+    
+    // Handle SonnenCommandResult
+    homey.log('Command result: ' + result?.toString());
+    if (result?.hasError) {
+      if (result.i18nKey) {
+        const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
+        throw new Error(message);
+      } else if (result.statusCode) {
+        if (result.statusCode === 401) {
+          throw new Error(homey.__("error.http.401"));
+        }
+        throw new Error(homey.__("error.http.other", { "statusCode": result.statusCode }));
+      } else {
+        throw new Error(homey.__("error.unknown", { "error": result.message }));
+      }
+    }
   }
 }
