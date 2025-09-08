@@ -344,6 +344,9 @@ This is a Homey app for integrating with Sonnen Battery systems, specifically fo
 - Run the app on Homey for debugging and testing using `homey app run --remote`
 - Install the app to Homey using `homey app install`
 
+### 17.2 Shell
+
+- Expect a shell compatible with Unix bash, i.e. in the VSCode terminal use `rm` to delete files, `mv` to move files.
 
 ---
 
