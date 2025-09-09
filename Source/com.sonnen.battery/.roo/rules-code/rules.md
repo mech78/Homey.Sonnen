@@ -169,6 +169,7 @@ This is a Homey app for integrating with Sonnen Battery systems, specifically fo
 - Maintain consistent code formatting
 - Use the common Typescript code-style for .ts files, i.e. camelCase, PascalCase or UPPER_CASE as appropriate
 - For Homey's configuration .json files use Homey SDK style for names & identifiers, i.e. snake_case for multi-word IDs
+- Be cautious about the Homey Energy SDK as some well-known identifiers are camelCase, not snake_case in some .json files
 - Document complex logic with comments
 - Keep functions small and focused
 
