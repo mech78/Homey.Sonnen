@@ -19,7 +19,7 @@ export abstract class SonnenDriver extends Homey.Driver {
     * onPairListDevices is called when a user is adding a device and the 'list_devices' view is called.
     * This should return an array with the data of devices that are available for pairing.
     */
-  override async onPairListDevices(): Promise<Array<{ name: string; data: { id: string }; settings: { "device-ip": string, "device-discovery": boolean } }>> {
+  override async onPairListDevices(): Promise<Array<{ name: string; data: { id: string }; settings: { "device_ip": string, "device_discovery": boolean } }>> {
     try {
       const commandResult = await SonnenBatterieClient.discoverBatteries(); // TODO: handle errors passed in SonnenCommandResult
       const batteries: SonnenBatteries = commandResult.payload as SonnenBatteries;
@@ -32,8 +32,8 @@ export abstract class SonnenDriver extends Homey.Driver {
             id: battery.device + "_" + this.deviceId,
           },
           settings: {
-            "device-ip": battery.lanip,
-            "device-discovery": true,
+            "device_ip": battery.lanip,
+            "device_discovery": true,
           },
         }));
 
@@ -48,6 +48,6 @@ export abstract class SonnenDriver extends Homey.Driver {
 
   protected createSonnenBatterieClient(device: Homey.Device): SonnenBatterieClient {
     const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
-    return new SonnenBatterieClient(batteryAuthToken, device.getSetting("device-ip") as string);
+    return new SonnenBatterieClient(batteryAuthToken, device.getSetting("device_ip") as string);
   }
 };

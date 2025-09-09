@@ -637,7 +637,7 @@
           },
           "children": [
             {
-              "id": "operating-mode",
+              "id": "operating_mode",
               "type": "dropdown",
               "value": "2",
               "label": {
@@ -680,7 +680,7 @@
               ]
             },
             {
-              "id": "time-of-use-schedule",
+              "id": "time_of_use_schedule",
               "type": "textarea",
               "label": {
                 "en": "Time-of-Use Schedule",
@@ -693,7 +693,7 @@
               }
             },
             {
-              "id": "prognosis-charging",
+              "id": "prognosis_charging",
               "type": "checkbox",
               "label": {
                 "en": "Prognosis Charging",
@@ -715,7 +715,7 @@
           },
           "children": [
             {
-              "id": "device-ip",
+              "id": "device_ip",
               "type": "text",
               "label": {
                 "en": "IP address",
@@ -728,7 +728,7 @@
               }
             },
             {
-              "id": "device-discovery",
+              "id": "device_discovery",
               "type": "checkbox",
               "label": {
                 "en": "Auto-discover IP address",

@@ -33,11 +33,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device-discovery") ?? true));
+      this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
     }, batteryPullInterval * 1000);
 
     // Do an initial load
-    this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device-discovery") ?? true));
+    this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
   }
 
   async onDeleted() {
@@ -68,8 +68,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }): Promise<string | void> {
     super.onSettings({ oldSettings, newSettings, changedKeys });
 
-    if (_.contains(changedKeys, "device-ip")) {
-      const newDeviceIP = newSettings["device-ip"] as string;
+    if (_.contains(changedKeys, "device_ip")) {
+      const newDeviceIP = newSettings["device_ip"] as string;
       this.log("Settings", "IP", newDeviceIP);
 
       if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
@@ -80,8 +80,8 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
-    if (_.contains(changedKeys, "device-discovery")) {
-      const useAutoDiscovery = newSettings["device-discovery"] as boolean;
+    if (_.contains(changedKeys, "device_discovery")) {
+      const useAutoDiscovery = newSettings["device_discovery"] as boolean;
       this.log("Settings", "AutoDiscovery", useAutoDiscovery);
 
       if (useAutoDiscovery) {
@@ -92,24 +92,24 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
-    if (_.contains(changedKeys, "operating-mode")) {
-      const operatingMode = newSettings["operating-mode"] as number;
+    if (_.contains(changedKeys, "operating_mode")) {
+      const operatingMode = newSettings["operating_mode"] as number;
       this.log("Settings", "OperatingMode", operatingMode);
 
       const result = await this.createSonnenBatterieClient().setOperationMode(operatingMode);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
     }
 
-    if (_.contains(changedKeys, "prognosis-charging")) {
-      const prognosisCharging = newSettings["prognosis-charging"] as boolean;
+    if (_.contains(changedKeys, "prognosis_charging")) {
+      const prognosisCharging = newSettings["prognosis_charging"] as boolean;
       this.log("Settings", "PrognosisCharging", prognosisCharging);
 
       const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
     }
 
-    if (_.contains(changedKeys, "time-of-use-schedule")) {
-      const scheduleRaw = newSettings["time-of-use-schedule"] as string;
+    if (_.contains(changedKeys, "time_of_use_schedule")) {
+      const scheduleRaw = newSettings["time_of_use_schedule"] as string;
       this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
 
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
@@ -194,7 +194,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
-    // TODO: maybe add a gracefully migration from store-based "autodiscovery" and "lanip" to settings-based "device-discovery" and "device-ip"
+    // TODO: maybe add a gracefully migration from store-based "autodiscovery" and "lanip" to settings-based "device_discovery" and "device_ip"
   }
 
   private async loadLatestState(lastState: SonnenState, retryOnError = true): Promise<SonnenState> {
@@ -329,9 +329,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
         const currentIP = await SonnenBatterieClient.findBatteryIP(homeyDeviceId); // Maybe IP has changed, lets try and fix this...
         if (currentIP) {
           this.log(`Found device ${homeyDeviceId} with IP ${currentIP}`);
-          const storedIP = this.getSetting("device-ip") as string;
+          const storedIP = this.getSetting("device_ip") as string;
           if (storedIP !== currentIP) {
-            this.setSettings({ "device-ip": currentIP });
+            this.setSettings({ "device_ip": currentIP });
             const notification = this.homey.__("connection.notification_ip_changed", { ip: currentIP });
             await this.homey.notifications.createNotification({ excerpt: notification });    
             return await this.loadLatestState(lastState, false); // Try and reload data
@@ -342,7 +342,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
    
-    await this.setWarning(this.homey.__("connection.error", { ip: this.getSetting("device-ip") }));
+    await this.setWarning(this.homey.__("connection.error", { ip: this.getSetting("device_ip") }));
     return lastState; // always return some valid state even on error
   }
 
