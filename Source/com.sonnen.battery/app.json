@@ -229,8 +229,8 @@
           "de": "Zeitabhängige Steuerung einstellen"
         },
         "titleFormatted": {
-          "en": "Set Time-Of-Use starting [[start]] and ending [[end]] with charge of maximum [[maxPower]]W within this period.",
-          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[maxPower]]W in dieser Zeitspanne."
+          "en": "Set Time-Of-Use starting [[start]] and ending [[end]] with charge of maximum [[max_power]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[max_power]]W in dieser Zeitspanne."
         },
         "hint": {
           "en": "Set period for Time-Of-Use",
@@ -260,7 +260,7 @@
           },
           {
             "type": "number",
-            "name": "maxPower",
+            "name": "max_power",
             "placeholder": {
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)"
@@ -278,8 +278,8 @@
           "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen"
         },
         "titleFormatted": {
-          "en": "Set Time-Of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[maxPower]]W within this period.",
-          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[maxPower]]W in dieser Zeitspanne."
+          "en": "Set Time-Of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne."
         },
         "hint": {
           "en": "Set period for Time-Of-Use",
@@ -312,7 +312,7 @@
           },
           {
             "type": "number",
-            "name": "maxPower",
+            "name": "max_power",
             "placeholder": {
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)"
@@ -330,8 +330,8 @@
           "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen"
         },
         "titleFormatted": {
-          "en": "Set Time-Of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[maxPower]]W within this period.",
-          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[maxPower]]W in dieser Zeitspanne."
+          "en": "Set Time-Of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne."
         },
         "hint": {
           "en": "Set period for Time-Of-Use",
@@ -364,7 +364,7 @@
           },
           {
             "type": "number",
-            "name": "maxPower",
+            "name": "max_power",
             "placeholder": {
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)"

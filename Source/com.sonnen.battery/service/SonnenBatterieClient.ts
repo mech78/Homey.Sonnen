@@ -56,9 +56,9 @@ export class SonnenBatterieClient {
 
   }
 
-  public async setScheduleEntry(timeStart: string, timeEnd: string, maxPower: number) {
+  public async setScheduleEntry(timeStart: string, timeEnd: string, max_power: number) {
     // TODO: add error handling or change to TimeOfUseEntry
-    return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: maxPower }));
+    return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: max_power }));
   }
 
   public async clearSchedule() {

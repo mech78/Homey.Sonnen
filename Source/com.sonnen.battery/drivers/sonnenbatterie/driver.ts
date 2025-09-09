@@ -41,21 +41,21 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
   }
 
-  private async handleSetTimeOfUse(args: { device: Homey.Device, start: string, end: string, maxPower: number }): Promise<void> {
+  private async handleSetTimeOfUse(args: { device: Homey.Device, start: string, end: string, max_power: number }): Promise<void> {
     const timeStart = args.start;
     const timeEnd = args.end;
-    const maxPower = args.maxPower;
+    const maxPower = args.max_power;
 
     const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.start, args.end, args.maxPower);
+    this.log("Result", commandResult, args.start, args.end, args.max_power);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });  
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
   };
 
-  private async handleSetTimeOfUseByStartTimeAndHours(args: { device: Homey.Device, start: string, hours: number, maxPower: number }): Promise<void> {
+  private async handleSetTimeOfUseByStartTimeAndHours(args: { device: Homey.Device, start: string, hours: number, max_power: number }): Promise<void> {
     const timeStart = args.start;
     const hours = args.hours;
-    const maxPower = args.maxPower;
+    const maxPower = args.max_power;
 
     // Calculate end from timeStart and hours.
     const timeStartHours = +timeStart.split(":", 1)[0];
@@ -66,7 +66,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
     const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.start, args.hours, args.maxPower);
+    this.log("Result", commandResult, args.start, args.hours, args.max_power);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
   }
