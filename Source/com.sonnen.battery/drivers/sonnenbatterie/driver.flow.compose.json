@@ -294,12 +294,12 @@
     {
       "id": "set_prognosis_charging",
       "title": {
-        "en": "Prognosis Charging",
+        "en": "Prognosis charging",
         "de": "Prognosebasiertes Laden"
       },
       "titleFormatted": {
-        "en": "Prognosis Charging [[active]]",
-        "de": "Prognosebasiertes Laden [[active]]"
+        "en": "Prognosis charging: [[active]]",
+        "de": "Prognosebasiertes Laden: [[active]]"
       },
       "hint": {
         "en": "Toggle prognosis charging",
