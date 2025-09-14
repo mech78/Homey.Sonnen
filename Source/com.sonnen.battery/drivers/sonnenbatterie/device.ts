@@ -6,8 +6,7 @@ import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 
-
-module.exports = class BatteryDevice extends SonnenDevice {
+export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
 
@@ -98,6 +97,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       const result = await this.createSonnenBatterieClient().setOperatingMode(operatingMode);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
     }
 
     if (_.contains(changedKeys, "prognosis_charging")) {
@@ -106,6 +106,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
 
       const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
     }
 
     if (_.contains(changedKeys, "time_of_use_schedule")) {
@@ -115,6 +116,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       const result = await this.createSonnenBatterieClient().setSchedule(schedule);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
     }
 
   }
@@ -358,4 +360,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
     return currentUpdate.getDay() !== lastUpdate.getDay();
   }
 
+  public async refreshState() {
+    this.loadLatestState(this.state, false);
+  }
+
 }
+module.exports = BatteryDevice;
