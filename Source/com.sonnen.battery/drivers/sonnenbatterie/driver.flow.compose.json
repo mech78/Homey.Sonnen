@@ -461,7 +461,7 @@
       "title": { "en": "The operating mode changed", "de": "Der Betriebsmodus wurde geändert" },
       "tokens": [
           {
-            "name": "operating_mode",
+            "name": "operating_mode_capability",
             "type": "string",
             "title": { "en": "Operating Mode", "de": "Betriebsmodus" },
             "example": { "en": "Self consumption", "de": "Eigenverbrauch" }

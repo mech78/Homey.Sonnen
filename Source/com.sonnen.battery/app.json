@@ -66,7 +66,7 @@
         },
         "tokens": [
           {
-            "name": "operating_mode",
+            "name": "operating_mode_capability",
             "type": "string",
             "title": {
               "en": "Operating Mode",

@@ -52,9 +52,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getConditionCard("prognosis_charging_equals")
       .registerRunListener(async (args) => this.handlePrognosisChargingEquals(args));
 
-    // Device-specific triggers:
+    // Device-specific triggers (not needed for custom capabilities following the naming convention):
 
-    //this.homey.flow.getDeviceTriggerCard("operating_mode_capability_changed")
   }
 
   private async handleSetTimeOfUse(args: { device: Homey.Device, start: string, end: string, max_power: number }): Promise<void> {
