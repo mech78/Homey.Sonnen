@@ -19,7 +19,7 @@ module.exports = class HouseholdMeterDevice extends SonnenDevice {
 
   async onInit() {
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
-    this.setSettings({ "energy_cumulative_include": false}); // despite being cumulative, by default do not include this device in energy when created as recommended in v1.7.4. It would conflict with gridmeter.
+    this.setSettings({ "energy_exclude": true}); // despite being cumulative, by default do not include this device in energy when created as recommended in v1.7.4. It would conflict with gridmeter.
     super.onInit();
   }
 
