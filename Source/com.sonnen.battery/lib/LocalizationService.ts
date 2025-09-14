@@ -56,4 +56,16 @@ export class LocalizationService {
       }
     }
   }
+
+  public resolveOperatingMode(mode: string): string {
+    return this.app.homey.__('operatingMode.' + mode) ?? mode;
+  }
+
+  public resolveCircleColor(eclipseLed: Record<string, boolean>): string {
+    let key = 'Unknown';
+    if (eclipseLed) {
+      key = Object.keys(eclipseLed).find(key => eclipseLed[key] === true) ?? key; 
+    }
+    return this.app.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
+  }
 }

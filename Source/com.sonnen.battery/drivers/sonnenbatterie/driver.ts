@@ -33,7 +33,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
     this.homey.flow.getActionCard("switch_operating_mode")
-      .registerRunListener(async (args) => this.handleSwitchOperatingMode(args));  
+      .registerRunListener(async (args) => this.handleSwitchOperatingMode(args));
 
     this.homey.flow.getActionCard("set_prognosis_charging")
       .registerRunListener(async (args) => this.handleSetPrognosisCharging(args));
@@ -45,6 +45,12 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     this.homey.flow.getConditionCard("battery_level_above_or_equal")
       .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
+
+    this.homey.flow.getConditionCard("operating_mode_equals")
+      .registerRunListener(async (args) => this.handleOperatingModeEquals(args));
+
+    this.homey.flow.getConditionCard("prognosis_charging_equals")
+      .registerRunListener(async (args) => this.handlePrognosisChargingEquals(args));
   }
 
   private async handleSetTimeOfUse(args: { device: Homey.Device, start: string, end: string, max_power: number }): Promise<void> {
@@ -117,7 +123,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const argPercentage = args.percentage;
     const batteryLevel = +args.device.getCapabilityValue("measure_battery");
 
-    this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
+    this.log("CONDITION", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
 
     return (batteryLevel < argPercentage);
   }
@@ -126,9 +132,28 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const argPercentage = args.percentage;
     const batteryLevel = +args.device.getCapabilityValue("measure_battery");
 
-    this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
+    this.log("CONDITION", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
 
     return (batteryLevel >= argPercentage);
+  }
+
+  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: number }): Promise<boolean> {
+    const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
+    const operatingMode = LocalizationService.getInstance().resolveOperatingMode("" + args.operating_mode);
+
+    const result = currentOperatingMode === operatingMode;
+    this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);
+
+    return result;
+  }
+
+    private async handlePrognosisChargingEquals(args: { device: Homey.Device, active: boolean }): Promise<boolean> {
+    const currentPrognosisCharging = args.device.getCapabilityValue("prognosis_charging_capability") as boolean;
+
+    const result = currentPrognosisCharging === args.active;
+    this.log("CONDITION", "prognosis charging", currentPrognosisCharging, "arg", args.active, "VALID", result);
+
+    return result;
   }
 
   private zeroPad(num: number, places: number): string {

@@ -287,7 +287,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('battery_charging_state', chargingState);
 
       this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
+      this.setCapabilityValue('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
       this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
       this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
@@ -299,7 +299,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setSettings({ 'time-of-use-schedule': tou.toString() });
 
       const operatingMode = configurations['EM_OperatingMode'];
-      const operatingModeText = this.resolveOperatingMode(operatingMode);
+      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
       this.setCapabilityValue('operating_mode_capability', operatingModeText);
       this.setSettings({ 'operating-mode': '' + operatingMode });
 
@@ -344,18 +344,6 @@ module.exports = class BatteryDevice extends SonnenDevice {
    
     await this.setWarning(this.homey.__("connection.error", { ip: this.getSetting("device_ip") }));
     return lastState; // always return some valid state even on error
-  }
-
-  private resolveOperatingMode(mode: string): string {
-    return this.homey.__('operatingMode.' + mode) ?? mode;
-  }
-
-  private resolveCircleColor(eclipseLed: Record<string, boolean>): string {
-    let key = 'Unknown';
-    if (eclipseLed) {
-      key = Object.keys(eclipseLed).find(key => eclipseLed[key] === true) ?? key; 
-    }
-    return this.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
   }
 
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {

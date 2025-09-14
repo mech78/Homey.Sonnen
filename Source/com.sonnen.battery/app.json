@@ -141,6 +141,84 @@
         ]
       },
       {
+        "id": "operating_mode_equals",
+        "title": {
+          "en": "Operating mode !{{is|isn't}}",
+          "de": "Betriebsmodus !{{ist|ist nicht}}"
+        },
+        "titleFormatted": {
+          "en": "Operating mode !{{is|isn't}} [[operating_mode]]",
+          "de": "Betriebsmodus !{{ist|ist nicht}} [[operating_mode]]"
+        },
+        "hint": {
+          "en": "Current operating mode",
+          "de": "Aktueller Betriebsmodus"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "dropdown",
+            "name": "operating_mode",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Manual",
+                  "de": "Manuell"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Self consumption",
+                  "de": "Eigenverbrauch"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Module extension (30%)",
+                  "de": "Modulerweiterung (30%)"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Time-of-Use",
+                  "de": "Time-of-Use"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "prognosis_charging_equals",
+        "title": {
+          "en": "Prognosis charging is !{{active|inactive}}",
+          "de": "Prognosebasiertes Laden ist !{{aktiv|inaktiv}}"
+        },
+        "titleFormatted": {
+          "en": "Prognosis charging !{{is|isn't}} active: [[active]]",
+          "de": "Prognosebasiertes Laden !{{ist|ist nicht}} aktiv: [[active]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "checkbox",
+            "name": "active"
+          }
+        ]
+      },
+      {
         "id": "grid_consumption_current",
         "title": {
           "en": "Consumption from grid",
@@ -564,8 +642,8 @@
           "de": "Prognosebasiertes Laden"
         },
         "titleFormatted": {
-          "en": "Prognosis charging active: [[active]]",
-          "de": "Prognosebasiertes Laden aktiv: [[active]]"
+          "en": "Prognosis charging: [[active]]",
+          "de": "Prognosebasiertes Laden: [[active]]"
         },
         "hint": {
           "en": "Toggle prognosis charging",
