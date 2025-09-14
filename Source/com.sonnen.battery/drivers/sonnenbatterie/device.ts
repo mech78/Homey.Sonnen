@@ -96,7 +96,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       const operatingMode = newSettings["operating_mode"] as number;
       this.log("Settings", "OperatingMode", operatingMode);
 
-      const result = await this.createSonnenBatterieClient().setOperationMode(operatingMode);
+      const result = await this.createSonnenBatterieClient().setOperatingMode(operatingMode);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
     }
 

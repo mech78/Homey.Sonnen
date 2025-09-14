@@ -32,6 +32,12 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("stop_charge")
       .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
+    this.homey.flow.getActionCard("switch_operating_mode")
+      .registerRunListener(async (args) => this.handleSwitchOperatingMode(args));  
+
+    this.homey.flow.getActionCard("set_prognosis_charging")
+      .registerRunListener(async (args) => this.handleSetPrognosisCharging(args));
+
     // Device-specific conditions:
 
     this.homey.flow.getConditionCard("battery_level_below")
@@ -72,9 +78,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleClearTimeOfUse(args: { device: Homey.Device }): Promise<void> {
-    // Set empty schedule
-
-    const commandResult = await this.createSonnenBatterieClient(args.device).clearSchedule();
+    const commandResult = await this.createSonnenBatterieClient(args.device).clearSchedule(); // Set empty schedule
     this.log("Result", commandResult);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
@@ -91,12 +95,22 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleStartTimeOfUse(args: { device: Homey.Device, power: number }): Promise<void> {
-    // Set full schedule
-
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power);
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power); // Set full schedule
     this.log("Result", commandResult, args.power);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });
+  }
+
+  private async handleSwitchOperatingMode(args: { device: Homey.Device, operating_mode: number }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
+    this.log("Result", commandResult, args.operating_mode);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+  }
+
+  private async handleSetPrognosisCharging(args: { device: Homey.Device, active: boolean }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setPrognosisCharging(args.active)
+    this.log("Result", commandResult, args.active);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
   }
 
   private async handleBatteryLevelBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {

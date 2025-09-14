@@ -500,6 +500,88 @@
             "filter": "driver_id=sonnenbatterie"
           }
         ]
+      },
+      {
+        "id": "switch_operating_mode",
+        "title": {
+          "en": "Switch operating mode",
+          "de": "Betriebsmodus umschalten"
+        },
+        "titleFormatted": {
+          "en": "Switch operating mode to [[operating_mode]]",
+          "de": "Betriebsmodus auf [[operating_mode]] umschalten"
+        },
+        "hint": {
+          "en": "Switch to the appropriate operating mode to have e.g. the time-of-use schedule applied",
+          "de": "Zum passenden Betriebsmodus wechseln, damit z.B. der Time-Of-Use Zeitplan verwendet wird"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "dropdown",
+            "name": "operating_mode",
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Manual",
+                  "de": "Manuell"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Self consumption",
+                  "de": "Eigenverbrauch"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Module extension (30%)",
+                  "de": "Modulerweiterung (30%)"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "Time-of-Use",
+                  "de": "Time-of-Use"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_prognosis_charging",
+        "title": {
+          "en": "Prognosis Charging",
+          "de": "Prognosebasiertes Laden"
+        },
+        "titleFormatted": {
+          "en": "Prognosis Charging [[active]]",
+          "de": "Prognosebasiertes Laden [[active]]"
+        },
+        "hint": {
+          "en": "Toggle prognosis charging",
+          "de": "Prognosebasiertes Laden umschalten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "checkbox",
+            "name": "active"
+          }
+        ]
       }
     ]
   },
