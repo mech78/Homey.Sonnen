@@ -57,23 +57,23 @@
     "error": "Keine Verbindung zur Batterie mit der IP '__ip__' hergestellt. Bitte Geräteeinstellungen überprüfen."
   },
   "error": {
-    "unknown": "An unknown error occurred: __error__",
+    "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__",
     "http": {
-      "400": "Bad request. Invalid data or validation failed",
-      "401": "Invalid Auth Token or required Read/Write API not enabled.",
-      "other": "Unexpected HTTP __statusCode__ error occurred"
+      "400": "Ungültige Anfrage. Ungültige Daten oder Validierung fehlgeschlagen",
+      "401": "Ungültiger Auth-Token oder erforderliche Lese-/Schreib-API nicht aktiviert.",
+      "other": "Unerwarteter HTTP __statusCode__ Fehler aufgetreten"
     },
     "validation": {
-      "failed": "Validation failed",
-      "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__",
-      "invalid_schedule_format": "Invalid schedule format: expected an array",
-      "invalid_schedule_item_missing_properties": "Invalid schedule item at index __index__: missing required properties",
-      "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format",
-      "invalid_schedule_line_format": "Invalid schedule line format: \"__line__\"",
+      "failed": "Validierung fehlgeschlagen",
+      "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__",
+      "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet",
+      "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen",
+      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat",
+      "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\"",
       "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
       "ToU": {
-        "invalid threshold": "Time-of-Use max. power values must be between 0 and 46000 watts.",
-        "ToU windows overlap": "Time-of-Use windows must not overlap."
+        "invalid threshold": "Time-of-Use maximale Leistungswerte müssen zwischen 0 und 46000 Watt liegen.",
+        "ToU windows overlap": "Time-of-Use Fenster dürfen sich nicht überschneiden."
       }
     }
   }
