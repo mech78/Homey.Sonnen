@@ -9,7 +9,6 @@
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
-  "uiQuickAction": true,
   "insights": true,
   "icon": "/assets/images/power-off-thin.svg",
   "insightsTitleTrue": {
