@@ -113,6 +113,34 @@
             "filter": "driver_id=sonnenbatterie"
           }
         ]
+      },
+      {
+        "id": "online_capability_true",
+        "title": {
+          "en": "Connection alarm turned on",
+          "de": "Verbindungsalarm aktiviert"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          }
+        ]
+      },
+      {
+        "id": "online_capability_false",
+        "title": {
+          "en": "Connection alarm turned off",
+          "de": "Verbindungsalarm deaktiviert"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -1537,7 +1565,7 @@
         "en": "Connection alarm turned off",
         "nl": "Connection alarm ging uit",
         "da": "Forbindelsesalarm blev deaktiveret",
-        "de": "Verbindungsalarm ausgeschaltet"
+        "de": "Verbindungsalarm deaktiviert"
       }
     },
     "operating_mode_capability": {

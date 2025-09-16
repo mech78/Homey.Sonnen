@@ -475,6 +475,16 @@
     {
       "id": "prognosis_charging_capability_false",
       "title": { "en": "The prognosis charging is inactive", "de": "Prognosebasiertes Laden ist inaktiv" }
+    },
+    {
+      "id": "online_capability_true",
+      "title": { "en": "Connection alarm turned on", "de": "Verbindungsalarm aktiviert" }
+    },
+    {
+      "id": "online_capability_false",
+      "title": { "en": "Connection alarm turned off", "de": "Verbindungsalarm deaktiviert" }
     }
+
+
   ]
 }
