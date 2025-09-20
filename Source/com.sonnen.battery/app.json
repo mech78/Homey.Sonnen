@@ -1189,7 +1189,7 @@
       "max": 100,
       "decimals": 1,
       "insights": true,
-      "icon": "/assets/images/percentage.svg"
+      "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
     },
     "capacity_capability": {
       "type": "number",
@@ -1207,7 +1207,7 @@
       },
       "min": 0,
       "decimals": 3,
-      "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
+      "icon": "/assets/images/svg/battery-100-svgrepo-com.svg"
     },
     "capacity_remaining_capability": {
       "type": "number",
@@ -1225,26 +1225,7 @@
       },
       "min": 0,
       "decimals": 3,
-      "icon": "/assets/images/distribute-spacing-vertical-thin.svg"
-    },
-    "consumption_capability": {
-      "type": "number",
-      "title": {
-        "en": "Consumption",
-        "da": "Forbrug",
-        "de": "Verbrauch",
-        "nl": "Uitgaven"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": true,
-      "units": {
-        "en": "kW"
-      },
-      "min": 0,
-      "decimals": 3,
-      "insights": true,
-      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+      "icon": "/assets/images/svg/battery-75-svgrepo-com.svg"
     },
     "consumption_current_capability": {
       "type": "number",
@@ -1262,7 +1243,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+      "icon": "/assets/images/svg/electricity-home-svgrepo-com.svg"
     },
     "consumption_daily_capability": {
       "type": "number",
@@ -1281,7 +1262,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
+      "icon": "/assets/images/svg/electricity-home-svgrepo-com.svg"
     },
     "consumption_total_capability": {
       "type": "number",
@@ -1300,7 +1281,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/light-house-blank-circle-bolt_daily.svg"
+      "icon": "/assets/images/svg/electricity-home-svgrepo-com.svg"
     },
     "eclipse_capability": {
       "type": "string",
@@ -1313,7 +1294,7 @@
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
-      "icon": "/assets/images/lightbulb-on-light.svg",
+      "icon": "/assets/images/svg/light-bulb-svgrepo-com.svg",
       "insights": true
     },
     "from_battery_capability": {
@@ -1333,7 +1314,7 @@
       "min": 0,
       "decimals": 0,
       "insights": true,
-      "icon": "/assets/images/from-battery.svg"
+      "icon": "/assets/images/svg/battery-negative-svgrepo-com.svg"
     },
     "from_battery_daily_capability": {
       "type": "number",
@@ -1352,7 +1333,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/from-battery.svg"
+      "icon": "/assets/images/svg/battery-negative-svgrepo-com.svg"
     },
     "from_battery_total_capability": {
       "type": "number",
@@ -1371,26 +1352,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/from-battery.svg"
-    },
-    "grid_consumption_capability": {
-      "type": "number",
-      "title": {
-        "en": "Grid consumption",
-        "da": "Netforbrug",
-        "de": "Netzbezug",
-        "nl": "Roosterverbruik"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": true,
-      "units": {
-        "en": "kW"
-      },
-      "min": 0,
-      "decimals": 3,
-      "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+      "icon": "/assets/images/svg/battery-negative-svgrepo-com.svg"
     },
     "grid_consumption_current_capability": {
       "type": "number",
@@ -1408,7 +1370,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "grid_consumption_daily_capability": {
       "type": "number",
@@ -1427,7 +1389,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "grid_consumption_total_capability": {
       "type": "number",
@@ -1446,26 +1408,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
-    },
-    "grid_feed_in_capability": {
-      "type": "number",
-      "title": {
-        "en": "Grid feed-in",
-        "da": "Til net",
-        "de": "Netzeinspeisung",
-        "nl": "Roosterinvoer"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": true,
-      "units": {
-        "en": "kW"
-      },
-      "min": 0,
-      "decimals": 3,
-      "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "grid_feed_in_current_capability": {
       "type": "number",
@@ -1483,7 +1426,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "grid_feed_in_daily_capability": {
       "type": "number",
@@ -1502,7 +1445,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "grid_feed_in_total_capability": {
       "type": "number",
@@ -1521,7 +1464,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+      "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com.svg"
     },
     "number_battery_capability": {
       "type": "number",
@@ -1540,7 +1483,7 @@
       "min": 0,
       "decimals": 0,
       "insights": true,
-      "icon": "/assets/images/car-battery-sharp-light.svg"
+      "icon": "/assets/images/svg/battery-energy-svgrepo-com.svg"
     },
     "online_capability": {
       "type": "boolean",
@@ -1554,7 +1497,7 @@
       "setable": false,
       "uiComponent": "sensor",
       "insights": true,
-      "icon": "/assets/images/power-off-thin.svg",
+      "icon": "/assets/images/svg/switch-button-svgrepo-com.svg",
       "insightsTitleTrue": {
         "en": "Connection alarm turned on",
         "nl": "Connection alarm ging af",
@@ -1579,26 +1522,7 @@
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
-      "icon": "/assets/images/car-battery-sharp-light.svg"
-    },
-    "production_capability": {
-      "type": "number",
-      "title": {
-        "en": "Production now",
-        "da": "Produktion",
-        "de": "Produktion",
-        "nl": "Productie nu"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": true,
-      "units": {
-        "en": "kW"
-      },
-      "min": 0,
-      "decimals": 3,
-      "insights": true,
-      "icon": "/assets/images/house-day-thin.svg"
+      "icon": "/assets/images/svg/three-gears-of-configuration-tools-svgrepo-com.svg"
     },
     "production_current_capability": {
       "type": "number",
@@ -1616,7 +1540,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/house-day-thin.svg"
+      "icon": "/assets/images/svg/solar-battery-4-svgrepo-com.svg"
     },
     "production_daily_capability": {
       "type": "number",
@@ -1635,7 +1559,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/house-day-thin_daily.svg"
+      "icon": "/assets/images/svg/solar-battery-4-svgrepo-com.svg"
     },
     "production_total_capability": {
       "type": "number",
@@ -1654,20 +1578,20 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/house-day-thin_daily.svg"
+      "icon": "/assets/images/svg/solar-battery-4-svgrepo-com.svg"
     },
     "prognosis_charging_capability": {
       "type": "boolean",
       "title": {
         "en": "Prognosis Charging",
-        "da": "Prognosebaseret opladning",
-        "de": "Prognosebasiertes Laden",
+        "da": "Prognose opladning",
+        "de": "Prognose Laden",
         "nl": "Prognose laden"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
-      "icon": "/assets/images/prognosis-charging.svg"
+      "icon": "/assets/images/svg/weather-symbol-4-svgrepo-com.svg"
     },
     "self_consumption_capability": {
       "type": "number",
@@ -1687,7 +1611,7 @@
       "max": 100,
       "decimals": 1,
       "insights": true,
-      "icon": "/assets/images/percentage.svg"
+      "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
     },
     "state_bms_capability": {
       "type": "string",
@@ -1700,7 +1624,7 @@
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
-      "icon": "/assets/images/wave-pulse-regular.svg"
+      "icon": "/assets/images/svg/pulse-svgrepo-com.svg"
     },
     "state_inverter_capability": {
       "type": "string",
@@ -1713,7 +1637,7 @@
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
-      "icon": "/assets/images/monitor-waveform-light.svg"
+      "icon": "/assets/images/svg/electric-charge-svgrepo-com.svg"
     },
     "to_battery_capability": {
       "type": "number",
@@ -1732,7 +1656,7 @@
       "min": 0,
       "decimals": 0,
       "insights": true,
-      "icon": "/assets/images/to-battery.svg"
+      "icon": "/assets/images/svg/battery-positive-svgrepo-com.svg"
     },
     "to_battery_daily_capability": {
       "type": "number",
@@ -1751,7 +1675,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/to-battery.svg"
+      "icon": "/assets/images/svg/battery-positive-svgrepo-com.svg"
     },
     "to_battery_total_capability": {
       "type": "number",
@@ -1770,7 +1694,7 @@
       "min": 0,
       "decimals": 3,
       "insights": true,
-      "icon": "/assets/images/to-battery.svg"
+      "icon": "/assets/images/svg/battery-positive-svgrepo-com.svg"
     }
   }
 }

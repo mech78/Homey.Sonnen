@@ -2,12 +2,12 @@
   "type": "boolean",
   "title": {
     "en": "Prognosis Charging",
-    "da": "Prognosebaseret opladning",
-    "de": "Prognosebasiertes Laden",
+    "da": "Prognose opladning",
+    "de": "Prognose Laden",
     "nl": "Prognose laden"
   },
   "uiComponent": "sensor",
   "getable": true,
   "setable": true,
-  "icon": "/assets/images/prognosis-charging.svg"
+  "icon": "/assets/images/svg/weather-symbol-4-svgrepo-com.svg"
 }

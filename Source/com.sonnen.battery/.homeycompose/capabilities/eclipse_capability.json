@@ -9,6 +9,6 @@
   "uiComponent": "sensor",
   "getable": true,
   "setable": true,
-  "icon": "/assets/images/lightbulb-on-light.svg",
+  "icon": "/assets/images/svg/light-bulb-svgrepo-com.svg",
   "insights": true
 }

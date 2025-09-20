@@ -9,5 +9,5 @@
   "uiComponent": "sensor",
   "getable": true,
   "setable": true,
-  "icon": "/assets/images/monitor-waveform-light.svg"
+  "icon": "/assets/images/svg/electric-charge-svgrepo-com.svg"
 }

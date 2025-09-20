@@ -9,5 +9,5 @@
   "uiComponent": "sensor",
   "getable": true,
   "setable": true,
-  "icon": "/assets/images/car-battery-sharp-light.svg"
+  "icon": "/assets/images/svg/three-gears-of-configuration-tools-svgrepo-com.svg"
 }

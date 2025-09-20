@@ -10,7 +10,7 @@
   "setable": false,
   "uiComponent": "sensor",
   "insights": true,
-  "icon": "/assets/images/power-off-thin.svg",
+  "icon": "/assets/images/svg/switch-button-svgrepo-com.svg",
   "insightsTitleTrue": {
     "en": "Connection alarm turned on",
     "nl": "Connection alarm ging af",
