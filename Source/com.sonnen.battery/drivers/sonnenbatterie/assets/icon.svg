@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Pro 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc.--><path d="M496 144l0 224L48 368l0-224 448 0zM48 96L0 96l0 48L0 368l0 48 48 0 448 0 48 0 0-48 0-48 32 0 0-128-32 0 0-48 0-48-48 0L48 96zm240 96L96 192l0 128 192 0 0-128z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="31" viewBox="0 0 29 31">
+    <g fill="white" fill-rule="evenodd" stroke="#181A27">
+        <rect width="28" height="30" x=".5" y=".5" rx="1"/>
+        <path stroke-width=".9" d="M14.5 13.5c1.678 0 3.039-1.343 3.039-3s-1.36-3-3.039-3c-1.678 0-3.039 1.343-3.039 3s1.36 3 3.039 3z"/>
+        <path stroke-linecap="round" d="M10.5 16.5h8"/>
+    </g>
+</svg>
