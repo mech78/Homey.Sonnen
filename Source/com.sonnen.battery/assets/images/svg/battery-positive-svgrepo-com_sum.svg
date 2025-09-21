@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#000000"
+   width="800px"
+   height="800px"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="battery-positive-svgrepo-com_sum.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.96625"
+     inkscape:cx="399.48254"
+     inkscape:cy="400"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <title
+     id="title1">battery-positive</title>
+  <path
+     d="m 17.779041,1.0005002 c -0.937,0 -1.25,0.211 -1.25,1.25 v 0.937 h -2.813 c -1.847,0 -2.187,0.341 -2.187,2.187 V 28.8125 c 0,1.847 0.341,2.187 2.187,2.187 h 15 c 1.847,0 2.187,-0.341 2.187,-2.187 V 5.3745002 c 0,-1.847 -0.341,-2.187 -2.187,-2.187 h -2.813 v -0.937 c 0,-1.038 -0.312,-1.25 -1.25,-1.25 h -6.875 z m -4.063,6.563 c 0,-2.5 -0.312,-2.187 2.187,-2.187 1.25,0 9.688,0 10.625,0 2.5,0 2.187,-0.312 2.187,2.187 0,1.25 0,17.8129998 0,19.0629998 0,2.5 0.312,2.187 -2.187,2.187 -1.25,0 -9.375,0 -10.625,0 -2.5,0 -2.187,0.312 -2.187,-2.187 0,-1.251 0,-17.8129998 0,-19.0629998 z m 2.187,7.1869998 h 10.625 c 0.345,0 0.625,0.28 0.625,0.625 v 3.125 c 0,0.345 -0.28,0.625 -0.625,0.625 h -10.625 c -0.345,0 -0.625,-0.28 -0.625,-0.625 v -3.125 c 0,-0.345 0.28,-0.625 0.625,-0.625 z m 3.751,-3.75 h 3.125 c 0.345,0 0.625,0.28 0.625,0.625 v 10.625 c 0,0.345 -0.28,0.625 -0.625,0.625 h -3.125 c -0.345,0 -0.625,-0.28 -0.625,-0.625 v -10.625 c 0,-0.345 0.28,-0.625 0.625,-0.625 z"
+     id="path1" />
+  <g
+     style="fill:#000000"
+     id="g4"
+     transform="matrix(0.02015846,0,0,0.02015846,0.70837981,19.124193)">
+    <g
+       id="g1-4">
+	<path
+   d="M 395.527,97.043 V 55.352 h -270.99 l 159.46,171.507 c 9.983,10.749 9.848,27.458 -0.319,38.026 L 126.017,428.861 h 269.504 v -25.18 c 0,-15.256 12.413,-27.668 27.674,-27.668 15.256,0 27.681,12.412 27.681,27.668 v 52.848 c 0,15.262 -12.419,27.681 -27.681,27.681 H 61.014 c -11.106,0 -21.107,-6.603 -25.464,-16.834 -4.359,-10.226 -2.189,-22.012 5.509,-30.026 L 225.643,245.386 40.743,46.521 C 33.251,38.453 31.247,26.723 35.642,16.622 40.042,6.525 50.005,0 61.014,0 h 362.188 c 15.255,0 27.68,12.413 27.68,27.68 v 69.363 c 0,15.259 -12.419,27.677 -27.68,27.677 -15.262,0 -27.675,-12.412 -27.675,-27.677 z"
+   id="path1-8" />
+
+</g>
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>battery-positive</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

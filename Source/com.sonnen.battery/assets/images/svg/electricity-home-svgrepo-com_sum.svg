@@ -8,7 +8,7 @@
    id="Layer_1"
    data-name="Layer 1"
    version="1.1"
-   sodipodi:docname="electricity-home-svgrepo-com.svg"
+   sodipodi:docname="electricity-home-svgrepo-com_sum.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,7 +24,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.96625"
-     inkscape:cx="529.88357"
+     inkscape:cx="530.40103"
      inkscape:cy="423.80336"
      inkscape:window-width="1920"
      inkscape:window-height="991"
@@ -41,15 +41,27 @@
      class="cls-1"
      points="20 8.5 20 22.5 4 22.5 4 8.5"
      id="polyline1"
-     transform="translate(1.960513,-0.20793905)" />
+     transform="translate(4.2877882,-0.20793905)" />
   <polyline
      class="cls-1"
      points="23 10.5 12 1.5 1 10.5"
      id="polyline2"
-     transform="translate(1.960513,-0.20793905)" />
+     transform="translate(4.2877882,-0.20793905)" />
   <polygon
      class="cls-1"
-     points="9,13.5 12,13.5 12,16.5 15,12.5 12,12.5 12,9.5 "
+     points="12,9.5 9,13.5 12,13.5 12,16.5 15,12.5 12,12.5 "
      id="polygon2"
-     transform="translate(1.960513,-0.20793905)" />
+     transform="translate(4.2877882,-0.20793905)" />
+  <g
+     style="fill:#000000"
+     id="g4"
+     transform="matrix(0.01511884,0,0,0.01511884,-0.50388955,13.695023)">
+    <g
+       id="g1-4">
+	<path
+   d="M 395.527,97.043 V 55.352 h -270.99 l 159.46,171.507 c 9.983,10.749 9.848,27.458 -0.319,38.026 L 126.017,428.861 h 269.504 v -25.18 c 0,-15.256 12.413,-27.668 27.674,-27.668 15.256,0 27.681,12.412 27.681,27.668 v 52.848 c 0,15.262 -12.419,27.681 -27.681,27.681 H 61.014 c -11.106,0 -21.107,-6.603 -25.464,-16.834 -4.359,-10.226 -2.189,-22.012 5.509,-30.026 L 225.643,245.386 40.743,46.521 C 33.251,38.453 31.247,26.723 35.642,16.622 40.042,6.525 50.005,0 61.014,0 h 362.188 c 15.255,0 27.68,12.413 27.68,27.68 v 69.363 c 0,15.259 -12.419,27.677 -27.68,27.677 -15.262,0 -27.675,-12.412 -27.675,-27.677 z"
+   id="path1-8" />
+
+</g>
+  </g>
 </svg>

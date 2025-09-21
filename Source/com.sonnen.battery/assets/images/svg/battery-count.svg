@@ -8,7 +8,7 @@
    viewBox="0 0 32 32"
    version="1.1"
    id="svg1"
-   sodipodi:docname="battery-negative-svgrepo-com.svg"
+   sodipodi:docname="battery-count.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -40,8 +40,9 @@
   <title
      id="title1">battery-negative</title>
   <path
-     d="m 12.563,1.0005 c -0.937,0 -1.25,0.211 -1.25,1.25 v 0.937 H 8.5 c -1.847,0 -2.187,0.341 -2.187,2.187 v 23.438 c 0,1.847 0.341,2.187 2.187,2.187 h 15 c 1.847,0 2.187,-0.341 2.187,-2.187 V 5.3745 c 0,-1.847 -0.341,-2.187 -2.187,-2.187 h -2.813 v -0.937 c 0,-1.038 -0.312,-1.25 -1.25,-1.25 H 12.562 Z M 8.5,7.5635 c 0,-2.5 -0.312,-2.187 2.187,-2.187 1.25,0 9.688,0 10.625,0 2.5,0 2.187,-0.312 2.187,2.187 0,1.25 0,17.813 0,19.063 0,2.5 0.312,2.187 -2.187,2.187 -1.25,0 -9.375,0 -10.625,0 -2.5,0 -2.187,0.312 -2.187,-2.187 0,-1.251 0,-17.813 0,-19.063 z m 2.187,7.187 h 10.625 c 0.345,0 0.625,0.28 0.625,0.625 v 3.125 c 0,0.345 -0.28,0.625 -0.625,0.625 H 10.687 c -0.345,0 -0.625,-0.28 -0.625,-0.625 v -3.125 c 0,-0.345 0.28,-0.625 0.625,-0.625 z"
-     id="path1" />
+     d="m 12.563,1.0005 c -0.937,0 -1.25,0.211 -1.25,1.25 v 0.937 H 8.5 c -1.847,0 -2.187,0.341 -2.187,2.187 v 23.438 c 0,1.847 0.341,2.187 2.187,2.187 h 15 c 1.847,0 2.187,-0.341 2.187,-2.187 V 5.3745 c 0,-1.847 -0.341,-2.187 -2.187,-2.187 h -2.813 v -0.937 c 0,-1.038 -0.312,-1.25 -1.25,-1.25 H 12.562 Z M 8.5,7.5635 c 0,-2.5 -0.312,-2.187 2.187,-2.187 h 10.625 c 2.5,0 2.187,-0.312 2.187,2.187 v 19.063 c 0,2.5 0.312,2.187 -2.187,2.187 H 10.687 c -2.5,0 -2.187,0.312 -2.187,-2.187 z"
+     id="path1"
+     sodipodi:nodetypes="cscsssssssscssccsssssssss" />
   <metadata
      id="metadata1">
     <rdf:RDF>
@@ -51,4 +52,19 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     id="g1"
+     transform="translate(6.7982098,-8.2152554)">
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.7879px;font-family:Monospace;-inkscape-font-specification:'Monospace, Bold Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.161818"
+       x="5.970161"
+       y="29.328804"
+       id="text4"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         x="5.970161"
+         y="29.328804"
+         style="stroke-width:0.161818">#</tspan></text>
+  </g>
 </svg>
