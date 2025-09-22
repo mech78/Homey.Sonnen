@@ -25,13 +25,24 @@
   },
   "stateBms": {
     "ready": "ready",
-    "notready": "not ready"
+    "notready": "not ready",
+    "error": "error",
+    "initializing": "initializing",
+    "init": "initializing"
   },
-  "stateInverter": {
+  "stateCoreControlModule": {
     "ready": "ready",
     "notready": "not ready",
+    "init": "initializing",
+    "reinit": "initializing",
     "ongrid": "on grid",
-    "offgrid": "off grid"
+    "offgrid": "off grid",
+    "criticalerror": "critical error"
+  },
+  "stateInverter": {
+    "running": "running",
+    "notready": "not ready",
+    "error": "error"
   },
   "widget": {
     "production": "Production",
