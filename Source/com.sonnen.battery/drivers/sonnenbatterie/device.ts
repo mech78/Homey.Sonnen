@@ -152,7 +152,8 @@ export class BatteryDevice extends SonnenDevice {
       'from_battery_total_capability',
       'capacity_remaining_capability',
       'operating_mode_capability',
-      'prognosis_charging_capability'
+      'prognosis_charging_capability',
+      'state_core_control_module_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -290,8 +291,9 @@ export class BatteryDevice extends SonnenDevice {
 
       this.setCapabilityValue('number_battery_capability', numberBatteries);
       this.setCapabilityValue('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
-      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
-      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule); // TODO: this was never really inverter state, that would be usually ic_status.stateinverter = running.
+      this.setCapabilityValue('state_bms_capability', latestDataJson.ic_status.statebms);
+      this.setCapabilityValue('state_inverter_capability', latestDataJson.ic_status.stateinverter);
+      this.setCapabilityValue('state_core_control_module_capability', latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
       

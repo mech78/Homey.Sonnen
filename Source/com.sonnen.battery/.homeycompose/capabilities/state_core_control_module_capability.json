@@ -1,0 +1,13 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Core Control Module",
+    "da": "Centralt styreenhed",
+    "nl": "Centrale regeleenheid",
+    "de": "Zentrales Steuergerät"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "icon": "/assets/images/svg/electric-charge-svgrepo-com.svg"
+}

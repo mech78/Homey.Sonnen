@@ -799,6 +799,7 @@
         "eclipse_capability",
         "state_inverter_capability",
         "state_bms_capability",
+        "state_core_control_module_capability",
         "alarm_generic",
         "button.reset_meter",
         "measure_power",
@@ -1623,18 +1624,31 @@
       "setable": true,
       "icon": "/assets/images/svg/pulse-svgrepo-com.svg"
     },
-    "state_inverter_capability": {
+    "state_core_control_module_capability": {
       "type": "string",
       "title": {
-        "en": "Inverter state",
-        "da": "Inverter status",
-        "nl": "Omvormer staat",
-        "de": "Wechselrichterstatus"
+        "en": "Core Control Module",
+        "da": "Centralt styreenhed",
+        "nl": "Centrale regeleenheid",
+        "de": "Zentrales Steuergerät"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": true,
       "icon": "/assets/images/svg/electric-charge-svgrepo-com.svg"
+    },
+    "state_inverter_capability": {
+      "type": "string",
+      "title": {
+        "en": "Inverter",
+        "da": "Inverter",
+        "nl": "Omvormer",
+        "de": "Wechselrichter"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
     },
     "to_battery_capability": {
       "type": "number",
