@@ -33,7 +33,7 @@ export class SonnenState {
     this.totalGridFeedIn_Wh = initialState?.totalGridFeedIn_Wh || 0;
     this.totalGridConsumption_Wh = initialState?.totalGridConsumption_Wh || 0;
     this.todayMaxConsumption_Wh = initialState?.todayMaxConsumption_Wh || 0;
-    this.todayMinConsumption_Wh = initialState?.todayMinConsumption_Wh || 0;
+    this.todayMinConsumption_Wh = initialState?.todayMinConsumption_Wh || Number.MAX_SAFE_INTEGER;
     this.todayMaxGridFeedIn_Wh = initialState?.todayMaxGridFeedIn_Wh || 0;
     this.todayMaxGridConsumption_Wh = initialState?.todayMaxGridConsumption_Wh || 0;
     this.todayMaxProduction_Wh = initialState?.todayMaxProduction_Wh || 0;
