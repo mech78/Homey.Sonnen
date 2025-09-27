@@ -327,17 +327,17 @@ export class BatteryDevice extends SonnenDevice {
       const scheduleRaw = configurations['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
       this.log('Parsed Time-of-Use schedule:', tou.toJSONString());
-      this.setSettings({ 'time-of-use-schedule': tou.toString() });
+      this.setSettings({ 'time_of_use_schedule': tou.toString() });
 
       const operatingMode = configurations['EM_OperatingMode'];
       const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
       this.setCapabilityValue('operating_mode_capability', operatingModeText);
-      this.setSettings({ 'operating-mode': '' + operatingMode });
+      this.setSettings({ 'operating_mode': '' + operatingMode });
 
       const prognosisCharging = configurations['EM_Prognosis_Charging'];
       const prognosisChargingMode = prognosisCharging === "1";
       this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
-      this.setSettings({ 'prognosis-charging': prognosisChargingMode });
+      this.setSettings({ 'prognosis_charging': prognosisChargingMode });
  
       /*
       if (Math.random() < 0.5) {
