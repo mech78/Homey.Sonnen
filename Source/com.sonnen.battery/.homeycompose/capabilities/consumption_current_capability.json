@@ -4,7 +4,7 @@
     "en": "Consumption",
     "da": "Forbrug",
     "de": "Verbrauch",
-    "nl": "Uitgaven"
+    "nl": "verbruik"
   },
   "uiComponent": "sensor",
   "getable": true,
