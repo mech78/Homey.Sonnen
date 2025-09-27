@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Today's max consumption",
+    "da": "Dagens maks. forbrug",
+    "de": "Heutiger Max.-Bezug",
+    "nl": "Vandaag max. verbruik"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+}

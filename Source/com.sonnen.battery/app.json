@@ -1027,6 +1027,8 @@
         "grid_feed_in_current_capability",
         "grid_consumption_daily_capability",
         "grid_feed_in_daily_capability",
+        "grid_consumption_today_max_capability",
+        "grid_feed_in_today_max_capability",
         "grid_consumption_total_capability",
         "grid_feed_in_total_capability",
         "measure_power",
@@ -1088,8 +1090,10 @@
       "capabilities": [
         "consumption_current_capability",
         "consumption_daily_capability",
-        "consumption_total_capability",
+        "consumption_today_min_capability",
+        "consumption_today_max_capability",
         "autarky_capability",
+        "consumption_total_capability",
         "measure_power"
       ],
       "capabilitiesOptions": {
@@ -1137,8 +1141,9 @@
       "capabilities": [
         "production_current_capability",
         "production_daily_capability",
-        "production_total_capability",
+        "production_today_max_capability",
         "self_consumption_capability",
+        "production_total_capability",
         "measure_power",
         "meter_power"
       ],
@@ -1234,7 +1239,7 @@
         "en": "Consumption",
         "da": "Forbrug",
         "de": "Verbrauch",
-        "nl": "Uitgaven"
+        "nl": "verbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1264,6 +1269,42 @@
       "decimals": 3,
       "insights": true,
       "icon": "/assets/images/svg/electricity-home-svgrepo-com_sum_daily.svg"
+    },
+    "consumption_today_max_capability": {
+      "type": "number",
+      "title": {
+        "en": "Today's max. consumption",
+        "da": "Dagens maks. forbrug",
+        "de": "Heutiger Max.-Verbrauch",
+        "nl": "Vandaag max. verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+    },
+    "consumption_today_min_capability": {
+      "type": "number",
+      "title": {
+        "en": "Today's min. consumption",
+        "da": "Dagens min. forbrug",
+        "de": "Heutiger Min.-Verbrauch",
+        "nl": "Vandaag min. verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/minimum-graph-svgrepo-com.svg"
     },
     "consumption_total_capability": {
       "type": "number",
@@ -1392,6 +1433,24 @@
       "insights": true,
       "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com_import_sum_daily.svg"
     },
+    "grid_consumption_today_max_capability": {
+      "type": "number",
+      "title": {
+        "en": "Today's max consumption",
+        "da": "Dagens maks. forbrug",
+        "de": "Heutiger Max.-Bezug",
+        "nl": "Vandaag max. verbruik"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+    },
     "grid_consumption_total_capability": {
       "type": "number",
       "title": {
@@ -1433,7 +1492,7 @@
       "type": "number",
       "title": {
         "en": "∑d Grid feed-in",
-        "da": "∑d Nettilslutning",
+        "da": "∑d Til net",
         "de": "∑d Netzeinspeisung",
         "nl": "∑d Roosterinvoer"
       },
@@ -1448,11 +1507,29 @@
       "insights": true,
       "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com_export_sum_daily.svg"
     },
+    "grid_feed_in_today_max_capability": {
+      "type": "number",
+      "title": {
+        "en": "Today's max feed-in",
+        "da": "Dagens maks. til net",
+        "de": "Heutige Max.-Einspeisung",
+        "nl": "Vandaag max. invoer"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+    },
     "grid_feed_in_total_capability": {
       "type": "number",
       "title": {
         "en": "∑ Grid feed-in",
-        "da": "∑ Nettilslutning",
+        "da": "∑ Til net",
         "de": "∑ Netzeinspeisung",
         "nl": "∑ Roosterinvoer"
       },
@@ -1558,6 +1635,24 @@
       "decimals": 3,
       "insights": true,
       "icon": "/assets/images/svg/solar-battery-4-svgrepo-com_sum_daily.svg"
+    },
+    "production_today_max_capability": {
+      "type": "number",
+      "title": {
+        "en": "Today's max solar power",
+        "da": "Dagens maks. solenergi",
+        "de": "Heutige Max.-Solarleistung",
+        "nl": "Max. zonnevermogen vandaag"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
     },
     "production_total_capability": {
       "type": "number",

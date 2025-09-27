@@ -20,12 +20,27 @@ module.exports = class SolarPanelDevice extends SonnenDevice {
 
   async onInit() {
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
+    await this.gracefullyAddOrRemoveCapabilities();
     super.onInit();
   }
 
   async onDeleted() {
     this.homey.removeListener('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onDeleted();
+  }
+
+  private async gracefullyAddOrRemoveCapabilities() {
+
+    const toAdd: string[] = [
+      'production_today_max_capability'
+    ];
+
+    for (const capability of toAdd) {
+      if (!this.hasCapability(capability)) {
+        await this.addCapability(capability);
+      }
+    }
+
   }
 
 };

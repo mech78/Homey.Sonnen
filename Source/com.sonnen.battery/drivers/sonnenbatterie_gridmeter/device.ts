@@ -27,6 +27,18 @@ module.exports = class GridMeterDevice extends SonnenDevice {
   }
 
   private async gracefullyAddOrRemoveCapabilities() {
+
+    const toAdd: string[] = [
+      'grid_consumption_today_max_capability',
+      'grid_feed_in_today_max_capability',
+    ];
+
+    for (const capability of toAdd) {
+      if (!this.hasCapability(capability)) {
+        await this.addCapability(capability);
+      }
+    }
+
     if (!this.isEnergyFullySupported()) {
 
       const unsupportedForOlderHomeys = [

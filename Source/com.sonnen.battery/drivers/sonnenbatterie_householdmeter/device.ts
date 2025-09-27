@@ -20,12 +20,28 @@ module.exports = class HouseholdMeterDevice extends SonnenDevice {
   async onInit() {
     this.homey.on('sonnenBatterieUpdate', this.handleUpdateEvent);
     this.setSettings({ "energy_exclude": true}); // despite being cumulative, by default do not include this device in energy when created as recommended in v1.7.4. It would conflict with gridmeter.
+    await this.gracefullyAddOrRemoveCapabilities();
     super.onInit();
   }
 
   async onDeleted() {
     this.homey.removeListener('sonnenBatterieUpdate', this.handleUpdateEvent);
     super.onDeleted();
+  }
+
+  private async gracefullyAddOrRemoveCapabilities() {
+
+    const toAdd: string[] = [
+      'consumption_today_max_capability',
+      'consumption_today_min_capability',
+    ];
+
+    for (const capability of toAdd) {
+      if (!this.hasCapability(capability)) {
+        await this.addCapability(capability);
+      }
+    }
+
   }
 
 };
