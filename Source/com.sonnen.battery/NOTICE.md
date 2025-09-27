@@ -122,7 +122,13 @@
 1. Icon: "weather-symbol-4-svgrepo-com.svg"
    * Source: https://www.svgrepo.com/svg/479345/weather-symbol-4
 
+1. Icon: "maximum-graph-svgrepo-com_export.svg"
+   * Source: https://www.svgrepo.com/svg/451091/maximum-graph
+   * Changes: tower, arrow
 
+1. Icon: "maximum-graph-svgrepo-com_import.svg"
+   * Source: https://www.svgrepo.com/svg/451091/maximum-graph
+   * Changes: tower, arrow
 
 ---
 

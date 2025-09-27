@@ -1449,7 +1449,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com_import.svg"
     },
     "grid_consumption_total_capability": {
       "type": "number",
@@ -1523,7 +1523,7 @@
       },
       "min": 0,
       "insights": true,
-      "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+      "icon": "/assets/images/svg/maximum-graph-svgrepo-com_export.svg"
     },
     "grid_feed_in_total_capability": {
       "type": "number",
