@@ -11,6 +11,8 @@ module.exports = class HouseholdMeterDevice extends SonnenDevice {
     this.setCapabilityValue('consumption_current_capability', statusJson.Consumption_W);
     this.setCapabilityValue('consumption_daily_capability', currentState.totalDailyConsumption_Wh / 1000);
     this.setCapabilityValue('consumption_total_capability', currentState.totalConsumption_Wh / 1000);
+    this.setCapabilityValue('consumption_today_max_capability', currentState.todayMaxConsumption_Wh);
+    this.setCapabilityValue('consumption_today_min_capability', currentState.todayMinConsumption_Wh);
 
     const percentageGridConsumption = (currentState.totalDailyGridConsumption_Wh / currentState.totalDailyConsumption_Wh) * 100;
     const percentageSelfProduction = 100 - percentageGridConsumption;

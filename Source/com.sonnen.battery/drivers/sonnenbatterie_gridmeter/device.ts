@@ -14,10 +14,12 @@ module.exports = class GridMeterDevice extends SonnenDevice {
     this.setCapabilityValue('grid_consumption_current_capability', +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0);
     this.setCapabilityValue('grid_consumption_daily_capability', currentState.totalDailyGridConsumption_Wh / 1000);
     this.setCapabilityValue('grid_consumption_total_capability', currentState.totalGridConsumption_Wh / 1000);
+    this.setCapabilityValue('grid_consumption_today_max_capability', currentState.todayMaxGridConsumption_Wh);
     
     this.setCapabilityValue('grid_feed_in_current_capability', +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0);
     this.setCapabilityValue('grid_feed_in_daily_capability', currentState.totalDailyGridFeedIn_Wh / 1000);
     this.setCapabilityValue('grid_feed_in_total_capability', currentState.totalGridFeedIn_Wh / 1000);
+    this.setCapabilityValue('grid_feed_in_today_max_capability', currentState.todayMaxGridFeedIn_Wh);
   }
 
   async onInit() {

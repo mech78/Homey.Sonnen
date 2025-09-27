@@ -240,6 +240,27 @@ export class BatteryDevice extends SonnenDevice {
       const toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
       const fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
 
+      // Track today's max/min values
+      const todayMaxConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Consumption_W
+        : Math.max(lastState.todayMaxConsumption_Wh, statusJson.Consumption_W);
+        
+      const todayMinConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Consumption_W
+        : Math.min(lastState.todayMinConsumption_Wh, statusJson.Consumption_W);
+        
+      const todayMaxGridFeedIn_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? grid_feed_in_W
+        : Math.max(lastState.todayMaxGridFeedIn_Wh, grid_feed_in_W);
+        
+      const todayMaxGridConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? grid_consumption_W
+        : Math.max(lastState.todayMaxGridConsumption_Wh, grid_consumption_W);
+        
+      const todayMaxProduction_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Production_W
+        : Math.max(lastState.todayMaxProduction_Wh, statusJson.Production_W);
+
       const currentState = new SonnenState({
         lastUpdate: currentUpdate,
 
@@ -256,6 +277,12 @@ export class BatteryDevice extends SonnenDevice {
         totalConsumption_Wh: this.aggregateTotal(lastState.totalConsumption_Wh, statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalGridFeedIn_Wh: this.aggregateTotal(lastState.totalGridFeedIn_Wh, grid_feed_in_W, lastState.lastUpdate, currentUpdate),
         totalGridConsumption_Wh: this.aggregateTotal(lastState.totalGridConsumption_Wh, grid_consumption_W, lastState.lastUpdate, currentUpdate),
+        
+        todayMaxConsumption_Wh,
+        todayMinConsumption_Wh,
+        todayMaxGridFeedIn_Wh,
+        todayMaxGridConsumption_Wh,
+        todayMaxProduction_Wh,
       });
 
       this.log("Emitting data update for other devices...");

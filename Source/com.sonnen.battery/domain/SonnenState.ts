@@ -12,6 +12,11 @@ export class SonnenState {
   totalConsumption_Wh: number;
   totalGridFeedIn_Wh: number;
   totalGridConsumption_Wh: number;
+  todayMaxConsumption_Wh: number;
+  todayMinConsumption_Wh: number;
+  todayMaxGridFeedIn_Wh: number;
+  todayMaxGridConsumption_Wh: number;
+  todayMaxProduction_Wh: number;
 
   constructor(initialState?: Partial<SonnenState>) {
     this.lastUpdate = initialState?.lastUpdate || null;
@@ -27,6 +32,11 @@ export class SonnenState {
     this.totalConsumption_Wh = initialState?.totalConsumption_Wh || 0;
     this.totalGridFeedIn_Wh = initialState?.totalGridFeedIn_Wh || 0;
     this.totalGridConsumption_Wh = initialState?.totalGridConsumption_Wh || 0;
+    this.todayMaxConsumption_Wh = initialState?.todayMaxConsumption_Wh || 0;
+    this.todayMinConsumption_Wh = initialState?.todayMinConsumption_Wh || 0;
+    this.todayMaxGridFeedIn_Wh = initialState?.todayMaxGridFeedIn_Wh || 0;
+    this.todayMaxGridConsumption_Wh = initialState?.todayMaxGridConsumption_Wh || 0;
+    this.todayMaxProduction_Wh = initialState?.todayMaxProduction_Wh || 0;
   }
 
   updateState(newState: Partial<SonnenState>) {
