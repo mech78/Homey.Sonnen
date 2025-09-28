@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "Today's max solar power",
-    "da": "Dagens maks. solenergi",
-    "de": "Heutige Max.-Solarleistung",
-    "nl": "Max. zonnevermogen vandaag"
+    "en": "△d Solar Power",
+    "da": "△d Solenergi",
+    "de": "△d Solarleistung",
+    "nl": "△d Zonnevermogen"
   },
   "uiComponent": "sensor",
   "getable": true,
