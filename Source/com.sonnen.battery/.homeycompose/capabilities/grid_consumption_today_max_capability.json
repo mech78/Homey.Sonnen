@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "△d Grid consumption",
-    "da": "△d Netforbrug",
-    "de": "△d Netzbezug",
-    "nl": "△d Roosterverbruik"
+    "en": "▲d Grid consumption",
+    "da": "▲d Netforbrug",
+    "de": "▲d Netzbezug",
+    "nl": "▲d Roosterverbruik"
   },
   "uiComponent": "sensor",
   "getable": true,

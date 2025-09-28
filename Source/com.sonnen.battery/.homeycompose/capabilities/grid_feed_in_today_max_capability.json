@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": {
-    "en": "△d Grid feed-in",
-    "da": "△d Til net",
-    "de": "△d Netzeinspeisung",
-    "nl": "△d Roosterinvoer"
+    "en": "▲d Grid feed-in",
+    "da": "▲d Til net",
+    "de": "▲d Netzeinspeisung",
+    "nl": "▲d Roosterinvoer"
   },
   "uiComponent": "sensor",
   "getable": true,

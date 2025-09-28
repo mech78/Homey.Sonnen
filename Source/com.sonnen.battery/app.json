@@ -1273,10 +1273,10 @@
     "consumption_today_max_capability": {
       "type": "number",
       "title": {
-        "en": "△d consumption",
-        "da": "△d forbrug",
-        "de": "△d Verbrauch",
-        "nl": "△d verbruik"
+        "en": "▲d consumption",
+        "da": "▲d forbrug",
+        "de": "▲d Verbrauch",
+        "nl": "▲d verbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1291,10 +1291,10 @@
     "consumption_today_min_capability": {
       "type": "number",
       "title": {
-        "en": "▽d consumption",
-        "da": "▽d forbrug",
-        "de": "▽d Verbrauch",
-        "nl": "▽d verbruik"
+        "en": "▼d consumption",
+        "da": "▼d forbrug",
+        "de": "▼d Verbrauch",
+        "nl": "▼d verbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1436,10 +1436,10 @@
     "grid_consumption_today_max_capability": {
       "type": "number",
       "title": {
-        "en": "△d Grid consumption",
-        "da": "△d Netforbrug",
-        "de": "△d Netzbezug",
-        "nl": "△d Roosterverbruik"
+        "en": "▲d Grid consumption",
+        "da": "▲d Netforbrug",
+        "de": "▲d Netzbezug",
+        "nl": "▲d Roosterverbruik"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1510,10 +1510,10 @@
     "grid_feed_in_today_max_capability": {
       "type": "number",
       "title": {
-        "en": "△d Grid feed-in",
-        "da": "△d Til net",
-        "de": "△d Netzeinspeisung",
-        "nl": "△d Roosterinvoer"
+        "en": "▲d Grid feed-in",
+        "da": "▲d Til net",
+        "de": "▲d Netzeinspeisung",
+        "nl": "▲d Roosterinvoer"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1639,10 +1639,10 @@
     "production_today_max_capability": {
       "type": "number",
       "title": {
-        "en": "△d Solar Power",
-        "da": "△d Solenergi",
-        "de": "△d Solarleistung",
-        "nl": "△d Zonnevermogen"
+        "en": "▲d Solar Power",
+        "da": "▲d Solenergi",
+        "de": "▲d Solarleistung",
+        "nl": "▲d Zonnevermogen"
       },
       "uiComponent": "sensor",
       "getable": true,
