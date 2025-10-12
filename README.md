@@ -1,2 +1,2 @@
 # Homey.Sonnen
-Homey Sonnen ToC support
+Homey Sonnen Time of Use (ToU) support, Prognosis Charging and much more
