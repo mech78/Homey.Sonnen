@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "1.8.2",
+  "version": "2.0.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -1187,7 +1187,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "%"
       },
@@ -1207,7 +1206,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1225,7 +1223,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1243,7 +1240,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1261,7 +1257,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1280,7 +1275,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1298,7 +1292,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1316,7 +1309,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1335,7 +1327,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/light-bulb-svgrepo-com.svg",
       "insights": true
     },
@@ -1349,7 +1340,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1368,7 +1358,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1387,7 +1376,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1406,7 +1394,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1424,7 +1411,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1443,7 +1429,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1461,7 +1446,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1480,7 +1464,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1498,7 +1481,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1517,7 +1499,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1535,7 +1516,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1554,7 +1534,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "min": 0,
       "decimals": 0,
       "insights": true,
@@ -1569,7 +1548,6 @@
         "de": "Aktiv"
       },
       "getable": true,
-      "setable": false,
       "uiComponent": "sensor",
       "insights": true,
       "icon": "/assets/images/svg/switch-button-svgrepo-com.svg",
@@ -1596,7 +1574,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/three-gears-of-configuration-tools-svgrepo-com.svg"
     },
     "production_current_capability": {
@@ -1609,7 +1586,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1627,7 +1603,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1646,7 +1621,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1664,7 +1638,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1683,7 +1656,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/weather-symbol-4-svgrepo-com.svg"
     },
     "self_consumption_capability": {
@@ -1696,7 +1668,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "%"
       },
@@ -1716,7 +1687,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/pulse-svgrepo-com.svg"
     },
     "state_core_control_module_capability": {
@@ -1729,7 +1699,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/electric-charge-svgrepo-com.svg"
     },
     "state_inverter_capability": {
@@ -1742,7 +1711,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
     },
     "to_battery_capability": {
@@ -1755,7 +1723,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -1774,7 +1741,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
@@ -1793,7 +1759,6 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
       "units": {
         "en": "kWh"
       },
