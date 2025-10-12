@@ -8,7 +8,6 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "W"
   },

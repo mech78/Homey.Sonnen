@@ -8,6 +8,5 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
 }

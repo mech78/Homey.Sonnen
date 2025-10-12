@@ -8,7 +8,6 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "min": 0,
   "decimals": 0,
   "insights": true,

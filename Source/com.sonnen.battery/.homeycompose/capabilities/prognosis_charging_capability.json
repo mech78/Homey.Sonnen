@@ -8,6 +8,5 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "icon": "/assets/images/svg/weather-symbol-4-svgrepo-com.svg"
 }

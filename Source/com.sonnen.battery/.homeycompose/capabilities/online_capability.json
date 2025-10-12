@@ -7,7 +7,6 @@
     "de": "Aktiv"
   },
   "getable": true,
-  "setable": false,
   "uiComponent": "sensor",
   "insights": true,
   "icon": "/assets/images/svg/switch-button-svgrepo-com.svg",
