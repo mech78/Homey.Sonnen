@@ -8,12 +8,11 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "kWh"
   },
   "min": 0,
   "decimals": 3,
   "insights": true,
-  "icon": "/assets/images/house-day-thin_daily.svg"
+  "icon": "/assets/images/svg/solar-battery-4-svgrepo-com_sum_daily.svg"
 }

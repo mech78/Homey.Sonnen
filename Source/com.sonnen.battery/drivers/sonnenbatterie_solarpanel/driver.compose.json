@@ -9,8 +9,9 @@
   "capabilities": [
     "production_current_capability",
     "production_daily_capability",
-    "production_total_capability",
+    "production_today_max_capability",
     "self_consumption_capability",
+    "production_total_capability",
 
     "measure_power",
     "meter_power"

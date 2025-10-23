@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Operating Mode",
+    "da": "Driftstilstand",
+    "de": "Betriebsmodus",
+    "nl": "Bedrijfsmodus"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "icon": "/assets/images/svg/three-gears-of-configuration-tools-svgrepo-com.svg"
+}

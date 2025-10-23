@@ -1,9 +1,12 @@
-import axios from 'axios';
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
 import { SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
-module.exports = class BatteryDevice extends SonnenDevice {
+import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
+import { LocalizedError } from '../../domain/LocalizedError';
+import { LocalizationService } from '../../lib/LocalizationService';
+
+export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
 
@@ -13,10 +16,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
 
-    var batteryAuthToken = this.homey.settings.get('BatteryAuthToken');
-    var batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
+    const batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
-    var storedState: SonnenState;
+    let storedState: SonnenState;
     try {
       this.log('Retrieving stored state...');
       storedState = this.homey.settings.get('deviceState') || this.state;
@@ -28,10 +30,13 @@ module.exports = class BatteryDevice extends SonnenDevice {
     this.state.updateState({ lastUpdate: null });
     this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
 
-    // Pull battery status
+    // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(batteryAuthToken, this.state, this.getStore().autodiscovery ?? true));
+      this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
     }, batteryPullInterval * 1000);
+
+    // Do an initial load
+    this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
   }
 
   async onDeleted() {
@@ -62,17 +67,58 @@ module.exports = class BatteryDevice extends SonnenDevice {
   }): Promise<string | void> {
     super.onSettings({ oldSettings, newSettings, changedKeys });
 
-    if (_.contains(changedKeys, "device-ip")) {
-      var newDeviceIp = newSettings["device-ip"];
-      this.log("Settings", "IP", newDeviceIp);
-      this.setStoreValue('lanip', newDeviceIp);
-    };
+    if (_.contains(changedKeys, "device_ip")) {
+      const newDeviceIP = newSettings["device_ip"] as string;
+      this.log("Settings", "IP", newDeviceIP);
 
-    if (_.contains(changedKeys, "device-discovery")) {
-      var blnUseAutoDisovery = newSettings["device-discovery"];
-      this.log("Settings", "AutoDiscovery", blnUseAutoDisovery);
-      this.setStoreValue('autodiscovery', blnUseAutoDisovery);
-    };
+      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
+        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
+        if (!ipv4Regex.test(newDeviceIP)) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.invalid_ip_format"));
+        }
+      }
+    }
+
+    if (_.contains(changedKeys, "device_discovery")) {
+      const useAutoDiscovery = newSettings["device_discovery"] as boolean;
+      this.log("Settings", "AutoDiscovery", useAutoDiscovery);
+
+      if (useAutoDiscovery) {
+        const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
+        if (!discoveredIP) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("connection.error_no_batteries"));
+        }
+      }
+    }
+
+    if (_.contains(changedKeys, "operating_mode")) {
+      const operatingMode = newSettings["operating_mode"] as number;
+      this.log("Settings", "OperatingMode", operatingMode);
+
+      const result = await this.createSonnenBatterieClient().setOperatingMode(operatingMode);
+      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
+    }
+
+    if (_.contains(changedKeys, "prognosis_charging")) {
+      const prognosisCharging = newSettings["prognosis_charging"] as boolean;
+      this.log("Settings", "PrognosisCharging", prognosisCharging);
+
+      const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
+      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
+    }
+
+    if (_.contains(changedKeys, "time_of_use_schedule")) {
+      const scheduleRaw = newSettings["time_of_use_schedule"] as string;
+      this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
+
+      const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
+      const result = await this.createSonnenBatterieClient().setSchedule(schedule);
+      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      await this.refreshState(); // immediately refresh UI
+    }
+
   }
 
   /**
@@ -81,7 +127,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
    * @returns {Date}
    */
   private getLocalNow(): Date {
-    var timezone = this.homey.clock.getTimezone();
+    const timezone = this.homey.clock.getTimezone() as string;
     return new Date(
       new Date().toLocaleString('en-US', { hour12: false, timeZone: timezone })
     );
@@ -97,14 +143,17 @@ module.exports = class BatteryDevice extends SonnenDevice {
     // https://apps.developer.homey.app/guides/how-to-breaking-changes
 
     // Baseline version 1.3.1
-    var toAddAfter1_3_1 = [    
+    let toAddAfter1_3_1: string[] = [
       'to_battery_capability',
       'from_battery_capability',
       'to_battery_daily_capability',
       'from_battery_daily_capability',
       'to_battery_total_capability',
       'from_battery_total_capability',
-      'capacity_remaining_capability'
+      'capacity_remaining_capability',
+      'operating_mode_capability',
+      'prognosis_charging_capability',
+      'state_core_control_module_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -115,7 +164,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
       ];
     }
 
-    var toRemoveAfter1_3_1 = [
+    let toRemoveAfter1_3_1: string[] = [
       'meter_power',
       'production_capability',
       'consumption_capability',
@@ -148,44 +197,23 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
     }
 
+    // TODO: maybe add a gracefully migration from store-based "autodiscovery" and "lanip" to settings-based "device_discovery" and "device_ip"
   }
 
-  private async loadLatestState(
-    authKey: string,
-    lastState: SonnenState,
-    retryOnError = true
-  ): Promise<SonnenState> {
-    // Arrange
-    var options = {
-      method: 'get',
-      headers: {
-        'Auth-Token': `${authKey}`,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    };
-
+  private async loadLatestState(lastState: SonnenState, retryOnError = true): Promise<SonnenState> {
     try {
-      // Act
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getStore().lanip); // This may change/update at runtime.
+      const client = this.createSonnenBatterieClient();
 
-      this.log(`Fetching data from ${baseUrl}/api/v2/latestdata and ${baseUrl}/api/v2/status`);
+      this.log("Fetching data...");
 
-      var response = await axios
-        .get(`${baseUrl}/api/v2/latestdata`, options)
-        .then();
-
-      var statusResponse = await axios
-        .get(`${baseUrl}/api/v2/status`, options)
-        .then();
-
-      var latestDataJson = response.data;
-      var statusJson = statusResponse.data;
+      const latestDataJson = await client.getLatestData();
+      const statusJson = await client.getStatus();
+      const configurations = await client.getConfigurations();
 
       // update device's batteries to actual number of internal batteries
-      var numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
-      var actualBatteries = new Array(numberBatteries).fill('INTERNAL');
-      var energy = (await this.getEnergy()) || {
+      const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
+      const actualBatteries = new Array(numberBatteries).fill('INTERNAL');
+      const energy = (await this.getEnergy()) || {
         homeBattery: true,
         batteries: [],
         "meterPowerImportedCapability": "meter_power.charged",
@@ -198,7 +226,7 @@ module.exports = class BatteryDevice extends SonnenDevice {
         await this.setEnergy(energy);
       }
 
-      var currentUpdate = new Date(latestDataJson.Timestamp);
+      const currentUpdate = new Date(latestDataJson.Timestamp);
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
@@ -207,12 +235,33 @@ module.exports = class BatteryDevice extends SonnenDevice {
       }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
-      var grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
-      var grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
-      var toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
-      var fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
+      const grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
+      const grid_consumption_W = +statusJson.GridFeedIn_W < 0 ? -1 * statusJson.GridFeedIn_W : 0;
+      const toBattery_W = (statusJson.Pac_total_W ?? 0) < 0 ? -1 * statusJson.Pac_total_W : 0;
+      const fromBattery_W = (statusJson.Pac_total_W ?? 0) > 0 ? statusJson.Pac_total_W : 0;
 
-      var currentState = new SonnenState({
+      // Track today's max/min values
+      const todayMaxConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Consumption_W
+        : Math.max(lastState.todayMaxConsumption_Wh, statusJson.Consumption_W);
+        
+      const todayMinConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Consumption_W
+        : Math.min(lastState.todayMinConsumption_Wh, statusJson.Consumption_W);
+        
+      const todayMaxGridFeedIn_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? grid_feed_in_W
+        : Math.max(lastState.todayMaxGridFeedIn_Wh, grid_feed_in_W);
+        
+      const todayMaxGridConsumption_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? grid_consumption_W
+        : Math.max(lastState.todayMaxGridConsumption_Wh, grid_consumption_W);
+        
+      const todayMaxProduction_Wh = this.isNewDay(currentUpdate, lastState.lastUpdate)
+        ? statusJson.Production_W
+        : Math.max(lastState.todayMaxProduction_Wh, statusJson.Production_W);
+
+      const currentState = new SonnenState({
         lastUpdate: currentUpdate,
 
         totalDailyToBattery_Wh: this.aggregateTotal(lastState.totalDailyToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate, true),
@@ -228,6 +277,12 @@ module.exports = class BatteryDevice extends SonnenDevice {
         totalConsumption_Wh: this.aggregateTotal(lastState.totalConsumption_Wh, statusJson.Consumption_W, lastState.lastUpdate, currentUpdate),
         totalGridFeedIn_Wh: this.aggregateTotal(lastState.totalGridFeedIn_Wh, grid_feed_in_W, lastState.lastUpdate, currentUpdate),
         totalGridConsumption_Wh: this.aggregateTotal(lastState.totalGridConsumption_Wh, grid_consumption_W, lastState.lastUpdate, currentUpdate),
+        
+        todayMaxConsumption_Wh,
+        todayMinConsumption_Wh,
+        todayMaxGridFeedIn_Wh,
+        todayMaxGridConsumption_Wh,
+        todayMaxProduction_Wh,
       });
 
       this.log("Emitting data update for other devices...");
@@ -247,11 +302,11 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
       this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
 
-      var remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
+      const remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
       this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000);
       this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
 
-      var chargingState;
+      let chargingState: string;
       if (statusJson.Pac_total_W < 0) {
         chargingState = 'charging';
       } else if (statusJson.Pac_total_W > 0) {
@@ -262,67 +317,70 @@ module.exports = class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('battery_charging_state', chargingState);
 
       this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue('eclipse_capability', this.resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
-      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', ''))) ?? latestDataJson.ic_status.statebms;
-      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
+      this.setCapabilityValue('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
+      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', '')) ?? latestDataJson.ic_status.statebms);
+      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.stateinverter.replaceAll(' ', '')) ?? latestDataJson.ic_status.stateinverter);
+      this.setCapabilityValue('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
+      
+      const scheduleRaw = configurations['EM_ToU_Schedule'];
+      const tou = new TimeOfUseSchedule(scheduleRaw);
+      this.log('Parsed Time-of-Use schedule:', tou.toJSONString());
+      this.setSettings({ 'time_of_use_schedule': tou.toString() });
 
+      const operatingMode = configurations['EM_OperatingMode'];
+      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
+      this.setCapabilityValue('operating_mode_capability', operatingModeText);
+      this.setSettings({ 'operating_mode': '' + operatingMode });
+
+      const prognosisCharging = configurations['EM_Prognosis_Charging'];
+      const prognosisChargingMode = prognosisCharging === "1";
+      this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
+      this.setSettings({ 'prognosis_charging': prognosisChargingMode });
+ 
       /*
       if (Math.random() < 0.5) {
         throw new Error("random");
       }
       */
 
+      this.unsetWarning(); // clear any previous warning
       return currentState;
-    } catch (e: any) {
+    } catch (e) {
       this.error('Error occured fetching data. Retry: ' + retryOnError, e)
-      if (retryOnError) {
-        // Maybe IP has changed, lets try and fix this...
-        await axios
-          .get('https://find-my.sonnen-batterie.com/find')
-          .then(async (res) => {
-            if (res.data) {
-              for (const e of res.data) {
-                if (this.resolveDeviceNameWithFallback() === e.info) {
-                  this.log(`Found device ${e.device} with IP ${e.lanip}`);
-                  const currentIP = this.getStoreValue('lanip');
-                  if (currentIP !== e.lanip) {
-                    this.log(`Device: ${e.device} changed IP from ${currentIP} to ${e.lanip}. Retrying...`);
-                    this.setStoreValue('lanip', e.lanip);
-
-                    await this.homey.notifications.createNotification({ excerpt: `Sonnen Batterie: Change of IP address detected. Resolved new IP: ${e.lanip}` });
-
-                    // Try and reload data
-                    return await this.loadLatestState(
-                      authKey,
-                      lastState,
-                      false
-                    );
-                  }
-                }
-              }
-            }
-          })
-          .catch((err) => this.log('Failed to find sonnen batteries', err));
-      }
-      return lastState; // always return some valid state 
+      return this.mayRetryWithAutoDiscovery(lastState, retryOnError); 
     }
   }
 
-  private resolveCircleColor(eclipseLed: any): string {
-    for (var key of Object.keys(eclipseLed)) {
-      if (eclipseLed[key] === true) {
-        return this.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
+  private async mayRetryWithAutoDiscovery(lastState: SonnenState, retryOnError: boolean): Promise<SonnenState> {
+    if (retryOnError) {
+      try {
+        const homeyDeviceId = this.getData().id; // as set by onPairListDevices() in driver.ts
+        const currentIP = await SonnenBatterieClient.findBatteryIP(homeyDeviceId); // Maybe IP has changed, lets try and fix this...
+        if (currentIP) {
+          this.log(`Found device ${homeyDeviceId} with IP ${currentIP}`);
+          const storedIP = this.getSetting("device_ip") as string;
+          if (storedIP !== currentIP) {
+            this.setSettings({ "device_ip": currentIP });
+            const notification = this.homey.__("connection.notification_ip_changed", { ip: currentIP });
+            await this.homey.notifications.createNotification({ excerpt: notification });    
+            return await this.loadLatestState(lastState, false); // Try and reload data
+          }
+        }
+      } catch (err) {
+        this.log('Failed to find sonnen batteries', err);
       }
     }
-    return this.homey.__('eclipseLed.Unknown');
+   
+    await this.setWarning(this.homey.__("connection.error", { ip: this.getSetting("device_ip") }));
+    return lastState; // always return some valid state even on error
   }
 
   private aggregateTotal(totalEnergy_Wh: number, currentPower_W: number, lastUpdate: Date, currentUpdate: Date, resetDaily: boolean = false): number {
-      var totalEnergyResult_Wh = resetDaily && this.isNewDay(currentUpdate, lastUpdate) ? 0 : (totalEnergy_Wh ?? 0);
-      var sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
-      var sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
+      let totalEnergyResult_Wh = resetDaily && this.isNewDay(currentUpdate, lastUpdate) ? 0 : (totalEnergy_Wh ?? 0);
+      const sampleIntervalMillis = currentUpdate.getTime() - lastUpdate.getTime(); // should be ~30000ms resp. polling frequency
+      const sampleEnergy_Wh = (currentPower_W ?? 0) * (sampleIntervalMillis / 60 / 60 / 1000); // Wh
       totalEnergyResult_Wh += sampleEnergy_Wh;
       return totalEnergyResult_Wh;
   }
@@ -331,9 +389,9 @@ module.exports = class BatteryDevice extends SonnenDevice {
     return currentUpdate.getDay() !== lastUpdate.getDay();
   }
 
-  private resolveDeviceNameWithFallback(): string {
-    var name = this.getName() || 'sonnenBatterie';
-    return String(name).charAt(0).toLowerCase() + String(name).slice(1);
+  public async refreshState() {
+    this.loadLatestState(this.state, false);
   }
 
 }
+module.exports = BatteryDevice;

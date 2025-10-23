@@ -2,33 +2,111 @@
   {
     "type": "group",
     "label": {
+      "en": "Battery Settings",
+      "de": "Batterie Einstellungen"
+    },
+    "children": [
+      {
+        "id": "operating_mode",
+        "type": "dropdown",
+        "value": "2",
+        "label": {
+          "en": "Operating Mode",
+          "de": "Betriebsmodus"
+        },
+        "hint": {
+          "en": "Refer to Sonnen Batterie manual for more information.",
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        },
+        "values": [
+          {
+            "id": "1",
+            "label": {
+              "en": "Manual",
+              "de": "Manuell"
+            }
+          },
+          {
+            "id": "2",
+            "label": {
+              "en": "Self consumption",
+              "de": "Eigenverbrauch"
+            }
+          },
+          {
+            "id": "6",
+            "label": {
+              "en": "Module extension (30%)",
+              "de": "Modulerweiterung (30%)"
+            }
+          },
+          {
+            "id": "10",
+            "label": {
+              "en": "Time-of-Use",
+              "de": "Time-of-Use"
+            }
+          }
+        ]
+      },
+      {
+        "id": "time_of_use_schedule",
+        "type": "textarea",
+        "label": {
+          "en": "Time-of-Use Schedule",
+          "de": "Time-of-Use Zeitplan"
+        },
+        "value": "",
+        "hint": {
+          "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
+          "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        }
+      },
+      {
+        "id": "prognosis_charging",
+        "type": "checkbox",
+        "label": {
+          "en": "Prognosis Charging",
+          "de": "Prognosebasiertes Laden"
+        },
+        "value": false,
+        "hint": {
+          "en": "Refer to Sonnen Batterie manual for more information.",
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
       "en": "Connection",
       "de": "Verbindung"
     },
     "children": [
       {
-        "id": "device-ip",
+        "id": "device_ip",
         "type": "text",
         "label": {
           "en": "IP address",
           "de": "IP Adresse"
         },
-        "value": "192.168.1.xxx",
+        "value": "",
         "hint": {
-          "en": "Specify the ip of the Sonnen Batterie.",
-          "de": "IP Adresse der Sonnen Batterie angeben."
+          "en": "Shows the current IP of the Sonnen Batterie. Optional: Disable auto-discovery and set the static IPv4 address (e.g. 192.168.1.xxx) manually.",
+          "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben."
         }
       },
       {
-        "id": "device-discovery",
+        "id": "device_discovery",
         "type": "checkbox",
         "label": {
           "en": "Auto-discover IP address",
-          "de": "Selbsterkennung IP Adresse"
+          "de": "IP Adresse automatisch ermitteln"
         },
         "value": true,
         "hint": {
-          "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of my IP address. Requires local-network.",
+          "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of the IP address. Requires local-network.",
           "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk."
         }
       }

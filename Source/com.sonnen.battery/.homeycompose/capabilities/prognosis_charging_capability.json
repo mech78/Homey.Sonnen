@@ -1,0 +1,12 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Prognosis Charging",
+    "da": "Prognose opladning",
+    "de": "Prognose Laden",
+    "nl": "Prognose laden"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "icon": "/assets/images/svg/weather-symbol-4-svgrepo-com.svg"
+}

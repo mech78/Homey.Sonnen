@@ -8,12 +8,11 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "kWh"
   },
   "min": 0,
   "decimals": 3,
   "insights": true,
-  "icon": "/assets/images/utility-pole-thin-grid-consumption_daily.svg"
+  "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com_import_sum.svg"
 }

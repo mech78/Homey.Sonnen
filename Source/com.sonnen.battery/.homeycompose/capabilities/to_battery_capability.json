@@ -8,12 +8,11 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "W"
   },
   "min": 0,
   "decimals": 0,
   "insights": true,
-  "icon": "/assets/images/to-battery.svg"
+  "icon": "/assets/images/svg/battery-positive-svgrepo-com.svg"
 }

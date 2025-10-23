@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "▲d Grid feed-in",
+    "da": "▲d Til net",
+    "de": "▲d Netzeinspeisung",
+    "nl": "▲d Roosterinvoer"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/maximum-graph-svgrepo-com_export.svg"
+}

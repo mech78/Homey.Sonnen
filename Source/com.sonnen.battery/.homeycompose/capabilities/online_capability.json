@@ -7,11 +7,9 @@
     "de": "Aktiv"
   },
   "getable": true,
-  "setable": false,
   "uiComponent": "sensor",
-  "uiQuickAction": true,
   "insights": true,
-  "icon": "/assets/images/power-off-thin.svg",
+  "icon": "/assets/images/svg/switch-button-svgrepo-com.svg",
   "insightsTitleTrue": {
     "en": "Connection alarm turned on",
     "nl": "Connection alarm ging af",
@@ -22,6 +20,6 @@
     "en": "Connection alarm turned off",
     "nl": "Connection alarm ging uit",
     "da": "Forbindelsesalarm blev deaktiveret",
-    "de": "Verbindungsalarm ausgeschaltet"
+    "de": "Verbindungsalarm deaktiviert"
   }
 }

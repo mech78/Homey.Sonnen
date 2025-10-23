@@ -11,6 +11,8 @@
     "grid_feed_in_current_capability",
     "grid_consumption_daily_capability",
     "grid_feed_in_daily_capability",
+    "grid_consumption_today_max_capability",
+    "grid_feed_in_today_max_capability",
     "grid_consumption_total_capability",
     "grid_feed_in_total_capability",
     

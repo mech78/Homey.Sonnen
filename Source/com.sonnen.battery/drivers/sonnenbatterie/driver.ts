@@ -1,193 +1,174 @@
-import _ from 'underscore';
-import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
+import Homey from 'homey';
+import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenDriver } from '../../lib/SonnenDriver';
-
+import { LocalizationService } from '../../lib/LocalizationService';
+import { BatteryDevice } from './device';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
-  async onInit() {
+  async onInit(): Promise<void> {
     this.deviceName = this.homey.__('device.battery');
     this.deviceId = "sonnenBattery";
     super.onInit();
 
-    const setToC_card = this.homey.flow.getActionCard("set-time-of-use");
-    const setToCHours_card = this.homey.flow.getActionCard("set-time-of-use-hours");
-    const setToCHoursString_card = this.homey.flow.getActionCard("set-time-of-use-hours-string");
-    const resetToC_card = this.homey.flow.getActionCard("reset-time-of-use");
-    const pauseToC_card = this.homey.flow.getActionCard("pause-time-of-use");
+    // Device-specific actions:
 
-    const startToC_card = this.homey.flow.getActionCard("start-charge");
-    const stopToC_card = this.homey.flow.getActionCard("stop-charge");
+    this.homey.flow.getActionCard("set_time_of_use")
+      .registerRunListener(async (args) => this.handleSetTimeOfUse(args));
 
-    const zeroPad = (num: any, places: any) => String(num).padStart(places, '0');
+    this.homey.flow.getActionCard("set_time_of_use_hours")
+      .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
-    var batteryAuthToken = this.homey.settings.get("BatteryAuthToken");
+    this.homey.flow.getActionCard("set_time_of_use_hours_string")
+      .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
-    var sonnenBatterieClient = new SonnenBatterieClient(batteryAuthToken);
+    this.homey.flow.getActionCard("reset_time_of_use")
+      .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
-    setToC_card.registerRunListener(async (args) => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      var timeStart = args.Start;
-      var timeEnd = args.End;
-      var maxPower = args.MaxPower;
+    this.homey.flow.getActionCard("pause_time_of_use")
+      .registerRunListener(async (args) => this.handlePauseTimeOfUse(args));
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-      this.log("Result", commandResult, args.Power);
+    this.homey.flow.getActionCard("start_charge")
+      .registerRunListener(async (args) => this.handleStartTimeOfUse(args));
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
+    this.homey.flow.getActionCard("stop_charge")
+      .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
+    this.homey.flow.getActionCard("switch_operating_mode")
+      .registerRunListener(async (args) => this.handleSwitchOperatingMode(args));
 
-    });
+    this.homey.flow.getActionCard("set_prognosis_charging")
+      .registerRunListener(async (args) => this.handleSetPrognosisCharging(args));
 
-    setToCHours_card.registerRunListener(async (args) => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      var timeStart = args.Start;
-      var hours = args.Hours;
-      var maxPower = args.MaxPower;
+    // Device-specific conditions:
 
-      // Calculate end from timeStart and hours.
-      var timeStartHours = +timeStart.split(":", 1)[0];
-      var timeStartMinutes = timeStart.split(":", 2)[1];
-      var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
-      var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
+    this.homey.flow.getConditionCard("battery_level_below")
+      .registerRunListener(async (args) => this.handleBatteryLevelBelow(args));
 
-      var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
+    this.homey.flow.getConditionCard("battery_level_above_or_equal")
+      .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-      this.log("Result", commandResult, args.Power);
+    this.homey.flow.getConditionCard("operating_mode_equals")
+      .registerRunListener(async (args) => this.handleOperatingModeEquals(args));
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
+    this.homey.flow.getConditionCard("prognosis_charging_equals")
+      .registerRunListener(async (args) => this.handlePrognosisChargingEquals(args));
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
+    // Device-specific triggers (not needed for custom capabilities following the naming convention):
 
-    });
+  }
 
-    setToCHoursString_card.registerRunListener(async (args) => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      var timeStart = args.Start;
-      var hours = args.Hours;
-      var maxPower = args.MaxPower;
+  private async handleSetTimeOfUse(args: { device: BatteryDevice, start: string, end: string, max_power: number }): Promise<void> {
+    const timeStart = args.start;
+    const timeEnd = args.end;
+    const maxPower = args.max_power;
 
-      // Calculate end from timeStart and hours.
-      var timeStartHours = +timeStart.split(":", 1)[0];
-      var timeStartMinutes = timeStart.split(":", 2)[1].trim();
-      var timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
-      var timeEndHoursFormatted = zeroPad(timeEndHours, 2);
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
+    this.log("Result", commandResult, args.start, args.end, args.max_power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
+    await args.device.refreshState(); // immediately refresh UI
+  };
 
-      timeStart = `${zeroPad(timeStartHours, 2)}:${zeroPad(timeStartMinutes, 2)}`;
-      var timeEnd = `${timeEndHoursFormatted}:${timeStartMinutes}`;
+  private async handleSetTimeOfUseByStartTimeAndHours(args: { device: BatteryDevice, start: string, hours: number, max_power: number }): Promise<void> {
+    const timeStart = args.start;
+    const hours = args.hours;
+    const maxPower = args.max_power;
 
-      //this.log("INPUT", timeStart, timeEnd, maxPower);
+    // Calculate end from timeStart and hours.
+    const timeStartHours = +timeStart.split(":", 1)[0];
+    const timeStartMinutes = timeStart.split(":", 2)[1];
+    const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+    const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, maxPower);
-      this.log("Result", commandResult, args.Power);
+    const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
+    this.log("Result", commandResult, args.start, args.hours, args.max_power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
+  private async handleClearTimeOfUse(args: { device: BatteryDevice }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).clearSchedule(); // Set empty schedule
+    this.log("Result", commandResult);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-    });
+  private async handlePauseTimeOfUse(args: { device: BatteryDevice, start: string; end: string }): Promise<void> {
+    const timeStart = args.start;
+    const timeEnd = args.end;
 
-    resetToC_card.registerRunListener(async () => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      // Set empty schedule
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
+    this.log("Result", commandResult, args.start, args.end);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-      var commandResult = await sonnenBatterieClient.ClearSchedule(baseUrl);
-      this.log("Result", commandResult);
+  private async handleStartTimeOfUse(args: { device: BatteryDevice, power: number }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power); // Set full schedule
+    this.log("Result", commandResult, args.power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Reset ToC.` });
+  private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: number }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
+    this.log("Result", commandResult, args.operating_mode);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
+  private async handleSetPrognosisCharging(args: { device: BatteryDevice, active: boolean }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setPrognosisCharging(args.active)
+    this.log("Result", commandResult, args.active);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await args.device.refreshState(); // immediately refresh UI
+  }
 
-    });
+  private async handleBatteryLevelBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const batteryLevel = +args.device.getCapabilityValue("measure_battery");
 
-    pauseToC_card.registerRunListener(async (args) => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      var timeStart = args.Start;
-      var timeEnd = args.End;
+    this.log("CONDITION", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, timeStart, timeEnd, 0);
-      this.log("Result", commandResult, args.Power);
+    return (batteryLevel < argPercentage);
+  }
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause ToC between ${timeStart} and ${timeEnd}.` });
+  private async handleBatteryLevelAboveOrEqual(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const batteryLevel = +args.device.getCapabilityValue("measure_battery");
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
-    });
+    this.log("CONDITION", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
 
-    startToC_card.registerRunListener(async (args) => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      // Set full schedule
+    return (batteryLevel >= argPercentage);
+  }
 
-      var commandResult = await sonnenBatterieClient.SetSchedule(baseUrl, "00:00", "23:59", args.Power);
-      this.log("Result", commandResult, args.Power);
+  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: number }): Promise<boolean> {
+    const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
+    const operatingMode = LocalizationService.getInstance().resolveOperatingMode("" + args.operating_mode);
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start ToC.` });
+    const result = currentOperatingMode === operatingMode;
+    this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
-    });
+    return result;
+  }
 
-    stopToC_card.registerRunListener(async () => {
-      var baseUrl = SonnenBatterieClient.GetBaseUrl(this.getDevices()[0].getStore().lanip);
-      // Set empty schedule
+    private async handlePrognosisChargingEquals(args: { device: Homey.Device, active: boolean }): Promise<boolean> {
+    const currentPrognosisCharging = args.device.getCapabilityValue("prognosis_charging_capability") as boolean;
 
-      var commandResult = await sonnenBatterieClient.ClearSchedule(baseUrl);
-      this.log("Result", commandResult);
+    const result = currentPrognosisCharging === args.active;
+    this.log("CONDITION", "prognosis charging", currentPrognosisCharging, "arg", args.active, "VALID", result);
 
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Stop ToC.` });
+    return result;
+  }
 
-      if (commandResult.HasError) {
-        throw Error(commandResult.error);
-      }
-
-    });
-
-    // Conditions:
-    // deprecate from & to battery conditions as the Homey default card for battery_charging_state does just that.
-    // unfortunately it is not yet localized, but hopefully that will get fixed..
-    const fromBatteryTrigger = this.homey.flow.getConditionCard("power-from-battery");
-    const toBatteryTrigger = this.homey.flow.getConditionCard("power-to-battery");
-
-    const batteryLevelBelowCard = this.homey.flow.getConditionCard("battery-level-below");
-    const batteryLevelAboveCard = this.homey.flow.getConditionCard("battery-level-above");
-
-    fromBatteryTrigger.registerRunListener(async (args) => { // Deprecated, use battery_charging_state instead
-      return (+this.getDevices()[0].getCapabilityValue("from_battery_capability")) > 0;
-    });
-
-    toBatteryTrigger.registerRunListener(async (args) => { // Deprecated, use battery_charging_state instead
-      return (+this.getDevices()[0].getCapabilityValue("to_battery_capability")) > 0;
-    });
-
-    batteryLevelBelowCard.registerRunListener(async (args) => {
-      var argPercentage = args.Percentage;
-      var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
-
-      this.log("TRIGGER", "battery level below", batteryLevel, "arg", argPercentage, "VALID", batteryLevel < argPercentage);
-
-      return (batteryLevel < argPercentage);
-    });
-
-    batteryLevelAboveCard.registerRunListener(async (args) => {
-      var argPercentage = args.Percentage;
-      var batteryLevel = +this.getDevices()[0].getCapabilityValue("measure_battery");
-
-      this.log("TRIGGER", "battery level above", batteryLevel, "arg", argPercentage, "VALID", batteryLevel >= argPercentage);
-
-      return (batteryLevel >= argPercentage);
-    });
-
+  private zeroPad(num: number, places: number): string {
+    return String(num).padStart(places, '0');
   }
 
 }

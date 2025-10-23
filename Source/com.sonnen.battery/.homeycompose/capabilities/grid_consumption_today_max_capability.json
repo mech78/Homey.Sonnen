@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "▲d Grid consumption",
+    "da": "▲d Netforbrug",
+    "de": "▲d Netzbezug",
+    "nl": "▲d Roosterverbruik"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/maximum-graph-svgrepo-com_import.svg"
+}

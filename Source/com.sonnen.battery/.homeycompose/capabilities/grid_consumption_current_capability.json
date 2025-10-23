@@ -8,11 +8,10 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "W"
   },
   "min": 0,
   "insights": true,
-  "icon": "/assets/images/utility-pole-thin-grid-consumption.svg"
+  "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com_import.svg"
 }

@@ -1,81 +1,157 @@
 import axios from "axios";
+import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
+import { TimeOfUseSchedule } from "../domain/TimeOfUse";
 import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 
 export class SonnenBatterieClient {
-  constructor(public authToken: string) {}
 
-  public async SetSchedule(
-    batteryBaseUrl: string,
-    timeStart: string,
-    timeEnd: string,
-    maxPower: number
-  ): Promise<SonnenCommandResult> {
-    var options = {
-      method: "put",
-      headers: {
+  optionsPut: { method: string; headers: { [key: string]: string } };
+  optionsGet: { method: string; headers: { [key: string]: string } };
+
+  constructor(private authToken: string, private ipAddress: string) {
+      const headers = {
         "Auth-Token": `${this.authToken}`,
         "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+        "Accept": "application/json",
+      }
+      this.optionsPut = {
+        method: "put",
+        headers: headers
+      };
+      this.optionsGet = {
+        method: "get",
+        headers: headers
+      };
+  }
+
+  public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
+    const body = {
+      EM_ToU_Schedule: `${schedule.toJSONString()}`,
     };
 
-    var body = {
-      EM_ToU_Schedule: `[{\"start\":\"${timeStart}\",\"stop\":\"${timeEnd}\",\"threshold_p_max\":${maxPower}}]`,
-    };
+    try {
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        if (error.response?.data != null) {
+          const responseData = error.response.data as { details: { EM_ToU_Schedule?: string }, error: string };
+          // console.log(responseData?.error + " " + error.response.status + " " + responseData?.details?.EM_ToU_Schedule);
+          
+          let i18nKey;
+          if (error.response.status === 400 && responseData.error === 'validation failed') {
+            i18nKey = "error.validation.ToU." + (responseData?.details?.EM_ToU_Schedule ?? "error.validation.failed");
+          }
 
-    // Act
-    var response = await axios
-      .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-      .then();
-
-    if (response == null)
-      return new SonnenCommandResult(true, "No valid response received.");
-
-    var responseData = response.data;
-    if (responseData.error != null) {
-      return new SonnenCommandResult(
-        true,
-        responseData.details != null
-          ? responseData.details.EM_ToU_Schedule ?? responseData.error
-          : responseData.error
-      );
+          return new SonnenCommandResult(
+            true, 
+            responseData.details?.EM_ToU_Schedule ?? responseData.error, 
+            error.response.status, // e.g. for HTTP 400 Bad Request data: { details: { EM_ToU_Schedule: 'invalid threshold' }, error: 'validation failed'}
+            i18nKey,
+          ); 
+        }
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
     }
 
-    return new SonnenCommandResult(false, "-");
   }
 
-  public async ClearSchedule(
-    batteryBaseUrl: string
-  ): Promise<SonnenCommandResult> {
-    var options = {
-      method: "put",
-      headers: {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
-    var body = {
-      EM_ToU_Schedule: `[]`,
-    };
-
-    // Act
-    var response = await axios
-      .put(`${batteryBaseUrl}/api/v2/configurations`, body, options)
-      .then();
-
-    if (response == null)
-      return new SonnenCommandResult(true, "No valid response received.");
-
-    var responseData = response.data;
-    if (responseData.error != null)
-      return new SonnenCommandResult(true, responseData.error);
-
-    return new SonnenCommandResult(false, "-");
+  public async setScheduleEntry(timeStart: string, timeEnd: string, max_power: number) {
+    // TODO: add error handling or change to TimeOfUseEntry
+    return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: max_power }));
   }
 
-  public static GetBaseUrl(ipAddress: string): string {
-    return `http://${ipAddress}:80`;
+  public async clearSchedule() {
+    return this.setSchedule(new TimeOfUseSchedule([]));
+  }
+
+  public async setOperatingMode(mode: number): Promise<SonnenCommandResult> {
+    try {
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.optionsPut);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        return new SonnenCommandResult(true, error.message, error.response?.status);
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+    }
+  }
+
+  public async setPrognosisCharging(active: boolean): Promise<SonnenCommandResult> {
+    const prognosis_charging = active ? 1 : 0;
+    try {
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.optionsPut);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        return new SonnenCommandResult(true, error.message, error.response?.status);
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+    }
+  }
+
+  public async getLatestData() {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet);
+    return response.data;
+  }
+
+  public async getStatus() {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet);
+    return response.data;
+  }
+
+  public async getConfigurations(){
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet);
+    return response.data;
+  }
+
+  public static async discoverBatteries(): Promise<SonnenCommandResult> {
+    try {
+      const response = await axios.get('https://find-my.sonnen-batterie.com/find');
+      const commandResult = new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
+      commandResult.payload = response.data as SonnenBatteries;
+      return commandResult
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        return new SonnenCommandResult(true, error.message, error.response?.status);
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+    }
+  }
+
+  public static async findBatteryIP(homeyDeviceId: string): Promise<string | null> {
+    const result = await SonnenBatterieClient.discoverBatteries(); // TODO: handle errors passed in SonnenCommandResult
+    const batteries: SonnenBatteries = result.payload as SonnenBatteries;
+    if (batteries) {
+      for (const battery of batteries) {
+        if (SonnenBatterieClient.isSameDevice(battery.device, homeyDeviceId)) {
+          return battery.lanip;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * onPairListDevices() used the serial number of the sonnenBatterie as prefix part for the unique device ID
+   */
+  public static isSameDevice(device: number, homeyDeviceId: string): boolean {
+    const batterySerialNumber = "" + device;
+    return homeyDeviceId.startsWith(batterySerialNumber);
+  }
+
+  private getBaseUrl(): string {
+    return `http://${this.ipAddress}:80`;
+  }
+
+  public static isAxiosError<T>(error: unknown): error is axios.AxiosError<T> {
+    return (error as axios.AxiosError<T>).isAxiosError === true;
+  }
+
+  private static safeToString(value: unknown): string {
+    if (typeof value === "string") { return value; }
+    if (value instanceof Error) { return value.message; }
+    if (typeof value === "object" && value !== null) { return JSON.stringify(value); }
+    return String(value);
   }
 }

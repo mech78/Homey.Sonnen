@@ -4,15 +4,14 @@
     "en": "Consumption",
     "da": "Forbrug",
     "de": "Verbrauch",
-    "nl": "Uitgaven"
+    "nl": "verbruik"
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "W"
   },
   "min": 0,
   "insights": true,
-  "icon": "/assets/images/light-house-blank-circle-bolt.svg"
+  "icon": "/assets/images/svg/electricity-home-svgrepo-com.svg"
 }

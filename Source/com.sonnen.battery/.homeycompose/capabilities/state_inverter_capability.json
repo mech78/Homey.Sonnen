@@ -1,13 +1,12 @@
 {
   "type": "string",
   "title": {
-    "en": "Inverter state",
-    "da": "Inverter status",
-    "nl": "Omvormer staat",
-    "de": "Wechselrichterstatus"
+    "en": "Inverter",
+    "da": "Inverter",
+    "nl": "Omvormer",
+    "de": "Wechselrichter"
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
-  "icon": "/assets/images/monitor-waveform-light.svg"
+  "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
 }

@@ -100,5 +100,8 @@
   },
   "1.8.1": {
     "en": "Driver images."
+  },
+  "2.0.0": {
+    "en": "Time-of-Use improvements, better flow support, allow changing operating mode and to enable forecast charging, added new max/min capabilities, changed to svgrepo icons, localization of error messages, refactorings, fixes battery status capabilities, added roorules, and much more."
   }
 }

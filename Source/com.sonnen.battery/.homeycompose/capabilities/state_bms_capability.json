@@ -8,6 +8,5 @@
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
-  "icon": "/assets/images/wave-pulse-regular.svg"
+  "icon": "/assets/images/svg/pulse-svgrepo-com.svg"
 }

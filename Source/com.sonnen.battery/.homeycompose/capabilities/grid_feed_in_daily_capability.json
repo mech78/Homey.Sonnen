@@ -2,18 +2,17 @@
   "type": "number",
   "title": {
     "en": "∑d Grid feed-in",
-    "da": "∑d Nettilslutning",
+    "da": "∑d Til net",
     "de": "∑d Netzeinspeisung",
     "nl": "∑d Roosterinvoer"
   },
   "uiComponent": "sensor",
   "getable": true,
-  "setable": true,
   "units": {
     "en": "kWh"
   },
   "min": 0,
   "decimals": 3,
   "insights": true,
-  "icon": "/assets/images/utility-pole-thin-grid-feed-in_daily.svg"
+  "icon": "/assets/images/svg/electric-tower-power-line-svgrepo-com_export_sum_daily.svg"
 }

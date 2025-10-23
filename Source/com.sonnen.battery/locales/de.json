@@ -1,48 +1,91 @@
 {
-    "settings": {
-      "title": "Sonnen Batterie Einstellungen",
-      "subtitle": "Bitte die Daten für die API-Nutzung angeben.",
-      "baseUrl": "Basis-URL",
-      "save": "Änderungen speichern",
-      "remark": "Hinweis:",
-      "note": "Bitte die Anwendung nach dem Speichern der Konfigurationsänderung neu starten.",
-      "frequency": "Frequenz des Datenabrufs",
-      "frequencyHint": "Frequenz in Sekunden. Wie häufig sollen Daten abgeholt werden. Standard ist 30 Sekunden (30).",
-      "authToken": "Auth Token",
-      "authTokenHint": "Das Auth Token wird von der Benutzeranmeldung auf Ihrem Sonnen Batterie System abgerufen.",
-      "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
-      "savedError": "Ein Fehler ist aufgetreten.",
-      "settings.deviceState": "Gerätezustand (JSON)",
-      "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an."
+  "settings": {
+    "title": "Sonnen Batterie Einstellungen",
+    "subtitle": "Bitte die Daten für die API-Nutzung angeben.",
+    "baseUrl": "Basis-URL",
+    "save": "Änderungen speichern",
+    "remark": "Hinweis:",
+    "note": "Bitte die Anwendung nach dem Speichern der Konfigurationsänderung neu starten.",
+    "frequency": "Frequenz des Datenabrufs",
+    "frequencyHint": "Frequenz in Sekunden. Wie häufig sollen Daten abgeholt werden. Standard ist 30 Sekunden (30).",
+    "authToken": "Auth Token",
+    "authTokenHint": "Das Auth Token wird von der Benutzeranmeldung auf Ihrem Sonnen Batterie System abgerufen.",
+    "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
+    "savedError": "Ein Fehler ist aufgetreten.",
+    "settings.deviceState": "Gerätezustand (JSON)",
+    "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an."
+  },
+  "eclipseLed": {
+    "BlinkingRed": "blinkt rot",
+    "PulsingGreen": "pulsiert grün",
+    "PulsingOrange": "pulsiert orange",
+    "PulsingWhite": "pulsiert weiß",
+    "SolidRed": "dauerhaft rot",
+    "Unknown": "unbekannt"
+  },
+  "stateBms": {
+    "ready": "bereit",
+    "notready": "nicht bereit",
+    "error": "Fehler",
+    "initializing": "initialisieren",
+    "init": "initialisieren"
+  },
+  "stateCoreControlModule": {
+    "ready": "bereit",
+    "notready": "nicht bereit",
+    "init": "initialisieren",
+    "reinit": "initialisieren",
+    "ongrid": "am Netz",
+    "offgrid": "ohne Netz",
+    "criticalerror": "kritischer Fehler"
+  },
+  "stateInverter": {
+    "running": "läuft",
+    "notready": "nicht bereit",
+    "error": "Fehler"
+  },
+  "widget": {
+    "production": "Produktion",
+    "consumption": "Verbrauch",
+    "fromBattery": "Batteriebezug",
+    "fromGrid": "Netzbezug"
+  },
+  "device": {
+    "solarPanel": "Solarmodul",
+    "battery": "Batterie",
+    "gridMeter": "Netz",
+    "householdMeter": "Haushalt"
+  },
+  "operatingMode": {
+    "1": "Manuell",
+    "2": "Eigenverbrauch",
+    "6": "Modulerweiterung (30%)",
+    "10": "Time-of-Use"
+  },
+  "connection": {
+    "error_no_batteries": "Keine Sonnen-Batterien im lokalen Netzwerk gefunden. Bitte Netzwerk überprüfen und erneut versuchen oder eine statische IP-Adresse angeben.",
+    "notification_ip_changed": "Sonnen Batterie: IP-Adressänderung erkannt. Neue IP-Adresse: __ip__",
+    "error": "Keine Verbindung zur Batterie mit der IP '__ip__' hergestellt. Bitte Geräteeinstellungen überprüfen."
+  },
+  "error": {
+    "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__",
+    "http": {
+      "400": "Ungültige Anfrage. Ungültige Daten oder Validierung fehlgeschlagen",
+      "401": "Ungültiger Auth-Token oder erforderliche Lese-/Schreib-API nicht aktiviert.",
+      "other": "Unerwarteter HTTP __statusCode__ Fehler aufgetreten"
     },
-    "eclipseLed": {
-      "BlinkingRed": "blinkt rot",
-      "PulsingGreen": "pulsiert grün",
-      "PulsingOrange": "pulsiert orange",
-      "PulsingWhite": "pulsiert weiß",
-      "SolidRed": "dauerhaft rot",
-      "Unknown": "unbekannt"
-    },
-    "stateBms": {
-      "ready": "bereit",
-      "notready": "nicht bereit"
-    },
-    "stateInverter": {
-      "ready": "bereit",
-      "notready": "nicht bereit",
-      "ongrid": "am Netz",
-      "offgrid": "ohne Netz"
-    },
-    "widget": {
-      "production": "Produktion",
-      "consumption": "Verbrauch",
-      "fromBattery": "Batteriebezug",
-      "fromGrid": "Netzbezug"
-    },
-    "device": {
-      "solarPanel": "Solarmodul",
-      "battery": "Batterie",
-      "gridMeter": "Netz",
-      "householdMeter": "Haushalt"
+    "validation": {
+      "failed": "Validierung fehlgeschlagen",
+      "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__",
+      "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet",
+      "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen",
+      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat",
+      "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\"",
+      "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
+      "ToU": {
+        "invalid threshold": "Time-of-Use maximale Leistungswerte müssen zwischen 0 und 46000 Watt liegen.",
+        "ToU windows overlap": "Time-of-Use Fenster dürfen sich nicht überschneiden."
+      }
     }
   }
+}

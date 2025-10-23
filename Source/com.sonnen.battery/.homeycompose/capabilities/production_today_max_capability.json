@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "▲d Solar Power",
+    "da": "▲d Solenergi",
+    "de": "▲d Solarleistung",
+    "nl": "▲d Zonnevermogen"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/maximum-graph-svgrepo-com.svg"
+}

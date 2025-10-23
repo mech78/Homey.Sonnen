@@ -9,8 +9,10 @@
   "capabilities": [
     "consumption_current_capability",
     "consumption_daily_capability",
-    "consumption_total_capability",
+    "consumption_today_min_capability",
+    "consumption_today_max_capability",
     "autarky_capability",
+    "consumption_total_capability",
 
     "measure_power"
   ],

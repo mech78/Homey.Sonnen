@@ -1,25 +1,25 @@
 import Homey from 'homey';
-
+import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
 export abstract class SonnenDevice extends Homey.Device {
 
   /**
    * onInit is called when the device is initialized.
    */
-  async onInit() {
+  override async onInit(): Promise<void> {
     this.log(this.constructor.name + ' has been initialized');
   }
 
   /**
    * onUninit is called when the device is uninitialized.
    */
-  async onUninit(): Promise<void> {
+  override async onUninit(): Promise<void> {
     this.log(this.constructor.name + ' has been uninitialized');
   }
 
   /**
    * onAdded is called when the user adds the device, called just after pairing.
    */
-  async onAdded() {
+  override async onAdded(): Promise<void> {
     this.log(this.constructor.name + ' has been added');
   }
 
@@ -31,7 +31,7 @@ export abstract class SonnenDevice extends Homey.Device {
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
-  async onSettings({
+  override async onSettings({
     oldSettings,
     newSettings,
     changedKeys,
@@ -51,22 +51,27 @@ export abstract class SonnenDevice extends Homey.Device {
    * This method can be used this to synchronise the name to the device.
    * @param {string} name The new name
    */
-  async onRenamed(name: string) {
-    this.log(this.constructor.name + ' was renamed');
+  override async onRenamed(name: string): Promise<void> {
+    this.log(this.constructor.name + ' was renamed to: ' + name);
   }
 
   /**
    * onDeleted is called when the user deleted the device.
    */
-  async onDeleted() {
+  override async onDeleted(): Promise<void> {
     this.log(this.constructor.name + ' has been deleted');
   }
 
   /**
    * @returns {boolean} true if the device supports energy features as Cloud or Homey Pro (early 2023) or later , false otherwise
    */
-  isEnergyFullySupported(): boolean {
+  protected isEnergyFullySupported(): boolean {
     return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
+  }
+
+  protected createSonnenBatterieClient(): SonnenBatterieClient {
+    const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
+    return new SonnenBatterieClient(batteryAuthToken, this.getSetting("device_ip") as string);
   }
 
 };

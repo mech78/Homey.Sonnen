@@ -1,13 +1,16 @@
-Adds support for Sonnen Batterie - Time of Use(ToU)
+Adds support for Sonnen Batterie - Time of Use (ToU) and more.
 
 The sonnenBatterie does not only store energy, it's smart. As an intelligent, backup capable, energy storage system, sonnenBatterie 10 can integrate into any existing PV system on the market. Gain your energy independence now and secure yourself against future energy price increases.
 
-This app allows you to set or reset Time-Of-Use.
-This is very handy with changing energy prices, you can pause your batterie delivery on low tariff or charge batterie on low tariff - so being fully charged in times with high tariff.
+This app allows you to set or reset Time-Of-Use, change the operating mode and enable/disable forecast/prognosis charging.
+This is very useful with changing energy prices, you can pause your batterie delivery on low tariff or charge batterie on low tariff - so being fully charged in times with high tariff.
 
-Reset Time-Of-Use is very handy, because once schedule is set - the schedule is repeated daily. Reset will clear the schedule. Please use this before setting a new schedule. 
+Reset Time-Of-Use is very useful, because once schedule is set - the schedule is repeated daily. Reset will clear the schedule. Please use this before setting a new schedule. 
 
-Be aware, atm. only one schedule/Time-Of-Use is supported - and not multiple like example: 10-14:charge:2000 AND 17-23:charge:2000
+Be aware, currently only one schedule/Time-Of-Use is supported to be set by a flow. 
+However the device settings dialog already allows to set multiple events. 
+Be sure to enable the ToU operating mode to be effective.
+Note that changes to the ToU schedule, prognosis charging and operating mode are only possible if the Sonnen write API is enabled.
 
 Usage notes:
 
@@ -21,4 +24,4 @@ However when having multiple devices providing the same type of data, be sure to
 Also consider excluding the household device from Energy. 
 
 
-Please visit the settings page, after installing this application. Configuration-fields are mandatory. 
+Please visit the application's settings page, after installing this application. Configuration fields are mandatory. 

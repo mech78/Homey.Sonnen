@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "▼d consumption",	
+    "da": "▼d forbrug",
+    "de": "▼d Verbrauch",
+    "nl": "▼d verbruik"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/minimum-graph-svgrepo-com.svg"
+}
