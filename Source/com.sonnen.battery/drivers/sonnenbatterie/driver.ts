@@ -39,6 +39,12 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("set_prognosis_charging")
       .registerRunListener(async (args) => this.handleSetPrognosisCharging(args));
 
+    this.homey.flow.getActionCard("set_manual_charging")
+      .registerRunListener(async (args) => this.handleManualCharging(args));
+      
+    this.homey.flow.getActionCard("set_manual_discharging")
+      .registerRunListener(async (args) => this.handleManualDischarging(args));     
+
     // Device-specific conditions:
 
     this.homey.flow.getConditionCard("battery_level_below")
@@ -134,6 +140,20 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
     await args.device.refreshState(); // immediately refresh UI
   }
+
+  private async handleManualCharging(args: { device: BatteryDevice, power: number }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setSetpoint('charge', args.power);
+    this.log("Result", commandResult, args.power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await args.device.refreshState(); // immediately refresh UI
+  }
+
+  private async handleManualDischarging(args: { device: BatteryDevice, power: number }): Promise<void> {
+    const commandResult = await this.createSonnenBatterieClient(args.device).setSetpoint('discharge', args.power);
+    this.log("Result", commandResult, args.power);
+    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
+    await args.device.refreshState(); // immediately refresh UI
+  }  
 
   private async handleBatteryLevelBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
     const argPercentage = args.percentage;

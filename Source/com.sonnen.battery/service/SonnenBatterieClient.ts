@@ -5,8 +5,7 @@ import { SonnenCommandResult } from "../domain/SonnenCommandResult";
 
 export class SonnenBatterieClient {
 
-  optionsPut: { method: string; headers: { [key: string]: string } };
-  optionsGet: { method: string; headers: { [key: string]: string } };
+  config: { headers: { [key: string]: string } };
 
   constructor(private authToken: string, private ipAddress: string) {
       const headers = {
@@ -14,29 +13,19 @@ export class SonnenBatterieClient {
         "Content-Type": "application/json",
         "Accept": "application/json",
       }
-      this.optionsPut = {
-        method: "put",
-        headers: headers
-      };
-      this.optionsGet = {
-        method: "get",
+      this.config = {
         headers: headers
       };
   }
 
   public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
-    const body = {
-      EM_ToU_Schedule: `${schedule.toJSONString()}`,
-    };
-
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
-      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { EM_ToU_Schedule: `${schedule.toJSONString()}` }, this.config);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' }
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         if (error.response?.data != null) {
           const responseData = error.response.data as { details: { EM_ToU_Schedule?: string }, error: string };
-          // console.log(responseData?.error + " " + error.response.status + " " + responseData?.details?.EM_ToU_Schedule);
           
           let i18nKey;
           if (error.response.status === 400 && responseData.error === 'validation failed') {
@@ -66,7 +55,7 @@ export class SonnenBatterieClient {
 
   public async setOperatingMode(mode: number): Promise<SonnenCommandResult> {
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.optionsPut);
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.config);
       return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
@@ -79,8 +68,8 @@ export class SonnenBatterieClient {
   public async setPrognosisCharging(active: boolean): Promise<SonnenCommandResult> {
     const prognosis_charging = active ? 1 : 0;
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.optionsPut);
-      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
+      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.config);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         return new SonnenCommandResult(true, error.message, error.response?.status);
@@ -89,18 +78,33 @@ export class SonnenBatterieClient {
     }
   }
 
+  public async setSetpoint(direction: 'charge' | 'discharge', watts: number): Promise<SonnenCommandResult> {
+    try {
+      const response = await axios.post(`${this.getBaseUrl()}/api/v2/setpoint/${direction}/${watts}`, {}, this.config);
+      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+          return new SonnenCommandResult(true, error.message, error.response.status, "error.vpp_priority");
+        }
+        return new SonnenCommandResult(true, error.message, error.response?.status);
+      }
+      return new SonnenCommandResult(true, (error as Error).message);
+    }
+  }
+
   public async getLatestData() {
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet);
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.config);
     return response.data;
   }
 
   public async getStatus() {
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet);
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.config);
     return response.data;
   }
 
   public async getConfigurations(){
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet);
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.config);
     return response.data;
   }
 

@@ -68,19 +68,21 @@
     "error": "Keine Verbindung zur Batterie mit der IP '__ip__' hergestellt. Bitte Geräteeinstellungen überprüfen."
   },
   "error": {
-    "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__",
+    "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__.",
     "http": {
-      "400": "Ungültige Anfrage. Ungültige Daten oder Validierung fehlgeschlagen",
+      "400": "Ungültige Anfrage. Ungültige Daten oder Validierung fehlgeschlagen.",
       "401": "Ungültiger Auth-Token oder erforderliche Lese-/Schreib-API nicht aktiviert.",
-      "other": "Unerwarteter HTTP __statusCode__ Fehler aufgetreten"
+      "403": "Nicht erlaubt.",
+      "other": "Unerwarteter HTTP __statusCode__ Fehler aufgetreten."
     },
+    "vpp_priority": "Nicht erlaubt, weil SonnenVPP Priorität hat.",
     "validation": {
       "failed": "Validierung fehlgeschlagen",
-      "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__",
-      "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet",
-      "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen",
-      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat: \"__time__\"",
-      "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\"",
+      "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__.",
+      "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet.",
+      "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen.",
+      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat: \"__time__\".",
+      "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\".",
       "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
       "ToU": {
         "invalid threshold": "Time-of-Use maximale Leistungswerte müssen zwischen 0 und 46000 Watt liegen.",
