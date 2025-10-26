@@ -67,6 +67,8 @@ export class BatteryDevice extends SonnenDevice {
   }): Promise<string | void> {
     super.onSettings({ oldSettings, newSettings, changedKeys });
 
+    const mode_ToU = "10"; // Time-of-Use operating mode
+
     if (_.contains(changedKeys, "device_ip")) {
       const newDeviceIP = newSettings["device_ip"] as string;
       this.log("Settings", "IP", newDeviceIP);
@@ -92,11 +94,29 @@ export class BatteryDevice extends SonnenDevice {
     }
 
     if (_.contains(changedKeys, "operating_mode")) {
-      const operatingMode = newSettings["operating_mode"] as number;
-      this.log("Settings", "OperatingMode", operatingMode);
+      const newOperatingMode = newSettings["operating_mode"] as string;
+      const currentOperatingMode = this.getSetting("operating_mode") as string;
+      this.log("Settings", "OperatingMode", newOperatingMode, currentOperatingMode);
 
-      const result = await this.createSonnenBatterieClient().setOperatingMode(operatingMode);
+      // Prevent changing operating mode away from 10 when setting a non-empty time-of-use schedule at the same time
+      if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU && _.contains(changedKeys, "time_of_use_schedule")) {
+        const scheduleRaw = newSettings["time_of_use_schedule"] as string;
+        const isScheduleEmpty = !scheduleRaw || scheduleRaw.trim() === '';
+        if (!isScheduleEmpty) {
+          throw new Error('Cannot change operating mode away from Time-of-Use while setting a non-empty time-of-use schedule');
+        }
+      }
+
+      const result = await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
       LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
+      
+      // Clear time-of-use schedule when operating mode is changed away from 10
+      if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
+        this.log("Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
+        const clearResult = await this.createSonnenBatterieClient().clearSchedule();
+        LocalizationService.getInstance().throwLocalizedErrorIfAny(clearResult);
+      }
+      
       await this.refreshState(); // immediately refresh UI
     }
 
@@ -110,7 +130,26 @@ export class BatteryDevice extends SonnenDevice {
     }
 
     if (_.contains(changedKeys, "time_of_use_schedule")) {
+      const newOperatingMode = newSettings["operating_mode"] as string;
+      const currentOperatingMode = this.getSetting("operating_mode") as string;
       const scheduleRaw = newSettings["time_of_use_schedule"] as string;
+      
+      // Always allow setting an empty schedule regardless of operating mode
+      const isScheduleEmpty = !scheduleRaw || scheduleRaw.trim() === '';
+      this.log("Settings", "TimeOfUseSchedule", scheduleRaw, isScheduleEmpty, newOperatingMode, currentOperatingMode);
+      
+      if (!isScheduleEmpty) {
+        // Prevent applying schedule if operating mode is being changed away from Time-of-Use
+        if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
+          throw new Error('Cannot apply Time-of-Use schedule when operating mode is being changed away from Time-of-Use');
+        }
+        
+        // Only allow setting schedule when either current or new operating mode is Time-of-Use
+        if (currentOperatingMode !== mode_ToU && newOperatingMode !== mode_ToU) {
+          throw new Error('Time-of-Use schedule can only be set when operating mode is Time-of-Use');
+        }
+      }
+      
       this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
 
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere

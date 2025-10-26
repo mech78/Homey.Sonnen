@@ -127,7 +127,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     await args.device.refreshState(); // immediately refresh UI
   }
 
-  private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: number }): Promise<void> {
+  private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: string }): Promise<void> {
     const commandResult = await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
     this.log("Result", commandResult, args.operating_mode);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
@@ -173,9 +173,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     return (batteryLevel >= argPercentage);
   }
 
-  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: number }): Promise<boolean> {
+  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: string }): Promise<boolean> {
     const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
-    const operatingMode = LocalizationService.getInstance().resolveOperatingMode("" + args.operating_mode);
+    const operatingMode = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
 
     const result = currentOperatingMode === operatingMode;
     this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);

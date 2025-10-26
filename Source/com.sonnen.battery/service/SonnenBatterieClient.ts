@@ -53,7 +53,7 @@ export class SonnenBatterieClient {
     return this.setSchedule(new TimeOfUseSchedule([]));
   }
 
-  public async setOperatingMode(mode: number): Promise<SonnenCommandResult> {
+  public async setOperatingMode(mode: string): Promise<SonnenCommandResult> {
     try {
       const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.config);
       return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
