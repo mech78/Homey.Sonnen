@@ -6,6 +6,7 @@
     "noUnusedParameters": true,
     "noImplicitAny": true,
     "allowJs": true,
-    "outDir": ".homeybuild/"
+    "outDir": ".homeybuild/",
+    "sourceMap": true
   }
 }
