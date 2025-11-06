@@ -75,8 +75,8 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const maxPower = args.max_power;
 
     // Calculate end from timeStart and hours.
-    const timeStartHours = +timeStart.split(":", 1)[0];
-    const timeStartMinutes = timeStart.split(":", 2)[1];
+    const timeStartHours    = +timeStart.split(":", 1)[0].trim();
+    const timeStartMinutes  =  timeStart.split(":", 2)[1].trim();
     const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
     const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
 

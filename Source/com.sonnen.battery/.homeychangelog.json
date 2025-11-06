@@ -106,5 +106,8 @@
   },
   "2.0.1": {
     "en": "Fixed schedule leading/ending trails"
+  },
+  "2.0.2": {
+    "en": "Another Trim fix."
   }
 }
