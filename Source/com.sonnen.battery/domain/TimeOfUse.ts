@@ -163,7 +163,7 @@ export class TimeOfUseSchedule {
       return new TimeOfUseSchedule([]);
     }
 
-    const lines = str.split('\n').filter(line => line.trim() !== '');
+    const lines = str.split('\n').map(line => line.trim()).filter(line => line !== '');
     const events: TimeOfUseEntry[] = [];
 
     for (const line of lines) {
