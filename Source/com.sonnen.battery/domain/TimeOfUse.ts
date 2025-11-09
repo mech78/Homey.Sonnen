@@ -109,6 +109,10 @@ export class TimeOfUseSchedule {
           `Invalid schedule item at index ${index}: missing required properties`
         );
       }
+
+      // Eventually trim remaining superfluous whitespace coming from UI inputs
+      event.start = event.start.trim();
+      event.stop = event.stop.trim(); 
       
       // Validate time format (HH:MM)
       if (!this.isValidTimeFormat(event.start) || !this.isValidTimeFormat(event.stop)) {
