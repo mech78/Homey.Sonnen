@@ -77,7 +77,7 @@
     },
     "vpp_priority": "Nicht erlaubt, weil SonnenVPP Priorität hat.",
     "validation": {
-      "failed": "Validierung fehlgeschlagen",
+      "failed": "Validierung fehlgeschlagen: __error__.",
       "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__.",
       "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet.",
       "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen.",
@@ -85,7 +85,7 @@
       "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\".",
       "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
       "ToU": {
-        "invalid threshold": "Time-of-Use maximale Leistungswerte müssen zwischen 0 und 46000 Watt liegen.",
+        "invalid threshold": "Time-of-Use maximaler Leistungswert muss zwischen 0 und 46000 Watt liegen.",
         "ToU windows overlap": "Time-of-Use Fenster dürfen sich nicht überschneiden."
       }
     }

@@ -28,7 +28,7 @@ export class SonnenBatterieClient {
 
           if (error.response.status === 400 && responseData.error === 'validation failed') {
             const i18nKey = "error.validation.ToU." + (responseData?.details?.EM_ToU_Schedule ?? "error.validation.failed");
-            throw new LocalizedError(i18nKey, undefined, responseData.details?.EM_ToU_Schedule ?? responseData.error);
+            throw new LocalizedError(i18nKey, { error: responseData.details?.EM_ToU_Schedule ?? responseData.error });
           }
         }
       }

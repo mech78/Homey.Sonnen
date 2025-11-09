@@ -8,12 +8,12 @@ export interface TimeOfUseEntry {
    * Start time in HH:MM format
    */
   start: string;
-  
+
   /**
    * Stop time in HH:MM format
    */
   stop: string;
-  
+
   /**
    * Maximum power threshold in watts
    */
@@ -25,7 +25,7 @@ export interface TimeOfUseEntry {
  */
 export class TimeOfUseSchedule {
   private schedule: TimeOfUseEntry[];
-  
+
   /**
    * Creates a new TimeOfUseSchedule instance
    * @param jsonString The JSON string representation of the schedule
@@ -47,29 +47,21 @@ export class TimeOfUseSchedule {
    */
   constructor(source: string | TimeOfUseEntry | TimeOfUseEntry[]) {
     let entries: TimeOfUseEntry[];
-    
+
     if (typeof source === 'string') {
       // Parse JSON string to get array of events
       try {
         const parsed = JSON.parse(source);
-        
+
         // Validate that it's an array
         if (!Array.isArray(parsed)) {
-          throw new LocalizedError(
-            'error.validation.invalid_schedule_format',
-            undefined,
-            'Invalid schedule format: expected an array'
-          );
+          throw new LocalizedError('error.validation.invalid_schedule_format', undefined);
         }
-        
+
         entries = parsed;
       } catch (error) {
         if (error instanceof SyntaxError) {
-          throw new LocalizedError(
-            'error.validation.failed_to_parse_schedule_json',
-            { error: error.message },
-            `Failed to parse schedule JSON: ${error.message}`
-          );
+          throw new LocalizedError('error.validation.failed_to_parse_schedule_json', { error: error.message });
         }
         throw error;
       }
@@ -78,12 +70,12 @@ export class TimeOfUseSchedule {
     } else {
       entries = [source];
     }
-    
+
     // Validate and copy all events
     this.schedule = this.validateAndCopyEvents(entries);
   }
-  
-  
+
+
   /**
    * Validates if a string is in HH:MM format
    * @param time The time string to validate
@@ -93,7 +85,7 @@ export class TimeOfUseSchedule {
     const timeRegex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
     return timeRegex.test(time);
   }
-  
+
   /**
    * Validates and copies an array of TimeOfUseEntry objects
    * @param events Array of TimeOfUseEntry objects to validate and copy
@@ -103,12 +95,8 @@ export class TimeOfUseSchedule {
     return events.map((event, index) => {
       // Check required properties
       if (typeof event.start !== 'string' || typeof event.stop !== 'string' || typeof event.threshold_p_max !== 'number') {
-        throw new LocalizedError(
-          'error.validation.invalid_schedule_item_missing_properties',
-          { index: index.toString() },
-          `Invalid schedule item at index ${index}: missing required properties`
-        );
-      }      
+        throw new LocalizedError('error.validation.invalid_schedule_item_missing_properties', { index: index.toString() });
+      }
 
       return {
         start: this.getValidTime(event.start, index),
@@ -121,23 +109,18 @@ export class TimeOfUseSchedule {
   private getValidTime(time: string, index: number): string {
     time = time.trim();
     if (!this.isValidTimeFormat(time)) {
-        throw new LocalizedError(
-          'error.validation.invalid_schedule_item_time_format',
-          { index: index.toString(), time },
-          `Invalid schedule item at index ${index}: invalid time format: \"${time}\"`
-        );
+      throw new LocalizedError('error.validation.invalid_schedule_item_time_format', { index: index.toString(), time });
     }
     return time;
   }
-  
+
   /**
-   * Gets the entire schedule
    * @returns Array of TimeOfUseItem objects
    */
   public getSchedule(): TimeOfUseEntry[] {
     return [...this.schedule]; // Return a copy to prevent external modification
   }
-  
+
   /**
    * Converts the schedule back to its JSON string representation
    * @returns The JSON string representation of the schedule
@@ -145,9 +128,8 @@ export class TimeOfUseSchedule {
   public toJSONString(): string {
     return JSON.stringify(this.schedule);
   }
-  
+
   /**
-   * Returns a string representation of the schedule
    * @returns A formatted string representation
    */
   public toString(): string {
@@ -173,11 +155,7 @@ export class TimeOfUseSchedule {
       // Match format: HH:MM-HH:MM: XXXXW
       const match = line.match(/^(\d{2}:\d{2})-(\d{2}:\d{2}):\s*(\d+)W?$/);
       if (!match) {
-        throw new LocalizedError(
-          'error.validation.invalid_schedule_line_format',
-          { line: line },
-          `Invalid schedule line format: "${line}"`
-        );
+        throw new LocalizedError('error.validation.invalid_schedule_line_format', { line: line });
       }
 
       const [, start, stop, thresholdStr] = match;
