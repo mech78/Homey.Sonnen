@@ -114,14 +114,10 @@ export class BatteryDevice extends SonnenDevice {
         if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
           this.log("Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
           await this.createSonnenBatterieClient().clearSchedule();
-        }
-        
-        await this.refreshState(); // immediately refresh UI
+        }     
       } catch (error) {
         LocalizationService.getInstance().throwLocalizedError(error);
       }
-      
-      await this.refreshState(); // immediately refresh UI
     }
 
     if (_.contains(changedKeys, "prognosis_charging")) {
@@ -130,7 +126,6 @@ export class BatteryDevice extends SonnenDevice {
 
       try {
         await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
-        await this.refreshState(); // immediately refresh UI
       } catch (error) {
         LocalizationService.getInstance().throwLocalizedError(error);
       }
@@ -162,12 +157,11 @@ export class BatteryDevice extends SonnenDevice {
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       try {
         await this.createSonnenBatterieClient().setSchedule(schedule);
-        await this.refreshState(); // immediately refresh UI
       } catch (error) {
         LocalizationService.getInstance().throwLocalizedError(error);
       }
     }
-
+    await this.refreshState(); // immediately refresh UI
   }
 
   /**
