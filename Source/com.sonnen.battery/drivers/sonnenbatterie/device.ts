@@ -112,7 +112,7 @@ export class BatteryDevice extends SonnenDevice {
         
         // Clear time-of-use schedule when operating mode is changed away from 10
         if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
-          this.log("Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
+          this.log("Settings", "Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
           await this.createSonnenBatterieClient().clearSchedule();
         }     
       } catch (error) {
@@ -152,15 +152,14 @@ export class BatteryDevice extends SonnenDevice {
         }
       }
       
-      this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
-
-      const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
       try {
+        const schedule = TimeOfUseSchedule.fromString(scheduleRaw);
         await this.createSonnenBatterieClient().setSchedule(schedule);
       } catch (error) {
         LocalizationService.getInstance().throwLocalizedError(error);
       }
     }
+
     await this.refreshState(); // immediately refresh UI
   }
 
