@@ -79,7 +79,7 @@
       "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__",
       "invalid_schedule_format": "Invalid schedule format: expected an array",
       "invalid_schedule_item_missing_properties": "Invalid schedule item at index __index__: missing required properties",
-      "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format",
+      "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format: \"__time__\"",
       "invalid_schedule_line_format": "Invalid schedule line format: \"__line__\"",
       "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address.",
       "ToU": {
