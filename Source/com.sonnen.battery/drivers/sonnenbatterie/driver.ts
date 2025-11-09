@@ -75,17 +75,22 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const maxPower = args.max_power;
 
     // Calculate end from timeStart and hours.
-    const timeStartHours    = +timeStart.split(":", 1)[0].trim();
-    const timeStartMinutes  =  timeStart.split(":", 2)[1].trim();
+    const timeStartHours    = Number(timeStart.split(":")[0]);
+    const timeStartMinutes  = Number(timeStart.split(":")[1]);
     const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+
+    const timeStartHoursFormatted = this.zeroPad(timeStartHours, 2);
     const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
+    const timeStartMinutesFormatted = this.zeroPad(timeStartMinutes, 2);
+    const timeEndMinutesFormatted = timeStartMinutesFormatted;
 
-    const timeEnd: string = `${timeEndHoursFormatted}:${timeStartMinutes}`;
+    const startTime: string = `${timeStartHoursFormatted}:${timeStartMinutesFormatted}`;
+    const endTime: string = `${timeEndHoursFormatted}:${timeEndMinutesFormatted}`;
 
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
+    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(startTime, endTime, maxPower);
     this.log("Result", commandResult, args.start, args.hours, args.max_power);
     LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set ToC-hours (${hours}) between ${timeStart} and ${timeEnd} with max power ${maxPower}.` });
+    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use for (${hours}) between ${startTime} and ${endTime} with max power ${maxPower}.` });
     await args.device.refreshState(); // immediately refresh UI
   }
 

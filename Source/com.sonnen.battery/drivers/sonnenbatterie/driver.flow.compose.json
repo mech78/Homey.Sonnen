@@ -40,7 +40,7 @@
           },
           "min": 0,
           "max": 46000,
-          "step": 1000
+          "step": 1
         }
       ]
     },
@@ -87,7 +87,7 @@
           },
           "min": 0,
           "max": 46000,
-          "step": 1000
+          "step": 1
         }
       ]
     },
@@ -134,7 +134,7 @@
           },
           "min": 0,
           "max": 46000,
-          "step": 1000
+          "step": 1
         }
       ]
     },
@@ -193,7 +193,7 @@
         "de": "Starte Ladevorgang"
       },
       "titleFormatted": {
-        "en": "Start charging of batteri with max. power [[power]] W",
+        "en": "Start charging of battery with max. power [[power]] W",
         "da": "Start opladning af batteri med max. power [[power]] W",
         "de": "Starte Ladevorgang der Batterie mit max. Leistung [[power]] W",
         "nl": "Begin met het opladen van de batterij met max. stroom [[power]] W"
@@ -309,6 +309,78 @@
         {
           "type": "checkbox",
           "name": "active"
+        }
+      ]
+    },
+    {
+      "id": "set_manual_charging",
+      "title": {
+        "en": "Set manual charging",
+        "da": "Set manuel opladning",
+        "nl": "Stel handmatig opladen in",
+        "de": "Manuelles Laden einstellen"
+      },
+      "titleFormatted": {
+        "en": "Manual charging of battery with max. power [[power]] W",
+        "da": "Manuel opladning af batteri med max. power [[power]] W",
+        "de": "Manuelles Laden der Batterie mit max. Leistung [[power]] W",
+        "nl": "Handmatig opladen van de batterij met max. stroom [[power]] W"
+      },
+      "hint": {
+        "en": "Use with operating mode: Manual",
+        "da": "Bruges med driftsmodus: Manuel",
+        "de": "Zur Verwendung mit Betriebsmodus: Manuell",
+        "nl": "Te gebruiken met de bedieningsmodus: Handmatig"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "power",
+          "placeholder": {
+            "en": "Max. power from grid (0-46000 W)",
+            "da": "Max. power fra net (0-46000 W)",
+            "de": "Max. Leistung aus dem Netz (0-46000 W)",
+            "nl": "Max. stroom uit het net (0-46000 W)"
+          },
+          "min": 0,
+          "max": 46000,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "set_manual_discharging",
+      "title": {
+        "en": "Set manual discharging",
+        "da": "Set manuel afladning",
+        "nl": "Stel handmatig ontladen in",
+        "de": "Manuelles Entladen einstellen"
+      },
+      "titleFormatted": {
+        "en": "Set manual discharging of battery with max. power [[power]] W",
+        "da": "Set manuel afladning af batteri med max. power [[power]] W",
+        "de": "Manuelles Endladen der Batterie mit max. Leistung [[power]] W",
+        "nl": "Begin met het handmatig ontladen van de batterij met max. stroom [[power]] W"
+      },
+      "hint": {
+        "en": "Use with operating mode: Manual",
+        "da": "Bruges med driftsmodus: Manuel",
+        "de": "Zur Verwendung mit Betriebsmodus: Manuell",
+        "nl": "Te gebruiken met de bedieningsmodus: Handmatig"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "power",
+          "placeholder": {
+            "en": "Max. power to grid (0-46000 W)",
+            "da": "Max. power til net (0-46000 W)",
+            "de": "Max. Leistung in das Netz (0-46000 W)",
+            "nl": "Max. stroom naar het net (0-46000 W)"
+          },
+          "min": 0,
+          "max": 46000,
+          "step": 1
         }
       ]
     }

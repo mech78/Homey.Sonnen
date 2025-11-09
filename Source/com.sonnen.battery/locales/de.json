@@ -79,7 +79,7 @@
       "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__",
       "invalid_schedule_format": "Ungültiges Zeitplanformat: Array erwartet",
       "invalid_schedule_item_missing_properties": "Ungültiges Zeitplanelement bei Index __index__: erforderliche Eigenschaften fehlen",
-      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat",
+      "invalid_schedule_item_time_format": "Ungültiges Zeitplanelement bei Index __index__: ungültiges Zeitformat: \"__time__\"",
       "invalid_schedule_line_format": "Ungültiges Zeitplan-Zeilenformat: \"__line__\"",
       "invalid_ip_format": "Ungültiges IP-Adressformat. Bitte eine gültige IPv4-Adresse eingeben.",
       "ToU": {

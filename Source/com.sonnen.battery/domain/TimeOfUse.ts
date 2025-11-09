@@ -108,23 +108,26 @@ export class TimeOfUseSchedule {
           { index: index.toString() },
           `Invalid schedule item at index ${index}: missing required properties`
         );
-      }
-      
-      // Validate time format (HH:MM)
-      if (!this.isValidTimeFormat(event.start) || !this.isValidTimeFormat(event.stop)) {
-        throw new LocalizedError(
-          'error.validation.invalid_schedule_item_time_format',
-          { index: index.toString() },
-          `Invalid schedule item at index ${index}: invalid time format`
-        );
-      }
-      
+      }      
+
       return {
-        start: event.start,
-        stop: event.stop,
+        start: this.getValidTime(event.start, index),
+        stop: this.getValidTime(event.stop, index),
         threshold_p_max: event.threshold_p_max
       };
     });
+  }
+
+  private getValidTime(time: string, index: number): string {
+    time = time.trim();
+    if (!this.isValidTimeFormat(time)) {
+        throw new LocalizedError(
+          'error.validation.invalid_schedule_item_time_format',
+          { index: index.toString(), time },
+          `Invalid schedule item at index ${index}: invalid time format: \"${time}\"`
+        );
+    }
+    return time;
   }
   
   /**
