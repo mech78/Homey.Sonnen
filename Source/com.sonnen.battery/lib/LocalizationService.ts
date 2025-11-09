@@ -23,7 +23,7 @@ export class LocalizationService {
     return this.instance;
   }
 
-  public throwLocalizedError(error: Error): void {
+  public throwLocalizedError(error: unknown): void {
     const homey = this.app.homey;
     
     // Handle LocalizedError

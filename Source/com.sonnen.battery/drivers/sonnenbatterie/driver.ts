@@ -73,7 +73,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with max. ${maxPower}W.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   };
 
@@ -100,7 +100,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${startTime} and ${endTime} with max. ${maxPower}W.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -110,7 +110,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -123,7 +123,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -133,7 +133,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use (24h).` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -144,7 +144,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Changed operating mode to "${operatingModeText}"` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -154,7 +154,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Prognosis charging ${args.active ? "active" : "inactive"}` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -164,7 +164,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Manual charging with max. ${args.power}W.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
@@ -174,7 +174,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Manual dicharging with max. ${args.power}W.` });
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error as Error);
+      LocalizationService.getInstance().throwLocalizedError(error);
     }
   }
 
