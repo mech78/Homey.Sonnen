@@ -29,6 +29,9 @@ export class LocalizationService {
     // Handle LocalizedError
     if (error instanceof LocalizedError) {
       const message = error.i18nArgs ? homey.__(error.i18nKey, error.i18nArgs) : homey.__(error.i18nKey);
+      if (message === null || message === undefined) {
+        throw new Error(`<${error.i18nKey}>`); // Fallback if translation is missing, display the i18nKey
+      }
       throw new Error(message);
     }
 

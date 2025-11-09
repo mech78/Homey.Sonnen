@@ -87,7 +87,10 @@
       "ToU": {
         "invalid threshold": "Time-of-Use maximaler Leistungswert muss zwischen 0 und 46000 Watt liegen.",
         "ToU windows overlap": "Time-of-Use Fenster dürfen sich nicht überschneiden."
-      }
+      },
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Betriebsmodus kann nicht weg von Time-of-Use geändert werden, während ein nicht-leerer Zeitplan festgelegt wird.",
+      "timeOfUseChangeMismatchingOperatingModeChange": "Time-of-Use Zeitplan kann nicht angewendet werden, wenn der Betriebsmodus weg von Time-of-Use geändert wird.",
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use Zeitplan kann nur festgelegt werden, wenn der Betriebsmodus Time-of-Use ist."
     }
   }
 }

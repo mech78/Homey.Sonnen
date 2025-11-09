@@ -87,7 +87,10 @@
       "ToU": {
         "invalid threshold": "Time-of-Use max. power value must be between 0 and 46000 watts.",
         "ToU windows overlap": "Time-of-Use windows must not overlap."
-      }
+      },
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Cannot change operating mode away from Time-of-Use while setting a non-empty time-of-use schedule.",
+      "timeOfUseChangeMismatchingOperatingModeChange": "Cannot apply Time-of-Use schedule when operating mode is being changed away from Time-of-Use.",
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schedule can only be set when operating mode is Time-of-Use."
     }
   }
 }

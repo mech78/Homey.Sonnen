@@ -103,7 +103,7 @@ export class BatteryDevice extends SonnenDevice {
         const scheduleRaw = newSettings["time_of_use_schedule"] as string;
         const isScheduleEmpty = !scheduleRaw || scheduleRaw.trim() === '';
         if (!isScheduleEmpty) {
-          throw new Error('Cannot change operating mode away from Time-of-Use while setting a non-empty time-of-use schedule');
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
         }
       }
 
@@ -118,7 +118,7 @@ export class BatteryDevice extends SonnenDevice {
         
         await this.refreshState(); // immediately refresh UI
       } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error as Error);
+        LocalizationService.getInstance().throwLocalizedError(error);
       }
       
       await this.refreshState(); // immediately refresh UI
@@ -132,7 +132,7 @@ export class BatteryDevice extends SonnenDevice {
         await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
         await this.refreshState(); // immediately refresh UI
       } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error as Error);
+        LocalizationService.getInstance().throwLocalizedError(error);
       }
     }
 
@@ -148,12 +148,12 @@ export class BatteryDevice extends SonnenDevice {
       if (!isScheduleEmpty) {
         // Prevent applying schedule if operating mode is being changed away from Time-of-Use
         if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
-          throw new Error('Cannot apply Time-of-Use schedule when operating mode is being changed away from Time-of-Use');
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
         }
         
         // Only allow setting schedule when either current or new operating mode is Time-of-Use
         if (currentOperatingMode !== mode_ToU && newOperatingMode !== mode_ToU) {
-          throw new Error('Time-of-Use schedule can only be set when operating mode is Time-of-Use');
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.timeOfUseChangeMismatchingOperatingMode"));
         }
       }
       
@@ -164,7 +164,7 @@ export class BatteryDevice extends SonnenDevice {
         await this.createSonnenBatterieClient().setSchedule(schedule);
         await this.refreshState(); // immediately refresh UI
       } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error as Error);
+        LocalizationService.getInstance().throwLocalizedError(error);
       }
     }
 
