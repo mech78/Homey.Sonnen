@@ -67,6 +67,18 @@
     "notification_ip_changed": "Sonnen Batterie: IP-Adressänderung erkannt. Neue IP-Adresse: __ip__",
     "error": "Keine Verbindung zur Batterie mit der IP '__ip__' hergestellt. Bitte Geräteeinstellungen überprüfen."
   },
+  "notification": {
+    "setToU": "Sonnen Batterie: Time-of-Use zwischen __startTime__ und __endTime__ mit max. __maxPower__W gesetzt.",
+    "clearedToU": "Sonnen Batterie: Time-of-Use Zeitplan gelöscht.",
+    "pausedToU": "Sonnen Batterie: Time-of-Use zwischen __startTime__ und __endTime__ pausiert.",
+    "startedToU": "Sonnen Batterie: Time-of-Use gestartet (24h).",
+    "changedOperatingMode": "Sonnen Batterie: Betriebsmodus auf \"__operatingMode__\" gesetzt.",
+    "changedPrognosisCharging": "Sonnen Batterie: Prognosebasiertes Laden auf __state__ gesetzt.",
+    "startedManualCharging": "Sonnen Batterie: Manuelles Laden mit max. __maxPower__W gestartet.",
+    "startedManualDischarging": "Sonnen Batterie: Manuelles Entladen mit max. __maxPower__W gestartet."
+  },
+  "active": "aktiv", 
+  "inactive": "inaktiv",
   "error": {
     "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__.",
     "http": {

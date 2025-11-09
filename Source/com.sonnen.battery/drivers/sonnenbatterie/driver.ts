@@ -64,41 +64,34 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleSetTimeOfUse(args: { device: BatteryDevice, start: string, end: string, max_power: number }): Promise<void> {
-    const timeStart = args.start;
-    const timeEnd = args.end;
-    const maxPower = args.max_power;
-
-    try {
-      await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with max. ${maxPower}W.` });
-      await args.device.refreshState(); // immediately refresh UI
-    } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
-    }
+    await this.handleSetTimeOfUseInternal(args.device, args.start, args.end, args.max_power);
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { device: BatteryDevice, start: string, hours: number, max_power: number }): Promise<void> {
-    const timeStart = args.start;
-    const hours = args.hours;
-    const maxPower = args.max_power;
-
     // Calculate end from timeStart and hours.
-    const timeStartHours    = Number(timeStart.split(":")[0]);
-    const timeStartMinutes  = Number(timeStart.split(":")[1]);
-    const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+    const timeStartHours    = Number(args.start.split(":")[0]);
+    const timeStartMinutes  = Number(args.start.split(":")[1]);
+    const timeEndHours = (timeStartHours + args.hours) % 24; // Handle overflow.
 
     const timeStartHoursFormatted = this.zeroPad(timeStartHours, 2);
     const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
     const timeStartMinutesFormatted = this.zeroPad(timeStartMinutes, 2);
     const timeEndMinutesFormatted = timeStartMinutesFormatted;
 
-    const startTime: string = `${timeStartHoursFormatted}:${timeStartMinutesFormatted}`;
-    const endTime: string = `${timeEndHoursFormatted}:${timeEndMinutesFormatted}`;
+    const timeStart: string = `${timeStartHoursFormatted}:${timeStartMinutesFormatted}`;
+    const timeEnd: string = `${timeEndHoursFormatted}:${timeEndMinutesFormatted}`;
 
+    await this.handleSetTimeOfUseInternal(args.device, timeStart, timeEnd, args.max_power);
+  }
+
+  private async handleSetTimeOfUseInternal(device: BatteryDevice, timeStart: string, timeEnd: string, maxPower: number) {
     try {
-      await this.createSonnenBatterieClient(args.device).setScheduleEntry(startTime, endTime, maxPower);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${startTime} and ${endTime} with max. ${maxPower}W.` });
-      await args.device.refreshState(); // immediately refresh UI
+      await this.createSonnenBatterieClient(device).setScheduleEntry(timeStart, timeEnd, maxPower);
+
+      const notification = this.homey.__("notification.setToU", { startTime: timeStart, endTime: timeEnd, maxPower: maxPower });
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
     }
@@ -107,7 +100,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   private async handleClearTimeOfUse(args: { device: BatteryDevice }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).clearSchedule(); // Set empty schedule
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
+      
+      const notification = this.homey.__("notification.clearedToU");
+      await this.homey.notifications.createNotification({ excerpt: notification });
+      
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -120,7 +116,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     try {
       await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
+      
+      const notification = this.homey.__("notification.pausedToU", { startTime: timeStart, endTime: timeEnd});
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -130,7 +129,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   private async handleStartTimeOfUse(args: { device: BatteryDevice, power: number }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power); // Set full schedule
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use (24h).` });
+      
+      const notification = this.homey.__("notification.startedToU");
+      await this.homey.notifications.createNotification({ excerpt: notification });
+      
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -141,7 +143,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     try {
       await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
       const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Changed operating mode to "${operatingModeText}"` });
+
+      const notification = this.homey.__("notification.changedOperatingMode", { operatingMode: operatingModeText });
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -151,7 +156,11 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   private async handleSetPrognosisCharging(args: { device: BatteryDevice, active: boolean }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setPrognosisCharging(args.active)
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Prognosis charging ${args.active ? "active" : "inactive"}` });
+
+      const state = this.homey.__(args.active ? "active" : "inactive");
+      const notification = this.homey.__("notification.changedPrognosisCharging", { state: state });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -161,7 +170,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   private async handleManualCharging(args: { device: BatteryDevice, power: number }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setSetpoint('charge', args.power);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Manual charging with max. ${args.power}W.` });
+
+      const notification = this.homey.__("notification.startedManualCharging", { maxPower: args.power });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
@@ -171,7 +183,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   private async handleManualDischarging(args: { device: BatteryDevice, power: number }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setSetpoint('discharge', args.power);
-      await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Manual dicharging with max. ${args.power}W.` });
+
+      const notification = this.homey.__("notification.startedManualDischarging", { maxPower: args.power });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
       LocalizationService.getInstance().throwLocalizedError(error);
