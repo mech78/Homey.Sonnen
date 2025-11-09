@@ -107,14 +107,18 @@ export class BatteryDevice extends SonnenDevice {
         }
       }
 
-      const result = await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
-      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
-      
-      // Clear time-of-use schedule when operating mode is changed away from 10
-      if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
-        this.log("Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
-        const clearResult = await this.createSonnenBatterieClient().clearSchedule();
-        LocalizationService.getInstance().throwLocalizedErrorIfAny(clearResult);
+      try {
+        await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
+        
+        // Clear time-of-use schedule when operating mode is changed away from 10
+        if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
+          this.log("Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
+          await this.createSonnenBatterieClient().clearSchedule();
+        }
+        
+        await this.refreshState(); // immediately refresh UI
+      } catch (error) {
+        LocalizationService.getInstance().throwLocalizedError(error as Error);
       }
       
       await this.refreshState(); // immediately refresh UI
@@ -124,9 +128,12 @@ export class BatteryDevice extends SonnenDevice {
       const prognosisCharging = newSettings["prognosis_charging"] as boolean;
       this.log("Settings", "PrognosisCharging", prognosisCharging);
 
-      const result = await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
-      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
-      await this.refreshState(); // immediately refresh UI
+      try {
+        await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
+        await this.refreshState(); // immediately refresh UI
+      } catch (error) {
+        LocalizationService.getInstance().throwLocalizedError(error as Error);
+      }
     }
 
     if (_.contains(changedKeys, "time_of_use_schedule")) {
@@ -153,9 +160,12 @@ export class BatteryDevice extends SonnenDevice {
       this.log("Settings", "TimeOfUseSchedule", scheduleRaw);
 
       const schedule = TimeOfUseSchedule.fromString(scheduleRaw); // TODO: localize all errors somewhere
-      const result = await this.createSonnenBatterieClient().setSchedule(schedule);
-      LocalizationService.getInstance().throwLocalizedErrorIfAny(result);
-      await this.refreshState(); // immediately refresh UI
+      try {
+        await this.createSonnenBatterieClient().setSchedule(schedule);
+        await this.refreshState(); // immediately refresh UI
+      } catch (error) {
+        LocalizationService.getInstance().throwLocalizedError(error as Error);
+      }
     }
 
   }

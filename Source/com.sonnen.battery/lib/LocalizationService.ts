@@ -1,5 +1,4 @@
 import Homey from 'homey';
-import { SonnenCommandResult } from '../domain/SonnenCommandResult';
 import { LocalizedError } from '../domain/LocalizedError';
 
 export class LocalizationService {
@@ -35,26 +34,6 @@ export class LocalizationService {
 
     // Fallback for regular errors
     throw error;
-  }
-
-  public throwLocalizedErrorIfAny(result: SonnenCommandResult): void {
-    const homey = this.app.homey;
-    
-    // Handle SonnenCommandResult
-    homey.log('Command result: ' + result?.toString());
-    if (result?.hasError) {
-      if (result.i18nKey) {
-        const message = result.i18nArgs ? homey.__(result.i18nKey, result.i18nArgs) : homey.__(result.i18nKey);
-        throw new Error(message);
-      } else if (result.statusCode) {
-        if (result.statusCode === 401) {
-          throw new Error(homey.__("error.http.401"));
-        }
-        throw new Error(homey.__("error.http.other", { "statusCode": result.statusCode }));
-      } else {
-        throw new Error(homey.__("error.unknown", { "error": result.message }));
-      }
-    }
   }
 
   public resolveOperatingMode(mode: string): string {
