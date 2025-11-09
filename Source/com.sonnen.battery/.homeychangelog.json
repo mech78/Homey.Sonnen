@@ -111,6 +111,6 @@
     "en": "Another Trim fix."
   },
   "2.0.3": {
-    "en": "Trim all whitespace from ToU schedule entries."
+    "en": "Trim all whitespace from ToU schedule entries and fix some localization issues."
   }
 }

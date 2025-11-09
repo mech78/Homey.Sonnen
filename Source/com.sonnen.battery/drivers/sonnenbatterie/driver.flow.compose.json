@@ -193,7 +193,7 @@
         "de": "Starte Ladevorgang"
       },
       "titleFormatted": {
-        "en": "Start charging of batteri with max. power [[power]] W",
+        "en": "Start charging of battery with max. power [[power]] W",
         "da": "Start opladning af batteri med max. power [[power]] W",
         "de": "Starte Ladevorgang der Batterie mit max. Leistung [[power]] W",
         "nl": "Begin met het opladen van de batterij met max. stroom [[power]] W"
@@ -321,7 +321,7 @@
         "de": "Manuelles Laden einstellen"
       },
       "titleFormatted": {
-        "en": "Manual charging of batteri with max. power [[power]] W",
+        "en": "Manual charging of battery with max. power [[power]] W",
         "da": "Manuel opladning af batteri med max. power [[power]] W",
         "de": "Manuelles Laden der Batterie mit max. Leistung [[power]] W",
         "nl": "Handmatig opladen van de batterij met max. stroom [[power]] W"
@@ -357,7 +357,7 @@
         "de": "Manuelles Entladen einstellen"
       },
       "titleFormatted": {
-        "en": "Set manual discharging of batteri with max. power [[power]] W",
+        "en": "Set manual discharging of battery with max. power [[power]] W",
         "da": "Set manuel afladning af batteri med max. power [[power]] W",
         "de": "Manuelles Endladen der Batterie mit max. Leistung [[power]] W",
         "nl": "Begin met het handmatig ontladen van de batterij met max. stroom [[power]] W"
