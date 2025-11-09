@@ -112,5 +112,8 @@
   },
   "2.0.3": {
     "en": "Trim all whitespace from ToU schedule entries and fix some localization issues."
+  },
+  "2.1.0": {
+    "en": "Add setpoint charge/discharge cards especially useful for operating mode 'manual'. More refactorings, validations and localizations as well as support for VSCode debugging."
   }
 }
