@@ -68,10 +68,10 @@
     "error": "Kon geen verbinding maken met de batterij met IP '__ip__'. Controleer de apparaatinstellingen."
   },
   "notification": {
-    "setToU": "Sonnen Batterie: Stel time-of-use in tussen __startTime__ en __endTime__ met max. __maxPower__W.",
-    "clearedToU": "Sonnen Batterie: Time-of-use schema gewist.",
-    "pausedToU": "Sonnen Batterie: Time-of-use gepauzeerd tussen __startTime__ en __endTime__.",
-    "startedToU": "Sonnen Batterie: Time-of-use gestart (24u).",
+    "setToU": "Sonnen Batterie: Stel Time-of-Use in tussen __startTime__ en __endTime__ met max. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Time-of-Use schema gewist.",
+    "pausedToU": "Sonnen Batterie: Time-of-Use gepauzeerd tussen __startTime__ en __endTime__.",
+    "startedToU": "Sonnen Batterie: Time-of-Use gestart (24u).",
     "changedOperatingMode": "Sonnen Batterie: Stel bedrijfsmodus in op \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Stel prognose laden __state__.",
     "startedManualCharging": "Sonnen Batterie: Handmatig opladen gestart met max. __maxPower__W.",
@@ -100,7 +100,7 @@
         "invalid threshold": "Time-of-Use max. vermogenwaarde moet tussen 0 en 46000 watt liggen.",
         "ToU windows overlap": "Time-of-Use vensters mogen elkaar niet overlappen."
       },
-      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan bedrijfsmodus niet wijzigen van Time-of-Use terwijl een niet-lege time-of-use planning wordt ingesteld.",
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan bedrijfsmodus niet wijzigen van Time-of-Use terwijl een niet-lege Time-of-Use planning wordt ingesteld.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan Time-of-Use schema niet toepassen wanneer bedrijfsmodus wordt gewijzigd van Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is."
     }

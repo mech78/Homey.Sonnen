@@ -1,16 +1,22 @@
 {
   "id": "com.sonnen.battery",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
     "local"
   ],
   "name": {
-    "en": "Sonnen Batterie"
+    "en": "Sonnen Batterie",
+    "de": "Sonnen Batterie",
+    "da": "Sonnen Batteri",
+    "nl": "Sonnen Batterij"
   },
   "description": {
-    "en": "Clean and affordable energy for everyone."
+    "en": "Clean and affordable energy for everyone.",
+    "de": "Sauberer und bezahlbarer Strom für alle.",
+    "da": "Ren og billig energi til alle.",
+    "nl": "Schone en betaalbare energie voor iedereen."
   },
   "category": [
     "energy"
@@ -52,6 +58,9 @@
     "translators": [
       {
         "name": "mech78"
+      },
+      {
+        "name": "AI/LLM"
       }
     ]
   }

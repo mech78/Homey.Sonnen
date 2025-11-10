@@ -3,7 +3,8 @@
   "name": {
     "en": "sonnenBatterie Grid",
     "de": "sonnenBatterie Netz",
-    "nl": "sonnenBatterie Net"    
+    "da": "sonnenBatterie Net",
+    "nl": "sonnenBatterie Net"
   },
   "class": "sensor",
   "capabilities": [

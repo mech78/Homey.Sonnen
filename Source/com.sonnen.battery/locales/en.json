@@ -68,10 +68,10 @@
     "error": "Could not connect to the battery with IP '__ip__'. Please check the device settings."
   },
   "notification": {
-    "setToU": "Sonnen Batterie: Set time-of-use between __startTime__ and __endTime__ with max. __maxPower__W.",
-    "clearedToU": "Sonnen Batterie: Cleared time-of-use schedule.",
-    "pausedToU": "Sonnen Batterie: Paused time-of-use between __startTime__ and __endTime__.",
-    "startedToU": "Sonnen Batterie: Started time-of-use (24h).",
+    "setToU": "Sonnen Batterie: Set Time-of-Use between __startTime__ and __endTime__ with max. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Cleared Time-of-Use schedule.",
+    "pausedToU": "Sonnen Batterie: Paused Time-of-Use between __startTime__ and __endTime__.",
+    "startedToU": "Sonnen Batterie: Started Time-of-Use (24h).",
     "changedOperatingMode": "Sonnen Batterie: Set operating mode to \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Set prognosis charging __state__.",
     "startedManualCharging": "Sonnen Batterie: Started manual charging with max. __maxPower__W.",
@@ -100,7 +100,7 @@
         "invalid threshold": "Time-of-Use max. power value must be between 0 and 46000 watts.",
         "ToU windows overlap": "Time-of-Use windows must not overlap."
       },
-      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Cannot change operating mode away from Time-of-Use while setting a non-empty time-of-use schedule.",
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Cannot change operating mode away from Time-of-Use while setting a non-empty Time-of-Use schedule.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Cannot apply Time-of-Use schedule when operating mode is being changed away from Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schedule can only be set when operating mode is Time-of-Use."
     }

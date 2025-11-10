@@ -68,10 +68,10 @@
     "error": "Kunne ikke oprette forbindelse til batteriet med IP '__ip__'. Kontroller enhedsindstillingerne."
   },
   "notification": {
-    "setToU": "Sonnen Batterie: Indstil time-of-use mellem __startTime__ og __endTime__ med maks. __maxPower__W.",
-    "clearedToU": "Sonnen Batterie: Ryddede time-of-use tidsplan.",
-    "pausedToU": "Sonnen Batterie: Satte time-of-use på pause mellem __startTime__ og __endTime__.",
-    "startedToU": "Sonnen Batterie: Startede time-of-use (24 timer).",
+    "setToU": "Sonnen Batterie: Indstil Time-of-Use mellem __startTime__ og __endTime__ med maks. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Ryddede Time-of-Use tidsplan.",
+    "pausedToU": "Sonnen Batterie: Satte Time-of-Use på pause mellem __startTime__ og __endTime__.",
+    "startedToU": "Sonnen Batterie: Startede Time-of-Use (24 timer).",
     "changedOperatingMode": "Sonnen Batterie: Indstil driftstilstand til \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Indstil prognosebaseret opladning __state__.",
     "startedManualCharging": "Sonnen Batterie: Startede manuel opladning med maks. __maxPower__W.",
@@ -100,7 +100,7 @@
         "invalid threshold": "Time-of-Use maks. effektværdi skal være mellem 0 og 46000 watt.",
         "ToU windows overlap": "Time-of-Use vinduer må ikke overlappe."
       },
-      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan ikke ændre driftstilstand væk fra Time-of-Use, mens der indstilles en ikke-tom time-of-use tidsplan.",
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan ikke ændre driftstilstand væk fra Time-of-Use, mens der indstilles en ikke-tom Time-of-Use tidsplan.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan ikke anvende Time-of-Use tidsplan, når driftstilstanden ændres væk fra Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use."
     }

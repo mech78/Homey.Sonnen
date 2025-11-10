@@ -3,7 +3,9 @@
     "type": "group",
     "label": {
       "en": "Battery Settings",
-      "de": "Batterie Einstellungen"
+      "de": "Batterie Einstellungen",
+      "da": "Batteri-indstillinger",
+      "nl": "Batterij-instellingen"
     },
     "children": [
       {
@@ -12,39 +14,51 @@
         "value": "2",
         "label": {
           "en": "Operating Mode",
-          "de": "Betriebsmodus"
+          "de": "Betriebsmodus",
+          "da": "Driftsmodus",
+          "nl": "Bedrijfsmodus"
         },
         "hint": {
           "en": "Refer to Sonnen Batterie manual for more information.",
-          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
+          "da": "Se Sonnen Batterie manualen for mere information.",
+          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
         },
         "values": [
           {
             "id": "1",
             "label": {
               "en": "Manual",
-              "de": "Manuell"
+              "de": "Manuell",
+              "da": "Manuel",
+              "nl": "Handmatig"
             }
           },
           {
             "id": "2",
             "label": {
               "en": "Self consumption",
-              "de": "Eigenverbrauch"
+              "de": "Eigenverbrauch",
+              "da": "Eget forbrug",
+              "nl": "Eigen verbruik"
             }
           },
           {
             "id": "6",
             "label": {
               "en": "Module extension (30%)",
-              "de": "Modulerweiterung (30%)"
+              "de": "Modulerweiterung (30%)",
+              "da": "Moduludvidelse (30%)",
+              "nl": "Module uitbreiding (30%)"
             }
           },
           {
             "id": "10",
             "label": {
               "en": "Time-of-Use",
-              "de": "Time-of-Use"
+              "de": "Time-of-Use",
+              "da": "Time-of-Use",
+              "nl": "Time-of-Use"
             }
           }
         ]
@@ -54,12 +68,16 @@
         "type": "textarea",
         "label": {
           "en": "Time-of-Use Schedule",
-          "de": "Time-of-Use Zeitplan"
+          "de": "Time-of-Use Zeitplan",
+          "da": "Time-of-Use tidsplan",
+          "nl": "Time-of-Use schema"
         },
         "value": "",
         "hint": {
           "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
-          "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen."
+          "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen.",
+          "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information.",
+          "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
         }
       },
       {
@@ -67,12 +85,16 @@
         "type": "checkbox",
         "label": {
           "en": "Prognosis Charging",
-          "de": "Prognosebasiertes Laden"
+          "de": "Prognosebasiertes Laden",
+          "da": "Prognosebaseret opladning",
+          "nl": "Prognose laden"
         },
         "value": false,
         "hint": {
           "en": "Refer to Sonnen Batterie manual for more information.",
-          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen."
+          "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
+          "da": "Se Sonnen Batterie manualen for mere information.",
+          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
         }
       }
     ]
@@ -81,7 +103,9 @@
     "type": "group",
     "label": {
       "en": "Connection",
-      "de": "Verbindung"
+      "de": "Verbindung",
+      "da": "Forbindelse",
+      "nl": "Verbinding"
     },
     "children": [
       {
@@ -89,12 +113,16 @@
         "type": "text",
         "label": {
           "en": "IP address",
-          "de": "IP Adresse"
+          "de": "IP Adresse",
+          "da": "IP-adresse",
+          "nl": "IP-adres"
         },
         "value": "",
         "hint": {
           "en": "Shows the current IP of the Sonnen Batterie. Optional: Disable auto-discovery and set the static IPv4 address (e.g. 192.168.1.xxx) manually.",
-          "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben."
+          "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben.",
+          "da": "Viser den nuværende IP-adresse for Sonnen Batterien. Valgfrit: Deaktiver automatisk opdagelse og indstil den statiske IPv4-adresse (f.eks. 192.168.1.xxx) manuelt.",
+          "nl": "Toont het huidige IP-adres van de Sonnen Batterij. Optioneel: Schakel automatische detectie uit en stel het statische IPv4-adres (bijv. 192.168.1.xxx) handmatig in."
         }
       },
       {
@@ -102,12 +130,16 @@
         "type": "checkbox",
         "label": {
           "en": "Auto-discover IP address",
-          "de": "IP Adresse automatisch ermitteln"
+          "de": "IP Adresse automatisch ermitteln",
+          "da": "Find IP-adresse automatisk",
+          "nl": "IP-adres automatisch ontdekken"
         },
         "value": true,
         "hint": {
           "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of the IP address. Requires local-network.",
-          "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk."
+          "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk.",
+          "da": "Brug 'https://find-my.sonnen-batterie.com/find' til at spore ændringer i IP-adressen. Kræver lokalt netværk.",
+          "nl": "Gebruik 'https://find-my.sonnen-batterie.com/find' om wijzigingen in het IP-adres te volgen. Vereist lokaal netwerk."
         }
       }
     ]
