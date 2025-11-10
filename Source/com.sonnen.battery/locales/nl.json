@@ -1,0 +1,108 @@
+{
+  "settings": {
+    "title": "Sonnen Batterie instellingen",
+    "subtitle": "Geef informatie op voor api-gebruik.",
+    "baseUrl": "Basis-URL",
+    "save": "Wijzigingen opslaan",
+    "remark": "Opmerking:",
+    "note": "Herstart de app na het wijzigen van instellingen.",
+    "frequency": "Interval voor gegevens ophalen",
+    "frequencyHint": "Frequentie in seconden. Hoe vaak gegevens worden opgehaald. Standaard is 30 seconden (30).",
+    "authToken": "Auth Token",
+    "authTokenHint": "Auth Token wordt opgehaald via gebruikerslogin op uw Sonnen Batterie systeem.",
+    "savedOk": "Instellingen opgeslagen. U kunt dit dialoogvenster nu sluiten.",
+    "savedError": "Er is een fout opgetreden.",
+    "settings.deviceState": "Apparaatstatus (JSON)",
+    "settings.deviceStateHint": "Toont de huidige status van de apparaten."
+  },
+  "eclipseLed": {
+    "BlinkingRed": "knipperend rood",
+    "PulsingGreen": "pulserend groen",
+    "PulsingOrange": "pulserend oranje",
+    "PulsingWhite": "pulserend wit",
+    "SolidRed": "continu rood",
+    "Unknown": "onbekend"
+  },
+  "stateBms": {
+    "ready": "klaar",
+    "notready": "niet klaar",
+    "error": "fout",
+    "initializing": "initialiseren",
+    "init": "initialiseren"
+  },
+  "stateCoreControlModule": {
+    "ready": "klaar",
+    "notready": "niet klaar",
+    "init": "initialiseren",
+    "reinit": "initialiseren",
+    "ongrid": "op net",
+    "offgrid": "zonder net",
+    "criticalerror": "kritieke fout"
+  },
+  "stateInverter": {
+    "running": "actief",
+    "notready": "niet klaar",
+    "error": "fout"
+  },
+  "widget": {
+    "production": "Productie",
+    "consumption": "Verbruik",
+    "fromBattery": "Van de batterij",
+    "fromGrid": "Van het net"
+  },
+  "device": {
+    "solarPanel": "zonnepaneel",
+    "battery": "batterij",
+    "gridMeter": "net",
+    "householdMeter": "huishouden"
+  },
+  "operatingMode": {
+    "1": "Handmatig",
+    "2": "Eigen verbruik",
+    "6": "Module uitbreiding (30%)",
+    "10": "Time-of-Use"
+  },
+  "connection": {
+    "error_no_batteries": "Kon geen Sonnen-batterijen vinden op het lokale netwerk. Controleer uw netwerk en probeer het opnieuw of geef een statisch IP-adres op.",
+    "notification_ip_changed": "Sonnen Batterie: IP-adreswijziging gedetecteerd. Nieuw IP-adres: __ip__.",
+    "error": "Kon geen verbinding maken met de batterij met IP '__ip__'. Controleer de apparaatinstellingen."
+  },
+  "notification": {
+    "setToU": "Sonnen Batterie: Stel time-of-use in tussen __startTime__ en __endTime__ met max. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Time-of-use schema gewist.",
+    "pausedToU": "Sonnen Batterie: Time-of-use gepauzeerd tussen __startTime__ en __endTime__.",
+    "startedToU": "Sonnen Batterie: Time-of-use gestart (24u).",
+    "changedOperatingMode": "Sonnen Batterie: Stel bedrijfsmodus in op \"__operatingMode__\".",
+    "changedPrognosisCharging": "Sonnen Batterie: Stel prognose laden __state__.",
+    "startedManualCharging": "Sonnen Batterie: Handmatig opladen gestart met max. __maxPower__W.",
+    "startedManualDischarging": "Sonnen Batterie: Handmatig ontladen gestart met max. __maxPower__W."
+  },
+  "active": "actief", 
+  "inactive": "inactief",
+  "error": {
+    "unknown": "Er is een onbekende fout opgetreden: __error__.",
+    "http": {
+      "400": "Slechte aanvraag. Ongeldige gegevens of validatie mislukt.",
+      "401": "Ongeldig Auth Token of vereiste Lees-/Schrijf-API niet ingeschakeld.",
+      "403": "Verboden.",
+      "other": "Onverwachte HTTP __statusCode__ fout opgetreden."
+    },
+    "vpp_priority": "Niet toegestaan omdat SonnenVPP prioriteit heeft.",
+    "validation": {
+      "failed": "Validatie mislukt: __error__.",
+      "failed_to_parse_schedule_json": "Kan schema JSON niet parseren: __error__.",
+      "invalid_schedule_format": "Ongeldig schemaformaat: verwachtte een array.",
+      "invalid_schedule_item_missing_properties": "Ongeldig schema-item bij index __index__: vereiste eigenschappen ontbreken.",
+      "invalid_schedule_item_time_format": "Ongeldig schema-item bij index __index__: ongeldig tijdformaat: \"__time__\".",
+      "invalid_schedule_line_format": "Ongeldig schema regelformaat: \"__line__\".",
+      "invalid_ip_format": "Ongeldig IP-adresformaat. Voer een geldig IPv4-adres in.",
+      "ToU": {
+        "invalid threshold": "Time-of-Use max. vermogenwaarde moet tussen 0 en 46000 watt liggen.",
+        "ToU windows overlap": "Time-of-Use vensters mogen elkaar niet overlappen."
+      },
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan bedrijfsmodus niet wijzigen van Time-of-Use terwijl een niet-lege time-of-use planning wordt ingesteld.",
+      "timeOfUseChangeMismatchingOperatingModeChange": "Kan Time-of-Use schema niet toepassen wanneer bedrijfsmodus wordt gewijzigd van Time-of-Use.",
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is."
+    }
+  }
+}

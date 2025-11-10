@@ -115,5 +115,9 @@
   },
   "2.1.0": {
     "en": "Add setpoint charge/discharge cards especially useful for operating mode 'manual'. More refactorings, validations and localizations as well as support for VSCode debugging."
+  },
+  "2.2.0": {
+    "en": "Add localization for DA and NL automatically using AI. Please help to improve translations."
   }
+
 }

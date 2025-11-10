@@ -1,0 +1,108 @@
+{
+  "settings": {
+    "title": "Sonnen Batterie indstillinger",
+    "subtitle": "Angiv oplysninger for api-brug.",
+    "baseUrl": "Basis-URL",
+    "save": "Gem ændringer",
+    "remark": "Bemærk:",
+    "note": "Genstart appen efter ændring af indstillinger.",
+    "frequency": "Træk data interval",
+    "frequencyHint": "Frekvens i sekunder. Hvor ofte der trækkes data. Standard er 30 sekunder (30).",
+    "authToken": "Auth Token",
+    "authTokenHint": "Auth Token hentes fra brugerlogin på dit Sonnen Batterie-system.",
+    "savedOk": "Indstillinger gemt. Du kan nu lukke denne dialog.",
+    "savedError": "Der opstod en fejl.",
+    "settings.deviceState": "Enhedsstatus (JSON)",
+    "settings.deviceStateHint": "Viser den aktuelle status for enhederne."
+  },
+  "eclipseLed": {
+    "BlinkingRed": "blinkende rød",
+    "PulsingGreen": "pulserende grøn",
+    "PulsingOrange": "pulserende orange",
+    "PulsingWhite": "pulserende hvid",
+    "SolidRed": "fast rød",
+    "Unknown": "ukendt"
+  },
+  "stateBms": {
+    "ready": "klar",
+    "notready": "ikke klar",
+    "error": "fejl",
+    "initializing": "initialiserer",
+    "init": "initialiserer"
+  },
+  "stateCoreControlModule": {
+    "ready": "klar",
+    "notready": "ikke klar",
+    "init": "initialiserer",
+    "reinit": "initialiserer",
+    "ongrid": "på net",
+    "offgrid": "uden net",
+    "criticalerror": "kritisk fejl"
+  },
+  "stateInverter": {
+    "running": "kører",
+    "notready": "ikke klar",
+    "error": "fejl"
+  },
+  "widget": {
+    "production": "Produktion",
+    "consumption": "Forbrug",
+    "fromBattery": "Fra batteri",
+    "fromGrid": "Fra net"
+  },
+  "device": {
+    "solarPanel": "solcellepanel",
+    "battery": "batteri",
+    "gridMeter": "net",
+    "householdMeter": "husholdning"
+  },
+  "operatingMode": {
+    "1": "Manuel",
+    "2": "Eget forbrug",
+    "6": "Moduludvidelse (30%)",
+    "10": "Time-of-Use"
+  },
+  "connection": {
+    "error_no_batteries": "Kunne ikke finde nogen Sonnen-batterier på det lokale netværk. Kontroller dit netværk og prøv igen eller angiv statisk IP.",
+    "notification_ip_changed": "Sonnen Batterie: Ændring af IP-adresse registreret. Ny IP-adresse: __ip__.",
+    "error": "Kunne ikke oprette forbindelse til batteriet med IP '__ip__'. Kontroller enhedsindstillingerne."
+  },
+  "notification": {
+    "setToU": "Sonnen Batterie: Indstil time-of-use mellem __startTime__ og __endTime__ med maks. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Ryddede time-of-use tidsplan.",
+    "pausedToU": "Sonnen Batterie: Satte time-of-use på pause mellem __startTime__ og __endTime__.",
+    "startedToU": "Sonnen Batterie: Startede time-of-use (24 timer).",
+    "changedOperatingMode": "Sonnen Batterie: Indstil driftstilstand til \"__operatingMode__\".",
+    "changedPrognosisCharging": "Sonnen Batterie: Indstil prognosebaseret opladning __state__.",
+    "startedManualCharging": "Sonnen Batterie: Startede manuel opladning med maks. __maxPower__W.",
+    "startedManualDischarging": "Sonnen Batterie: Startede manuel afladning med maks. __maxPower__W."
+  },
+  "active": "aktiv", 
+  "inactive": "inaktiv",
+  "error": {
+    "unknown": "Der opstod en ukendt fejl: __error__.",
+    "http": {
+      "400": "Dårlig anmodning. Ugyldige data eller validering mislykkedes.",
+      "401": "Ugyldigt Auth Token eller påkrævet læse-/skrive-API ikke aktiveret.",
+      "403": "Forbudt.",
+      "other": "Uventet HTTP __statusCode__ fejl opstod."
+    },
+    "vpp_priority": "Ikke tilladt, da SonnenVPP har prioritet.",
+    "validation": {
+      "failed": "Validering mislykkedes: __error__.",
+      "failed_to_parse_schedule_json": "Kunne ikke analysere tidsplan JSON: __error__.",
+      "invalid_schedule_format": "Ugyldigt tidsplanformat: forventede en matrix.",
+      "invalid_schedule_item_missing_properties": "Ugyldigt tidsplanelement ved indeks __index__: manglende obligatoriske egenskaber.",
+      "invalid_schedule_item_time_format": "Ugyldigt tidsplanelement ved indeks __index__: ugyldigt tidsformat: \"__time__\".",
+      "invalid_schedule_line_format": "Ugyldigt tidsplan linjeformat: \"__line__\".",
+      "invalid_ip_format": "Ugyldigt IP-adresseformat. Indtast en gyldig IPv4-adresse.",
+      "ToU": {
+        "invalid threshold": "Time-of-Use maks. effektværdi skal være mellem 0 og 46000 watt.",
+        "ToU windows overlap": "Time-of-Use vinduer må ikke overlappe."
+      },
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan ikke ændre driftstilstand væk fra Time-of-Use, mens der indstilles en ikke-tom time-of-use tidsplan.",
+      "timeOfUseChangeMismatchingOperatingModeChange": "Kan ikke anvende Time-of-Use tidsplan, når driftstilstanden ændres væk fra Time-of-Use.",
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use."
+    }
+  }
+}
