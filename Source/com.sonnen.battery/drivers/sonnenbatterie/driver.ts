@@ -68,6 +68,10 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { device: BatteryDevice, start: string, hours: number, max_power: number }): Promise<void> {
+    const timeStart = args.start.trim();
+    const hours = args.hours;
+    const maxPower = args.max_power;
+
     // Calculate end from timeStart and hours.
     const timeStartHours    = Number(args.start.split(":")[0]);
     const timeStartMinutes  = Number(args.start.split(":")[1]);
