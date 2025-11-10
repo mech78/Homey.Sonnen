@@ -21,8 +21,7 @@ export abstract class SonnenDriver extends Homey.Driver {
     */
   override async onPairListDevices(): Promise<Array<{ name: string; data: { id: string }; settings: { "device_ip": string, "device_discovery": boolean } }>> {
     try {
-      const commandResult = await SonnenBatterieClient.discoverBatteries(); // TODO: handle errors passed in SonnenCommandResult
-      const batteries: SonnenBatteries = commandResult.payload as SonnenBatteries;
+      const batteries: SonnenBatteries = await SonnenBatterieClient.discoverBatteries();
 
       if (batteries) {
         this.log('Devices found: ', batteries);

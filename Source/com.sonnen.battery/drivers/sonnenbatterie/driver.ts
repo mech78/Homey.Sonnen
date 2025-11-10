@@ -39,6 +39,12 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("set_prognosis_charging")
       .registerRunListener(async (args) => this.handleSetPrognosisCharging(args));
 
+    this.homey.flow.getActionCard("set_manual_charging")
+      .registerRunListener(async (args) => this.handleManualCharging(args));
+      
+    this.homey.flow.getActionCard("set_manual_discharging")
+      .registerRunListener(async (args) => this.handleManualDischarging(args));     
+
     // Device-specific conditions:
 
     this.homey.flow.getConditionCard("battery_level_below")
@@ -58,15 +64,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
   }
 
   private async handleSetTimeOfUse(args: { device: BatteryDevice, start: string, end: string, max_power: number }): Promise<void> {
-    const timeStart = args.start;
-    const timeEnd = args.end;
-    const maxPower = args.max_power;
-
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, maxPower);
-    this.log("Result", commandResult, args.start, args.end, args.max_power);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use between ${timeStart} and ${timeEnd} with maximum power ${maxPower}.` });
-    await args.device.refreshState(); // immediately refresh UI
+    await this.handleSetTimeOfUseInternal(args.device, args.start, args.end, args.max_power);
   };
 
   private async handleSetTimeOfUseByStartTimeAndHours(args: { device: BatteryDevice, start: string, hours: number, max_power: number }): Promise<void> {
@@ -75,64 +73,128 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     const maxPower = args.max_power;
 
     // Calculate end from timeStart and hours.
-    const timeStartHours    = Number(timeStart.split(":")[0]);
-    const timeStartMinutes  = Number(timeStart.split(":")[1]);
-    const timeEndHours = (timeStartHours + hours) % 24; // Handle overflow.
+    const timeStartHours    = Number(args.start.split(":")[0]);
+    const timeStartMinutes  = Number(args.start.split(":")[1]);
+    const timeEndHours = (timeStartHours + args.hours) % 24; // Handle overflow.
 
     const timeStartHoursFormatted = this.zeroPad(timeStartHours, 2);
     const timeEndHoursFormatted = this.zeroPad(timeEndHours, 2);
     const timeStartMinutesFormatted = this.zeroPad(timeStartMinutes, 2);
     const timeEndMinutesFormatted = timeStartMinutesFormatted;
 
-    const startTime: string = `${timeStartHoursFormatted}:${timeStartMinutesFormatted}`;
-    const endTime: string = `${timeEndHoursFormatted}:${timeEndMinutesFormatted}`;
+    const timeStart: string = `${timeStartHoursFormatted}:${timeStartMinutesFormatted}`;
+    const timeEnd: string = `${timeEndHoursFormatted}:${timeEndMinutesFormatted}`;
 
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(startTime, endTime, maxPower);
-    this.log("Result", commandResult, args.start, args.hours, args.max_power);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Set time-of-use for (${hours}) between ${startTime} and ${endTime} with max power ${maxPower}.` });
-    await args.device.refreshState(); // immediately refresh UI
+    await this.handleSetTimeOfUseInternal(args.device, timeStart, timeEnd, args.max_power);
+  }
+
+  private async handleSetTimeOfUseInternal(device: BatteryDevice, timeStart: string, timeEnd: string, maxPower: number) {
+    try {
+      await this.createSonnenBatterieClient(device).setScheduleEntry(timeStart, timeEnd, maxPower);
+
+      const notification = this.homey.__("notification.setToU", { startTime: timeStart, endTime: timeEnd, maxPower: maxPower });
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
   private async handleClearTimeOfUse(args: { device: BatteryDevice }): Promise<void> {
-    const commandResult = await this.createSonnenBatterieClient(args.device).clearSchedule(); // Set empty schedule
-    this.log("Result", commandResult);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Clear time-of-use.` });
-    await args.device.refreshState(); // immediately refresh UI
+    try {
+      await this.createSonnenBatterieClient(args.device).clearSchedule(); // Set empty schedule
+      
+      const notification = this.homey.__("notification.clearedToU");
+      await this.homey.notifications.createNotification({ excerpt: notification });
+      
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
   private async handlePauseTimeOfUse(args: { device: BatteryDevice, start: string; end: string }): Promise<void> {
     const timeStart = args.start;
     const timeEnd = args.end;
 
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
-    this.log("Result", commandResult, args.start, args.end);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Pause time-of-use between ${timeStart} and ${timeEnd}.` });
-    await args.device.refreshState(); // immediately refresh UI
+    try {
+      await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
+      
+      const notification = this.homey.__("notification.pausedToU", { startTime: timeStart, endTime: timeEnd});
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
   private async handleStartTimeOfUse(args: { device: BatteryDevice, power: number }): Promise<void> {
-    const commandResult = await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power); // Set full schedule
-    this.log("Result", commandResult, args.power);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await this.homey.notifications.createNotification({ excerpt: `SonnenBatterie: Start time-of-use.` });
-    await args.device.refreshState(); // immediately refresh UI
+    try {
+      await this.createSonnenBatterieClient(args.device).setScheduleEntry("00:00", "23:59", args.power); // Set full schedule
+      
+      const notification = this.homey.__("notification.startedToU");
+      await this.homey.notifications.createNotification({ excerpt: notification });
+      
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
-  private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: number }): Promise<void> {
-    const commandResult = await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
-    this.log("Result", commandResult, args.operating_mode);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await args.device.refreshState(); // immediately refresh UI
+  private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: string }): Promise<void> {
+    try {
+      await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
+      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
+
+      const notification = this.homey.__("notification.changedOperatingMode", { operatingMode: operatingModeText });
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
   private async handleSetPrognosisCharging(args: { device: BatteryDevice, active: boolean }): Promise<void> {
-    const commandResult = await this.createSonnenBatterieClient(args.device).setPrognosisCharging(args.active)
-    this.log("Result", commandResult, args.active);
-    LocalizationService.getInstance().throwLocalizedErrorIfAny(commandResult);
-    await args.device.refreshState(); // immediately refresh UI
+    try {
+      await this.createSonnenBatterieClient(args.device).setPrognosisCharging(args.active)
+
+      const state = this.homey.__(args.active ? "active" : "inactive");
+      const notification = this.homey.__("notification.changedPrognosisCharging", { state: state });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
+  }
+
+  private async handleManualCharging(args: { device: BatteryDevice, power: number }): Promise<void> {
+    try {
+      await this.createSonnenBatterieClient(args.device).setSetpoint('charge', args.power);
+
+      const notification = this.homey.__("notification.startedManualCharging", { maxPower: args.power });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
+  }
+
+  private async handleManualDischarging(args: { device: BatteryDevice, power: number }): Promise<void> {
+    try {
+      await this.createSonnenBatterieClient(args.device).setSetpoint('discharge', args.power);
+
+      const notification = this.homey.__("notification.startedManualDischarging", { maxPower: args.power });
+      await this.homey.notifications.createNotification({ excerpt: notification });  
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
   }
 
   private async handleBatteryLevelBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
@@ -153,9 +215,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     return (batteryLevel >= argPercentage);
   }
 
-  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: number }): Promise<boolean> {
+  private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: string }): Promise<boolean> {
     const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
-    const operatingMode = LocalizationService.getInstance().resolveOperatingMode("" + args.operating_mode);
+    const operatingMode = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
 
     const result = currentOperatingMode === operatingMode;
     this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);

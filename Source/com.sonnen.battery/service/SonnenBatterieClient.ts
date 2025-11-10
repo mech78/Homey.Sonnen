@@ -1,126 +1,103 @@
 import axios from "axios";
 import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
 import { TimeOfUseSchedule } from "../domain/TimeOfUse";
-import { SonnenCommandResult } from "../domain/SonnenCommandResult";
+import { LocalizedError } from "../domain/LocalizedError";
 
 export class SonnenBatterieClient {
 
-  optionsPut: { method: string; headers: { [key: string]: string } };
-  optionsGet: { method: string; headers: { [key: string]: string } };
+  config: { headers: { [key: string]: string } };
 
   constructor(private authToken: string, private ipAddress: string) {
-      const headers = {
-        "Auth-Token": `${this.authToken}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      }
-      this.optionsPut = {
-        method: "put",
-        headers: headers
-      };
-      this.optionsGet = {
-        method: "get",
-        headers: headers
-      };
+    const headers = {
+      "Auth-Token": `${this.authToken}`,
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    }
+    this.config = {
+      headers: headers
+    };
   }
 
-  public async setSchedule(schedule: TimeOfUseSchedule): Promise<SonnenCommandResult> {
-    const body = {
-      EM_ToU_Schedule: `${schedule.toJSONString()}`,
-    };
-
+  public async setSchedule(schedule: TimeOfUseSchedule): Promise<void> {
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, body, this.optionsPut);
-      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data?.EM_ToU_Schedule), response?.status); // e.g. data: { EM_ToU_Schedule: '[{"start":"09:00","stop":"12:00","threshold_p_max":1234}]' } 
+      await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { EM_ToU_Schedule: `${schedule.toJSONString()}` }, this.config);
     } catch (error) {
       if (SonnenBatterieClient.isAxiosError(error)) {
         if (error.response?.data != null) {
           const responseData = error.response.data as { details: { EM_ToU_Schedule?: string }, error: string };
-          // console.log(responseData?.error + " " + error.response.status + " " + responseData?.details?.EM_ToU_Schedule);
-          
-          let i18nKey;
-          if (error.response.status === 400 && responseData.error === 'validation failed') {
-            i18nKey = "error.validation.ToU." + (responseData?.details?.EM_ToU_Schedule ?? "error.validation.failed");
-          }
 
-          return new SonnenCommandResult(
-            true, 
-            responseData.details?.EM_ToU_Schedule ?? responseData.error, 
-            error.response.status, // e.g. for HTTP 400 Bad Request data: { details: { EM_ToU_Schedule: 'invalid threshold' }, error: 'validation failed'}
-            i18nKey,
-          ); 
+          if (error.response.status === 400 && responseData.error === 'validation failed') {
+            const i18nKey = "error.validation.ToU." + (responseData?.details?.EM_ToU_Schedule ?? "error.validation.failed");
+            throw new LocalizedError(i18nKey, { error: responseData.details?.EM_ToU_Schedule ?? responseData.error });
+          }
         }
       }
-      return new SonnenCommandResult(true, (error as Error).message);
+      throw SonnenBatterieClient.getLocalizedError(error);
     }
-
   }
 
-  public async setScheduleEntry(timeStart: string, timeEnd: string, max_power: number) {
+  public async setScheduleEntry(timeStart: string, timeEnd: string, max_power: number): Promise<void> {
     return this.setSchedule(new TimeOfUseSchedule({ start: timeStart, stop: timeEnd, threshold_p_max: max_power }));
   }
 
-  public async clearSchedule() {
+  public async clearSchedule(): Promise<void> {
     return this.setSchedule(new TimeOfUseSchedule([]));
   }
 
-  public async setOperatingMode(mode: number): Promise<SonnenCommandResult> {
+  public async setOperatingMode(mode: string): Promise<void> {
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.optionsPut);
-      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status);
+      await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_OperatingMode": mode }, this.config);
     } catch (error) {
-      if (SonnenBatterieClient.isAxiosError(error)) {
-        return new SonnenCommandResult(true, error.message, error.response?.status);
-      }
-      return new SonnenCommandResult(true, (error as Error).message);
+      throw SonnenBatterieClient.getLocalizedError(error);
     }
   }
 
-  public async setPrognosisCharging(active: boolean): Promise<SonnenCommandResult> {
+  public async setPrognosisCharging(active: boolean): Promise<void> {
     const prognosis_charging = active ? 1 : 0;
     try {
-      const response = await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.optionsPut);
-      return new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
+      await axios.put(`${this.getBaseUrl()}/api/v2/configurations`, { "EM_Prognosis_Charging": prognosis_charging }, this.config);
     } catch (error) {
-      if (SonnenBatterieClient.isAxiosError(error)) {
-        return new SonnenCommandResult(true, error.message, error.response?.status);
-      }
-      return new SonnenCommandResult(true, (error as Error).message);
+      throw SonnenBatterieClient.getLocalizedError(error);
     }
   }
 
-  public async getLatestData() {
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.optionsGet);
+  public async setSetpoint(direction: 'charge' | 'discharge', watts: number): Promise<void> {
+    try {
+      await axios.post(`${this.getBaseUrl()}/api/v2/setpoint/${direction}/${watts}`, {}, this.config);
+    } catch (error) {
+      if (SonnenBatterieClient.isAxiosError(error) && error.response?.status === 403) {
+        throw new LocalizedError("error.vpp_priority");
+      }
+      throw SonnenBatterieClient.getLocalizedError(error);
+    }
+  }
+
+  public async getLatestData(): Promise<any> {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/latestdata`, this.config);
     return response.data;
   }
 
-  public async getStatus() {
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.optionsGet);
+  public async getStatus(): Promise<any> {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/status`, this.config);
     return response.data;
   }
 
-  public async getConfigurations(){
-    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.optionsGet);
+  public async getConfigurations(): Promise<any> {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/configurations`, this.config);
     return response.data;
   }
 
-  public static async discoverBatteries(): Promise<SonnenCommandResult> {
+  public static async discoverBatteries(): Promise<SonnenBatteries> {
     try {
       const response = await axios.get('https://find-my.sonnen-batterie.com/find');
-      const commandResult = new SonnenCommandResult(false, SonnenBatterieClient.safeToString(response.data), response.status); 
-      commandResult.payload = response.data as SonnenBatteries;
-      return commandResult
+      return response.data as SonnenBatteries;
     } catch (error) {
-      if (SonnenBatterieClient.isAxiosError(error)) {
-        return new SonnenCommandResult(true, error.message, error.response?.status);
-      }
-      return new SonnenCommandResult(true, (error as Error).message);
+      throw SonnenBatterieClient.getLocalizedError(error);
     }
   }
 
   public static async findBatteryIP(homeyDeviceId: string): Promise<string | null> {
-    const result = await SonnenBatterieClient.discoverBatteries(); // TODO: handle errors passed in SonnenCommandResult
-    const batteries: SonnenBatteries = result.payload as SonnenBatteries;
+    const batteries: SonnenBatteries = await SonnenBatterieClient.discoverBatteries();
     if (batteries) {
       for (const battery of batteries) {
         if (SonnenBatterieClient.isSameDevice(battery.device, homeyDeviceId)) {
@@ -129,6 +106,24 @@ export class SonnenBatterieClient {
       }
     }
     return null;
+  }
+
+  private static getLocalizedHttpError(error: unknown): LocalizedError | null {
+    if (SonnenBatterieClient.isAxiosError(error)) {
+      const httpStatus = error.response?.status;
+      const localizedHttpErrors = [400, 401, 403];
+      if (httpStatus !== undefined && localizedHttpErrors.includes(httpStatus)) {
+        return new LocalizedError("error.http." + httpStatus.toString());
+      }
+
+      // Generic error handling for not localized HTTP errors
+      return new LocalizedError("error.http.other", { "statusCode": httpStatus?.toString() ?? "unknown" });
+    }
+    return null;
+  }
+
+  private static getLocalizedError(error: unknown): LocalizedError {
+    return SonnenBatterieClient.getLocalizedHttpError(error) ?? new LocalizedError("error.unknown", { "error": (error as Error).message }); // Fallback for non-Axios errors    
   }
 
   /**
@@ -147,10 +142,4 @@ export class SonnenBatterieClient {
     return (error as axios.AxiosError<T>).isAxiosError === true;
   }
 
-  private static safeToString(value: unknown): string {
-    if (typeof value === "string") { return value; }
-    if (value instanceof Error) { return value.message; }
-    if (typeof value === "object" && value !== null) { return JSON.stringify(value); }
-    return String(value);
-  }
 }

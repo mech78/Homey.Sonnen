@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Homey App Container started in WLS using 'homey app run' (no --remote)",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "address": "0.0.0.0",
+      "localRoot": "${workspaceFolder}/.homeybuild/",
+      "remoteRoot": "/app",
+      "restart": true,
+      "protocol": "inspector",
+      "outFiles": ["${workspaceFolder}/.homeybuild/**/*.js"]
+    }
+  ]
+}
