@@ -6,6 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/source/com.sonnen.battery" # Location of package manifests
+    directory: "/Homey.Sonnen/source/com.sonnen.battery" # Location of package manifests
     schedule:
       interval: "weekly"
