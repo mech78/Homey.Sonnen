@@ -3,6 +3,7 @@
   "name": {
     "en": "sonnenBatterie",
     "de": "sonnenBatterie",
+    "da": "sonnenBatterie",
     "nl": "sonnenBatterie"
   },
   "class": "battery",
@@ -34,13 +35,15 @@
   "capabilitiesOptions": {
     "button.reset_meter": {
       "maintenanceAction": true,
-      "title": { 
-          "en": "Reset totals", 
+      "title": {
+          "en": "Reset totals",
           "de": "Summen zurücksetzen",
+          "da": "Nulstil totaler",
           "nl": "Totalen resetten"},
-      "desc": { 
-          "en": "Resets totals (kWh). This can not be restored.", 
+      "desc": {
+          "en": "Resets totals (kWh). This can not be restored.",
           "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
+          "da": "Nulstiller totaler (kWh). Dette kan ikke gendannes.",
           "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."}
     },
     "measure_power": {
@@ -56,33 +59,37 @@
       "preventInsights": true
     },
     "battery_charging_state": {
-      "title": { 
+      "title": {
         "en": "Charging State",
         "de": "Ladezustand",
+        "da": "Opladningsstatus",
         "nl": "Laadstatus"
       },
       "values": [
         {
           "id": "charging",
-          "title": { 
+          "title": {
             "en": "Charging",
             "de": "Laden",
+            "da": "Oplader",
             "nl": "Opladen"
           }
         },
         {
           "id": "discharging",
-          "title": { 
+          "title": {
             "en": "Discharging",
             "de": "Entladen",
+            "da": "Aflader",
             "nl": "Ontladen"
           }
         },
         {
           "id": "idle",
-          "title": { 
+          "title": {
             "en": "Idle",
             "de": "Im Leerlauf",
+            "da": "Inaktiv",
             "nl": "Inactief"
           }
         }

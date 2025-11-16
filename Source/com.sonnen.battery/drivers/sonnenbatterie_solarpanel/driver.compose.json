@@ -3,6 +3,7 @@
   "name": {
     "en": "sonnenBatterie solar panel",
     "de": "sonnenBatterie Solarmodul",
+    "da": "sonnenBatterie Solcellepanel",
     "nl": "sonnenBatterie Zonnepaneel"
   },
   "class": "solarpanel",

@@ -1,119 +1,242 @@
 {
   "1.0.0": {
-    "en": "Initial release"
+    "en": "Initial release",
+    "de": "Erstveröffentlichung",
+    "da": "Første udgivelse",
+    "nl": "Eerste uitgave"
   },
   "1.0.1": {
-    "en": "Added Time-Of-Use where you specify StartTime and Hours instead of EndTime. Specify Hours from StartTime instead of EndTime. "
+    "en": "Added Time-of-Use where you specify StartTime and Hours instead of EndTime. Specify Hours from StartTime instead of EndTime. ",
+    "de": "Time-of-Use hinzugefügt, bei dem Sie StartTime und Stunden statt EndTime angeben. Geben Sie Stunden ab StartTime statt EndTime an. ",
+    "da": "Tilføjet Time-of-Use, hvor du angiver StartTime og Hours i stedet for EndTime. Angiv Hours fra StartTime i stedet for EndTime. ",
+    "nl": "Time-of-Use toegevoegd waarbij u StartTime en Hours opgeeft in plaats van EndTime. Geef Hours op vanaf StartTime in plaats van EndTime. "
   },
   "1.0.2": {
-    "en": "A lot of capabilities added and more configuration."
+    "en": "A lot of capabilities added and more configuration.",
+    "de": "Viele Funktionen hinzugefügt und mehr Konfiguration.",
+    "da": "Masser af funktioner tilføjet og mere konfiguration.",
+    "nl": "Veel functies toegevoegd en meer configuratie."
   },
   "1.0.3": {
-    "en": "Link to community added."
+    "en": "Link to community added.",
+    "de": "Link zur Community hinzugefügt.",
+    "da": "Link til fællesskab tilføjet.",
+    "nl": "Link naar community toegevoegd."
   },
   "1.0.4": {
-    "en": "Capability adjustments. "
+    "en": "Capability adjustments. ",
+    "de": "Anpassungen der Funktionen. ",
+    "da": "Justeringer af funktioner. ",
+    "nl": "Aanpassingen van functies. "
   },
   "1.0.5": {
-    "en": "New capabilities added (from/to battery). More conditions added."
+    "en": "New capabilities added (from/to battery). More conditions added.",
+    "de": "Neue Funktionen hinzugefügt (von/an Batterie). Weitere Bedingungen hinzugefügt.",
+    "da": "Nye funktioner tilføjet (fra/til batteri). Flere betingelser tilføjet.",
+    "nl": "Nieuwe functies toegevoegd (van/naar batterij). Meer voorwaarden toegevoegd."
   },
   "1.0.6": {
-    "en": "Battery level conditions added."
+    "en": "Battery level conditions added.",
+    "de": "Bedingungen für Batteriestand hinzugefügt.",
+    "da": "Batteriniveau betingelser tilføjet.",
+    "nl": "Voorwaarden voor batterijniveau toegevoegd."
   },
   "1.0.7": {
-    "en": "Localization (DA) added."
+    "en": "Localization (DA) added.",
+    "de": "Lokalisierung (DA) hinzugefügt.",
+    "da": "Lokalisering (DA) tilføjet.",
+    "nl": "Lokalisatie (DA) toegevoegd."
   },
   "1.0.8": {
-    "en": "Translations added."
+    "en": "Translations added.",
+    "de": "Übersetzungen hinzugefügt.",
+    "da": "Oversættelser tilføjet.",
+    "nl": "Vertalingen toegevoegd."
   },
   "1.0.9": {
-    "en": "Hotfix."
+    "en": "Hotfix.",
+    "de": "Hotfix.",
+    "da": "Hotfix.",
+    "nl": "Hotfix."
   },
   "1.0.10": {
-    "en": "Locale update."
+    "en": "Locale update.",
+    "de": "Lokalisierungsaktualisierung.",
+    "da": "Lokaliseringsopdatering.",
+    "nl": "Lokalisatie-update."
   },
   "1.0.11": {
-    "en": "GridFeedIn fixture."
+    "en": "GridFeedIn fixture.",
+    "de": "GridFeedIn-Korrektur.",
+    "da": "GridFeedIn rettelse.",
+    "nl": "GridFeedIn reparatie."
   },
   "1.1.0": {
-    "en": "mech78 contribution"
+    "en": "mech78 contribution",
+    "de": "Beitrag von mech78",
+    "da": "Bidrag fra mech78",
+    "nl": "Bijdrage van mech78"
   },
   "1.1.1": {
-    "en": "Hotfix."
+    "en": "Hotfix.",
+    "de": "Hotfix.",
+    "da": "Hotfix.",
+    "nl": "Hotfix."
   },
   "1.1.2": {
-    "en": "Added support for start-as-string. Packages update."
+    "en": "Added support for start-as-string. Packages update.",
+    "de": "Unterstützung für Start als Zeichenfolge hinzugefügt. Paketaktualisierung.",
+    "da": "Tilføjet understøttelse af start-som-streng. Pakkeopdatering.",
+    "nl": "Ondersteuning toegevoegd voor start-als-tekenreeks. Pakketupdate."
   },
   "1.1.3": {
-    "en": "Start input format fixture."
+    "en": "Start input format fixture.",
+    "de": "Korrektur des Start-Eingabeformats.",
+    "da": "Rettelse af startinputformat.",
+    "nl": "Reparatie van startinvoerformaat."
   },
   "1.2.0": {
-    "en": "Widget support"
+    "en": "Widget support",
+    "de": "Widget-Unterstützung",
+    "da": "Widget understøttelse",
+    "nl": "Widget-ondersteuning"
   },
   "1.2.1": {
-    "en": "Widget preview added."
+    "en": "Widget preview added.",
+    "de": "Widget-Vorschau hinzugefügt.",
+    "da": "Widget forhåndsvisning tilføjet.",
+    "nl": "Widget-voorbeeld toegevoegd."
   },
   "1.2.2": {
-    "en": "Added auto-discovery of (local) IP."
+    "en": "Added auto-discovery of (local) IP.",
+    "de": "Automatische Erkennung der (lokalen) IP hinzugefügt.",
+    "da": "Tilføjet automatisk opdagelse af (lokal) IP.",
+    "nl": "Automatische detectie van (lokale) IP toegevoegd."
   },
   "1.2.3": {
-    "en": "Hotfixes. Addressed by Tim Bogaert."
+    "en": "Hotfixes. Addressed by Tim Bogaert.",
+    "de": "Hotfixes. Behoben von Tim Bogaert.",
+    "da": "Hotfixes. Løst af Tim Bogaert.",
+    "nl": "Hotfixes. Opgelost door Tim Bogaert."
   },
   "1.2.4": {
-    "en": "Hotfix. Commands not being sent. Added settings on device."
+    "en": "Hotfix. Commands not being sent. Added settings on device.",
+    "de": "Hotfix. Befehle wurden nicht gesendet. Einstellungen am Gerät hinzugefügt.",
+    "da": "Hotfix. Kommandoer sendes ikke. Tilføjede indstillinger på enheden.",
+    "nl": "Hotfix. Opdrachten worden niet verzonden. Instellingen toegevoegd op apparaat."
   },
   "1.2.5": {
-    "en": "Added DE translations for v1.2.4. Fixes IP change auto-recovery. Fixes homeBattery device config."
+    "en": "Added DE translations for v1.2.4. Fixes IP change auto-recovery. Fixes homeBattery device config.",
+    "de": "DE-Übersetzungen für v1.2.4 hinzugefügt. Korrigiert automatische Wiederherstellung bei IP-Änderung. Korrigiert homeBattery-Gerätekonfiguration.",
+    "da": "Tilføjet DE oversættelser til v1.2.4. Retter automatisk gendannelse af IP-ændring. Retter homeBattery enhedskonfiguration.",
+    "nl": "DE-vertalingen toegevoegd voor v1.2.4. Lost automatisch herstel bij IP-wijziging op. Lost homeBattery apparaatconfiguratie op."
   },
   "1.3.0": {
-    "en": "Changes to the Energy-tab"
+    "en": "Changes to the Energy-tab",
+    "de": "Änderungen am Energie-Tab",
+    "da": "Ændringer til Energi-fanen",
+    "nl": "Wijzigingen aan het Energie-tabblad"
   },
   "1.3.1": {
-    "en": "Bring back internal-batteries."
+    "en": "Bring back internal-batteries.",
+    "de": "Interne Batterien wiederherstellen.",
+    "da": "Bringe interne batterier tilbage.",
+    "nl": "Interne batterijen terugbrengen."
   },
   "1.4.0": {
-    "en": "Allow sonnenBatterie to meter imported & exported energy for Energy tab on supported hardware. Fixed measure_power to show charging/discharging as positive/negative values and removing battery charging state."
+    "en": "Allow sonnenBatterie to meter imported & exported energy for Energy tab on supported hardware. Fixed measure_power to show charging/discharging as positive/negative values and removing battery charging state.",
+    "de": "Ermöglicht es der sonnenBatterie, importierte und exportierte Energie für das Energie-Tab auf unterstützter Hardware zu messen. measure_power korrigiert, um Laden/Entladen als positive/negative Werte anzuzeigen und den Batterieladezustand zu entfernen.",
+    "da": "Tillad sonnenBatterie at måle importeret og eksporteret energi til Energi-fanen på understøttet hardware. Rettet measure_power til at vise opladning/afledning som positive/negative værdier og fjernelse af batteriets opladningstilstand.",
+    "nl": "Laat sonnenBatterie geïmporteerde en geëxporteerde energie meten voor het Energie-tabblad op ondersteunde hardware. measure_power gerepareerd om laden/ontladen als positieve/negatieve waarden te tonen en de batterijlaadstatus te verwijderen."
   },
   "1.5.0": {
-    "en": "Fixed multiple energy related meters and better distinction between daily and cumulative meters."
+    "en": "Fixed multiple energy related meters and better distinction between daily and cumulative meters.",
+    "de": "Mehrere energiebezogene Messgeräte korrigiert und bessere Unterscheidung zwischen täglichen und kumulativen Messgeräten.",
+    "da": "Rettede flere energirelaterede målere og bedre forskel mellem daglige og akkumulerede målere.",
+    "nl": "Meerdere energiegerelateerde meters gerepareerd en beter onderscheid tussen dagelijkse en cumulatieve meters."
   },
   "1.6.0": {
-    "en": "Added support for solar panel and household meter devices, improved grid meter device and derived all values from (mandatory) battery device."
+    "en": "Added support for solar panel and household meter devices, improved grid meter device and derived all values from (mandatory) battery device.",
+    "de": "Unterstützung für Solarpanel- und Haushaltsmessgeräte hinzugefügt, verbessertes Netzanschlussmessgerät und alle Werte vom (obligatorischen) Batteriegerät abgeleitet.",
+    "da": "Tilføjet understøttelse af solcellepanel og husholdningsmålerenheder, forbedret netmålerenhed og afledt alle værdier fra (obligatorisk) batterienhed.",
+    "nl": "Ondersteuning toegevoegd voor zonnepanelen en huishoudelijke meterapparaten, verbeterd netmeterapparaat en alle waarden afgeleid van (verplicht) batterijapparaat."
   },
   "1.7.0": {
-    "en": "Relocated sonnenBatterie capabilities to solarpanel, household and grid devices. Preserve totals during reinstallations. Known issues: All four devices need to be recreated & household device should be excluded from Energy manually."
+    "en": "Relocated sonnenBatterie capabilities to solarpanel, household and grid devices. Preserve totals during reinstallations. Known issues: All four devices need to be recreated & household device should be excluded from Energy manually.",
+    "de": "sonnenBatterie-Funktionen auf Solarpanel-, Haushalts- und Netzgeräte verschoben. Erhalt der Gesamtsummen bei Neuinstallationen. Bekannte Probleme: Alle vier Geräte müssen neu erstellt werden & Haushaltsgerät sollte manuell von Energie ausgeschlossen werden.",
+    "da": "Flyttede sonnenBatterie funktioner til solcellepanel, husholdning og netenheder. Bevar totaler under geninstallationer. Kendte problemer: Alle fire enheder skal genoprettes & husholdningsenhed skal manuelt ekskluderes fra Energi.",
+    "nl": "sonnenBatterie-functies verplaatst naar zonnepaneel, huishouden en netapparaten. Behoud totalen tijdens herinstallaties. Bekende problemen: Alle vier apparaten moeten opnieuw worden aangemaakt & huishoudenapparaat moet handmatig worden uitgesloten van Energie."
   },
   "1.7.1": {
-    "en": "Fix solarpanel device regression having omitted meter_power"
+    "en": "Fix solarpanel device regression having omitted meter_power",
+    "de": "Korrektur der Solarpanel-Geräteregression mit fehlendem meter_power",
+    "da": "Ret solcellepanelenhed regression med udeladt meter_power",
+    "nl": "Repareer zonnepaneelapparaat regressie met weggelaten meter_power"
   },
   "1.7.2": {
-    "en": "Fix widget regression and obtain values from individual devices"
+    "en": "Fix widget regression and obtain values from individual devices",
+    "de": "Korrektur der Widget-Regressionsprobleme und Werte von einzelnen Geräten erhalten",
+    "da": "Ret widget regression og få værdier fra individuelle enheder",
+    "nl": "Repareer widget regressie en verkrijg waarden van individuele apparaten"
   },
   "1.7.3": {
-    "en": "Do not create redundant insights, if possible. Known issues: existing insights need to be deleted manually and for default power measurements it is not possible."
+    "en": "Do not create redundant insights, if possible. Known issues: existing insights need to be deleted manually and for default power measurements it is not possible.",
+    "de": "Erstelle keine redundanten Einblicke, wenn möglich. Bekannte Probleme: Vorhandene Einblicke müssen manuell gelöscht werden und für Standard-Leistungsmessungen ist es nicht möglich.",
+    "da": "Opret ikke redundante indsigt, hvis det er muligt. Kendte problemer: eksisterende indsigt skal slettes manuelt og for standard strømmålinger er det ikke muligt.",
+    "nl": "Maak geen redundante inzichten aan, indien mogelijk. Bekende problemen: bestaande inzichten moeten handmatig worden verwijderd en voor standaard stroommetingen is het niet mogelijk."
   },
   "1.7.4": {
-    "en": "Allow in-place upgrade from v1.3.1 and only add some capabilities if supported by Homey Pro (Early 2023) and later. Hints: Must at least add the sonnenBatterie device. Also be sure to manually exclude the household device from energy. Recreating devices is recommended for proper capability ordering."
+    "en": "Allow in-place upgrade from v1.3.1 and only add some capabilities if supported by Homey Pro (Early 2023) and later. Hints: Must at least add the sonnenBatterie device. Also be sure to manually exclude the household device from energy. Recreating devices is recommended for proper capability ordering.",
+    "de": "Ermöglicht In-Place-Upgrades von v1.3.1 und fügt nur einige Funktionen hinzu, wenn sie von Homey Pro (Anfang 2023) und später unterstützt werden. Hinweise: Es muss mindestens das sonnenBatterie-Gerät hinzugefügt werden. Stellen Sie auch sicher, dass das Haushaltsgerät manuell von der Energie ausgeschlossen wird. Das Neuerstellen von Geräten wird für die richtige Funktionsreihenfolge empfohlen.",
+    "da": "Tillad in-place opgradering fra v1.3.1 og tilføj kun nogle funktioner, hvis det understøttes af Homey Pro (begyndelsen af 2023) og senere. Tips: Skal mindst tilføje sonnenBatterie enheden. Sørg også for manuelt at ekskludere husholdningsenheden fra energi. Genoprettelse af enheder anbefales for korrekt funktionsrækkefølge.",
+    "nl": "Sta in-place upgrade toe vanaf v1.3.1 en voeg alleen enkele functies toe als deze worden ondersteund door Homey Pro (Begin 2023) en later. Tips: Voeg minimaal het sonnenBatterie-apparaat toe. Zorg er ook voor dat het huishoudenapparaat handmatig wordt uitgesloten van energie. Het opnieuw aanmaken van apparaten wordt aanbevolen voor de juiste functievolgorde."
   },
   "1.8.0": {
-    "en": "Updates. Icons fix."
+    "en": "Updates. Icons fix.",
+    "de": "Aktualisierungen. Symbole korrigiert.",
+    "da": "Opdateringer. Ikoner rettet.",
+    "nl": "Updates. Pictogrammen gerepareerd."
   },
   "1.8.1": {
-    "en": "Driver images."
+    "en": "Driver images.",
+    "de": "Treiberbilder.",
+    "da": "Driver billeder.",
+    "nl": "Stuurprogramma-afbeeldingen."
   },
   "2.0.0": {
-    "en": "Time-of-Use improvements, better flow support, allow changing operating mode and to enable forecast charging, added new max/min capabilities, changed to svgrepo icons, localization of error messages, refactorings, fixes battery status capabilities, added roorules, and much more."
+    "en": "Time-of-Use improvements, better flow support, allow changing operating mode and to enable forecast charging, added new max/min capabilities, changed to svgrepo icons, localization of error messages, refactorings, fixes battery status capabilities, added roorules, and much more.",
+    "de": "Time-of-Use-Verbesserungen, bessere Flow-Unterstützung, Änderung des Betriebsmodus und Aktivierung der prognosebasierten Ladung ermöglicht, neue Max/Min-Funktionen hinzugefügt, zu svgrepo-Symbolen gewechselt, Lokalisierung von Fehlermeldungen, Überarbeitungen, Korrekturen der Batteriestatusfunktionen, roorules hinzugefügt und vieles mehr.",
+    "da": "Time-of-Use forbedringer, bedre flow understøttelse, tillad ændring af driftstilstand og aktivering af prognosebaseret opladning, tilføjet nye maks/min funktioner, ændret til svgrepo ikoner, lokalisering af fejlmeddelelser, omstruktureringer, rettelser af batteristatus funktioner, tilføjet roorules og meget mere.",
+    "nl": "Time-of-Use verbeteringen, betere flow-ondersteuning, maak het mogelijk om de bedrijfsmodus te wijzigen en voorspellingsgebaseerd opladen in te schakelen, nieuwe max/min-functies toegevoegd, gewijzigd naar svgrepo pictogrammen, lokalisatie van foutmeldingen, refactors, repareert batterijstatusfuncties, roorules toegevoegd en nog veel meer."
   },
   "2.0.1": {
-    "en": "Fixed schedule leading/ending trails"
+    "en": "Fixed schedule leading/ending trails",
+    "de": "Korrigierte Zeitplan-Führung/Endspuren",
+    "da": "Rettet tidsplan førende/afsluttende spor",
+    "nl": "Gerepareerde schema leidende/eindigende sporen"
   },
   "2.0.2": {
-    "en": "Another Trim fix."
+    "en": "Another Trim fix.",
+    "de": "Eine weitere Trim-Korrektur.",
+    "da": "En anden Trim rettelse.",
+    "nl": "Nog een Trim-reparatie."
   },
   "2.0.3": {
-    "en": "Trim all whitespace from ToU schedule entries and fix some localization issues."
+    "en": "Trim all whitespace from ToU schedule entries and fix some localization issues.",
+    "de": "Alle Leerzeichen aus ToU-Zeitplaneinträgen entfernen und einige Lokalisierungsprobleme beheben.",
+    "da": "Trim alle mellemrum fra ToU tidsplanposter og ret nogle lokaliseringsproblemer.",
+    "nl": "Trim alle witruimte uit ToU-schema-items en los enkele lokalisatieproblemen op."
   },
   "2.1.0": {
-    "en": "Add setpoint charge/discharge cards especially useful for operating mode 'manual'. More refactorings, validations and localizations as well as support for VSCode debugging."
+    "en": "Add setpoint charge/discharge cards especially useful for operating mode 'manual'. More refactorings, validations and localizations as well as support for VSCode debugging.",
+    "de": "Setpoint-Lade-/Entladekarten hinzufügen, besonders nützlich für den Betriebsmodus 'manuell'. Weitere Überarbeitungen, Validierungen und Lokalisierungen sowie Unterstützung für VSCode-Debugging.",
+    "da": "Tilføj setpoint opladnings-/afladningskort især nyttige til driftstilstand 'manuel'. Flere omstruktureringer, valideringer og lokaliseringer samt understøttelse af VSCode debugging.",
+    "nl": "Voeg setpoint laad-/ontlaadkaarten toe die vooral nuttig zijn voor bedrijfsmodus 'handmatig'. Meer refactors, validaties en lokalisaties en ondersteuning voor VSCode-debugging."
+  },
+  "2.2.0": {
+    "en": "Add AI generated localization for DA and NL. Please help to improve translations.",
+    "de": "KI-generierte Lokalisierung für DA und NL hinzugefügt. Bitte bei der Verbesserung der Übersetzungen helfen.",
+    "da": "Tilføj AI genereret lokalisering for DA og NL. Hjælp venligst med at forbedre oversættelser.",
+    "nl": "Voeg AI gegenereerde lokalisatie toe voor DA en NL. Help alstublieft met het verbeteren van vertalingen."
   }
 }
