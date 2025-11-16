@@ -3,6 +3,7 @@
   "name": {
     "en": "sonnenBatterie household",
     "de": "sonnenBatterie Haushalt",
+    "da": "sonnenBatterie Husholdning",
     "nl": "sonnenBatterie Huishouden"
   },
   "class": "sensor",
