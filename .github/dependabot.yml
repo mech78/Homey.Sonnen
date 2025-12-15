@@ -9,3 +9,7 @@ updates:
     directory: "/Source/com.sonnen.battery" # Location of package manifests
     schedule:
       interval: "weekly"
+    # Auto-rebase PRs to minimize conflicts
+    rebase-strategy: "auto"
+    # Limit concurrent PRs to prevent overwhelming
+    open-pull-requests-limit: 10
