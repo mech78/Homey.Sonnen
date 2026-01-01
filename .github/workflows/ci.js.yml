@@ -3,6 +3,9 @@
 
 name: Build And Verify Homey App
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ "main", "*/*" ]
