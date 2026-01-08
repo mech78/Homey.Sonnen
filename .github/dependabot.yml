@@ -13,3 +13,8 @@ updates:
     rebase-strategy: "auto"
     # Limit concurrent PRs to prevent overwhelming
     open-pull-requests-limit: 10
+    groups:
+      minor-and-patch-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
