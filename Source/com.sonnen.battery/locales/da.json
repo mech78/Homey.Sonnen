@@ -12,6 +12,10 @@
     "authTokenHint": "Auth Token hentes fra brugerlogin på dit Sonnen Batterie-system.",
     "savedOk": "Indstillinger gemt. Du kan nu lukke denne dialog.",
     "savedError": "Der opstod en fejl.",
+    "saveDeviceState": "Gem aktuelle enhedstilstand",
+    "deviceState": "Enhedsstatus (JSON)",
+    "deviceStateSaved": "Enhedsstatus gemt med succes.\nStatus: __lastUpdate__",
+    "deviceStateNotSaved": "Kunne ikke gemme enhedsstatus.",
     "settings.deviceState": "Enhedsstatus (JSON)",
     "settings.deviceStateHint": "Viser den aktuelle status for enhederne."
   },

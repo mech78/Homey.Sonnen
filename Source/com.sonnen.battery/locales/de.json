@@ -12,8 +12,12 @@
     "authTokenHint": "Das Auth Token wird von der Benutzeranmeldung auf Ihrem Sonnen Batterie System abgerufen.",
     "savedOk": "Einstellungen gespeichert. Der Dialog kann jetzt geschlossen werden.",
     "savedError": "Ein Fehler ist aufgetreten.",
+    "saveDeviceState": "Speichere aktuellen Gerätezustand",
+    "deviceState": "Gerätezustand (JSON)",
+    "deviceStateSaved": "Gerätezustand erfolgreich gespeichert.\nStand: __lastUpdate__",
+    "deviceStateNotSaved": "Gerätezustand konnte nicht gespeichert werden.",
     "settings.deviceState": "Gerätezustand (JSON)",
-    "settings.deviceStateHint": "Zeigt den aktuellen Zustand der Geräte an."
+    "settings.deviceStateHint": "Zeigt den aktuellen Gerätezustand an."
   },
   "eclipseLed": {
     "BlinkingRed": "blinkt rot",

@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "⌀ Cycle rate (30d)",
+    "de": "⌀ Zyklusrate (30d)",
+    "da": "⌀ cyklusrate (30d)",
+    "nl": "⌀ cyclussnelheid (30d)"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "units": {
+    "en": "cycles/d",
+    "de": "Zyklen/d",
+    "da": "cyklus/d",
+    "nl": "cycli/d"
+  },
+  "min": 0,
+  "decimals": 3,
+  "insights": true,
+  "icon": "/assets/images/svg/avg_cyclecount_rate_30d.svg"
+}
