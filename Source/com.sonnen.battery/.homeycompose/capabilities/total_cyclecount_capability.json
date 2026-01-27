@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Total cycle count",
+    "de": "Gesamtzyklenzahl",
+    "da": "Samlet cyklus antal",
+    "nl": "Totaal aantal cycli"
+  },
+  "uiComponent": "sensor",
+  "getable": true,
+  "min": 0,
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/images/svg/cyclecount.svg"
+}

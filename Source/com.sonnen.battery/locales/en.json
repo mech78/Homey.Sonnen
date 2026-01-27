@@ -12,8 +12,12 @@
     "authTokenHint": "Auth Token is retrieved from user-login on your Sonnen Batterie system.",
     "savedOk": "Settings saved. You can close this dialog now.",
     "savedError": "An error occured.",
-    "settings.deviceState": "Device State (JSON)",
-    "settings.deviceStateHint": "Shows the current state of the devices."
+    "saveDeviceState": "Save current device state",
+    "deviceState": "Device state (JSON)",
+    "deviceStateSaved": "Device state saved successfully.\nStatus: __lastUpdate__",
+    "deviceStateNotSaved": "Could not save device state.",
+    "settings.deviceState": "Device state (JSON)",
+    "settings.deviceStateHint": "Shows the current device state."
   },
   "eclipseLed": {
     "BlinkingRed": "blinking red",

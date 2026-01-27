@@ -1,6 +1,6 @@
 {
   "id": "com.sonnen.battery",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -22,6 +22,12 @@
     "energy"
   ],
   "permissions": [],
+  "api": {
+    "saveDeviceState": {
+      "method": "POST",
+      "path": "/save-device-state"
+    }
+  },
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",

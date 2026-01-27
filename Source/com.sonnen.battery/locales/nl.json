@@ -12,6 +12,10 @@
     "authTokenHint": "Auth Token wordt opgehaald via gebruikerslogin op uw Sonnen Batterie systeem.",
     "savedOk": "Instellingen opgeslagen. U kunt dit dialoogvenster nu sluiten.",
     "savedError": "Er is een fout opgetreden.",
+    "saveDeviceState": "Opslaan huidige Apparaatstatus",
+    "deviceState": "Apparaatstatus (JSON)",
+    "deviceStateSaved": "Apparaatstatus succesvol opgeslagen.\nStatus: __lastUpdate__",
+    "deviceStateNotSaved": "Kon apparaatstatus niet opslaan.",
     "settings.deviceState": "Apparaatstatus (JSON)",
     "settings.deviceStateHint": "Toont de huidige status van de apparaten."
   },

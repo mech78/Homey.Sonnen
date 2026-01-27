@@ -19,6 +19,9 @@
     "to_battery_total_capability",
     "from_battery_total_capability",
     "online_capability",
+    "total_cyclecount_capability",
+    "cyclecount_7day_rate_capability",
+    "cyclecount_30day_rate_capability",
     "number_battery_capability",
     "operating_mode_capability",
     "prognosis_charging_capability",
@@ -29,7 +32,7 @@
     "alarm_generic",
     "button.reset_meter",    
     "measure_power",
-    "meter_power.charged", 
+    "meter_power.charged",
     "meter_power.discharged"
   ],
   "capabilitiesOptions": {

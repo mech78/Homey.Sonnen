@@ -87,6 +87,11 @@ export class SonnenBatterieClient {
     return response.data;
   }
 
+  public async getBattery(): Promise<any> {
+    const response = await axios.get(`${this.getBaseUrl()}/api/v2/battery`, this.config);
+    return response.data;
+  }
+
   public static async discoverBatteries(): Promise<SonnenBatteries> {
     try {
       const response = await axios.get('https://find-my.sonnen-batterie.com/find');

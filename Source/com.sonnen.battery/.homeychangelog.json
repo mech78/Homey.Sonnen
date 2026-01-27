@@ -238,5 +238,11 @@
     "de": "KI-generierte Lokalisierung für DA und NL hinzugefügt. Bitte bei der Verbesserung der Übersetzungen helfen.",
     "da": "Tilføj AI genereret lokalisering for DA og NL. Hjælp venligst med at forbedre oversættelser.",
     "nl": "Voeg AI gegenereerde lokalisatie toe voor DA en NL. Help alstublieft met het verbeteren van vertalingen."
+  },
+  "2.3.0": {
+    "en": "Add total cycle count and average cycle rates. Improved saving of current device state.",
+    "de": "Gesamtzykluszahl und durchschnittliche Zyklusraten hinzugefügt. Verbessertes Speichern des aktuellen Gerätezustands.",
+    "da": "Samlet cyklus antal og gennemsnitlige cyklusrater tilføjet. Forbedret gemning af den aktuelle enhedstilstand.",
+    "nl": "Totaal aantal cycli en gemiddelde cyclusrates toegevoegd. Verbeterd opslaan van de huidige apparaatstatus."
   }
 }

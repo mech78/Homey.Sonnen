@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#000000"
+   height="800px"
+   width="800px"
+   version="1.1"
+   id="Layer_1"
+   viewBox="0 0 512 512"
+   xml:space="preserve"
+   sodipodi:docname="avg_cyclecount_rate_30d.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs6" /><sodipodi:namedview
+   id="namedview6"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="1.06375"
+   inkscape:cx="397.64982"
+   inkscape:cy="422.56169"
+   inkscape:window-width="1920"
+   inkscape:window-height="1111"
+   inkscape:window-x="-9"
+   inkscape:window-y="-9"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<g
+   id="g2">
+	<g
+   id="g1">
+		<path
+   d="M501.859,184.549c-2.587-8.848-11.87-13.924-20.696-11.364c-8.859,2.581-13.945,11.848-11.37,20.701    c5.848,20.086,8.815,40.983,8.815,62.113c0,122.744-99.859,222.609-222.609,222.609c-62.856,0-122.063-26.614-163.981-72.353    h32.775c9.217,0,16.696-7.473,16.696-16.696c0-9.223-7.479-16.584-16.696-16.584H58.011c-10.011,0-18.918,9.167-16.696,20.132    v63.235c0,9.223,7.479,16.696,16.696,16.696s16.696-7.473,16.696-16.696v-19.771C122.348,484.43,187.301,512,256,512    c141.163,0,256-114.843,256-256C512,231.712,508.587,207.668,501.859,184.549z"
+   id="path1" />
+	</g>
+</g>
+<g
+   id="g4">
+	<g
+   id="g3">
+		<path
+   d="M456.347,38.957c-9.217,0-16.696,7.473-16.696,16.696v22.214C391.811,28.514,325.865,0,256,0C114.837,0,0,114.843,0,256    c0,24.293,3.413,48.332,10.141,71.445c2.608,8.926,11.926,13.934,20.696,11.359c8.859-2.576,13.945-11.843,11.37-20.696    c-5.848-20.08-8.815-40.978-8.815-62.108C33.391,133.256,133.25,33.391,256,33.391c62.869,0,122.065,26.606,163.976,72.348    h-30.411c-9.217,0-16.696,7.473-16.696,16.696c0,9.223,7.479,16.696,16.696,16.696h64.913c0.006,0,0.008,0,0.008,0    c11.986,0,18.557-7.751,18.557-16.696V55.652C473.042,46.43,465.564,38.957,456.347,38.957z"
+   id="path2" />
+	</g>
+</g>
+
+<path
+   d="m 223.28605,113.23221 c -8.91852,0 -11.89771,2.00834 -11.89771,11.89772 v 8.91852 h -26.77462 c -17.58006,0 -20.81623,3.2457 -20.81623,20.81623 v 223.08687 c 0,17.58007 3.24569,20.81624 20.81623,20.81624 h 142.77255 c 17.58007,0 20.81624,-3.2457 20.81624,-20.81624 V 154.86468 c 0,-17.58005 -3.2457,-20.81623 -20.81624,-20.81623 h -26.77461 v -8.91852 c 0,-9.87986 -2.96967,-11.89772 -11.89771,-11.89772 h -65.43742 z m -38.67233,62.46775 c 0,-23.79542 -2.96967,-20.81624 20.81624,-20.81624 h 101.13055 c 23.79544,0 20.81624,-2.96967 20.81624,20.81624 v 181.44487 c 0,23.79543 2.96967,20.81624 -20.81624,20.81624 H 205.42996 c -23.79542,0 -20.81624,2.96967 -20.81624,-20.81624 z m 14.86739,148.72141 h 113.02826 c 3.28377,0 5.94886,2.66509 5.94886,5.94886 v 32.72346 c 0,3.28377 -2.66509,5.94886 -5.94886,5.94886 H 199.48111 c -3.28377,0 -5.94886,-2.66509 -5.94886,-5.94886 v -32.72346 c 0,-3.28377 2.66509,-5.94886 5.94886,-5.94886 z"
+   id="path1-8"
+   style="stroke-width:9.5182"
+   inkscape:label="path1-8"
+   sodipodi:nodetypes="cscsssssssscssccssssssssssssssssss" /><text
+   xml:space="preserve"
+   style="font-size:7.68px;writing-mode:lr-tb;direction:ltr;fill:none;stroke-width:0.64"
+   x="74.00235"
+   y="241.25969"
+   id="text1"><tspan
+     sodipodi:role="line"
+     id="tspan1"
+     style="stroke-width:0.64"
+     x="74.00235"
+     y="241.25969">dsdsdd</tspan></text><text
+   xml:space="preserve"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:218.453px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.64"
+   x="182.52"
+   y="465.07172"
+   id="text4"><tspan
+     sodipodi:role="line"
+     id="tspan4"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:81.92px;font-family:Monospace;-inkscape-font-specification:'Monospace, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.64"
+     x="182.52"
+     y="465.07172">30d</tspan></text><text
+   xml:space="preserve"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:218.453px;font-family:Monospace;-inkscape-font-specification:'Monospace, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.64"
+   x="190.5601"
+   y="298.41602"
+   id="text2"><tspan
+     sodipodi:role="line"
+     id="tspan2"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:218.453px;font-family:Monospace;-inkscape-font-specification:'Monospace, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.64"
+     x="190.5601"
+     y="298.41602">ø</tspan></text></svg>

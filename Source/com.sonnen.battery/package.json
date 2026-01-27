@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/underscore": "^1.13.0",
     "axios": "^1.13.2",
+    "ring-buffer-ts": "^1.2.0",
     "underscore": "^1.13.7"
   }
 }
