@@ -5,9 +5,9 @@
   "height": 150,
   "settings": [],
   "api": {
-    "getData": {
+    "getSonnenbatterieWidgetData": {
       "method": "GET",
-      "path": "/"
+      "path": "/sonnen-batterie-widget-data"
     }
   }
 }

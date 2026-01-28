@@ -1,5 +1,3 @@
-'use strict';
-
 import { BatteryDevice } from "./drivers/sonnenbatterie/device";
 
 module.exports = {

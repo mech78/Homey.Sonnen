@@ -25,6 +25,7 @@
       max-width: 24%;
       box-sizing: border-box;
       display: flex;
+      visibility: hidden;
       flex-direction: column;
       /* Ensures elements inside stack vertically */
       align-items: center;
@@ -47,6 +48,7 @@
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
+      visibility: hidden;
       flex-direction: row;
       align-items: center;
     }
@@ -116,35 +118,33 @@
 
   <div class="app-container">
     <!-- Column 1-->
-    <div class="app-item-container" >
+    <div class="app-item-container" id="battery">
+      <img src="icon.svg" class="app-icon sonnen-icon"></img>
+      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
+    </div>
+    <!-- Column 2-->
+    <div class="app-item-container" id="solarpanel">
       <div class="homey-custom-icon-panel"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.production">Production</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblProduction">0</span> W</p>
     </div>
-    <!-- Column 2-->
-    <div class="app-item-container">
+    <!-- Column 3-->
+    <div class="app-item-container" id="household">
       <div class="homey-custom-icon-house"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.consumption">Consumption</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblConsumption">0</span> W</p>
     </div>
-    <!-- Column 3-->
-    <div class="app-item-container">
-      <img src="icon.svg" class="app-icon sonnen-icon"></img>
-      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
-      <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
-      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">FROM</span> -->
-    </div>
     <!-- Column 4-->
-    <div class="app-item-container">
+    <div class="app-item-container" id="grid">
       <div class="homey-custom-icon-pole"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromGrid">Grid</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblGrid">0</span> W</p>
-      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">TO</span> -->
     </div>
   </div>
 
   <div>
-    <div class="batteryContainer" style="padding-left: var(--homey-su-2);">
+    <div class="batteryContainer" id="batteryContainer" style="padding-left: var(--homey-su-2);">
       <div class="batteryOuter">
         <div id="batteryLevel"></div>
       </div>
@@ -153,42 +153,72 @@
     </div>
   </div>
 
-  <!-- <div>
+  <!--
+  <div>
     <span id="lblDebug" style="background-color: green;"></span>
-  </div> -->
+  </div>
+  -->
 
   <script type="text/javascript">
-    let widget_data = {};
 
     function onHomeyReady(Homey) {
-
       Homey.ready();
       
-      this.getData();
+      this.applyData();
       // Repeat every 30 sek.
-      setTimeout(() => { this.getData(); }, 30*1000);
+      setTimeout(() => { this.applyData(); }, 30*1000);
       
     }
 
 
-    function getData() {
-
-      //document.getElementById('lblDebug').innerText = 'Call api';
+    function applyData() {
+      // document.getElementById('lblDebug').innerText = 'Call api';
 
       try {
-        Homey.api("GET", `/`).then((response) => {
-          const batteryData = response;
+        Homey.api('GET', '/sonnen-batterie-widget-data').then((widgetData) => {
+          // static elements: battery device must always be present or widget would be completely useless.
+          if (widgetData.battery !== undefined) {
+            document.getElementById('lblBattery').innerText        = widgetData.battery;
+            document.getElementById('battery').style.visibility = 'visible';
+          } else {
+            document.getElementById('battery').style.visibility = 'hidden';
+          }
 
-          document.getElementById('lblProduction').innerText     = batteryData["production"];
-          document.getElementById('lblConsumption').innerText    = batteryData["consumption"];
-          document.getElementById('lblBattery').innerText        = batteryData["battery"];
-          document.getElementById('lblGrid').innerText           = batteryData["from_grid"];
+          if (widgetData.percentage !== undefined) {
+            document.getElementById('batteryLevel').style.width    = widgetData.percentage + 'px';
+            document.getElementById('batteryPercentage').innerText = widgetData.percentage + '%';
+            document.getElementById('batteryContainer').style.visibility = 'visible';
+          } else {
+            document.getElementById('batteryContainer').style.visibility = 'hidden';
+          }
 
-          document.getElementById('batteryLevel').style.width    = batteryData["percentage"] + 'px';
-          document.getElementById('batteryPercentage').innerText = batteryData["percentage"] + '%';
+          // dynamic elements - may be missing if devices are not present in Homey
+        
+
+          if (widgetData.production !== undefined) {
+            document.getElementById('lblProduction').innerText     = widgetData.production;
+            document.getElementById('solarpanel').style.visibility = 'visible';
+          } else {
+            document.getElementById('solarpanel').style.display = 'none';
+          }
+
+          if (widgetData.consumption !== undefined) {
+            document.getElementById('lblConsumption').innerText    = widgetData.consumption;
+            document.getElementById('household').style.visibility = 'visible';
+          } else {
+            document.getElementById('household').style.display = 'none';
+          }
+
+          if (widgetData.from_grid !== undefined) {
+            document.getElementById('lblGrid').innerText           = widgetData.from_grid;
+            document.getElementById('grid').style.visibility = 'visible';
+          } else {
+            document.getElementById('grid').style.display = 'none';
+          }
+
         });
       } catch (e) {
-        //document.getElementById('lblDebug').innerText = 'E: ' + e;
+        // document.getElementById('lblDebug').innerText = 'E: ' + e;
       }
 
 
