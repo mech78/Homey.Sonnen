@@ -25,7 +25,7 @@
       max-width: 24%;
       box-sizing: border-box;
       display: flex;
-      visibility: visible;
+      visibility: hidden;
       flex-direction: column;
       /* Ensures elements inside stack vertically */
       align-items: center;
@@ -183,16 +183,16 @@ function applyData() {
           ];
 
           let orderIndex = 1;
-
           devices.forEach(device => {
             const container = document.getElementById(device.id);
             if (widgetData[device.dataKey] !== undefined) {
               container.style.order = orderIndex++;
-              container.style.display = 'flex';
               document.getElementById(device.labelId).innerText = widgetData[device.dataKey];
+              container.style.visibility = 'visible';
             } else {
-              container.style.order = 999;
-              container.style.display = 'none';
+              container.style.order = 999-orderIndex; // reverse order for unavailable devices to keep space when hiding
+              document.getElementById(device.labelId).innerText = '-'; // N/A
+              container.style.visibility = 'hidden';
             }
           });
 
