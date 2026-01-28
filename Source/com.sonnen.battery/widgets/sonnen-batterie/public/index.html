@@ -19,7 +19,7 @@
 
     .app-item-container {
       margin: 0px 0px;
-      
+
       flex: 1 1 24%;
       /* Each item takes 25% of the width (adjust as needed) */
       max-width: 24%;
@@ -83,17 +83,17 @@
       height: 36px;
       -webkit-mask-image: url('solar-battery-4-svgrepo-com.svg');
       mask-image: url('solar-battery-4-svgrepo-com.svg');
-    } 
+    }
 
     .homey-custom-icon-house {
       --homey-icon-color: var(--homey-icon-color-dark);
-      
+
       padding-bottom: var(--homey-su);
       width: 36px;
       height: 36px;
       -webkit-mask-image: url('electricity-home-svgrepo-com.svg');
       mask-image: url('electricity-home-svgrepo-com.svg');
-    } 
+    }
 
     .homey-custom-icon-pole {
       --homey-icon-color: var(--homey-icon-color-dark);
@@ -102,13 +102,12 @@
       height: 36px;
       -webkit-mask-image: url('electric-tower-power-line-svgrepo-com.svg');
       mask-image: url('electric-tower-power-line-svgrepo-com.svg');
-    } 
-    
+    }
+
     .sonnen-icon {
       width: 36px;
       height: 36px;
     }
-
   </style>
 </head>
 
@@ -149,32 +148,25 @@
         <div id="batteryLevel"></div>
       </div>
       <div class="batteryBump"></div>
-      <span class="homey-font-size-default homey-font-weight-regular" id="batteryPercentage" style="padding-left: var(--homey-su-2);">-%</span>
+      <span class="homey-font-size-default homey-font-weight-regular" id="batteryPercentage"
+        style="padding-left: var(--homey-su-2);">-%</span>
     </div>
   </div>
-
-  <!--
-  <div>
-    <span id="lblDebug" style="background-color: green;"></span>
-  </div>
-  -->
 
   <script type="text/javascript">
 
     function onHomeyReady(Homey) {
       Homey.ready();
-      
+
       this.applyData();
       // Repeat every 30 sek.
-      setTimeout(() => { this.applyData(); }, 30*1000);
-      
+      setTimeout(() => { this.applyData(); }, 30 * 1000);
     }
 
-
-function applyData() {
+    function applyData() {
       try {
         Homey.api('GET', '/sonnen-batterie-widget-data').then((widgetData) => {
-          
+
           const devices = [
             { id: 'solarpanel', dataKey: 'production', labelId: 'lblProduction' },
             { id: 'household', dataKey: 'consumption', labelId: 'lblConsumption' },
@@ -190,7 +182,7 @@ function applyData() {
               document.getElementById(device.labelId).innerText = widgetData[device.dataKey];
               container.style.visibility = 'visible';
             } else {
-              container.style.order = 999-orderIndex; // reverse order for unavailable devices to keep space when hiding
+              container.style.order = 999 - orderIndex; // reverse order for unavailable devices to keep space when hiding
               document.getElementById(device.labelId).innerText = '-'; // N/A
               container.style.visibility = 'hidden';
             }
@@ -205,8 +197,8 @@ function applyData() {
           }
 
         });
-      } catch (e) {}
-    
+      } catch (e) { }
+
     }
 
   </script>
