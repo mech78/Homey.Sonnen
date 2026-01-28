@@ -424,7 +424,7 @@ export class BatteryDevice extends SonnenDevice {
       this.unsetWarning(); // clear any previous warning
       return currentState;
     } catch (e) {
-      this.error('Error occured fetching data. Retry: ' + retryOnError, e)
+      this.error('Error occurred fetching data. Retry: ' + retryOnError, e)
       return this.mayRetryWithAutoDiscovery(lastState, retryOnError); 
     }
   }

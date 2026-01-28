@@ -40,7 +40,7 @@ export abstract class SonnenDevice extends Homey.Device {
     newSettings: { [key: string]: boolean | string | number | undefined | null };
     changedKeys: string[];
   }): Promise<string | void> {
-      this.log(this.constructor.name + ' settings where changed: ' +
+      this.log(this.constructor.name + ' settings were changed: ' +
           changedKeys.join(', ') +
           '. old settings: ' + JSON.stringify(oldSettings) +
           ', new settings: ' + JSON.stringify(newSettings));

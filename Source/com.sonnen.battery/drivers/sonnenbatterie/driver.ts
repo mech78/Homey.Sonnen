@@ -1,5 +1,4 @@
 import Homey from 'homey';
-import _ from 'underscore'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { SonnenDriver } from '../../lib/SonnenDriver';
 import { LocalizationService } from '../../lib/LocalizationService';
 import { BatteryDevice } from './device';
