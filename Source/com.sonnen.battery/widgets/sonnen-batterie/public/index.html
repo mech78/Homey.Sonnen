@@ -25,7 +25,7 @@
       max-width: 24%;
       box-sizing: border-box;
       display: flex;
-      visibility: hidden;
+      visibility: visible;
       flex-direction: column;
       /* Ensures elements inside stack vertically */
       align-items: center;
@@ -171,62 +171,42 @@
     }
 
 
-    function applyData() {
-      // document.getElementById('lblDebug').innerText = 'Call api';
-
+function applyData() {
       try {
         Homey.api('GET', '/sonnen-batterie-widget-data').then((widgetData) => {
-          // static elements: battery device must always be present or widget would be completely useless.
-          if (widgetData.battery !== undefined) {
-            document.getElementById('lblBattery').innerText        = widgetData.battery;
-            document.getElementById('battery').style.visibility = 'visible';
-          } else {
-            document.getElementById('battery').style.visibility = 'hidden';
-          }
+          
+          const devices = [
+            { id: 'battery', dataKey: 'battery', labelId: 'lblBattery' },
+            { id: 'solarpanel', dataKey: 'production', labelId: 'lblProduction' },
+            { id: 'household', dataKey: 'consumption', labelId: 'lblConsumption' },
+            { id: 'grid', dataKey: 'from_grid', labelId: 'lblGrid' }
+          ];
+
+          let orderIndex = 1;
+
+          devices.forEach(device => {
+            const container = document.getElementById(device.id);
+            if (widgetData[device.dataKey] !== undefined) {
+              container.style.order = orderIndex++;
+              container.style.display = 'flex';
+              document.getElementById(device.labelId).innerText = widgetData[device.dataKey];
+            } else {
+              container.style.order = 999;
+              container.style.display = 'none';
+            }
+          });
 
           if (widgetData.percentage !== undefined) {
-            document.getElementById('batteryLevel').style.width    = widgetData.percentage + 'px';
+            document.getElementById('batteryLevel').style.width = widgetData.percentage + 'px';
             document.getElementById('batteryPercentage').innerText = widgetData.percentage + '%';
             document.getElementById('batteryContainer').style.visibility = 'visible';
           } else {
             document.getElementById('batteryContainer').style.visibility = 'hidden';
           }
 
-          // dynamic elements - may be missing if devices are not present in Homey
-        
-
-          if (widgetData.production !== undefined) {
-            document.getElementById('lblProduction').innerText     = widgetData.production;
-            document.getElementById('solarpanel').style.visibility = 'visible';
-          } else {
-            document.getElementById('solarpanel').style.display = 'none';
-          }
-
-          if (widgetData.consumption !== undefined) {
-            document.getElementById('lblConsumption').innerText    = widgetData.consumption;
-            document.getElementById('household').style.visibility = 'visible';
-          } else {
-            document.getElementById('household').style.display = 'none';
-          }
-
-          if (widgetData.from_grid !== undefined) {
-            document.getElementById('lblGrid').innerText           = widgetData.from_grid;
-            document.getElementById('grid').style.visibility = 'visible';
-          } else {
-            document.getElementById('grid').style.display = 'none';
-          }
-
         });
-      } catch (e) {
-        // document.getElementById('lblDebug').innerText = 'E: ' + e;
-      }
-
-
-
-
-
-
-
+      } catch (e) {}
+    
     }
 
   </script>
