@@ -118,22 +118,22 @@
 
   <div class="app-container">
     <!-- Column 1-->
-    <div class="app-item-container" id="battery">
-      <img src="icon.svg" class="app-icon sonnen-icon"></img>
-      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
-      <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
-    </div>
-    <!-- Column 2-->
     <div class="app-item-container" id="solarpanel">
       <div class="homey-custom-icon-panel"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.production">Production</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblProduction">0</span> W</p>
     </div>
-    <!-- Column 3-->
+    <!-- Column 2-->
     <div class="app-item-container" id="household">
       <div class="homey-custom-icon-house"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.consumption">Consumption</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblConsumption">0</span> W</p>
+    </div>
+    <!-- Column 3-->
+    <div class="app-item-container" id="battery">
+      <img src="icon.svg" class="app-icon sonnen-icon"></img>
+      <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
+      <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
     </div>
     <!-- Column 4-->
     <div class="app-item-container" id="grid">
@@ -176,9 +176,9 @@ function applyData() {
         Homey.api('GET', '/sonnen-batterie-widget-data').then((widgetData) => {
           
           const devices = [
-            { id: 'battery', dataKey: 'battery', labelId: 'lblBattery' },
             { id: 'solarpanel', dataKey: 'production', labelId: 'lblProduction' },
             { id: 'household', dataKey: 'consumption', labelId: 'lblConsumption' },
+            { id: 'battery', dataKey: 'battery', labelId: 'lblBattery' },
             { id: 'grid', dataKey: 'from_grid', labelId: 'lblGrid' }
           ];
 
