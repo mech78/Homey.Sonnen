@@ -244,5 +244,11 @@
     "de": "Gesamtzykluszahl und durchschnittliche Zyklusraten hinzugefügt. Verbessertes Speichern des aktuellen Gerätezustands.",
     "da": "Samlet cyklus antal og gennemsnitlige cyklusrater tilføjet. Forbedret gemning af den aktuelle enhedstilstand.",
     "nl": "Totaal aantal cycli en gemiddelde cyclusrates toegevoegd. Verbeterd opslaan van de huidige apparaatstatus."
+  },
+  "2.4.0": {
+    "en": "Improve widget data retrieval to only show available devices.",
+    "de": "Verbesserte Widget-Datenabfrage, um nur verfügbare Geräte anzuzeigen.",
+    "da": "Forbedret widget data hentning for kun at vise tilgængelige enheder.",
+    "nl": "Verbeterde widget-gegevensopvraging om alleen beschikbare apparaten te tonen."
   }
 }

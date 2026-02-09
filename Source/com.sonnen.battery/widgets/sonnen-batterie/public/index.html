@@ -19,12 +19,13 @@
 
     .app-item-container {
       margin: 0px 0px;
-      
+
       flex: 1 1 24%;
       /* Each item takes 25% of the width (adjust as needed) */
       max-width: 24%;
       box-sizing: border-box;
       display: flex;
+      visibility: hidden;
       flex-direction: column;
       /* Ensures elements inside stack vertically */
       align-items: center;
@@ -47,6 +48,7 @@
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
+      visibility: hidden;
       flex-direction: row;
       align-items: center;
     }
@@ -81,17 +83,26 @@
       height: 36px;
       -webkit-mask-image: url('solar-battery-4-svgrepo-com.svg');
       mask-image: url('solar-battery-4-svgrepo-com.svg');
-    } 
+    }
 
     .homey-custom-icon-house {
       --homey-icon-color: var(--homey-icon-color-dark);
-      
+
       padding-bottom: var(--homey-su);
       width: 36px;
       height: 36px;
       -webkit-mask-image: url('electricity-home-svgrepo-com.svg');
       mask-image: url('electricity-home-svgrepo-com.svg');
-    } 
+    }
+
+    .homey-custom-icon-battery {
+      --homey-icon-color: var(--homey-icon-color-dark);
+      padding-bottom: var(--homey-su);
+      width: 36px;
+      height: 36px;
+      -webkit-mask-image: url('battery.svg');
+      mask-image: url('battery.svg');
+    }
 
     .homey-custom-icon-pole {
       --homey-icon-color: var(--homey-icon-color-dark);
@@ -100,11 +111,6 @@
       height: 36px;
       -webkit-mask-image: url('electric-tower-power-line-svgrepo-com.svg');
       mask-image: url('electric-tower-power-line-svgrepo-com.svg');
-    } 
-    
-    .sonnen-icon {
-      width: 36px;
-      height: 36px;
     }
 
   </style>
@@ -116,86 +122,87 @@
 
   <div class="app-container">
     <!-- Column 1-->
-    <div class="app-item-container" >
+    <div class="app-item-container" id="solarpanel">
       <div class="homey-custom-icon-panel"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.production">Production</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblProduction">0</span> W</p>
     </div>
     <!-- Column 2-->
-    <div class="app-item-container">
+    <div class="app-item-container" id="household">
       <div class="homey-custom-icon-house"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.consumption">Consumption</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblConsumption">0</span> W</p>
     </div>
     <!-- Column 3-->
-    <div class="app-item-container">
-      <img src="icon.svg" class="app-icon sonnen-icon"></img>
+    <div class="app-item-container" id="battery">
+      <div class="homey-custom-icon-battery"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromBattery">Battery</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblBattery">0</span> W</p>
-      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">FROM</span> -->
     </div>
     <!-- Column 4-->
-    <div class="app-item-container">
+    <div class="app-item-container" id="grid">
       <div class="homey-custom-icon-pole"></div>
       <p class="homey-text-small-light homey-text-align-center" data-i18n="widget.fromGrid">Grid</p>
       <p class="homey-text-bold homey-text-align-center"><span id="lblGrid">0</span> W</p>
-      <!-- <span class="homey-font-weight-regular hoemy-font-size-small">TO</span> -->
     </div>
   </div>
 
   <div>
-    <div class="batteryContainer" style="padding-left: var(--homey-su-2);">
+    <div class="batteryContainer" id="batteryContainer" style="padding-left: var(--homey-su-2);">
       <div class="batteryOuter">
         <div id="batteryLevel"></div>
       </div>
       <div class="batteryBump"></div>
-      <span class="homey-font-size-default homey-font-weight-regular" id="batteryPercentage" style="padding-left: var(--homey-su-2);">-%</span>
+      <span class="homey-font-size-default homey-font-weight-regular" id="batteryPercentage"
+        style="padding-left: var(--homey-su-2);">-%</span>
     </div>
   </div>
 
-  <!-- <div>
-    <span id="lblDebug" style="background-color: green;"></span>
-  </div> -->
-
   <script type="text/javascript">
-    let widget_data = {};
 
     function onHomeyReady(Homey) {
-
       Homey.ready();
-      
-      this.getData();
+
+      this.applyData();
       // Repeat every 30 sek.
-      setTimeout(() => { this.getData(); }, 30*1000);
-      
+      setTimeout(() => { this.applyData(); }, 30 * 1000);
     }
 
-
-    function getData() {
-
-      //document.getElementById('lblDebug').innerText = 'Call api';
-
+    function applyData() {
       try {
-        Homey.api("GET", `/`).then((response) => {
-          const batteryData = response;
+        Homey.api('GET', '/sonnen-batterie-widget-data').then((widgetData) => {
 
-          document.getElementById('lblProduction').innerText     = batteryData["production"];
-          document.getElementById('lblConsumption').innerText    = batteryData["consumption"];
-          document.getElementById('lblBattery').innerText        = batteryData["battery"];
-          document.getElementById('lblGrid').innerText           = batteryData["from_grid"];
+          const devices = [
+            { id: 'solarpanel', dataKey: 'production', labelId: 'lblProduction' },
+            { id: 'household', dataKey: 'consumption', labelId: 'lblConsumption' },
+            { id: 'battery', dataKey: 'battery', labelId: 'lblBattery' },
+            { id: 'grid', dataKey: 'from_grid', labelId: 'lblGrid' }
+          ];
 
-          document.getElementById('batteryLevel').style.width    = batteryData["percentage"] + 'px';
-          document.getElementById('batteryPercentage').innerText = batteryData["percentage"] + '%';
+          let orderIndex = 1;
+          devices.forEach(device => {
+            const container = document.getElementById(device.id);
+            if (widgetData[device.dataKey] !== undefined) {
+              container.style.order = orderIndex++;
+              document.getElementById(device.labelId).innerText = widgetData[device.dataKey];
+              container.style.visibility = 'visible';
+            } else {
+              container.style.order = 999 - orderIndex; // reverse order for unavailable devices to keep space when hiding
+              document.getElementById(device.labelId).innerText = '-'; // N/A
+              container.style.visibility = 'hidden';
+            }
+          });
+
+          if (widgetData.percentage !== undefined) {
+            document.getElementById('batteryLevel').style.width = widgetData.percentage + 'px';
+            document.getElementById('batteryPercentage').innerText = widgetData.percentage + '%';
+            document.getElementById('batteryContainer').style.visibility = 'visible';
+          } else {
+            document.getElementById('batteryContainer').style.visibility = 'hidden';
+          }
+
         });
-      } catch (e) {
-        //document.getElementById('lblDebug').innerText = 'E: ' + e;
-      }
-
-
-
-
-
-
+      } catch (e) { }
 
     }
 
