@@ -50,31 +50,31 @@ export class SonnenState {
     this.todayMaxGridConsumption_Wh = initialState?.todayMaxGridConsumption_Wh || 0;
     this.todayMaxProduction_Wh = initialState?.todayMaxProduction_Wh || 0;
     this.total_cycleCount = initialState?.total_cycleCount || 0;
-    this.cycleCount7DayBuffer = (initialState?.cycleCount7DayBuffer instanceof RingBuffer) ? initialState?.cycleCount7DayBuffer : new RingBuffer<CycleCountSnapshot>(168);
-    this.cycleCount30DayBuffer = (initialState?.cycleCount30DayBuffer instanceof RingBuffer) ? initialState?.cycleCount30DayBuffer : new RingBuffer<CycleCountSnapshot>(720);
+    this.cycleCount7DayBuffer = (initialState?.cycleCount7DayBuffer instanceof RingBuffer) ? initialState?.cycleCount7DayBuffer : SonnenState.createCycleCount7DayBuffer();
+    this.cycleCount30DayBuffer = (initialState?.cycleCount30DayBuffer instanceof RingBuffer) ? initialState?.cycleCount30DayBuffer : SonnenState.createCycleCount30DayBuffer();
   }
 
    /**
-   * Create a SonnenState instance from a plain object, properly deserializing Date objects and RingBuffer instances
-   * @param deserializedState Plain object with potential string dates and serialized RingBuffer data
-   * @returns Properly deserialized SonnenState instance
-   */
+    * Create a SonnenState instance from a plain object, properly deserializing Date objects and RingBuffer instances
+    * @param deserializedState Plain object with potential string dates and serialized RingBuffer data
+    * @returns Properly deserialized SonnenState instance
+    */
   static fromObject(deserializedState: any): SonnenState {
     if (!deserializedState) {
       return new SonnenState();
     }
-    
+
     deserializedState = SonnenState.filterCurrentProperties(deserializedState);
-    
+
     if (deserializedState.lastUpdate && typeof deserializedState.lastUpdate === 'string') {
       deserializedState.lastUpdate = new Date(deserializedState.lastUpdate);
     }
-    
+
     deserializedState.lastBatteryDataUpdate = null; // transient property, do not restore
 
     deserializedState.cycleCount7DayBuffer = SonnenState.reconstructRingBuffer(deserializedState.cycleCount7DayBuffer);
     deserializedState.cycleCount30DayBuffer = SonnenState.reconstructRingBuffer(deserializedState.cycleCount30DayBuffer);
-    
+
     return new SonnenState(deserializedState);
   }
 
@@ -89,9 +89,9 @@ export class SonnenState {
   }
 
   /**
-   * @param serializedBuffer Serialized RingBuffer data
-   * @returns Reconstructed RingBuffer instance or null if reconstruction fails
-   */
+    * @param serializedBuffer Serialized RingBuffer data
+    * @returns Reconstructed RingBuffer instance or null if reconstruction fails
+    */
   private static reconstructRingBuffer(serializedBuffer: any): RingBuffer<CycleCountSnapshot> | null {
     if (!serializedBuffer || typeof serializedBuffer !== 'object' ||
       !serializedBuffer.buffer || !Array.isArray(serializedBuffer.buffer) ||
@@ -123,7 +123,7 @@ export class SonnenState {
   }
 
   updateState(newState: Partial<SonnenState>) {
-    Object.assign(this, newState); 
+    Object.assign(this, newState);
   }
 
   addCycleCountSnapshot(timestamp: Date, cycleCount: number): void {
@@ -144,23 +144,36 @@ export class SonnenState {
     if (!buffer || buffer.getBufferLength() < 2) {
       return null;
     }
-    
+
     const oldestSnapshot = buffer.getFirst();
     const newestSnapshot = buffer.getLast();
-    
+
     if (!oldestSnapshot || !newestSnapshot) {
       return null;
     }
-    
+
     const timeDiffMs = newestSnapshot.timestamp.getTime() - oldestSnapshot.timestamp.getTime();
     const timeDiffDays = timeDiffMs / (1000 * 60 * 60 * 24);
-    
+
     if (timeDiffDays <= 0) {
       return null;
     }
-    
+
     // Calculate rate (cycles per day)
     const cycleDiff = newestSnapshot.cycleCount - oldestSnapshot.cycleCount;
     return cycleDiff / timeDiffDays;
+  }
+
+  resetCycleCountBuffers(): void {
+    this.cycleCount7DayBuffer = SonnenState.createCycleCount7DayBuffer();
+    this.cycleCount30DayBuffer = SonnenState.createCycleCount30DayBuffer();
+  }
+
+  private static createCycleCount7DayBuffer(): RingBuffer<CycleCountSnapshot> {
+    return new RingBuffer<CycleCountSnapshot>(168);
+  }
+
+  private static createCycleCount30DayBuffer(): RingBuffer<CycleCountSnapshot> {
+    return new RingBuffer<CycleCountSnapshot>(720);
   }
 }

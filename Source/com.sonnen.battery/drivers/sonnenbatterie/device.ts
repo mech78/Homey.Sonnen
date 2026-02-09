@@ -480,5 +480,11 @@ export class BatteryDevice extends SonnenDevice {
     return this.state.lastUpdate;
   }
 
+  public resetCycleCountBuffers(): Date | null {
+    this.state.resetCycleCountBuffers();
+    this.saveDeviceState();
+    return this.state.lastUpdate;
+  }
+
 }
 module.exports = BatteryDevice;

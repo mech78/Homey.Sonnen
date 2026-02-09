@@ -10,4 +10,14 @@ module.exports = {
     }
     return { saved: false };
   },
+
+  async resetCycleCountBuffers({ homey }: { homey: any }) {
+    homey.log('Received request to reset cycle count buffers');
+    const battery: BatteryDevice = homey.drivers.getDriver('sonnenbatterie').getDevices()[0]; // as long as only one batterydevice is supported
+    if (battery) {
+      battery.resetCycleCountBuffers();
+      return { reset: true };
+    }
+    return { reset: false };
+  },
 };

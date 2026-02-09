@@ -27,6 +27,10 @@
     "saveDeviceState": {
       "method": "POST",
       "path": "/save-device-state"
+    },
+    "resetCycleCountBuffers": {
+      "method": "POST",
+      "path": "/reset-cycle-count-buffers"
     }
   },
   "images": {
