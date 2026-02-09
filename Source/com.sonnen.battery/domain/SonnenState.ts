@@ -100,17 +100,26 @@ export class SonnenState {
     }
 
     const buffer = new RingBuffer<CycleCountSnapshot>(serializedBuffer.size);
+    const pos = typeof serializedBuffer.pos === 'number' ? serializedBuffer.pos : 0;
+    const buf = serializedBuffer.buffer;
 
-    for (const snapshot of serializedBuffer.buffer) {
-      if (snapshot && typeof snapshot.timestamp === 'string' && typeof snapshot.cycleCount === 'number') {
-        const timestamp = new Date(snapshot.timestamp);
-        if (!isNaN(timestamp.getTime())) {
-          buffer.add({ timestamp, cycleCount: snapshot.cycleCount });
-        }
-      }
+    for (let i = pos; i < buf.length; i++) {
+      SonnenState.addSnapshot(buf[i], buffer);
+    }
+    for (let i = 0; i < pos; i++) {
+      SonnenState.addSnapshot(buf[i], buffer);
     }
 
     return buffer;
+  }
+
+  private static addSnapshot(snapshot: any, buffer: RingBuffer<CycleCountSnapshot>): void {
+    if (snapshot && typeof snapshot.timestamp === 'string' && typeof snapshot.cycleCount === 'number') {
+      const timestamp = new Date(snapshot.timestamp);
+      if (!isNaN(timestamp.getTime())) {
+        buffer.add({ timestamp, cycleCount: snapshot.cycleCount });
+      }
+    }
   }
 
   updateState(newState: Partial<SonnenState>) {
