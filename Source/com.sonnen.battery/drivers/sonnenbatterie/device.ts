@@ -283,8 +283,8 @@ export class BatteryDevice extends SonnenDevice {
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
-      if (this.isNewDay(currentUpdate, lastState.lastUpdate)) {
-        this.saveDeviceState(); // backup state at least once a day as there seems to be no proper hook during an app shutdown/restart one can use.
+      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
+        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
       }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
