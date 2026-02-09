@@ -250,5 +250,11 @@
     "de": "Verbesserte Widget-Datenabfrage, um nur verfügbare Geräte anzuzeigen.",
     "da": "Forbedret widget data hentning for kun at vise tilgængelige enheder.",
     "nl": "Verbeterde widget-gegevensopvraging om alleen beschikbare apparaten te tonen."
+  },
+  "2.4.1": {
+    "en": "Fixed cycle count tracking bug.",
+    "de": "Zyklenzählungsfehler behoben.",
+    "da": "Rettet cyklusantal sporingsfejl.",
+    "nl": "Cyclus-tellingsfout opgelost."
   }
 }
