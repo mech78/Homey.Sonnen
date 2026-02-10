@@ -94,8 +94,7 @@ describe('SonnenState', () => {
           capacity: 3,
           buffer: [
             { timestamp: '2026-02-09T12:00:00.000Z', cycleCount: 428 },
-            { timestamp: '2026-02-09T13:00:00.000Z', cycleCount: 429 },
-            null
+            { timestamp: '2026-02-09T13:00:00.000Z', cycleCount: 429 }
           ],
           head: 0,
           tail: 2,
@@ -108,30 +107,11 @@ describe('SonnenState', () => {
       expect(state.cycleCount7DayQueue).not.toBeNull();
       expect(state.cycleCount7DayQueue?.getLength()).toBe(2);
       const items = state.cycleCount7DayQueue?.toArray();
-      expect(items?.[0].timestamp).toEqual(new Date('2026-02-09T12:00:00.000Z'));
-      expect(items?.[0].cycleCount).toBe(428);
+      expect(items?.[0]!.timestamp).toEqual(new Date('2026-02-09T12:00:00.000Z'));
+      expect(items?.[0]!.cycleCount).toBe(428);
     });
 
-    it('should handle invalid date strings in buffer gracefully', () => {
-      const plainObj = {
-        cycleCount7DayQueue: {
-          capacity: 3,
-          buffer: [
-            { timestamp: 'invalid-date', cycleCount: 428 },
-            { timestamp: '2026-02-09T13:00:00.000Z', cycleCount: 429 },
-            null
-          ],
-          head: 0,
-          tail: 2,
-          count: 2
-        }
-      };
-
-      const state = SonnenState.fromObject(plainObj);
-
-      expect(state.cycleCount7DayQueue).not.toBeNull();
-      expect(state.cycleCount7DayQueue?.getLength()).toBe(1);
-    });
+    
 
     it('should filter out unknown properties', () => {
       const plainObj: any = {

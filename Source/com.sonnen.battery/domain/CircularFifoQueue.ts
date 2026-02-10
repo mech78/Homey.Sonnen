@@ -1,6 +1,6 @@
 export class CircularFifoQueue<T> {
   readonly capacity: number;
-  private buffer: (T | null)[];
+  private buffer: T[] = [];
   private head: number;
   private tail: number;
   private count: number;
@@ -10,7 +10,7 @@ export class CircularFifoQueue<T> {
       throw new Error(`Capacity must be non-negative, got ${capacity}`);
     }
     this.capacity = capacity;
-    this.buffer = new Array(capacity).fill(null);
+    this.buffer = [];
     this.head = 0;
     this.tail = 0;
     this.count = 0;
@@ -29,6 +29,9 @@ export class CircularFifoQueue<T> {
       this.count++;
     }
 
+    if (this.tail >= this.buffer.length) {
+      this.buffer.length = this.tail + 1;
+    }
     this.buffer[this.tail] = clonedItem;
     this.tail = (this.tail + 1) % this.capacity;
   }
@@ -41,31 +44,26 @@ export class CircularFifoQueue<T> {
 
     let index = this.head;
     for (let i = 0; i < this.count; i++) {
-      const item = this.buffer[index];
-      if (item !== null) {
-        result.push(structuredClone(item));
-      }
+      result.push(structuredClone(this.buffer[index]));
       index = (index + 1) % this.capacity;
     }
 
     return result;
   }
 
-  getFirst(): T | null {
+  getFirst(): T | undefined {
     if (this.count === 0) {
-      return null;
+      return undefined;
     }
-    const item = this.buffer[this.head];
-    return item !== null ? structuredClone(item) : null;
+    return structuredClone(this.buffer[this.head]);
   }
 
-  getLast(): T | null {
+  getLast(): T | undefined {
     if (this.count === 0) {
-      return null;
+      return undefined;
     }
     const lastIndex = (this.tail - 1 + this.capacity) % this.capacity;
-    const item = this.buffer[lastIndex];
-    return item !== null ? structuredClone(item) : null;
+    return structuredClone(this.buffer[lastIndex]);
   }
 
   getCapacity(): number {
@@ -81,9 +79,7 @@ export class CircularFifoQueue<T> {
   }
 
   clear(): void {
-    for (let i = 0; i < this.capacity; i++) {
-      this.buffer[i] = null;
-    }
+    this.buffer = [];
     this.head = 0;
     this.tail = 0;
     this.count = 0;
@@ -94,11 +90,16 @@ export class CircularFifoQueue<T> {
     cloned.head = this.head;
     cloned.tail = this.tail;
     cloned.count = this.count;
-    for (let i = 0; i < this.capacity; i++) {
-      if (this.buffer[i] !== null) {
-        cloned.buffer[i] = structuredClone(this.buffer[i]);
-      }
+    for (let i = 0; i < this.buffer.length; i++) {
+      cloned.buffer[i] = structuredClone(this.buffer[i]);
     }
     return cloned;
+  }
+
+  restoreFromSerialized(buffer: T[], head: number, tail: number, count: number): void {
+    this.buffer = [...buffer];
+    this.head = head;
+    this.tail = tail;
+    this.count = count;
   }
 }

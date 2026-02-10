@@ -110,18 +110,16 @@ export class SonnenState {
       const queue = new CircularFifoQueue<CycleCountSnapshot>(capacity);
       const bufferItems = serializedQueue.buffer;
 
-      for (const item of bufferItems) {
-        if (item && 
-            typeof item === 'object' && 
-            typeof item.timestamp === 'string' && 
-            typeof item.cycleCount === 'number') {
-          
-          const timestamp = new Date(item.timestamp);
-          if (!isNaN(timestamp.getTime())) {
-            queue.add({ timestamp, cycleCount: item.cycleCount });
-          }
-        }
-      }
+      const restoredBuffer = bufferItems.map((item: any): CycleCountSnapshot => {
+        const timestamp = new Date(item.timestamp);
+        return { timestamp, cycleCount: item.cycleCount };
+      });
+
+      const head = (typeof serializedQueue.head === 'number') ? serializedQueue.head : 0;
+      const tail = (typeof serializedQueue.tail === 'number') ? serializedQueue.tail : 0;
+      const count = (typeof serializedQueue.count === 'number') ? serializedQueue.count : 0;
+
+      queue.restoreFromSerialized(restoredBuffer, head, tail, count);
 
       return queue;
     } catch {

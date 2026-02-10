@@ -52,10 +52,10 @@ describe('CircularFifoQueue<number> - Basic Operations', () => {
     expect(queue.getLast()).toBe(30);
   });
 
-  it('should return null for first/last when empty', () => {
+  it('should return undefined for first/last when empty', () => {
     const queue = new CircularFifoQueue<number>(5);
-    expect(queue.getFirst()).toBeNull();
-    expect(queue.getLast()).toBeNull();
+    expect(queue.getFirst()).toBeUndefined();
+    expect(queue.getLast()).toBeUndefined();
   });
 
   it('should return items in insertion order via toArray', () => {
@@ -153,7 +153,7 @@ describe('CircularFifoQueue<number> - Deep Cloning', () => {
     queue.add(42);
 
     const first = queue.getFirst();
-    if (first !== null) {
+    if (first !== undefined) {
       const modified = first + 1;
       expect(modified).toBe(43);
     }
@@ -165,7 +165,7 @@ describe('CircularFifoQueue<number> - Deep Cloning', () => {
     queue.add(42);
 
     const last = queue.getLast();
-    if (last !== null) {
+    if (last !== undefined) {
       const modified = last + 1;
       expect(modified).toBe(43);
     }
@@ -208,7 +208,9 @@ describe('CircularFifoQueue<number> - JSON Serialization', () => {
     const parsed = JSON.parse(json);
 
     expect(parsed.capacity).toBe(3);
-    expect(parsed.buffer).toHaveLength(3);
+    expect(parsed.buffer).toHaveLength(2);
+    expect(parsed.buffer[0]).toBe(1);
+    expect(parsed.buffer[1]).toBe(2);
     expect(parsed.head).toBe(0);
     expect(parsed.tail).toBe(2);
     expect(parsed.count).toBe(2);
@@ -234,8 +236,8 @@ describe('CircularFifoQueue<ComplexItem> - Complex Objects', () => {
     expect(items).toHaveLength(3);
     expect(items[0]).toEqual({ value: 1, name: 'Alice' });
     expect(items[1]).toEqual({ value: 2, name: 'Bob' });
-    expect(items[0].value).toBe(1);
-    expect(items[0].name).toBe('Alice');
+    expect(items[0]!.value).toBe(1);
+    expect(items[0]!.name).toBe('Alice');
   });
 
   it('should deep clone complex objects on return', () => {
@@ -243,8 +245,8 @@ describe('CircularFifoQueue<ComplexItem> - Complex Objects', () => {
     queue.add({ value: 100, name: 'Test' });
 
     const items = queue.toArray();
-    items[0].value = 999;
-    items[0].name = 'Modified';
+    items[0]!.value = 999;
+    items[0]!.name = 'Modified';
 
     const first = queue.getFirst();
     expect(first).not.toBeNull();
@@ -311,10 +313,66 @@ describe('CircularFifoQueue<ComplexItem> - Complex Objects', () => {
 
     const cloned = original.clone();
     const items = cloned.toArray();
-    items[0].value = 999;
-    items[0].name = 'Changed';
+    items[0]!.value = 999;
+    items[0]!.name = 'Changed';
 
     expect(original.toArray()[0]).toEqual({ value: 100, name: 'Original' });
+  });
+});
+
+describe('CircularFifoQueue<ComplexItem | null> - Nullable Types', () => {
+  it('should allow null values when constructed with union type', () => {
+    const queue = new CircularFifoQueue<ComplexItem | null>(5);
+    queue.add({ value: 1, name: 'Alice' });
+    queue.add(null);
+    queue.add({ value: 2, name: 'Bob' });
+    queue.add(null);
+    queue.add({ value: 3, name: 'Charlie' });
+
+    expect(queue.getLength()).toBe(5);
+    const items = queue.toArray();
+    expect(items).toEqual([
+      { value: 1, name: 'Alice' },
+      null,
+      { value: 2, name: 'Bob' },
+      null,
+      { value: 3, name: 'Charlie' }
+    ]);
+  });
+
+  it('should return null when first item is null', () => {
+    const queue = new CircularFifoQueue<ComplexItem | null>(3);
+    queue.add(null);
+    queue.add({ value: 1, name: 'Alice' });
+    queue.add({ value: 2, name: 'Bob' });
+
+    expect(queue.getFirst()).toBeNull();  // Actually null, not undefined (item IS null)
+    expect(queue.getLast()).toEqual({ value: 2, name: 'Bob' });
+  });
+
+  it('should return undefined for empty queue, even with nullable type', () => {
+    const queue = new CircularFifoQueue<ComplexItem | null>(3);
+
+    expect(queue.getFirst()).toBeUndefined();  // Empty queue
+    expect(queue.getLast()).toBeUndefined();   // Empty queue
+  });
+
+  it('should serialize and deserialize null values correctly', () => {
+    const queue = new CircularFifoQueue<ComplexItem | null>(3);
+    queue.add({ value: 1, name: 'Alice' });
+    queue.add(null);
+    queue.add({ value: 3, name: 'Charlie' });
+
+    const json = JSON.stringify(queue);
+    const parsed = JSON.parse(json);
+
+    expect(parsed.capacity).toBe(3);
+    expect(parsed.buffer).toEqual([
+      { value: 1, name: 'Alice' },
+      null,
+      { value: 3, name: 'Charlie' }
+    ]);
+    expect(parsed.buffer[1]).toBeNull();  // null preserved in JSON
   });
 });
 
