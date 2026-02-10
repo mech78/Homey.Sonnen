@@ -14,14 +14,14 @@
     "savedError": "An error occured.",
     "saveDeviceState": "Save current device state",
     "deviceState": "Device state (JSON)",
-"deviceStateSaved": "Device state saved successfully.\nStatus: __lastUpdate__",
+    "deviceStateSaved": "Device state saved successfully.\nStatus: __lastUpdate__",
     "deviceStateNotSaved": "Could not save device state.",
     "settings.deviceState": "Device state (JSON)",
     "settings.deviceStateHint": "Shows the current device state.",
-"resetCycleCountBuffers": "Reset cycle count tracking",
-    "confirmResetCycleCountBuffers": "Are you sure you want to reset the cycle count tracking buffers? This will delete all accumulated cycle count history.",
-    "cycleCountBuffersReset": "Cycle count tracking buffers reset successfully.",
-    "cycleCountBuffersNotReset": "Could not reset cycle count tracking buffers."
+    "resetCycleCountQueues": "Reset cycle counts",
+    "confirmResetCycleCountQueues": "Are you sure you want to reset the cycle counts? This will delete all accumulated cycle count history.",
+    "cycleCountQueuesReset": "Cycle counts reset successfully.",
+    "cycleCountQueuesNotReset": "Could not reset cycle counts."
   },
   "eclipseLed": {
     "BlinkingRed": "blinking red",

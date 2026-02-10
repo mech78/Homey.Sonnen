@@ -1,221 +1,291 @@
 import { SonnenState } from '../domain/SonnenState';
 
-describe('SonnenState RingBuffer Serialization/Deserialization', () => {
-  describe('7-day buffer tests', () => {
-    it('should correctly deserialize wrapped buffer with realistic data', () => {
-      const serializedState = {
-        lastUpdate: "2026-02-08T23:59:59.000Z",
-        total_cycleCount: 430,
-        cycleCount7DayBuffer: {
-          buffer: [
-            { timestamp: "2026-02-05T04:29:38.000Z", cycleCount: 429 },
-            { timestamp: "2026-02-05T05:29:44.000Z", cycleCount: 429 },
-            { timestamp: "2026-02-06T04:32:01.000Z", cycleCount: 429 },
-            { timestamp: "2026-02-07T04:34:23.000Z", cycleCount: 430 },
-            { timestamp: "2026-02-08T04:36:45.000Z", cycleCount: 430 },
-            { timestamp: "2026-01-31T09:53:53.000Z", cycleCount: 427 },
-            { timestamp: "2026-02-01T04:55:53.000Z", cycleCount: 428 },
-            { timestamp: "2026-02-02T04:58:25.000Z", cycleCount: 428 },
-            { timestamp: "2026-02-03T05:01:03.000Z", cycleCount: 428 },
-            { timestamp: "2026-02-04T04:03:31.000Z", cycleCount: 429 }
-          ],
-          pos: 5,
-          size: 168
-        }
-      };
+describe('SonnenState', () => {
+  describe('Construction and Initialization', () => {
+    it('should create new SonnenState with empty buffers', () => {
+      const state = new SonnenState();
 
-      const state = SonnenState.fromObject(serializedState);
-      const buffer = state.cycleCount7DayBuffer;
-
-      expect(buffer).not.toBeNull();
-      if (buffer) {
-        const allSnapshots = buffer.toArray();
-
-        expect(allSnapshots.length).toBe(10);
-
-        for (let i = 1; i < allSnapshots.length; i++) {
-          expect(allSnapshots[i].timestamp.getTime()).toBeGreaterThanOrEqual(
-            allSnapshots[i - 1].timestamp.getTime()
-          );
-        }
-
-        expect(allSnapshots[0].timestamp.toISOString()).toBe("2026-01-31T09:53:53.000Z");
-        expect(allSnapshots[4].timestamp.toISOString()).toBe("2026-02-04T04:03:31.000Z");
-        expect(allSnapshots[5].timestamp.toISOString()).toBe("2026-02-05T04:29:38.000Z");
-        expect(allSnapshots[9].timestamp.toISOString()).toBe("2026-02-08T04:36:45.000Z");
-      }
+      expect(state.lastUpdate).toBeNull();
+      expect(state.total_cycleCount).toBe(0);
+      expect(state.cycleCount7DayQueue).not.toBeNull();
+      expect(state.cycleCount30DayQueue).not.toBeNull();
+      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
+      expect(state.cycleCount30DayQueue?.isEmpty()).toBe(true);
     });
 
-    it('should correctly deserialize buffer with pos reset to 0 after app restart', () => {
-      const serializedState = {
-        lastUpdate: "2026-02-09T12:28:27.000Z",
+    it('should initialize with provided state values', () => {
+      const timestamp = new Date('2026-02-09T12:00:00.000Z');
+      const initialState = {
+        lastUpdate: timestamp,
         total_cycleCount: 430,
-        cycleCount7DayBuffer: {
-          buffer: [
-            { timestamp: "2026-02-09T12:18:56.000Z", cycleCount: 430 },
-            { timestamp: "2026-02-05T05:29:44.000Z", cycleCount: 429 },
-            { timestamp: "2026-02-05T06:29:50.000Z", cycleCount: 429 },
-            { timestamp: "2026-02-06T04:32:01.000Z", cycleCount: 429 }
-          ],
-          pos: 1,
-          size: 168
-        }
+        todayMaxConsumption_Wh: 5000
       };
 
-      const state = SonnenState.fromObject(serializedState);
-      const buffer = state.cycleCount7DayBuffer;
+      const state = new SonnenState(initialState);
 
-      expect(buffer).not.toBeNull();
-      if (buffer) {
-        const allSnapshots = buffer.toArray();
-
-        expect(allSnapshots.length).toBe(4);
-
-        for (let i = 1; i < allSnapshots.length; i++) {
-          expect(allSnapshots[i].timestamp.getTime()).toBeGreaterThanOrEqual(
-            allSnapshots[i - 1].timestamp.getTime()
-          );
-        }
-
-        expect(allSnapshots[0].timestamp.toISOString()).toBe("2026-02-05T05:29:44.000Z");
-        expect(allSnapshots[3].timestamp.toISOString()).toBe("2026-02-09T12:18:56.000Z");
-      }
+      expect(state.lastUpdate).toEqual(timestamp);
+      expect(state.total_cycleCount).toBe(430);
+      expect(state.todayMaxConsumption_Wh).toBe(5000);
     });
 
-    it('should correctly deserialize buffer with pos = 0 (no wrap)', () => {
-      const serializedState = {
-        lastUpdate: "2026-02-09T12:28:27.000Z",
-        total_cycleCount: 430,
-        cycleCount7DayBuffer: {
-          buffer: [
-            { timestamp: "2026-02-07T12:35:10.000Z", cycleCount: 430 },
-            { timestamp: "2026-02-08T12:37:33.000Z", cycleCount: 430 },
-            { timestamp: "2026-02-09T12:18:56.000Z", cycleCount: 430 }
-          ],
-          pos: 0,
-          size: 168
-        }
-      };
+    it('should create new buffers if provided state has non-CircularFifoQueue buffers', () => {
+      const state = new SonnenState({
+        cycleCount7DayQueue: null,
+        cycleCount30DayQueue: null
+      });
 
-      const state = SonnenState.fromObject(serializedState);
-      const buffer = state.cycleCount7DayBuffer;
+      expect(state.cycleCount7DayQueue).not.toBeNull();
+      expect(state.cycleCount30DayQueue).not.toBeNull();
+      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
+      expect(state.cycleCount30DayQueue?.isEmpty()).toBe(true);
+    });
 
-      expect(buffer).not.toBeNull();
-      if (buffer) {
-        const allSnapshots = buffer.toArray();
+    it('should reuse existing CircularFifoQueue instances', () => {
+      const { CircularFifoQueue } = require('../domain/CircularFifoQueue');
+      const existingBuffer = new CircularFifoQueue(168);
+      existingBuffer.add({ timestamp: new Date(), cycleCount: 100 });
 
-        expect(allSnapshots.length).toBe(3);
+      const state = new SonnenState({
+        cycleCount7DayQueue: existingBuffer
+      });
 
-        for (let i = 1; i < allSnapshots.length; i++) {
-          expect(allSnapshots[i].timestamp.getTime()).toBeGreaterThanOrEqual(
-            allSnapshots[i - 1].timestamp.getTime()
-          );
-        }
-
-        expect(allSnapshots[0].timestamp.toISOString()).toBe("2026-02-07T12:35:10.000Z");
-        expect(allSnapshots[2].timestamp.toISOString()).toBe("2026-02-09T12:18:56.000Z");
-      }
+      expect(state.cycleCount7DayQueue).toBe(existingBuffer);
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(1);
     });
   });
 
-  describe('30-day buffer tests', () => {
-    it('should correctly deserialize wrapped 30-day buffer', () => {
-      const serializedState = {
+  describe('fromObject Deserialization', () => {
+    it('should create state from plain object with Date string', () => {
+      const plainObj = {
+        lastUpdate: '2026-02-09T12:00:00.000Z',
         total_cycleCount: 430,
-        cycleCount30DayBuffer: {
+        totalConsumption_Wh: 10000
+      };
+
+      const state = SonnenState.fromObject(plainObj);
+
+      expect(state.lastUpdate).toEqual(new Date('2026-02-09T12:00:00.000Z'));
+      expect(state.total_cycleCount).toBe(430);
+      expect(state.totalConsumption_Wh).toBe(10000);
+    });
+
+    it('should create empty state from null or undefined', () => {
+      const state1 = SonnenState.fromObject(null);
+      const state2 = SonnenState.fromObject(undefined);
+
+      expect(state1.cycleCount7DayQueue).not.toBeNull();
+      expect(state2.cycleCount30DayQueue).not.toBeNull();
+    });
+
+    it('should handle null buffers by creating new ones', () => {
+      const state = SonnenState.fromObject({
+        cycleCount7DayQueue: null,
+        cycleCount30DayQueue: null
+      });
+
+      expect(state.cycleCount7DayQueue).not.toBeNull();
+      expect(state.cycleCount30DayQueue).not.toBeNull();
+      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
+    });
+
+    it('should deserialize CircularFifoQueue with CycleCountSnapshot', () => {
+      const plainObj = {
+        cycleCount7DayQueue: {
+          capacity: 3,
           buffer: [
-            { timestamp: "2026-02-09T04:36:00.000Z", cycleCount: 431 },
-            { timestamp: "2026-02-10T04:36:00.000Z", cycleCount: 432 },
-            { timestamp: "2026-02-11T04:36:00.000Z", cycleCount: 433 },
-            { timestamp: "2026-01-31T04:36:00.000Z", cycleCount: 427 },
-            { timestamp: "2026-02-01T04:36:00.000Z", cycleCount: 428 },
-            { timestamp: "2026-02-02T04:36:00.000Z", cycleCount: 428 },
-            { timestamp: "2026-02-03T04:36:00.000Z", cycleCount: 428 }
+            { timestamp: '2026-02-09T12:00:00.000Z', cycleCount: 428 },
+            { timestamp: '2026-02-09T13:00:00.000Z', cycleCount: 429 },
+            null
           ],
-          pos: 3,
-          size: 720
+          head: 0,
+          tail: 2,
+          count: 2
         }
       };
 
-      const state = SonnenState.fromObject(serializedState);
-      const buffer = state.cycleCount30DayBuffer;
+      const state = SonnenState.fromObject(plainObj);
 
-      expect(buffer).not.toBeNull();
-      if (buffer) {
-        const allSnapshots = buffer.toArray();
+      expect(state.cycleCount7DayQueue).not.toBeNull();
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(2);
+      const items = state.cycleCount7DayQueue?.toArray();
+      expect(items?.[0].timestamp).toEqual(new Date('2026-02-09T12:00:00.000Z'));
+      expect(items?.[0].cycleCount).toBe(428);
+    });
 
-        expect(allSnapshots.length).toBe(7);
-
-        for (let i = 1; i < allSnapshots.length; i++) {
-          expect(allSnapshots[i].timestamp.getTime()).toBeGreaterThanOrEqual(
-            allSnapshots[i - 1].timestamp.getTime()
-          );
+    it('should handle invalid date strings in buffer gracefully', () => {
+      const plainObj = {
+        cycleCount7DayQueue: {
+          capacity: 3,
+          buffer: [
+            { timestamp: 'invalid-date', cycleCount: 428 },
+            { timestamp: '2026-02-09T13:00:00.000Z', cycleCount: 429 },
+            null
+          ],
+          head: 0,
+          tail: 2,
+          count: 2
         }
+      };
 
-        expect(allSnapshots[0].timestamp.toISOString()).toBe("2026-01-31T04:36:00.000Z");
-        expect(allSnapshots[2].timestamp.toISOString()).toBe("2026-02-02T04:36:00.000Z");
-        expect(allSnapshots[3].timestamp.toISOString()).toBe("2026-02-03T04:36:00.000Z");
-        expect(allSnapshots[6].timestamp.toISOString()).toBe("2026-02-11T04:36:00.000Z");
-      }
+      const state = SonnenState.fromObject(plainObj);
+
+      expect(state.cycleCount7DayQueue).not.toBeNull();
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(1);
+    });
+
+    it('should filter out unknown properties', () => {
+      const plainObj: any = {
+        lastUpdate: '2026-02-09T12:00:00.000Z',
+        total_cycleCount: 430,
+        unknownProperty: 'should be ignored',
+        anotherUnknown: 123
+      };
+
+      const state = SonnenState.fromObject(plainObj);
+
+      expect(state.total_cycleCount).toBe(430);
+      expect((state as any).unknownProperty).toBeUndefined();
+      expect((state as any).anotherUnknown).toBeUndefined();
+    });
+
+    it('should not restore lastBatteryDataUpdate (transient property)', () => {
+      const plainObj: any = {
+        lastBatteryDataUpdate: '2026-02-09T12:00:00.000Z'
+      };
+
+      const state = SonnenState.fromObject(plainObj);
+
+      expect(state.lastBatteryDataUpdate).toBeNull();
     });
   });
 
-  describe('Edge cases', () => {
-    it('should handle null or invalid buffer data', () => {
-      const state1 = SonnenState.fromObject({ cycleCount7DayBuffer: null });
-      expect(state1.cycleCount7DayBuffer).not.toBeNull();
+  describe('addCycleCountSnapshot', () => {
+    it('should add snapshot to both buffers', () => {
+      const state = new SonnenState();
+      const timestamp = new Date('2026-02-09T12:00:00.000Z');
 
-      const state2 = SonnenState.fromObject({ cycleCount7DayBuffer: {} });
-      expect(state2.cycleCount7DayBuffer).not.toBeNull();
+      state.addCycleCountSnapshot(timestamp, 430);
 
-      const state3 = SonnenState.fromObject({ cycleCount7DayBuffer: { buffer: [], pos: 0, size: 168 } });
-      expect(state3.cycleCount7DayBuffer).not.toBeNull();
-      if (state3.cycleCount7DayBuffer) {
-        expect(state3.cycleCount7DayBuffer.getBufferLength()).toBe(0);
-      }
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(1);
+      expect(state.cycleCount30DayQueue?.getLength()).toBe(1);
+      expect(state.cycleCount7DayQueue?.getFirst()).toEqual({ timestamp, cycleCount: 430 });
     });
 
-    it('should handle invalid timestamps gracefully', () => {
-      const serializedState = {
-        cycleCount7DayBuffer: {
+    it('should add multiple snapshots sequentially', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 5; i++) {
+        const timestamp = new Date(`2026-02-09T${12 + i}:00:00.000Z`);
+        state.addCycleCountSnapshot(timestamp, 428 + i);
+      }
+
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(5);
+      expect(state.cycleCount30DayQueue?.getLength()).toBe(5);
+    });
+  });
+
+  describe('calculateAverageCycleCountRate', () => {
+    it('should return null for empty buffer', () => {
+      const state = new SonnenState();
+
+      expect(state.get7DayAverageCycleCountRate()).toBeNull();
+      expect(state.get30DayAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should return null for buffer with less than 2 snapshots', () => {
+      const state = new SonnenState();
+      state.addCycleCountSnapshot(new Date('2026-02-09T12:00:00.000Z'), 430);
+
+      expect(state.get7DayAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should calculate correct average rate', () => {
+      const state = new SonnenState();
+      const startTime = new Date('2026-02-01T00:00:00.000Z');
+      const endTime = new Date('2026-02-08T00:00:00.000Z');
+
+      state.addCycleCountSnapshot(startTime, 400);
+      state.addCycleCountSnapshot(endTime, 420);
+
+      const rate = state.get7DayAverageCycleCountRate();
+
+      expect(rate).not.toBeNull();
+      expect(rate).toBeCloseTo(2.857, 2);
+    });
+
+    it('should return null if oldest snapshot has invalid date', () => {
+      const state = SonnenState.fromObject({
+        cycleCount7DayQueue: {
+          capacity: 2,
           buffer: [
-            { timestamp: "2026-02-09T12:18:56.000Z", cycleCount: 430 },
-            { timestamp: "invalid-date", cycleCount: 429 }
+            { timestamp: 'invalid-date', cycleCount: 400 },
+            { timestamp: '2026-02-08T00:00:00.000Z', cycleCount: 420 }
           ],
-          pos: 0,
-          size: 168
+          head: 0,
+          tail: 0,
+          count: 0
         }
-      };
+      });
 
-      const state = SonnenState.fromObject(serializedState);
-      const buffer = state.cycleCount7DayBuffer;
+      expect(state.get7DayAverageCycleCountRate()).toBeNull();
+    });
+  });
 
-      expect(buffer).not.toBeNull();
-      if (buffer) {
-        expect(buffer.getBufferLength()).toBe(1);
-        const snapshot = buffer.getFirst();
-        expect(snapshot?.timestamp.toISOString()).toBe("2026-02-09T12:18:56.000Z");
-      }
+  describe('resetCycleCountQueues', () => {
+    it('should clear both buffers', () => {
+      const state = new SonnenState();
+      state.addCycleCountSnapshot(new Date('2026-02-09T12:00:00.000Z'), 430);
+      state.addCycleCountSnapshot(new Date('2026-02-09T13:00:00.000Z'), 431);
+
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(2);
+
+      state.resetCycleCountQueues();
+
+      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
+      expect(state.cycleCount30DayQueue?.isEmpty()).toBe(true);
     });
 
-    it('should preserve chronological order after adding snapshots', () => {
-      const originalDate = new Date("2026-02-01T00:00:00.000Z");
+    it('should create new buffer instances', () => {
+      const state = new SonnenState();
+      state.addCycleCountSnapshot(new Date('2026-02-09T12:00:00.000Z'), 430);
 
-      const initialState = new SonnenState();
-      for (let i = 0; i < 10; i++) {
-        const date = new Date(originalDate.getTime() + i * 3600000);
-        initialState.addCycleCountSnapshot(date, 400 + i);
+      const oldBuffer7Day = state.cycleCount7DayQueue;
+      const oldBuffer30Day = state.cycleCount30DayQueue;
+
+      state.resetCycleCountQueues();
+
+      expect(state.cycleCount7DayQueue).not.toBe(oldBuffer7Day);
+      expect(state.cycleCount30DayQueue).not.toBe(oldBuffer30Day);
+    });
+  });
+
+  describe('updateState', () => {
+    it('should update multiple properties', () => {
+      const state = new SonnenState();
+
+      state.updateState({
+        total_cycleCount: 500,
+        totalConsumption_Wh: 25000,
+        todayMaxConsumption_Wh: 3000
+      });
+
+      expect(state.total_cycleCount).toBe(500);
+      expect(state.totalConsumption_Wh).toBe(25000);
+      expect(state.todayMaxConsumption_Wh).toBe(3000);
+    });
+  });
+
+  describe('Buffer Overflow', () => {
+    it('should handle overflow in 7-day buffer correctly', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 170; i++) {
+        const timestamp = new Date(`2026-02-${(i % 28 + 1).toString().padStart(2, '0')}T00:00:00.000Z`);
+        state.addCycleCountSnapshot(timestamp, i);
       }
 
-      const allSnapshots = initialState.cycleCount7DayBuffer?.toArray();
-      expect(allSnapshots).toBeDefined();
-      expect(allSnapshots?.length).toBe(10);
-
-      for (let i = 1; i < (allSnapshots?.length || 0); i++) {
-        expect(allSnapshots![i].timestamp.getTime()).toBeGreaterThanOrEqual(
-          allSnapshots![i - 1].timestamp.getTime()
-        );
-      }
+      expect(state.cycleCount7DayQueue?.getLength()).toBe(168);
+      expect(state.cycleCount30DayQueue?.getLength()).toBe(170);
     });
   });
 });

@@ -18,10 +18,10 @@
     "deviceStateNotSaved": "Kunne ikke gemme enhedsstatus.",
     "settings.deviceState": "Enhedsstatus (JSON)",
     "settings.deviceStateHint": "Viser den aktuelle status for enhederne.",
-"resetCycleCountBuffers": "Nulstil cyklusantal sporing",
-    "confirmResetCycleCountBuffers": "Er du sikker på, at du vil nulstille bufferne for cyklusantal sporing? Dette sletter alt akkumuleret cykusantal historik.",
-    "cycleCountBuffersReset": "Bufferne for cykusantal sporing nulstillet med succes.",
-    "cycleCountBuffersNotReset": "Kunne ikke nulstille bufferne for cykusantal sporing."
+    "resetCycleCountQueues": "Nulstil cyklustællinger",
+    "confirmResetCycleCountQueues": "Er du sikker på, at du vil nulstille cyklustællingerne? Dette sletter al akkumuleret cyklus-tællingshistorik.",
+    "cycleCountQueuesReset": "Cyklustællinger nulstillet med succes.",
+    "cycleCountQueuesNotReset": "Kunne ikke nulstille cyklustællinger."
   },
   "eclipseLed": {
     "BlinkingRed": "blinkende rød",

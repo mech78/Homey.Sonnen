@@ -50,8 +50,8 @@
     <button id="saveDeviceState" class="homey-button-secondary-full" data-i18n="settings.saveDeviceState">Save Device
         State</button>
 
-    <button id="resetCycleCountBuffers" class="homey-button-secondary-full"
-        data-i18n="settings.resetCycleCountBuffers">Reset Cycle Count Buffers</button>
+    <button id="resetCycleCountQueues" class="homey-button-secondary-full"
+        data-i18n="settings.resetCycleCountQueues">Reset Cycle Count Queues</button>
 
     <script type="text/javascript">
         function onHomeyReady(Homey) {
@@ -62,7 +62,7 @@
             const textAreaDeviceStateValueElement = document.getElementById("textAreaDeviceStateValue");
             const saveElement = document.getElementById("save");
             const saveDeviceStateElement = document.getElementById("saveDeviceState");
-            const resetCycleCountBuffersElement = document.getElementById("resetCycleCountBuffers");
+            const resetCycleCountQueuesElement = document.getElementById("resetCycleCountQueues");
 
             const refreshDeviceStateDisplay = function() {
                 Homey.get("deviceState", function (err, deviceState) {
@@ -122,11 +122,11 @@
                 });
             });
 
-            resetCycleCountBuffersElement.addEventListener("click", function (e) {
-                Homey.api("POST", "/reset-cycle-count-buffers", null, function (err, response) {
-                    if (err) { return Homey.alert(Homey.__("settings.cycleCountBuffersNotReset")); }
+            resetCycleCountQueuesElement.addEventListener("click", function (e) {
+                Homey.api("POST", "/reset-cycle-count-queues", null, function (err, response) {
+                    if (err) { return Homey.alert(Homey.__("settings.cycleCountQueuesNotReset")); }
                     if (response["reset"]) {
-                        Homey.alert(Homey.__("settings.cycleCountBuffersReset"));
+                        Homey.alert(Homey.__("settings.cycleCountQueuesReset"));
                         refreshDeviceStateDisplay();
                     } else {
                         Homey.alert(Homey.__("settings.cycleCountBuffersNotReset"));

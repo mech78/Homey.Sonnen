@@ -1,6 +1,6 @@
-import { RingBuffer } from 'ring-buffer-ts';
+import { CircularFifoQueue } from './CircularFifoQueue';
 
-interface CycleCountSnapshot {
+export interface CycleCountSnapshot {
   timestamp: Date;
   cycleCount: number;
 }
@@ -26,8 +26,8 @@ export class SonnenState {
   todayMaxGridConsumption_Wh: number;
   todayMaxProduction_Wh: number;
   total_cycleCount: number;
-  cycleCount7DayBuffer : RingBuffer<CycleCountSnapshot> | null;
-  cycleCount30DayBuffer : RingBuffer<CycleCountSnapshot> | null;
+  cycleCount7DayQueue: CircularFifoQueue<CycleCountSnapshot> | null;
+  cycleCount30DayQueue: CircularFifoQueue<CycleCountSnapshot> | null;
 
   constructor(initialState?: Partial<SonnenState>) {
     this.lastUpdate = initialState?.lastUpdate || null;
@@ -50,15 +50,15 @@ export class SonnenState {
     this.todayMaxGridConsumption_Wh = initialState?.todayMaxGridConsumption_Wh || 0;
     this.todayMaxProduction_Wh = initialState?.todayMaxProduction_Wh || 0;
     this.total_cycleCount = initialState?.total_cycleCount || 0;
-    this.cycleCount7DayBuffer = (initialState?.cycleCount7DayBuffer instanceof RingBuffer) ? initialState?.cycleCount7DayBuffer : SonnenState.createCycleCount7DayBuffer();
-    this.cycleCount30DayBuffer = (initialState?.cycleCount30DayBuffer instanceof RingBuffer) ? initialState?.cycleCount30DayBuffer : SonnenState.createCycleCount30DayBuffer();
+    this.cycleCount7DayQueue = (initialState?.cycleCount7DayQueue instanceof CircularFifoQueue) ? initialState?.cycleCount7DayQueue : SonnenState.createCycleCount7DayQueue();
+    this.cycleCount30DayQueue = (initialState?.cycleCount30DayQueue instanceof CircularFifoQueue) ? initialState?.cycleCount30DayQueue : SonnenState.createCycleCount30DayQueue();
   }
 
-   /**
-    * Create a SonnenState instance from a plain object, properly deserializing Date objects and RingBuffer instances
-    * @param deserializedState Plain object with potential string dates and serialized RingBuffer data
-    * @returns Properly deserialized SonnenState instance
-    */
+  /**
+   * Create a SonnenState instance from a plain object, properly deserializing Date objects and CircularFifoQueue instances
+   * @param deserializedState Plain object with potential string dates and serialized CircularFifoQueue data
+   * @returns Properly deserialized SonnenState instance
+   */
   static fromObject(deserializedState: any): SonnenState {
     if (!deserializedState) {
       return new SonnenState();
@@ -72,8 +72,8 @@ export class SonnenState {
 
     deserializedState.lastBatteryDataUpdate = null; // transient property, do not restore
 
-    deserializedState.cycleCount7DayBuffer = SonnenState.reconstructRingBuffer(deserializedState.cycleCount7DayBuffer);
-    deserializedState.cycleCount30DayBuffer = SonnenState.reconstructRingBuffer(deserializedState.cycleCount30DayBuffer);
+    deserializedState.cycleCount7DayQueue = SonnenState.reconstructQueue(deserializedState.cycleCount7DayQueue);
+    deserializedState.cycleCount30DayQueue = SonnenState.reconstructQueue(deserializedState.cycleCount30DayQueue);
 
     return new SonnenState(deserializedState);
   }
@@ -88,37 +88,44 @@ export class SonnenState {
     return filteredObj;
   }
 
-  /**
-    * @param serializedBuffer Serialized RingBuffer data
-    * @returns Reconstructed RingBuffer instance or null if reconstruction fails
+/**
+    * @param serializedQueue Serialized CircularFifoQueue data
+    * @returns Reconstructed CircularFifoQueue instance or null if reconstruction fails
     */
-  private static reconstructRingBuffer(serializedBuffer: any): RingBuffer<CycleCountSnapshot> | null {
-    if (!serializedBuffer || typeof serializedBuffer !== 'object' ||
-      !serializedBuffer.buffer || !Array.isArray(serializedBuffer.buffer) ||
-      typeof serializedBuffer.size !== 'number') {
-      return null;
-    }
-
-    const buffer = new RingBuffer<CycleCountSnapshot>(serializedBuffer.size);
-    const pos = typeof serializedBuffer.pos === 'number' ? serializedBuffer.pos : 0;
-    const buf = serializedBuffer.buffer;
-
-    for (let i = pos; i < buf.length; i++) {
-      SonnenState.addSnapshot(buf[i], buffer);
-    }
-    for (let i = 0; i < pos; i++) {
-      SonnenState.addSnapshot(buf[i], buffer);
-    }
-
-    return buffer;
-  }
-
-  private static addSnapshot(snapshot: any, buffer: RingBuffer<CycleCountSnapshot>): void {
-    if (snapshot && typeof snapshot.timestamp === 'string' && typeof snapshot.cycleCount === 'number') {
-      const timestamp = new Date(snapshot.timestamp);
-      if (!isNaN(timestamp.getTime())) {
-        buffer.add({ timestamp, cycleCount: snapshot.cycleCount });
+  private static reconstructQueue(serializedQueue: any): CircularFifoQueue<CycleCountSnapshot> | null {
+    try {
+      if (!serializedQueue || typeof serializedQueue !== 'object') {
+        return null;
       }
+
+      const capacity = serializedQueue.capacity;
+      if (typeof capacity !== 'number' || capacity < 0) {
+        return null;
+      }
+
+      if (!Array.isArray(serializedQueue.buffer)) {
+        return null;
+      }
+
+      const queue = new CircularFifoQueue<CycleCountSnapshot>(capacity);
+      const bufferItems = serializedQueue.buffer;
+
+      for (const item of bufferItems) {
+        if (item && 
+            typeof item === 'object' && 
+            typeof item.timestamp === 'string' && 
+            typeof item.cycleCount === 'number') {
+          
+          const timestamp = new Date(item.timestamp);
+          if (!isNaN(timestamp.getTime())) {
+            queue.add({ timestamp, cycleCount: item.cycleCount });
+          }
+        }
+      }
+
+      return queue;
+    } catch {
+      return null;
     }
   }
 
@@ -128,25 +135,25 @@ export class SonnenState {
 
   addCycleCountSnapshot(timestamp: Date, cycleCount: number): void {
     const snapshot: CycleCountSnapshot = { timestamp, cycleCount };
-    this.cycleCount7DayBuffer?.add(snapshot);
-    this.cycleCount30DayBuffer?.add(snapshot);
+    this.cycleCount7DayQueue?.add(snapshot);
+    this.cycleCount30DayQueue?.add(snapshot);
   }
 
   get7DayAverageCycleCountRate(): number | null {
-    return this.calculateAverageCycleCountRate(this.cycleCount7DayBuffer);
+    return this.calculateAverageCycleCountRate(this.cycleCount7DayQueue);
   }
 
   get30DayAverageCycleCountRate(): number | null {
-    return this.calculateAverageCycleCountRate(this.cycleCount30DayBuffer);
+    return this.calculateAverageCycleCountRate(this.cycleCount30DayQueue);
   }
 
-  private calculateAverageCycleCountRate(buffer: RingBuffer<CycleCountSnapshot>|null): number | null {
-    if (!buffer || buffer.getBufferLength() < 2) {
+  private calculateAverageCycleCountRate(queue: CircularFifoQueue<CycleCountSnapshot> | null): number | null {
+    if (!queue || queue.getLength() < 2) {
       return null;
     }
 
-    const oldestSnapshot = buffer.getFirst();
-    const newestSnapshot = buffer.getLast();
+    const oldestSnapshot = queue.getFirst();
+    const newestSnapshot = queue.getLast();
 
     if (!oldestSnapshot || !newestSnapshot) {
       return null;
@@ -164,16 +171,16 @@ export class SonnenState {
     return cycleDiff / timeDiffDays;
   }
 
-  resetCycleCountBuffers(): void {
-    this.cycleCount7DayBuffer = SonnenState.createCycleCount7DayBuffer();
-    this.cycleCount30DayBuffer = SonnenState.createCycleCount30DayBuffer();
+  resetCycleCountQueues(): void {
+    this.cycleCount7DayQueue = SonnenState.createCycleCount7DayQueue();
+    this.cycleCount30DayQueue = SonnenState.createCycleCount30DayQueue();
   }
 
-  private static createCycleCount7DayBuffer(): RingBuffer<CycleCountSnapshot> {
-    return new RingBuffer<CycleCountSnapshot>(168);
+  private static createCycleCount7DayQueue(): CircularFifoQueue<CycleCountSnapshot> {
+    return new CircularFifoQueue<CycleCountSnapshot>(168);
   }
 
-  private static createCycleCount30DayBuffer(): RingBuffer<CycleCountSnapshot> {
-    return new RingBuffer<CycleCountSnapshot>(720);
+  private static createCycleCount30DayQueue(): CircularFifoQueue<CycleCountSnapshot> {
+    return new CircularFifoQueue<CycleCountSnapshot>(720);
   }
 }

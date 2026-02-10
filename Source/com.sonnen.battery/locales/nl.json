@@ -18,10 +18,10 @@
     "deviceStateNotSaved": "Kon apparaatstatus niet opslaan.",
     "settings.deviceState": "Apparaatstatus (JSON)",
     "settings.deviceStateHint": "Toont de huidige status van de apparaten.",
-"resetCycleCountBuffers": "Cyclus-telling buffers resetten",
-    "confirmResetCycleCountBuffers": "Weet u zeker dat u de cyclus-telling buffers wilt resetten? Dit verwijdert alle opgeslagen cyclus-telling als geschiedenis.",
-    "cycleCountBuffersReset": "Cyclus-telling buffers succesvol gereset.",
-    "cycleCountBuffersNotReset": "Kon cyclus-telling buffers niet resetten."
+    "resetCycleCountQueues": "Cyclus-tellingen resetten",
+    "confirmResetCycleCountQueues": "Weet u zeker dat u de cyclus-tellingen wilt resetten? Dit verwijdert alle opgeslagen cyclus-telling historie.",
+    "cycleCountQueuesReset": "Cyclus-tellingen succesvol gereset.",
+    "cycleCountQueuesNotReset": "Kon cyclus-tellingen niet resetten."
   },
   "eclipseLed": {
     "BlinkingRed": "knipperend rood",

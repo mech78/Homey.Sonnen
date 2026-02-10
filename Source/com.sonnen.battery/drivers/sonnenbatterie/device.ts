@@ -338,8 +338,8 @@ export class BatteryDevice extends SonnenDevice {
         todayMaxGridConsumption_Wh,
         todayMaxProduction_Wh,
         total_cycleCount: batteryJson ? batteryJson.cyclecount : lastState.total_cycleCount,
-        cycleCount7DayBuffer: lastState.cycleCount7DayBuffer,
-        cycleCount30DayBuffer: lastState.cycleCount30DayBuffer,
+        cycleCount7DayQueue: lastState.cycleCount7DayQueue,
+        cycleCount30DayQueue: lastState.cycleCount30DayQueue,
       });
 
       this.log("Emitting data update for other devices...");
@@ -480,8 +480,8 @@ export class BatteryDevice extends SonnenDevice {
     return this.state.lastUpdate;
   }
 
-  public resetCycleCountBuffers(): Date | null {
-    this.state.resetCycleCountBuffers();
+  public resetCycleCountQueues(): Date | null {
+    this.state.resetCycleCountQueues();
     this.saveDeviceState();
     return this.state.lastUpdate;
   }

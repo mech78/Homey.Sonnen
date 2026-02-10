@@ -18,10 +18,10 @@
     "deviceStateNotSaved": "Gerätezustand konnte nicht gespeichert werden.",
     "settings.deviceState": "Gerätezustand (JSON)",
     "settings.deviceStateHint": "Zeigt den aktuellen Gerätezustand an.",
-"resetCycleCountBuffers": "Zyklenzählung zurücksetzen",
-    "confirmResetCycleCountBuffers": "Möchten Sie die Zyklenzählungs-Buffer wirklich zurücksetzen? Dies löscht die gesamte Zyklenzählungs-Historie.",
-    "cycleCountBuffersReset": "Zyklenzählungs-Buffer erfolgreich zurückgesetzt.",
-    "cycleCountBuffersNotReset": "Zyklenzählungs-Buffer konnten nicht zurückgesetzt werden."
+    "resetCycleCountQueues": "Zyklenzählung zurücksetzen",
+    "confirmResetCycleCountQueues": "Zyklenzählung wirklich zurücksetzen? Dies löscht die gesamte Zyklenzählungs-Historie.",
+    "cycleCountQueuesReset": "Zyklenzählung erfolgreich zurückgesetzt.",
+    "cycleCountQueuesNotReset": "Zyklenzählung konnte nicht zurückgesetzt werden."
   },
   "eclipseLed": {
     "BlinkingRed": "blinkt rot",
