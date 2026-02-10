@@ -8,11 +8,13 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/Source/com.sonnen.battery" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
     # Auto-rebase PRs to minimize conflicts
     rebase-strategy: "auto"
     # Limit concurrent PRs to prevent overwhelming
     open-pull-requests-limit: 10
+    # Cooldown period for supply chain attack protection
+    cooldown: 7d
     groups:
       minor-and-patch-dependencies:
         update-types:
