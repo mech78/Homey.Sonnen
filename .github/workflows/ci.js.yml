@@ -37,6 +37,8 @@ jobs:
     - run: npm run build --if-present
     - name: Run linter
       run: npm run lint
+    - name: Run tests
+      run: npm test
     - name: Install Homey CLI
       run: npm -g install homey
     - name: App needs to pass verified level validation
