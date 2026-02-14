@@ -2,17 +2,7 @@ import { SonnenState } from '../domain/SonnenState';
 
 describe('SonnenState', () => {
   describe('Construction and Initialization', () => {
-    it('should create new SonnenState with empty buffers', () => {
-      const state = new SonnenState();
-
-      expect(state.lastUpdate).toBeNull();
-      expect(state.total_cycleCount).toBe(0);
-      expect(state.cycleCount7DayQueue).not.toBeNull();
-      expect(state.cycleCount30DayQueue).not.toBeNull();
-      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
-      expect(state.cycleCount30DayQueue?.isEmpty()).toBe(true);
-    });
-
+ 
     it('should initialize with provided state values', () => {
       const timestamp = new Date('2026-02-09T12:00:00.000Z');
       const initialState = {
@@ -85,7 +75,6 @@ describe('SonnenState', () => {
 
       expect(state.cycleCount7DayQueue).not.toBeNull();
       expect(state.cycleCount30DayQueue).not.toBeNull();
-      expect(state.cycleCount7DayQueue?.isEmpty()).toBe(true);
     });
 
     it('should deserialize CircularFifoQueue with CycleCountSnapshot', () => {

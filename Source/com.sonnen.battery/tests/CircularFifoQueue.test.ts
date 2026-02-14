@@ -376,6 +376,120 @@ describe('CircularFifoQueue<ComplexItem | null> - Nullable Types', () => {
   });
 });
 
+describe('CircularFifoQueue - JSON Serialization Round-trip with Wrap-around', () => {
+  it('should serialize and deserialize queue with wrap-around (numbers)', () => {
+    const original = new CircularFifoQueue<number>(3);
+    original.add(1);
+    original.add(2);
+    original.add(3);
+    original.add(4);
+    original.add(5);
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<number>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    expect(restored.getCapacity()).toBe(original.getCapacity());
+    expect(restored.getLength()).toBe(original.getLength());
+    expect(restored.toArray()).toEqual(original.toArray());
+    expect(restored.getFirst()).toBe(original.getFirst());
+    expect(restored.getLast()).toBe(original.getLast());
+  });
+
+  it('should serialize and deserialize queue with multiple wrap-arounds (numbers)', () => {
+    const original = new CircularFifoQueue<number>(3);
+    for (let i = 1; i <= 10; i++) {
+      original.add(i);
+    }
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<number>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    expect(restored.getCapacity()).toBe(original.getCapacity());
+    expect(restored.getLength()).toBe(original.getLength());
+    expect(restored.toArray()).toEqual(original.toArray());
+    expect(restored.getFirst()).toBe(8);
+    expect(restored.getLast()).toBe(10);
+  });
+
+  it('should serialize and deserialize queue with wrap-around (complex objects)', () => {
+    interface TestItem {
+      id: number;
+      label: string;
+      active: boolean;
+    }
+
+    const original = new CircularFifoQueue<TestItem>(2);
+    original.add({ id: 1, label: 'First', active: true });
+    original.add({ id: 2, label: 'Second', active: false });
+    original.add({ id: 3, label: 'Third', active: true });
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<TestItem>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    expect(restored.getCapacity()).toBe(original.getCapacity());
+    expect(restored.getLength()).toBe(original.getLength());
+    expect(restored.toArray()).toEqual(original.toArray());
+    expect(restored.getFirst()).toEqual({ id: 2, label: 'Second', active: false });
+    expect(restored.getLast()).toEqual({ id: 3, label: 'Third', active: true });
+  });
+
+  it('should serialize and deserialize empty queue', () => {
+    const original = new CircularFifoQueue<number>(5);
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<number>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    expect(restored.getCapacity()).toBe(original.getCapacity());
+    expect(restored.getLength()).toBe(original.getLength());
+    expect(restored.toArray()).toEqual(original.toArray());
+    expect(restored.isEmpty()).toBe(true);
+  });
+
+  it('should serialize and deserialize queue at full capacity without wrap-around', () => {
+    const original = new CircularFifoQueue<number>(3);
+    original.add(1);
+    original.add(2);
+    original.add(3);
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<number>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    expect(restored.getCapacity()).toBe(original.getCapacity());
+    expect(restored.getLength()).toBe(original.getLength());
+    expect(restored.toArray()).toEqual(original.toArray());
+    expect(restored.toArray()).toEqual([1, 2, 3]);
+  });
+
+  it('should preserve internal state after wrap-around serialization', () => {
+    const original = new CircularFifoQueue<number>(3);
+    original.add(10);
+    original.add(20);
+    original.add(30);
+    original.add(40);
+
+    const json = JSON.stringify(original);
+    const parsed = JSON.parse(json);
+    const restored = new CircularFifoQueue<number>(parsed.capacity);
+    restored.restoreFromSerialized(parsed.buffer, parsed.head, parsed.tail, parsed.count);
+
+    const originalJson = JSON.parse(JSON.stringify(original));
+    expect(parsed.head).toBe(originalJson.head);
+    expect(parsed.tail).toBe(originalJson.tail);
+    expect(parsed.count).toBe(originalJson.count);
+    expect(parsed.buffer).toEqual(originalJson.buffer);
+  });
+});
+
 describe('CircularFifoQueue - Edge Cases', () => {
   it('should handle adding to zero-capacity queue', () => {
     const queue = new CircularFifoQueue<number>(0);
