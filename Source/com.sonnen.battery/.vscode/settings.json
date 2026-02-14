@@ -1,0 +1,8 @@
+{
+  "testing.automaticallyOpenPeekView": "never",
+  "testing.autoRun": "off",
+  "testExplorer.showOnRun": true,
+  "testing.defaultGutterClickAction": "debug",
+  "jest.jestCommandLine": "npm test --",
+  "jest.pathToConfig": "<rootDir>/jest.config.js"
+}
