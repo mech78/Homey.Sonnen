@@ -181,4 +181,15 @@ export class SonnenState {
   private static createCycleCount30DayQueue(): CircularFifoQueue<CycleCountSnapshot> {
     return new CircularFifoQueue<CycleCountSnapshot>(720);
   }
+
+  toLog(): string {
+    return JSON.stringify(this, SonnenState.logReplacer, 2);
+  }
+
+  private static logReplacer(_key: string, value: any): any {
+    if (value instanceof CircularFifoQueue) {
+      return value.toLog();
+    }
+    return value;
+  }
 }

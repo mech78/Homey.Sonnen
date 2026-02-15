@@ -31,7 +31,7 @@ export class BatteryDevice extends SonnenDevice {
     }
     this.state.updateState(storedState); // apply stored state to current state
     this.state.updateState({ lastUpdate: null });
-    this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
+    this.log('Retrieved stored state: ' + this.state.toLog());
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
@@ -476,7 +476,7 @@ export class BatteryDevice extends SonnenDevice {
 
   public saveDeviceState(): Date | null {
     this.homey.settings.set('deviceState', this.state);
-    this.log('Saved deviceState to settings: ' + JSON.stringify(this.state, null, 2));
+    this.log('Saved deviceState to settings: ' + this.state.toLog());
     return this.state.lastUpdate;
   }
 

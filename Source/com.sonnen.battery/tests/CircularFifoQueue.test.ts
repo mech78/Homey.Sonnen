@@ -514,3 +514,120 @@ describe('CircularFifoQueue - Edge Cases', () => {
     expect(() => queue.clear()).not.toThrow();
   });
 });
+
+describe('CircularFifoQueue - toLog() Compact Logging', () => {
+  it('should return compact object representation for empty queue', () => {
+    const queue = new CircularFifoQueue<number>(5);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 5,
+      size: 0,
+      head: 0,
+      tail: 0,
+      first: undefined,
+      last: undefined
+    });
+  });
+
+  it('should return compact object representation for single element', () => {
+    const queue = new CircularFifoQueue<number>(5);
+    queue.add(42);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 5,
+      size: 1,
+      head: 0,
+      tail: 1,
+      first: 42,
+      last: 42
+    });
+  });
+
+  it('should return compact object representation for multiple elements', () => {
+    const queue = new CircularFifoQueue<number>(5);
+    queue.add(10);
+    queue.add(20);
+    queue.add(30);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 5,
+      size: 3,
+      head: 0,
+      tail: 3,
+      first: 10,
+      last: 30
+    });
+  });
+
+  it('should handle wrap-around in compact log', () => {
+    const queue = new CircularFifoQueue<number>(3);
+    queue.add(1);
+    queue.add(2);
+    queue.add(3);
+    queue.add(4);
+    queue.add(5);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 3,
+      size: 3,
+      head: 2,
+      tail: 2,
+      first: 3,
+      last: 5
+    });
+  });
+
+  it('should serialize complex objects in compact log', () => {
+    const queue = new CircularFifoQueue<ComplexItem>(3);
+    queue.add({ value: 1, name: 'Alice' });
+    queue.add({ value: 2, name: 'Bob' });
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 3,
+      size: 2,
+      head: 0,
+      tail: 2,
+      first: { value: 1, name: 'Alice' },
+      last: { value: 2, name: 'Bob' }
+    });
+  });
+
+  it('should maintain correct head/tail values after multiple operations in log', () => {
+    const queue = new CircularFifoQueue<number>(4);
+    queue.add(1);
+    queue.add(2);
+    queue.add(3);
+    queue.add(4);
+    queue.add(5);
+    queue.add(6);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 4,
+      size: 4,
+      head: 2,
+      tail: 2,
+      first: 3,
+      last: 6
+    });
+  });
+
+  it('should handle zero-capacity queue in log', () => {
+    const queue = new CircularFifoQueue<number>(0);
+    const logOutput = queue.toLog();
+
+    expect(logOutput).toEqual({
+      capacity: 0,
+      size: 0,
+      head: 0,
+      tail: 0,
+      first: undefined,
+      last: undefined
+    });
+  });
+});

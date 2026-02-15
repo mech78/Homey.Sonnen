@@ -1,9 +1,10 @@
 import { SonnenDevice } from '../../lib/SonnenDevice';
+import { SonnenState } from '../../domain/SonnenState';
 
 module.exports = class SolarPanelDevice extends SonnenDevice {
 
   private readonly handleUpdateEvent = (currentState: any, statusJson: any): void => {
-    this.log("Received currentState: " + JSON.stringify(currentState, null, 2));
+    this.log("Received currentState: " + (currentState instanceof SonnenState ? currentState.toLog() : JSON.stringify(currentState, null, 2)));
     this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
 
     this.setCapabilityValue('measure_power', statusJson.Production_W);
