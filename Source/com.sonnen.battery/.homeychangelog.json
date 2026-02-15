@@ -257,10 +257,10 @@
     "da": "Fejl rettet, der forårsagede, at cyklusantallet ikke blev korrekt gendannet under genstart af appen. Tilføjet nulstillingsknap for cyklusantallet.",
     "nl": "Bug opgelost die ervoor zorgde dat het aantal cycli niet correct werd hersteld tijdens het opnieuw opstarten van de app. Reset-knop toegevoegd voor het aantal cycli."
   },
-  "2.4.5": {
-    "en": "Upgraded to Node.js 22. Requires Homey v12.9.0 or later.",
-    "de": "Upgrade auf Node.js 22. Erfordert Homey v12.9.0 oder höher.",
-    "da": "Opgraderet til Node.js 22. Kræver Homey v12.9.0 eller nyere.",
-    "nl": "Geüpgraded naar Node.js 22. Vereist Homey v12.9.0 of hoger."
+  "2.5.0": {
+    "en": "Upgraded to Node.js 22. Migrated from Axios to native fetch API. Requires Homey v12.9.0 or later.",
+    "de": "Upgrade auf Node.js 22. Migriert von Axios zu nativer fetch API. Erfordert Homey v12.9.0 oder höher.",
+    "da": "Opgraderet til Node.js 22. Migreret fra Axios til native fetch API. Kræver Homey v12.9.0 eller nyere.",
+    "nl": "Geüpgraded naar Node.js 22. Gemigreerd van Axios naar native fetch API. Vereist Homey v12.9.0 of hoger."
   }
 }

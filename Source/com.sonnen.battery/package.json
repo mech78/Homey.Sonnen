@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@types/underscore": "^1.13.0",
-    "axios": "^1.13.5",
     "underscore": "^1.13.7"
   }
 }
