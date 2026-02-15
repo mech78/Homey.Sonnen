@@ -342,7 +342,7 @@ export class BatteryDevice extends SonnenDevice {
         cycleCount30DayQueue: lastState.cycleCount30DayQueue,
       });
 
-      this.log("Emitting data update for other devices...");
+      this.log("Emitting currentState and statusJson to other devices...\n" + currentState.toLog() + "\n" + JSON.stringify(statusJson, null, 2));      
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
@@ -383,7 +383,9 @@ export class BatteryDevice extends SonnenDevice {
       
       const scheduleRaw = configurationsJson['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
-      this.log('Parsed Time-of-Use schedule:', tou.toJSONString());
+      if (this.isDebugMode()) {
+        this.log("Parsed Time-of-Use schedule: " + tou.toString());
+      }
       this.setSettings({ 'time_of_use_schedule': tou.toString() });
 
       const operatingMode = configurationsJson['EM_OperatingMode'];

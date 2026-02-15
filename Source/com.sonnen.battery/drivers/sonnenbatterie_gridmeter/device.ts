@@ -4,8 +4,11 @@ import { SonnenState } from '../../domain/SonnenState';
 module.exports = class GridMeterDevice extends SonnenDevice {
 
   private readonly handleUpdateEvent = (currentState: any, statusJson: any): void => {
-    this.log("Received currentState: " + (currentState as SonnenState).toLog());
-    this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
+    this.log("Received event data update");
+    if (this.isDebugMode()) {
+      this.log("Received currentState: " + (currentState as SonnenState).toLog());
+      this.log("Received statusJson:   " + JSON.stringify(statusJson, null, 2));
+    }
 
     this.setCapabilityValue('measure_power', -statusJson.GridFeedIn_W);
     if (this.isEnergyFullySupported()) {
