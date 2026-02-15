@@ -256,5 +256,11 @@
     "de": "Fehler behoben, der dazu führte, dass die Zyklusanzahl beim Neustart der App nicht richtig wiederhergestellt wurde. Schaltfläche zum Zurücksetzen der Zyklusanzahl hinzugefügt.",
     "da": "Fejl rettet, der forårsagede, at cyklusantallet ikke blev korrekt gendannet under genstart af appen. Tilføjet nulstillingsknap for cyklusantallet.",
     "nl": "Bug opgelost die ervoor zorgde dat het aantal cycli niet correct werd hersteld tijdens het opnieuw opstarten van de app. Reset-knop toegevoegd voor het aantal cycli."
+  },
+  "2.4.5": {
+    "en": "Upgraded to Node.js 22. Requires Homey v12.9.0 or later.",
+    "de": "Upgrade auf Node.js 22. Erfordert Homey v12.9.0 oder höher.",
+    "da": "Opgraderet til Node.js 22. Kræver Homey v12.9.0 eller nyere.",
+    "nl": "Geüpgraded naar Node.js 22. Vereist Homey v12.9.0 of hoger."
   }
 }

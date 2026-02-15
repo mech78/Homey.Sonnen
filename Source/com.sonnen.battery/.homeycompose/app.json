@@ -1,7 +1,7 @@
 {
   "id": "com.sonnen.battery",
-  "version": "2.4.1",
-  "compatibility": ">=12.4.5",
+  "version": "2.4.5",
+  "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
     "local"
