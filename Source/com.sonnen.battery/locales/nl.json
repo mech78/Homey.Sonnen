@@ -17,7 +17,11 @@
     "deviceStateSaved": "Apparaatstatus succesvol opgeslagen.\nStatus: __lastUpdate__",
     "deviceStateNotSaved": "Kon apparaatstatus niet opslaan.",
     "settings.deviceState": "Apparaatstatus (JSON)",
-    "settings.deviceStateHint": "Toont de huidige status van de apparaten."
+    "settings.deviceStateHint": "Toont de huidige status van de apparaten.",
+    "resetCycleCountQueues": "Cyclus-tellingen resetten",
+    "confirmResetCycleCountQueues": "Weet u zeker dat u de cyclus-tellingen wilt resetten? Dit verwijdert alle opgeslagen cyclus-telling historie.",
+    "cycleCountQueuesReset": "Cyclus-tellingen succesvol gereset.",
+    "cycleCountQueuesNotReset": "Kon cyclus-tellingen niet resetten."
   },
   "eclipseLed": {
     "BlinkingRed": "knipperend rood",

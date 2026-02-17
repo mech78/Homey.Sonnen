@@ -250,5 +250,11 @@
     "de": "Verbesserte Widget-Datenabfrage, um nur verfügbare Geräte anzuzeigen.",
     "da": "Forbedret widget data hentning for kun at vise tilgængelige enheder.",
     "nl": "Verbeterde widget-gegevensopvraging om alleen beschikbare apparaten te tonen."
+  },
+  "2.4.1": {
+    "en": "Fixed bug that caused cycle count to be improperly restored during app restart. Added reset button for cycle count.",
+    "de": "Fehler behoben, der dazu führte, dass die Zyklusanzahl beim Neustart der App nicht richtig wiederhergestellt wurde. Schaltfläche zum Zurücksetzen der Zyklusanzahl hinzugefügt.",
+    "da": "Fejl rettet, der forårsagede, at cyklusantallet ikke blev korrekt gendannet under genstart af appen. Tilføjet nulstillingsknap for cyklusantallet.",
+    "nl": "Bug opgelost die ervoor zorgde dat het aantal cycli niet correct werd hersteld tijdens het opnieuw opstarten van de app. Reset-knop toegevoegd voor het aantal cycli."
   }
 }

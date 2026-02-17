@@ -1,6 +1,6 @@
 {
   "id": "com.sonnen.battery",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "compatibility": ">=12.4.5",
   "sdk": 3,
   "platforms": [
@@ -26,6 +26,10 @@
     "saveDeviceState": {
       "method": "POST",
       "path": "/save-device-state"
+    },
+    "resetCycleCountQueues": {
+      "method": "POST",
+      "path": "/reset-cycle-count-queues"
     }
   },
   "images": {

@@ -50,6 +50,9 @@
     <button id="saveDeviceState" class="homey-button-secondary-full" data-i18n="settings.saveDeviceState">Save Device
         State</button>
 
+    <button id="resetCycleCountQueues" class="homey-button-secondary-full"
+        data-i18n="settings.resetCycleCountQueues">Reset Cycle Count Queues</button>
+
     <script type="text/javascript">
         function onHomeyReady(Homey) {
             Homey.ready();
@@ -59,6 +62,14 @@
             const textAreaDeviceStateValueElement = document.getElementById("textAreaDeviceStateValue");
             const saveElement = document.getElementById("save");
             const saveDeviceStateElement = document.getElementById("saveDeviceState");
+            const resetCycleCountQueuesElement = document.getElementById("resetCycleCountQueues");
+
+            const refreshDeviceStateDisplay = function() {
+                Homey.get("deviceState", function (err, deviceState) {
+                    if (err) { return Homey.alert(err); }
+                    textAreaDeviceStateValueElement.value = JSON.stringify(deviceState, null, 2) ?? "{}";
+                });
+            };
 
             Homey.get("BatteryAuthToken", function (err, authToken) {
                 if (err) { return Homey.alert(err); }
@@ -100,24 +111,28 @@
             });
 
             saveDeviceStateElement.addEventListener("click", function (e) {
-                Homey.api('POST', '/save-device-state')
-                    .then((response) => {
-                        if (response['saved']) {
-                            Homey.alert(Homey.__("settings.deviceStateSaved", { lastUpdate: response['lastUpdate'] }));
-
-                            Homey.get("deviceState", function (err, deviceState) {
-                                if (err) { return Homey.alert(err); }
-                                textAreaDeviceStateValueElement.value = JSON.stringify(deviceState, null, 2) ?? "{}";
-                            });
-                        } else {
-                            Homey.alert(Homey.__("settings.deviceStateNotSaved"));
-                        }
-                    })
-                    .catch((error) => {
-                        Homey.alert(Homey.__("settings.deviceStateNotSaved") + " (" + error.message + ")");
-                    });
+                Homey.api("POST", "/save-device-state", null, function (err, response) {
+                    if (err) { return Homey.alert(Homey.__("settings.deviceStateNotSaved") + " (" + err + ")"); }
+                    if (response["saved"]) {
+                        Homey.alert(Homey.__("settings.deviceStateSaved", { lastUpdate: response["lastUpdate"] }));
+                        refreshDeviceStateDisplay();
+                    } else {
+                        Homey.alert(Homey.__("settings.deviceStateNotSaved"));
+                    }
+                });
             });
 
+            resetCycleCountQueuesElement.addEventListener("click", function (e) {
+                Homey.api("POST", "/reset-cycle-count-queues", null, function (err, response) {
+                    if (err) { return Homey.alert(Homey.__("settings.cycleCountQueuesNotReset")); }
+                    if (response["reset"]) {
+                        Homey.alert(Homey.__("settings.cycleCountQueuesReset"));
+                        refreshDeviceStateDisplay();
+                    } else {
+                        Homey.alert(Homey.__("settings.cycleCountBuffersNotReset"));
+                    }
+                });
+            });
         }
     </script>
 </body>

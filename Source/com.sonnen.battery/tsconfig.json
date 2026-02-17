@@ -7,6 +7,16 @@
     "noImplicitAny": true,
     "allowJs": true,
     "outDir": ".homeybuild/",
-    "sourceMap": true
-  }
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".homeybuild"
+  ]
 }

@@ -283,8 +283,8 @@ export class BatteryDevice extends SonnenDevice {
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
-      if (this.isNewDay(currentUpdate, lastState.lastUpdate)) {
-        this.saveDeviceState(); // backup state at least once a day as there seems to be no proper hook during an app shutdown/restart one can use.
+      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
+        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
       }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
@@ -338,8 +338,8 @@ export class BatteryDevice extends SonnenDevice {
         todayMaxGridConsumption_Wh,
         todayMaxProduction_Wh,
         total_cycleCount: batteryJson ? batteryJson.cyclecount : lastState.total_cycleCount,
-        cycleCount7DayBuffer: lastState.cycleCount7DayBuffer,
-        cycleCount30DayBuffer: lastState.cycleCount30DayBuffer,
+        cycleCount7DayQueue: lastState.cycleCount7DayQueue,
+        cycleCount30DayQueue: lastState.cycleCount30DayQueue,
       });
 
       this.log("Emitting data update for other devices...");
@@ -477,6 +477,12 @@ export class BatteryDevice extends SonnenDevice {
   public saveDeviceState(): Date | null {
     this.homey.settings.set('deviceState', this.state);
     this.log('Saved deviceState to settings: ' + JSON.stringify(this.state, null, 2));
+    return this.state.lastUpdate;
+  }
+
+  public resetCycleCountQueues(): Date | null {
+    this.state.resetCycleCountQueues();
+    this.saveDeviceState();
     return this.state.lastUpdate;
   }
 
