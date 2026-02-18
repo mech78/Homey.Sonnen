@@ -283,9 +283,6 @@ export class BatteryDevice extends SonnenDevice {
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
-      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
-        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
-      }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
       const grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
@@ -417,11 +414,9 @@ export class BatteryDevice extends SonnenDevice {
         this.log(`Cycle count: ${batteryJson.cyclecount}, 7-day rate: ${cycleCount7DayRate}, 30-day rate: ${cycleCount30DayRate}`);
       }
  
-      /*
-      if (Math.random() < 0.5) {
-        throw new Error("random");
+      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
+        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
       }
-      */
 
       this.unsetWarning(); // clear any previous warning
       return currentState;
