@@ -14,7 +14,8 @@ updates:
     # Limit concurrent PRs to prevent overwhelming
     open-pull-requests-limit: 10
     # Cooldown period for supply chain attack protection
-    cooldown: 7d
+    cooldown:
+      default-days: 7
     groups:
       minor-and-patch-dependencies:
         update-types:
