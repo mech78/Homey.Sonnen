@@ -354,6 +354,7 @@ export class BatteryDevice extends SonnenDevice {
         total_cycleCount: batteryJson ? batteryJson.cyclecount : lastState.total_cycleCount,
         cycleCount7DayQueue: lastState.cycleCount7DayQueue,
         cycleCount30DayQueue: lastState.cycleCount30DayQueue,
+        installationDate: lastState.installationDate,
       });
 
       this.log("Emitting currentState and statusJson to other devices...\n" + currentState.toLog() + "\n" + JSON.stringify(statusJson, null, 2));      
@@ -424,7 +425,7 @@ export class BatteryDevice extends SonnenDevice {
 
         const cycleCount7DayRate = currentState.get7DayAverageCycleCountRate();
         const cycleCount30DayRate = currentState.get30DayAverageCycleCountRate();
-        const installationRate = currentState.getInstallationAverageCycleCountRate();
+        const cycleCountInstallationRate = currentState.getInstallationAverageCycleCountRate();
 
         if (cycleCount7DayRate !== null) {
           this.setCapabilityValue('cyclecount_7day_rate_capability', cycleCount7DayRate);
@@ -432,11 +433,11 @@ export class BatteryDevice extends SonnenDevice {
         if (cycleCount30DayRate !== null) {
           this.setCapabilityValue('cyclecount_30day_rate_capability', cycleCount30DayRate);
         }
-        if (installationRate !== null) {
-          this.setCapabilityValue('cyclecount_installation_rate_capability', installationRate);
+        if (cycleCountInstallationRate !== null) {
+          this.setCapabilityValue('cyclecount_installation_rate_capability', cycleCountInstallationRate);
         }
 
-        this.log(`Cycle count: ${batteryJson.cyclecount}, rates (7d: ${cycleCount7DayRate}, 30d: ${cycleCount30DayRate}, installation: ${installationRate})`);
+        this.log(`Cycle count: ${batteryJson.cyclecount}, rates (7d: ${cycleCount7DayRate}, 30d: ${cycleCount30DayRate}, installation: ${cycleCountInstallationRate})`);
       }
  
       if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
