@@ -414,31 +414,18 @@ export class BatteryDevice extends SonnenDevice {
       this.setSettings({ 'prognosis_charging': prognosisChargingMode });
       
       if (batteryJson) {
-        currentState.total_cycleCount = batteryJson.cyclecount;
-        this.setCapabilityValue('total_cyclecount_capability', batteryJson.cyclecount);
-
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
-
-        const installationDateSetting = this.getSetting('installation_date') as string | undefined;
-        const trimmedDate = installationDateSetting?.trim();
-        currentState.installationDate = trimmedDate ? new Date(trimmedDate) : null;
-
-        const cycleCount7DayRate = currentState.get7DayAverageCycleCountRate();
-        const cycleCount30DayRate = currentState.get30DayAverageCycleCountRate();
-        const cycleCountInstallationRate = currentState.getInstallationAverageCycleCountRate();
-
-        if (cycleCount7DayRate !== null) {
-          this.setCapabilityValue('cyclecount_7day_rate_capability', cycleCount7DayRate);
-        }
-        if (cycleCount30DayRate !== null) {
-          this.setCapabilityValue('cyclecount_30day_rate_capability', cycleCount30DayRate);
-        }
-        if (cycleCountInstallationRate !== null) {
-          this.setCapabilityValue('cyclecount_installation_rate_capability', cycleCountInstallationRate);
-        }
-
-        this.log(`Cycle count: ${batteryJson.cyclecount}, rates (7d: ${cycleCount7DayRate}, 30d: ${cycleCount30DayRate}, installation: ${cycleCountInstallationRate})`);
       }
+
+      this.setCapabilityValue('total_cyclecount_capability', currentState.total_cycleCount);
+      this.setCapabilityValue('cyclecount_7day_rate_capability', currentState.get7DayAverageCycleCountRate());    
+      this.setCapabilityValue('cyclecount_30day_rate_capability', currentState.get30DayAverageCycleCountRate());
+
+      const installationDateSetting = this.getSetting('installation_date') as string | undefined;
+      const trimmedDate = installationDateSetting?.trim();
+      currentState.installationDate = trimmedDate ? new Date(trimmedDate) : null;
+
+      this.setCapabilityValue('cyclecount_installation_rate_capability', currentState.getInstallationAverageCycleCountRate()); 
  
       if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
         this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
