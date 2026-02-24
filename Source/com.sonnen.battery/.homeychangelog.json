@@ -258,9 +258,9 @@
     "nl": "Bug opgelost die ervoor zorgde dat het aantal cycli niet correct werd hersteld tijdens het opnieuw opstarten van de app. Reset-knop toegevoegd voor het aantal cycli."
   },
   "2.5.0": {
-    "en": "Upgraded to Node.js 22. Migrated from Axios to native fetch API. Requires Homey v12.9.0 or later.",
-    "de": "Upgrade auf Node.js 22. Migriert von Axios zu nativer fetch API. Erfordert Homey v12.9.0 oder höher.",
-    "da": "Opgraderet til Node.js 22. Migreret fra Axios til native fetch API. Kræver Homey v12.9.0 eller nyere.",
-    "nl": "Geüpgraded naar Node.js 22. Gemigreerd van Axios naar native fetch API. Vereist Homey v12.9.0 of hoger."
+    "en": "Cycle rate since installation date. Upgraded to Node.js 22. Migrated from Axios to native fetch API. Requires Homey v12.9.0 or later.",
+    "de": "Zyklusrate seit Installationsdatum. Upgrade auf Node.js 22. Migriert von Axios zu nativer fetch API. Erfordert Homey v12.9.0 oder höher.",
+    "da": "Cyklusrate siden installationsdato. Opgraderet til Node.js 22. Migreret fra Axios til native fetch API. Kræver Homey v12.9.0 eller nyere.",
+    "nl": "Cyclus snelheid sinds installatiedatum. Geüpgraded naar Node.js 22. Gemigreerd van Axios naar native fetch API. Vereist Homey v12.9.0 of hoger."
   }
 }

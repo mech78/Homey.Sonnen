@@ -132,6 +132,22 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
+    if (_.contains(changedKeys, "installation_date")) {
+      const newInstallationDate = newSettings["installation_date"] as string;
+      this.log("Settings", "InstallationDate", newInstallationDate);
+
+      if (newInstallationDate && newInstallationDate.trim()) {
+        const installationDate = new Date(newInstallationDate);
+        const localNow = this.getLocalNow();
+        if (isNaN(installationDate.getTime())) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.invalid_installation_date_format"));
+        }
+        if (installationDate > localNow) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.installation_date_in_future"));
+        }
+      }
+    }
+
     if (_.contains(changedKeys, "time_of_use_schedule")) {
       const newOperatingMode = newSettings["operating_mode"] as string;
       const currentOperatingMode = this.getSetting("operating_mode") as string;
@@ -199,7 +215,8 @@ export class BatteryDevice extends SonnenDevice {
       'state_core_control_module_capability',
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
-      'cyclecount_30day_rate_capability'
+      'cyclecount_30day_rate_capability',
+      'cyclecount_installation_rate_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -395,23 +412,31 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
       this.setSettings({ 'prognosis_charging': prognosisChargingMode });
       
-      // Set cycle count capability only when we actually fetch battery data
       if (batteryJson) {
+        currentState.total_cycleCount = batteryJson.cyclecount;
         this.setCapabilityValue('total_cyclecount_capability', batteryJson.cyclecount);
-        
+
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
-        
+
+        const installationDateSetting = this.getSetting('installation_date') as string | undefined;
+        const trimmedDate = installationDateSetting?.trim();
+        currentState.installationDate = trimmedDate ? new Date(trimmedDate) : null;
+
         const cycleCount7DayRate = currentState.get7DayAverageCycleCountRate();
         const cycleCount30DayRate = currentState.get30DayAverageCycleCountRate();
-        
+        const installationRate = currentState.getInstallationAverageCycleCountRate();
+
         if (cycleCount7DayRate !== null) {
           this.setCapabilityValue('cyclecount_7day_rate_capability', cycleCount7DayRate);
         }
-        
         if (cycleCount30DayRate !== null) {
           this.setCapabilityValue('cyclecount_30day_rate_capability', cycleCount30DayRate);
         }
-        this.log(`Cycle count: ${batteryJson.cyclecount}, 7-day rate: ${cycleCount7DayRate}, 30-day rate: ${cycleCount30DayRate}`);
+        if (installationRate !== null) {
+          this.setCapabilityValue('cyclecount_installation_rate_capability', installationRate);
+        }
+
+        this.log(`Cycle count: ${batteryJson.cyclecount}, rates (7d: ${cycleCount7DayRate}, 30d: ${cycleCount30DayRate}, installation: ${installationRate})`);
       }
  
       if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {

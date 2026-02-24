@@ -110,7 +110,9 @@
       },
       "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan ikke ændre driftstilstand væk fra Time-of-Use, mens der indstilles en ikke-tom Time-of-Use tidsplan.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan ikke anvende Time-of-Use tidsplan, når driftstilstanden ændres væk fra Time-of-Use.",
-      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use."
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use.",
+      "invalid_installation_date_format": "Ugyldigt installationsdatoformat. Brug venligst et gyldigt datoformat.",
+      "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden."
     }
   }
 }

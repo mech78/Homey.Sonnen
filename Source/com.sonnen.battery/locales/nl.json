@@ -110,7 +110,9 @@
       },
       "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Kan bedrijfsmodus niet wijzigen van Time-of-Use terwijl een niet-lege Time-of-Use planning wordt ingesteld.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan Time-of-Use schema niet toepassen wanneer bedrijfsmodus wordt gewijzigd van Time-of-Use.",
-      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is."
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is.",
+      "invalid_installation_date_format": "Ongeldig installatiedatumformaat. Gebruik een geldig datumformaat.",
+      "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen."
     }
   }
 }

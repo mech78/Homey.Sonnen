@@ -200,6 +200,67 @@ describe('SonnenState', () => {
     });
   });
 
+  describe('getInstallationAverageCycleCountRate', () => {
+    it('should return null when no installation date', () => {
+      const state = new SonnenState();
+      state.lastUpdate = new Date('2026-02-24T12:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should return null when lastUpdate is null', () => {
+      const state = new SonnenState();
+      state.installationDate = new Date('2023-03-23T00:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should return null when installation date is in the future', () => {
+      const state = new SonnenState();
+      state.lastUpdate = new Date('2026-02-24T12:00:00.000Z');
+      state.installationDate = new Date('2030-01-01T00:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should calculate correct installation rate', () => {
+      const state = new SonnenState();
+      const installationDate = new Date('2023-03-23T00:00:00.000Z');
+      const lastUpdate = new Date('2026-02-24T00:00:00.000Z');
+      
+      state.lastUpdate = lastUpdate;
+      state.installationDate = installationDate;
+      state.total_cycleCount = 434;
+
+      const rate = state.getInstallationAverageCycleCountRate();
+
+      expect(rate).not.toBeNull();
+      const expectedDays = (lastUpdate.getTime() - installationDate.getTime()) / (1000 * 60 * 60 * 24);
+      expect(rate).toBe(434 / expectedDays);
+    });
+
+    it('rate updates when cycleCount changes', () => {
+      const state = new SonnenState();
+      const installationDate = new Date('2023-03-23T00:00:00.000Z');
+      const lastUpdate = new Date('2026-02-24T00:00:00.000Z');
+      
+      state.lastUpdate = lastUpdate;
+      state.installationDate = installationDate;
+      state.total_cycleCount = 434;
+
+      const rate1 = state.getInstallationAverageCycleCountRate();
+      expect(rate1).not.toBeNull();
+
+      state.total_cycleCount = 435;
+      const rate2 = state.getInstallationAverageCycleCountRate();
+      expect(rate2).not.toBeNull();
+      expect(rate2).toBeGreaterThan(rate1!);
+    });
+  });
+
   describe('resetCycleCountQueues', () => {
     it('should clear both buffers', () => {
       const state = new SonnenState();

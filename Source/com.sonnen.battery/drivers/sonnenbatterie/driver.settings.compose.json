@@ -96,6 +96,23 @@
           "da": "Se Sonnen Batterie manualen for mere information.",
           "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
         }
+      },
+      {
+        "id": "installation_date",
+        "type": "text",
+        "label": {
+          "en": "Installation Date",
+          "de": "Installationsdatum",
+          "da": "Installationsdato",
+          "nl": "Installatiedatum"
+        },
+        "value": "",
+        "hint": {
+          "en": "Enter the date when the battery was installed in ISO 8601 format (e.g., 2020-12-31). Used to calculate the average daily cycle count since installation.",
+          "de": "Geben Sie das Datum im ISO 8601-Format (z.B. 2020-12-31) ein, an dem die Batterie installiert wurde. Wird verwendet, um die durchschnittliche tägliche Zyklenzahl seit der Installation zu berechnen.",
+          "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen.",
+          "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen."
+        }
       }
     ]
   },

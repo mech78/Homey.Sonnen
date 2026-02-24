@@ -110,7 +110,9 @@
       },
       "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Betriebsmodus kann nicht weg von Time-of-Use geändert werden, während ein nicht-leerer Zeitplan festgelegt wird.",
       "timeOfUseChangeMismatchingOperatingModeChange": "Time-of-Use Zeitplan kann nicht angewendet werden, wenn der Betriebsmodus weg von Time-of-Use geändert wird.",
-      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use Zeitplan kann nur festgelegt werden, wenn der Betriebsmodus Time-of-Use ist."
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use Zeitplan kann nur festgelegt werden, wenn der Betriebsmodus Time-of-Use ist.",
+      "invalid_installation_date_format": "Ungültiges Installationsdatum. Bitte verwenden Sie ein gültiges Datumsformat.",
+      "installation_date_in_future": "Das Installationsdatum darf nicht in der Zukunft liegen."
     }
   }
 }
