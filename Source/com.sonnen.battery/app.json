@@ -1200,10 +1200,10 @@
               },
               "value": "",
               "hint": {
-                "en": "Enter the date when the battery was installed in ISO 8601 format (e.g., 2020-12-31). Used to calculate the average daily cycle count since installation.",
-                "de": "Geben Sie das Datum im ISO 8601-Format (z.B. 2020-12-31) ein, an dem die Batterie installiert wurde. Wird verwendet, um die durchschnittliche tägliche Zyklenzahl seit der Installation zu berechnen.",
-                "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen.",
-                "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen."
+                "en": "Enter the date when the battery was installed in ISO 8601 format (e.g., 2020-12-31). Used to calculate the average daily cycle count since installation. The installation date can be found in the Sonnen App's battery details.",
+                "de": "Geben Sie das Datum im ISO 8601-Format (z.B. 2020-12-31) ein, an dem die Batterie installiert wurde. Wird verwendet, um die durchschnittliche tägliche Zyklenzahl seit der Installation zu berechnen. Das Installationsdatum ist bei den Batteriedetails in der Sonnen App zu finden.",
+                "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen. Installationsdatoen kan findes i batteridetaljeskærmen i Sonnen-appen.",
+                "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App."
               }
             }
           ]
