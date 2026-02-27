@@ -200,6 +200,67 @@ describe('SonnenState', () => {
     });
   });
 
+  describe('getInstallationAverageCycleCountRate', () => {
+    it('should return null when no installation date', () => {
+      const state = new SonnenState();
+      state.lastUpdate = new Date('2026-02-24T12:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should return null when lastUpdate is null', () => {
+      const state = new SonnenState();
+      state.installationDate = new Date('2023-03-23T00:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should return null when installation date is in the future', () => {
+      const state = new SonnenState();
+      state.lastUpdate = new Date('2026-02-24T12:00:00.000Z');
+      state.installationDate = new Date('2030-01-01T00:00:00.000Z');
+      state.total_cycleCount = 434;
+
+      expect(state.getInstallationAverageCycleCountRate()).toBeNull();
+    });
+
+    it('should calculate correct installation rate', () => {
+      const state = new SonnenState();
+      const installationDate = new Date('2023-03-23T00:00:00.000Z');
+      const lastUpdate = new Date('2026-02-24T00:00:00.000Z');
+      
+      state.lastUpdate = lastUpdate;
+      state.installationDate = installationDate;
+      state.total_cycleCount = 434;
+
+      const rate = state.getInstallationAverageCycleCountRate();
+
+      expect(rate).not.toBeNull();
+      const expectedDays = (lastUpdate.getTime() - installationDate.getTime()) / (1000 * 60 * 60 * 24);
+      expect(rate).toBe(434 / expectedDays);
+    });
+
+    it('rate updates when cycleCount changes', () => {
+      const state = new SonnenState();
+      const installationDate = new Date('2023-03-23T00:00:00.000Z');
+      const lastUpdate = new Date('2026-02-24T00:00:00.000Z');
+      
+      state.lastUpdate = lastUpdate;
+      state.installationDate = installationDate;
+      state.total_cycleCount = 434;
+
+      const rate1 = state.getInstallationAverageCycleCountRate();
+      expect(rate1).not.toBeNull();
+
+      state.total_cycleCount = 435;
+      const rate2 = state.getInstallationAverageCycleCountRate();
+      expect(rate2).not.toBeNull();
+      expect(rate2).toBeGreaterThan(rate1!);
+    });
+  });
+
   describe('resetCycleCountQueues', () => {
     it('should clear both buffers', () => {
       const state = new SonnenState();
@@ -255,6 +316,184 @@ describe('SonnenState', () => {
 
       expect(state.cycleCount7DayQueue?.getLength()).toBe(168);
       expect(state.cycleCount30DayQueue?.getLength()).toBe(170);
+    });
+  });
+
+  describe('toLog() Compact Logging', () => {
+    it('should return compact JSON object for empty state', () => {
+      const state = new SonnenState();
+      const logOutput = state.toLog();
+
+      expect(typeof logOutput).toBe('string');
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.cycleCount7DayQueue).toEqual({
+        capacity: 168,
+        size: 0,
+        head: 0,
+        tail: 0,
+        first: undefined,
+        last: undefined
+      });
+      expect(parsed.cycleCount30DayQueue).toEqual({
+        capacity: 720,
+        size: 0,
+        head: 0,
+        tail: 0,
+        first: undefined,
+        last: undefined
+      });
+    });
+
+    it('should return compact JSON object with populated queues', () => {
+      const state = new SonnenState();
+      const timestamp1 = new Date('2026-02-09T12:00:00.000Z');
+      const timestamp2 = new Date('2026-02-10T12:00:00.000Z');
+
+      state.addCycleCountSnapshot(timestamp1, 430);
+      state.addCycleCountSnapshot(timestamp2, 431);
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.cycleCount7DayQueue.capacity).toBe(168);
+      expect(parsed.cycleCount7DayQueue.size).toBe(2);
+      expect(parsed.cycleCount7DayQueue.first).toEqual({
+        timestamp: timestamp1.toISOString(),
+        cycleCount: 430
+      });
+      expect(parsed.cycleCount7DayQueue.last).toEqual({
+        timestamp: timestamp2.toISOString(),
+        cycleCount: 431
+      });
+      expect(parsed.cycleCount30DayQueue.size).toBe(2);
+    });
+
+    it('should include timestamps in compact log first/last elements', () => {
+      const state = new SonnenState();
+      const timestamp1 = new Date('2026-02-09T12:00:00.000Z');
+      const timestamp2 = new Date('2026-02-10T12:00:00.000Z');
+
+      state.addCycleCountSnapshot(timestamp1, 430);
+      state.addCycleCountSnapshot(timestamp2, 431);
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.cycleCount7DayQueue.first.timestamp).toBe('2026-02-09T12:00:00.000Z');
+      expect(parsed.cycleCount7DayQueue.last.timestamp).toBe('2026-02-10T12:00:00.000Z');
+      expect(parsed.cycleCount7DayQueue.first.cycleCount).toBe(430);
+      expect(parsed.cycleCount7DayQueue.last.cycleCount).toBe(431);
+    });
+
+    it('should not show full buffer arrays in compact log', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 10; i++) {
+        state.addCycleCountSnapshot(new Date(`2026-02-${10 + i}T12:00:00.000Z`), 430 + i);
+      }
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.cycleCount7DayQueue).not.toHaveProperty('buffer');
+      expect(parsed.cycleCount30DayQueue).not.toHaveProperty('buffer');
+      expect(parsed.cycleCount7DayQueue.size).toBe(10);
+      expect(parsed.cycleCount30DayQueue.size).toBe(10);
+    });
+
+    it('should preserve other properties in compact log', () => {
+      const timestamp = new Date('2026-02-09T12:00:00.000Z');
+      const state = new SonnenState({
+        lastUpdate: timestamp,
+        total_cycleCount: 500,
+        totalConsumption_Wh: 10000,
+        todayMaxConsumption_Wh: 3000
+      });
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.lastUpdate).toBe(timestamp.toISOString());
+      expect(parsed.total_cycleCount).toBe(500);
+      expect(parsed.totalConsumption_Wh).toBe(10000);
+      expect(parsed.todayMaxConsumption_Wh).toBe(3000);
+    });
+
+    it('should handle queues with overflow in compact log', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 170; i++) {
+        state.addCycleCountSnapshot(new Date(`2026-02-${(i % 28 + 1).toString().padStart(2, '0')}T00:00:00.000Z`), i);
+      }
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(parsed.cycleCount7DayQueue.capacity).toBe(168);
+      expect(parsed.cycleCount7DayQueue.size).toBe(168);
+      expect(parsed.cycleCount30DayQueue.size).toBe(170);
+    });
+
+    it('should convert queues to compact objects', () => {
+      const state = new SonnenState();
+      state.addCycleCountSnapshot(new Date('2026-02-09T12:00:00.000Z'), 430);
+
+      const logOutput = state.toLog();
+      const parsed = JSON.parse(logOutput);
+
+      expect(typeof parsed.cycleCount7DayQueue).toBe('object');
+      expect(typeof parsed.cycleCount30DayQueue).toBe('object');
+    });
+  });
+
+  describe('JSON Serialization (Normal toJSON)', () => {
+    it('should serialize full buffers with JSON.stringify (toJSON behavior)', () => {
+      const state = new SonnenState();
+      state.addCycleCountSnapshot(new Date('2026-02-09T12:00:00.000Z'), 430);
+      state.addCycleCountSnapshot(new Date('2026-02-10T12:00:00.000Z'), 431);
+
+      const jsonString = JSON.stringify(state);
+      const parsed = JSON.parse(jsonString);
+
+      expect(parsed.cycleCount7DayQueue).toHaveProperty('capacity');
+      expect(parsed.cycleCount7DayQueue).toHaveProperty('buffer');
+      expect(parsed.cycleCount7DayQueue).toHaveProperty('head');
+      expect(parsed.cycleCount7DayQueue).toHaveProperty('tail');
+      expect(parsed.cycleCount7DayQueue).toHaveProperty('count');
+      expect(Array.isArray(parsed.cycleCount7DayQueue.buffer)).toBe(true);
+      expect(parsed.cycleCount7DayQueue.buffer).toHaveLength(2);
+    });
+
+    it('should show full buffer arrays with JSON.stringify', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 5; i++) {
+        state.addCycleCountSnapshot(new Date(`2026-02-${10 + i}T12:00:00.000Z`), 430 + i);
+      }
+
+      const jsonString = JSON.stringify(state);
+
+      expect(jsonString).toContain('"buffer"');
+      expect(jsonString).toContain('capacity');
+      expect(jsonString).toContain('head');
+      expect(jsonString).toContain('tail');
+      expect(jsonString).toContain('count');
+    });
+
+    it('toLog should be more compact than JSON.stringify', () => {
+      const state = new SonnenState();
+
+      for (let i = 0; i < 168; i++) {
+        state.addCycleCountSnapshot(new Date(`2026-02-${(i % 28 + 1).toString().padStart(2, '0')}T00:00:00.000Z`), i);
+      }
+
+      const compactLog = state.toLog();
+      const fullJson = JSON.stringify(state, null, 2);
+
+      expect(compactLog.length).toBeLessThan(fullJson.length);
+      expect(compactLog).not.toContain('"buffer"');
+      expect(fullJson).toContain('"buffer"');
     });
   });
 });

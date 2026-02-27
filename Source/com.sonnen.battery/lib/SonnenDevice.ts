@@ -2,6 +2,8 @@ import Homey from 'homey';
 import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
 export abstract class SonnenDevice extends Homey.Device {
 
+  protected DEBUG_MODE: boolean = false;
+
   /**
    * onInit is called when the device is initialized.
    */
@@ -67,6 +69,10 @@ export abstract class SonnenDevice extends Homey.Device {
    */
   protected isEnergyFullySupported(): boolean {
     return (this.homey.platform === "cloud" || (this.homey.platformVersion ?? 0) >= 2);
+  }
+
+  protected isDebugMode(): boolean {
+    return this.DEBUG_MODE;
   }
 
   protected createSonnenBatterieClient(): SonnenBatterieClient {

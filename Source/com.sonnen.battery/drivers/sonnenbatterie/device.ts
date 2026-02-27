@@ -31,7 +31,7 @@ export class BatteryDevice extends SonnenDevice {
     }
     this.state.updateState(storedState); // apply stored state to current state
     this.state.updateState({ lastUpdate: null });
-    this.log('Retrieved stored state: ' + JSON.stringify(this.state, null, 2));
+    this.log('Retrieved stored state: ' + this.state.toLog());
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
@@ -132,6 +132,22 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
+    if (_.contains(changedKeys, "installation_date")) {
+      const newInstallationDate = newSettings["installation_date"] as string;
+      this.log("Settings", "InstallationDate", newInstallationDate);
+
+      if (newInstallationDate && newInstallationDate.trim()) {
+        const installationDate = new Date(newInstallationDate);
+        const localNow = this.getLocalNow();
+        if (isNaN(installationDate.getTime())) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.invalid_installation_date_format"));
+        }
+        if (installationDate > localNow) {
+          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.installation_date_in_future"));
+        }
+      }
+    }
+
     if (_.contains(changedKeys, "time_of_use_schedule")) {
       const newOperatingMode = newSettings["operating_mode"] as string;
       const currentOperatingMode = this.getSetting("operating_mode") as string;
@@ -199,7 +215,8 @@ export class BatteryDevice extends SonnenDevice {
       'state_core_control_module_capability',
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
-      'cyclecount_30day_rate_capability'
+      'cyclecount_30day_rate_capability',
+      'cyclecount_installation_rate_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -283,9 +300,6 @@ export class BatteryDevice extends SonnenDevice {
       if (!lastState.lastUpdate) {
         lastState.lastUpdate = currentUpdate; // if no last update, use current update
       }
-      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
-        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
-      }
       this.log('Fetched at ' + currentUpdate.toISOString() + ' compute changes since ' + lastState.lastUpdate.toISOString());
 
       const grid_feed_in_W = +statusJson.GridFeedIn_W > 0 ? +statusJson.GridFeedIn_W : 0;
@@ -340,9 +354,10 @@ export class BatteryDevice extends SonnenDevice {
         total_cycleCount: batteryJson ? batteryJson.cyclecount : lastState.total_cycleCount,
         cycleCount7DayQueue: lastState.cycleCount7DayQueue,
         cycleCount30DayQueue: lastState.cycleCount30DayQueue,
+        installationDate: lastState.installationDate,
       });
 
-      this.log("Emitting data update for other devices...");
+      this.log("Emitting currentState and statusJson to other devices...\n" + currentState.toLog() + "\n" + JSON.stringify(statusJson, null, 2));      
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
@@ -383,7 +398,9 @@ export class BatteryDevice extends SonnenDevice {
       
       const scheduleRaw = configurationsJson['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
-      this.log('Parsed Time-of-Use schedule:', tou.toJSONString());
+      if (this.isDebugMode()) {
+        this.log("Parsed Time-of-Use schedule: " + tou.toString());
+      }
       this.setSettings({ 'time_of_use_schedule': tou.toString() });
 
       const operatingMode = configurationsJson['EM_OperatingMode'];
@@ -396,30 +413,23 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
       this.setSettings({ 'prognosis_charging': prognosisChargingMode });
       
-      // Set cycle count capability only when we actually fetch battery data
       if (batteryJson) {
-        this.setCapabilityValue('total_cyclecount_capability', batteryJson.cyclecount);
-        
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
-        
-        const cycleCount7DayRate = currentState.get7DayAverageCycleCountRate();
-        const cycleCount30DayRate = currentState.get30DayAverageCycleCountRate();
-        
-        if (cycleCount7DayRate !== null) {
-          this.setCapabilityValue('cyclecount_7day_rate_capability', cycleCount7DayRate);
-        }
-        
-        if (cycleCount30DayRate !== null) {
-          this.setCapabilityValue('cyclecount_30day_rate_capability', cycleCount30DayRate);
-        }
-        this.log(`Cycle count: ${batteryJson.cyclecount}, 7-day rate: ${cycleCount7DayRate}, 30-day rate: ${cycleCount30DayRate}`);
       }
+
+      this.setCapabilityValue('total_cyclecount_capability', currentState.total_cycleCount);
+      this.setCapabilityValue('cyclecount_7day_rate_capability', currentState.get7DayAverageCycleCountRate());    
+      this.setCapabilityValue('cyclecount_30day_rate_capability', currentState.get30DayAverageCycleCountRate());
+
+      const installationDateSetting = this.getSetting('installation_date') as string | undefined;
+      const trimmedDate = installationDateSetting?.trim();
+      currentState.installationDate = trimmedDate ? new Date(trimmedDate) : null;
+
+      this.setCapabilityValue('cyclecount_installation_rate_capability', currentState.getInstallationAverageCycleCountRate()); 
  
-      /*
-      if (Math.random() < 0.5) {
-        throw new Error("random");
+      if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
+        this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
       }
-      */
 
       this.unsetWarning(); // clear any previous warning
       return currentState;
@@ -476,7 +486,7 @@ export class BatteryDevice extends SonnenDevice {
 
   public saveDeviceState(): Date | null {
     this.homey.settings.set('deviceState', this.state);
-    this.log('Saved deviceState to settings: ' + JSON.stringify(this.state, null, 2));
+    this.log('Saved deviceState to settings: ' + this.state.toLog());
     return this.state.lastUpdate;
   }
 

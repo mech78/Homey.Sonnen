@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^16.1.8",
+    "@tsconfig/node22": "^22.0.5",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.3.0",
@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@types/underscore": "^1.13.0",
-    "axios": "^1.13.5",
-    "underscore": "^1.13.8"
+    "underscore": "^1.13.7"
   }
 }

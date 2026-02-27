@@ -22,6 +22,7 @@
     "total_cyclecount_capability",
     "cyclecount_7day_rate_capability",
     "cyclecount_30day_rate_capability",
+    "cyclecount_installation_rate_capability",
     "number_battery_capability",
     "operating_mode_capability",
     "prognosis_charging_capability",

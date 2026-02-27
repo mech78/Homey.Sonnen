@@ -102,4 +102,15 @@ export class CircularFifoQueue<T> {
     this.tail = tail;
     this.count = count;
   }
+
+  toLog(): any {
+  return {
+    capacity: this.capacity,
+    size: this.count,
+    head: this.head,
+    tail: this.tail,
+    first: this.getFirst(),
+    last: this.getLast()
+  };
+}
 }

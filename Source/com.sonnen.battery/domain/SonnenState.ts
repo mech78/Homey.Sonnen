@@ -26,6 +26,7 @@ export class SonnenState {
   todayMaxGridConsumption_Wh: number;
   todayMaxProduction_Wh: number;
   total_cycleCount: number;
+  installationDate: Date | null;
   cycleCount7DayQueue: CircularFifoQueue<CycleCountSnapshot> | null;
   cycleCount30DayQueue: CircularFifoQueue<CycleCountSnapshot> | null;
 
@@ -50,6 +51,7 @@ export class SonnenState {
     this.todayMaxGridConsumption_Wh = initialState?.todayMaxGridConsumption_Wh || 0;
     this.todayMaxProduction_Wh = initialState?.todayMaxProduction_Wh || 0;
     this.total_cycleCount = initialState?.total_cycleCount || 0;
+    this.installationDate = initialState?.installationDate || null;
     this.cycleCount7DayQueue = (initialState?.cycleCount7DayQueue instanceof CircularFifoQueue) ? initialState?.cycleCount7DayQueue : SonnenState.createCycleCount7DayQueue();
     this.cycleCount30DayQueue = (initialState?.cycleCount30DayQueue instanceof CircularFifoQueue) ? initialState?.cycleCount30DayQueue : SonnenState.createCycleCount30DayQueue();
   }
@@ -68,6 +70,10 @@ export class SonnenState {
 
     if (deserializedState.lastUpdate && typeof deserializedState.lastUpdate === 'string') {
       deserializedState.lastUpdate = new Date(deserializedState.lastUpdate);
+    }
+
+    if (deserializedState.installationDate && typeof deserializedState.installationDate === 'string') {
+      deserializedState.installationDate = new Date(deserializedState.installationDate);
     }
 
     deserializedState.lastBatteryDataUpdate = null; // transient property, do not restore
@@ -145,6 +151,20 @@ export class SonnenState {
     return this.calculateAverageCycleCountRate(this.cycleCount30DayQueue);
   }
 
+  getInstallationAverageCycleCountRate(): number | null {
+    if (!this.installationDate || !this.lastUpdate) {
+      return null;
+    }
+
+    const daysSinceInstallation = (this.lastUpdate.getTime() - this.installationDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceInstallation <= 0) {
+      return null;
+    }
+
+    return this.total_cycleCount / daysSinceInstallation;
+  }
+
   private calculateAverageCycleCountRate(queue: CircularFifoQueue<CycleCountSnapshot> | null): number | null {
     if (!queue || queue.getLength() < 2) {
       return null;
@@ -180,5 +200,16 @@ export class SonnenState {
 
   private static createCycleCount30DayQueue(): CircularFifoQueue<CycleCountSnapshot> {
     return new CircularFifoQueue<CycleCountSnapshot>(720);
+  }
+
+  toLog(): string {
+    return JSON.stringify(this, SonnenState.logReplacer, 2);
+  }
+
+  private static logReplacer(_key: string, value: any): any {
+    if (value instanceof CircularFifoQueue) {
+      return value.toLog();
+    }
+    return value;
   }
 }
