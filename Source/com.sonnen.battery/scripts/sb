@@ -9,7 +9,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+APP_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 CONFIG_DIR="${SB_CONFIG_DIR:-$HOME/.config/sonnen}"
 CACHE_DIR="${SB_CACHE_DIR:-$HOME/.cache/sonnen}"
@@ -18,7 +18,7 @@ HOST_FILE="$CONFIG_DIR/host"
 SERIAL_FILE="$CONFIG_DIR/serial"
 CACHE_FILE="$CACHE_DIR/discovery.json"
 CACHE_TTL="${SB_CACHE_TTL:-3600}"
-OPENAPI_FILE="${SB_OPENAPI:-$REPO_ROOT/Source/com.sonnen.battery/openapi.json}"
+OPENAPI_FILE="${SB_OPENAPI:-$APP_DIR/openapi.json}"
 FIND_URL="${SB_FIND_URL:-https://find-my.sonnen-batterie.com/find}"
 PORT="${SB_PORT:-80}"
 
