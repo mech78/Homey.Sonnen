@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": {
+      "*config/sonnen*": "deny"
+    },
+    "read": {
+      "~/.config/sonnen/**": "deny",
+      "**/.config/sonnen/**": "deny"
+    },
+    "grep": {
+      "~/.config/sonnen/**": "deny",
+      "**/.config/sonnen/**": "deny"
+    },
+    "glob": {
+      "~/.config/sonnen/**": "deny",
+      "**/.config/sonnen/**": "deny"
+    },
+    "list": {
+      "~/.config/sonnen/**": "deny",
+      "**/.config/sonnen/**": "deny"
+    },
+    "edit": {
+      "~/.config/sonnen/**": "deny",
+      "**/.config/sonnen/**": "deny"
+    }
+  }
+}

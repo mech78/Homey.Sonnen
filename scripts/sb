@@ -1,0 +1,301 @@
+#!/usr/bin/env bash
+# sb — convenience CLI for the sonnenBatterie local REST API.
+#
+# Secrets/config live OUTSIDE this repo:
+#   ~/.config/sonnen/token   Auth-Token (0600)
+#   ~/.config/sonnen/host    manual host override (optional)
+#   ~/.config/sonnen/serial  pinned battery serial (optional)
+#   ~/.cache/sonnen/discovery.json   discovery cache (TTL, 0600)
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+CONFIG_DIR="${SB_CONFIG_DIR:-$HOME/.config/sonnen}"
+CACHE_DIR="${SB_CACHE_DIR:-$HOME/.cache/sonnen}"
+TOKEN_FILE="$CONFIG_DIR/token"
+HOST_FILE="$CONFIG_DIR/host"
+SERIAL_FILE="$CONFIG_DIR/serial"
+CACHE_FILE="$CACHE_DIR/discovery.json"
+CACHE_TTL="${SB_CACHE_TTL:-3600}"
+OPENAPI_FILE="${SB_OPENAPI:-$REPO_ROOT/Source/com.sonnen.battery/openapi.json}"
+FIND_URL="${SB_FIND_URL:-https://find-my.sonnen-batterie.com/find}"
+PORT="${SB_PORT:-80}"
+
+die() { echo "sb: $*" >&2; exit 1; }
+
+ensure_dirs() {
+  mkdir -p "$CONFIG_DIR" "$CACHE_DIR"
+  chmod 700 "$CONFIG_DIR" "$CACHE_DIR" 2>/dev/null || true
+}
+
+usage() {
+  cat <<'EOF'
+sb — sonnenBatterie REST API CLI
+
+  token set|clear|status    store/remove the Auth-Token (hidden input, 0600 file)
+  discover                  list batteries from sonnen cloud discovery (serial, IP)
+  host [--refresh]          resolve battery host: override > DNS sb-<serial> > cloud
+  serial <number>           pin a battery serial (for multi-battery setups)
+  endpoints [pattern]       list documented endpoints from openapi.json
+  show <path> [METHOD]      show one endpoint's spec (params, responses)
+  curl <path> [METHOD] [JSON-BODY] [-- extra-curl-args]
+                            authenticated request; pipe output to jq
+
+Examples:
+  sb endpoints latestdata
+  sb show /api/v2/status GET
+  sb curl /api/v2/latestdata | jq '.Production_W'
+  sb curl /api/v2/setpoint/charge/1000 POST
+  sb curl /api/v2/configurations PUT '{"TimeOfUse": false}' --
+EOF
+}
+
+discovery_fresh() {
+  local now mtime
+  [ -f "$CACHE_FILE" ] || return 1
+  now=$(date +%s)
+  mtime=$(stat -c '%Y' "$CACHE_FILE" 2>/dev/null || echo 0)
+  (( now - mtime < CACHE_TTL ))
+}
+
+cloud_discover() {
+  local json
+  json=$(curl -fsS --max-time 10 "$FIND_URL") || die "cannot reach discovery endpoint: $FIND_URL"
+  echo "$json" | jq -e 'type == "array"' >/dev/null 2>&1 || die "unexpected discovery response"
+  printf '%s\n' "$json" > "$CACHE_FILE"
+  chmod 600 "$CACHE_FILE"
+}
+
+current_serial() {
+  if [ -n "${SB_SERIAL:-}" ]; then
+    echo "$SB_SERIAL"
+  elif [ -f "$SERIAL_FILE" ]; then
+    cat "$SERIAL_FILE"
+  fi
+}
+
+pick_battery() {
+  local serial ip count
+  serial=$(current_serial || true)
+  if [ -n "${serial:-}" ]; then
+    ip=$(jq -r --arg s "$serial" \
+      'first(.[] | select((.device | tostring) | startswith($s)) | .lanip) // empty' \
+      "$CACHE_FILE")
+    if [ -n "$ip" ]; then
+      echo "$ip"
+      return 0
+    fi
+  fi
+  count=$(jq 'length' "$CACHE_FILE")
+  if [ "$count" -eq 1 ]; then
+    jq -r '.[0].lanip' "$CACHE_FILE"
+    return 0
+  fi
+  {
+    echo "sb: multiple batteries found; pin one with 'sb serial <number>':"
+    jq -r '.[] | "  \(.device)  \(.lanip)  \(.info // "")"' "$CACHE_FILE"
+  } >&2
+  return 1
+}
+
+resolve_host() {
+  ensure_dirs
+  local refresh=false
+  [ "${1:-}" = "--refresh" ] && refresh=true
+
+  if [ "$refresh" = false ] && [ -f "$HOST_FILE" ]; then
+    cat "$HOST_FILE"
+    return 0
+  fi
+
+  local serial resolved
+  serial=$(current_serial || true)
+  if [ -n "${serial:-}" ] && [ "$refresh" = false ]; then
+    resolved=$(getent hosts "sb-$serial" 2>/dev/null | awk '{print $1; exit}' || true)
+    if [ -n "${resolved:-}" ]; then
+      echo "$resolved"
+      return 0
+    fi
+  fi
+
+  if [ "$refresh" = false ] && discovery_fresh && pick_battery; then
+    return 0
+  fi
+  cloud_discover
+  pick_battery || die "no battery host resolved"
+}
+
+cmd_token() {
+  ensure_dirs
+  case "${1:-}" in
+    set)
+      printf 'Auth-Token: '
+      IFS= read -rs TOKEN
+      echo
+      [ -n "$TOKEN" ] || die "empty token"
+      printf '%s\n' "$TOKEN" > "$TOKEN_FILE"
+      chmod 600 "$TOKEN_FILE"
+      echo "Token stored in $TOKEN_FILE (mode $(stat -c '%a' "$TOKEN_FILE"))."
+      ;;
+    clear)
+      rm -f "$TOKEN_FILE"
+      echo "Token removed."
+      ;;
+    status)
+      if [ -f "$TOKEN_FILE" ]; then
+        echo "Token present at $TOKEN_FILE (mode $(stat -c '%a' "$TOKEN_FILE"))."
+      else
+        echo "No token stored."
+      fi
+      ;;
+    *) die "usage: sb token set|clear|status" ;;
+  esac
+}
+
+cmd_serial() {
+  ensure_dirs
+  if [ $# -eq 0 ]; then
+    if [ -f "$SERIAL_FILE" ]; then
+      cat "$SERIAL_FILE"
+    else
+      echo "No serial pinned. See: sb discover"
+    fi
+    return 0
+  fi
+  [[ $1 =~ ^[0-9]+$ ]] || die "serial must be numeric (see: sb discover)"
+  printf '%s\n' "$1" > "$SERIAL_FILE"
+  chmod 600 "$SERIAL_FILE"
+  echo "Serial pinned: sb-$1"
+}
+
+cmd_discover() {
+  ensure_dirs
+  if discovery_fresh && [ "${1:-}" != "--refresh" ]; then
+    echo "(cached, $(date -d "@$(stat -c '%Y' "$CACHE_FILE")" '+%Y-%m-%d %H:%M:%S'); refresh with --refresh)"
+  else
+    cloud_discover
+  fi
+  jq -r '.[] | "\(.device)  \(.lanip)  hostname: sb-\(.device)  \(.info // "")"' "$CACHE_FILE"
+}
+
+cmd_host() {
+  resolve_host "$@"
+}
+
+cmd_endpoints() {
+  [ -f "$OPENAPI_FILE" ] || die "openapi.json not found at $OPENAPI_FILE"
+  local pattern="${1:-}" out
+  out=$(jq -r '
+    .paths | to_entries[] as $p |
+    $p.value | to_entries[] |
+    select(.key == "get" or .key == "post" or .key == "put" or .key == "delete" or .key == "patch") |
+    "[\(.key | ascii_upcase)]\t\($p.key)\t\(.value.summary // .value.operationId // "")"
+  ' "$OPENAPI_FILE")
+  if [ -n "$pattern" ]; then
+    out=$(echo "$out" | grep -i -- "$pattern") || die "no endpoint matches '$pattern'"
+  fi
+  echo "$out" | column -t -s "$(printf '\t')"
+}
+
+cmd_show() {
+  [ -f "$OPENAPI_FILE" ] || die "openapi.json not found at $OPENAPI_FILE"
+  local path="${1:-}" method="${2:-}"
+  [ -n "$path" ] || die "usage: sb show <path> [METHOD]"
+  case "$path" in /*) ;; *) path="/$path" ;; esac
+  local entry
+  entry=$(jq --arg p "$path" '.paths[$p] // null' "$OPENAPI_FILE")
+  [ "$(echo "$entry" | jq -r 'type')" = "object" ] || die "path $path not in openapi.json (try: sb endpoints)"
+  if [ -n "$method" ]; then
+    echo "$entry" | jq --arg m "${method,,}" '.[$m] // null'
+  else
+    echo "$entry" | jq .
+  fi
+}
+
+cmd_curl() {
+  local args=("$@")
+  local path method body
+  path="${args[0]:-}"
+  [ -n "$path" ] || die "usage: sb curl <path> [METHOD] [JSON-BODY] [-- extra-curl-args]"
+  case "$path" in /*) ;; *) path="/$path" ;; esac
+  method="${args[1]:-GET}"
+  method="${method^^}"
+  body="${args[2]:-}"
+  local sep=-1 i
+  for i in 1 2 3; do
+    if [ "${args[i]:-}" = "--" ]; then
+      sep=$i
+      break
+    fi
+  done
+  case "$sep" in
+    1)  method="GET"; body="" ;;
+    2)  method="${args[1]:-GET}"; body="" ;;
+    3)  method="${args[1]:-GET}"; body="${args[2]:-}" ;;
+    -1) [ $# -le 3 ] || die "unexpected extra args (use '--' before extra curl arguments)" ;;
+  esac
+  method="${method^^}"
+  local extra=()
+  if [ "$sep" -ge 0 ]; then
+    extra=("${args[@]:$((sep + 1))}")
+  fi
+
+  local a
+  for a in ${extra[@]+"${extra[@]}"}; do
+    case "$a" in
+      -v|--verbose|--trace|--trace-|--trace-*) die "verbose/trace output would leak the Auth-Token header; refused" ;;
+    esac
+  done
+
+  local host url
+  host=$(resolve_host) || die "cannot resolve battery host (try: sb discover)"
+  host="${host#http://}"
+  host="${host#https://}"
+  host="${host%/}"
+  case "$host" in
+    *:*) ;;
+    *) host="$host:$PORT" ;;
+  esac
+  url="http://$host$path"
+
+  local hdr=""
+  if [ -f "$TOKEN_FILE" ]; then
+    hdr=$(mktemp "$CONFIG_DIR/.header.XXXXXX")
+    chmod 600 "$hdr"
+    printf 'Auth-Token: %s\n' "$(cat "$TOKEN_FILE")" > "$hdr"
+  fi
+
+  local curl_args=(-sS -X "$method" ${extra[@]+"${extra[@]}"})
+  if [ -n "$body" ]; then
+    curl_args+=(--data "$body" -H 'Content-Type: application/json')
+  fi
+  if [ -n "$hdr" ]; then
+    curl_args+=(--header "@$hdr")
+  fi
+  local rc=0
+  if ! curl "${curl_args[@]}" "$url"; then
+    rc=$?
+  fi
+  rm -f "$hdr"
+  return "$rc"
+}
+
+main() {
+  local cmd="${1:-}"
+  [ -n "$cmd" ] && shift || true
+  case "$cmd" in
+    token)     cmd_token "$@" ;;
+    discover)  cmd_discover "$@" ;;
+    host)      cmd_host "$@" ;;
+    serial)    cmd_serial "$@" ;;
+    endpoints) cmd_endpoints "$@" ;;
+    show)      cmd_show "$@" ;;
+    curl)      cmd_curl "$@" ;;
+    help|-h|--help) usage ;;
+    "")        usage ;;
+    *) die "unknown command '$cmd' (try: sb help)" ;;
+  esac
+}
+
+main "$@"
