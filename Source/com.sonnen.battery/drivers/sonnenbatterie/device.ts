@@ -269,16 +269,18 @@ export class BatteryDevice extends SonnenDevice {
 
       this.log("Fetching data...");
 
-      const latestDataJson = await client.getLatestData();
-      const statusJson = await client.getStatus();
-      const configurationsJson = await client.getConfigurations();
+      const [latestDataJson, statusJson, configurationsJson, batteryJson] = await Promise.all([
+        client.getLatestData(),
+        client.getStatus(),
+        client.getConfigurations(),
+        client.getBattery(),
+      ]);
 
       const currentUpdate = new Date(latestDataJson.Timestamp);
 
-      // Fetch battery data for cycle count with conditional update (every hour)
+      // Battery data is fetched every cycle (e.g. for battery capacity), but cycle count
+      // snapshots are taken at most once per hour to avoid polluting the ring buffer queues
       const shouldUpdateBatteryData = this.isUpdateDue(currentUpdate, lastState.lastBatteryDataUpdate, this.batteryDateUpdateInterval);
-      
-      const batteryJson = shouldUpdateBatteryData ? await client.getBattery() : null;
 
       // update device's batteries to actual number of internal batteries
       const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
@@ -330,7 +332,7 @@ export class BatteryDevice extends SonnenDevice {
 
       const currentState = new SonnenState({
         lastUpdate: currentUpdate,
-        lastBatteryDataUpdate: batteryJson ? currentUpdate : lastState.lastBatteryDataUpdate,
+        lastBatteryDataUpdate: shouldUpdateBatteryData ? currentUpdate : lastState.lastBatteryDataUpdate,
 
         totalDailyToBattery_Wh: this.aggregateTotal(lastState.totalDailyToBattery_Wh, toBattery_W, lastState.lastUpdate, currentUpdate, true),
         totalDailyFromBattery_Wh: this.aggregateTotal(lastState.totalDailyFromBattery_Wh, fromBattery_W, lastState.lastUpdate, currentUpdate, true),
@@ -351,13 +353,16 @@ export class BatteryDevice extends SonnenDevice {
         todayMaxGridFeedIn_Wh,
         todayMaxGridConsumption_Wh,
         todayMaxProduction_Wh,
-        total_cycleCount: batteryJson ? batteryJson.cyclecount : lastState.total_cycleCount,
+        total_cycleCount: batteryJson.cyclecount,
         cycleCount7DayQueue: lastState.cycleCount7DayQueue,
         cycleCount30DayQueue: lastState.cycleCount30DayQueue,
         installationDate: lastState.installationDate,
       });
 
-      this.log("Emitting currentState and statusJson to other devices...\n" + currentState.toLog() + "\n" + JSON.stringify(statusJson, null, 2));      
+      if (this.isDebugMode()) {
+        this.log("Emitting currentState and statusJson to other devices...\n" + currentState.toLog() + "\n" + JSON.stringify(statusJson, null, 2));
+        this.log("Battery data:\n" + JSON.stringify(batteryJson, null, 2));
+      }
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
       this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
@@ -374,9 +379,9 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
       this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
 
-      const remaining_energy_Wh = +latestDataJson.FullChargeCapacity * (statusJson.USOC / 100);
-      this.setCapabilityValue('capacity_remaining_capability', remaining_energy_Wh / 1000);
-      this.setCapabilityValue('capacity_capability', +latestDataJson.FullChargeCapacity / 1000);
+      const fullChargeCapacity_Wh = +batteryJson.fullchargecapacitywh;
+      this.setCapabilityValue('capacity_capability', fullChargeCapacity_Wh / 1000); // kWh
+      this.setCapabilityValue('capacity_remaining_capability', fullChargeCapacity_Wh * (+statusJson.USOC / 100) / 1000); // usable energy in kWh
 
       let chargingState: string;
       if (statusJson.Pac_total_W < 0) {
@@ -413,7 +418,7 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
       this.setSettings({ 'prognosis_charging': prognosisChargingMode });
       
-      if (batteryJson) {
+      if (shouldUpdateBatteryData) {
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
       }
 
