@@ -1,11 +1,11 @@
 ---
 name: sb-api
-description: Query the sonnenBatterie local REST API via the scripts/sb CLI — endpoint lookup from openapi.json, automatic hostname discovery, authenticated curl without ever exposing the Auth-Token. Use when the user asks to curl/query/inspect the sonnen battery API, list REST endpoints, fetch battery data (latestdata, status, configurations, setpoint, powermeter), or debug API access to the battery.
+description: Query the sonnenBatterie local REST API via the Source/com.sonnen.battery/scripts/sb CLI — endpoint lookup from openapi.json, automatic hostname discovery, authenticated curl without ever exposing the Auth-Token. Use when the user asks to curl/query/inspect the sonnen battery API, list REST endpoints, fetch battery data (latestdata, status, configurations, setpoint, powermeter), or debug API access to the battery.
 ---
 
 # sb — sonnenBatterie REST API CLI
 
-Run from the repo root: `scripts/sb <subcommand> ...` (add `scripts/` to PATH for plain `sb`).
+Run from the repo root: `Source/com.sonnen.battery/scripts/sb <subcommand> ...` (add `scripts/` to PATH for plain `sb`).
 
 ## Subcommands
 
