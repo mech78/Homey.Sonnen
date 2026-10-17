@@ -189,6 +189,11 @@ const client = this.createSonnenBatterieClient();
 const latestDataJson = await client.getLatestData();
 ```
 
+### REST API Reference (openapi.json)
+If `openapi.json` is present in the app root (git-ignored, so it may not exist on fresh clones), use it as the authoritative reference when implementing or extending `SonnenBatterieClient` — it documents endpoint paths, request/response payload shapes and Auth-Token usage (e.g. `GET /api/v2/latestdata`). Prefer its field names when parsing API responses or deciding how to access a new endpoint.
+
+Note that `openapi.json` is proprietary sonnen content and deliberately excluded via `.gitignore` (`/openapi.json`). If the file is missing, ask the user to provide it rather than guessing API details. Do not commit or push it.
+
 ## Homey-Specific Considerations
 
 1. Follow Homey app structure conventions
