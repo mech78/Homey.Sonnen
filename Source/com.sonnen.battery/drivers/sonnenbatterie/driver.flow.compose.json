@@ -65,10 +65,10 @@
         "nl": "Stel Time-of-Use in met uren"
       },
       "titleFormatted": {
-        "en": "Set Time-of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+        "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
         "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
-        "da": "Indstil Time-of-Use startende [[start]] og sluttende efter timer af [[hours]] med opladning af maksimalt [[max_power]]W i denne periode.",
-        "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na uren van [[hours]] met een lading van maximaal [[max_power]]W binnen deze periode."
+        "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
+        "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
       },
       "hint": {
         "en": "Set period for Time-of-Use",
@@ -119,15 +119,15 @@
       "id": "set_time_of_use_hours_string",
       "title": {
         "en": "Set Time-of-Use with custom string",
-        "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen",
+        "de": "Zeitabhängige Steuerung mit Stundenangabe als Text",
         "da": "Indstil Time-of-Use med brugerdefineret streng",
         "nl": "Stel Time-of-Use in met aangepaste string"
       },
       "titleFormatted": {
-        "en": "Set Time-of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+        "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
         "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
-        "da": "Indstil Time-of-Use startende [[start]] og sluttende efter timer af [[hours]] med opladning af maksimalt [[max_power]]W i denne periode.",
-        "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na uren van [[hours]] met een lading van maximaal [[max_power]]W binnen deze periode."
+        "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
+        "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
       },
       "hint": {
         "en": "Set period for Time-of-Use",
@@ -140,8 +140,8 @@
           "type": "text",
           "name": "start",
           "placeholder": {
-            "en": "Enter starting time for new charge event. String must be well-formated 24h format (ex: 13:15)",
-            "de": "Startzeit für neues Ladeereignis eingeben. String must be well-formated 24h format (ex: 13:15)",
+            "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+            "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
             "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
             "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
           }
