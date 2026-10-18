@@ -2,7 +2,7 @@
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
   "version": "2.7.0",
-  "compatibility": ">=12.9.0",
+  "compatibility": ">=12.13.0",
   "sdk": 3,
   "platforms": [
     "local"
@@ -1184,7 +1184,9 @@
         "button.reset_meter",
         "measure_power",
         "meter_power.charged",
-        "meter_power.discharged"
+        "meter_power.discharged",
+        "target_power",
+        "target_power_mode"
       ],
       "capabilitiesOptions": {
         "button.reset_meter": {
@@ -1213,6 +1215,56 @@
         "meter_power.discharged": {
           "uiComponent": null,
           "preventInsights": true
+        },
+        "target_power": {
+          "uiComponent": null,
+          "min": -46000,
+          "max": 46000,
+          "step": 100,
+          "title": {
+            "en": "Target Power (Homey control)",
+            "de": "Zielleistung (Homey-Steuerung)",
+            "da": "Måleffekt (Homey-styring)",
+            "nl": "Streefvermogen (Homey-sturing)"
+          },
+          "desc": {
+            "en": "Signed power setpoint in watts for Homey-controlled operation: positive charges, negative discharges, 0 idles. Hidden from the UI; set via flows, EMS apps or the 'Set target power' card.",
+            "de": "Signiertes Sollleistung in Watt für die Homey-gesteuerte Nutzung: positiv lädt, negativ entlädt, 0 bedeutet Leerlauf. In der UI ausgeblendet; über Flows, EMS-Apps oder die Karte 'Zielleistung setzen' setzen.",
+            "da": "Signeret effektmålværdi i watt til Homey-styret drift: positiv oplader, negativ aflader, 0 er inaktiv. Skjult i UI; angives via flows, EMS-apps eller 'Angiv måleffekt'-kortet.",
+            "nl": "Getekend streefvermogen in watt voor Homey-gestuurde werking: positief laadt, negatief ontlaadt, 0 is inactief. Verborgen in de UI; instelbaar via flows, EMS-apps of de 'Streefvermogen instellen'-kaart."
+          }
+        },
+        "target_power_mode": {
+          "uiComponent": null,
+          "values": [
+            {
+              "id": "homey",
+              "title": {
+                "en": "Homey",
+                "de": "Homey",
+                "da": "Homey",
+                "nl": "Homey"
+              }
+            },
+            {
+              "id": "self_consumption",
+              "title": {
+                "en": "Self consumption",
+                "de": "Eigenverbrauch",
+                "da": "Eget forbrug",
+                "nl": "Eigen verbruik"
+              }
+            },
+            {
+              "id": "time_of_use",
+              "title": {
+                "en": "Time-of-Use",
+                "de": "Time-of-Use",
+                "da": "Time-of-Use",
+                "nl": "Time-of-Use"
+              }
+            }
+          ]
         },
         "battery_charging_state": {
           "title": {
