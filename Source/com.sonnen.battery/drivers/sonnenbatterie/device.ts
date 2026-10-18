@@ -15,6 +15,7 @@ const KNOWN_OPERATING_MODES = ['1', '2', '6', '10'];
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
+  private refreshTimeoutId: NodeJS.Timeout | undefined;
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
   private lastReportedOperatingMode: string | null = null;
   private missingCapabilitiesWarned = new Set<string>();
@@ -54,12 +55,20 @@ export class BatteryDevice extends SonnenDevice {
     if (this.updateIntervalId) {
       this.homey.clearInterval(this.updateIntervalId);
     }
+    if (this.refreshTimeoutId) {
+      this.homey.clearTimeout(this.refreshTimeoutId);
+      this.refreshTimeoutId = undefined;
+    }
     this.saveDeviceState();
 
     super.onDeleted();
   }
 
   async onUninit() {
+    if (this.refreshTimeoutId) {
+      this.homey.clearTimeout(this.refreshTimeoutId);
+      this.refreshTimeoutId = undefined;
+    }
     this.saveDeviceState();
 
     super.onUninit();
@@ -191,7 +200,17 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
-    await this.refreshState(); // immediately refresh UI
+    // Defer the refresh until this onSettings handler has completed: the
+    // setSettings() calls inside loadLatestState() fail with
+    // "Cannot set Settings while this.onSettings is still pending"
+    // when run while Homey still considers onSettings in-flight.
+    if (this.refreshTimeoutId) {
+      this.homey.clearTimeout(this.refreshTimeoutId);
+    }
+    this.refreshTimeoutId = this.homey.setTimeout(() => {
+      this.refreshTimeoutId = undefined;
+      this.refreshState().catch((err) => this.error('Deferred refreshState failed', err));
+    }, 500);
   }
 
   /**
