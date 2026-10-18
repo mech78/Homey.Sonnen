@@ -7,6 +7,7 @@ import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
 import { ControlActions, TargetPowerMode, TargetPowerModeValue } from '../../domain/TargetPowerMode';
+import { PowerLimits, SiteLimitsResponse, TargetPowerLimits } from '../../domain/TargetPowerLimits';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -17,6 +18,9 @@ export class BatteryDevice extends SonnenDevice {
   private missingCapabilitiesWarned = new Set<string>();
   private manualStandbyActive: boolean = false;
   private targetPowerModeState: TargetPowerModeValue | null = null;
+  private powerLimits: PowerLimits = { charge: TargetPowerLimits.DEFAULT_LIMIT_W, discharge: TargetPowerLimits.DEFAULT_LIMIT_W, source: 'default' };
+  private siteLimitsCache: { fetchedAt: number; data: SiteLimitsResponse | null } | null = null;
+  private readonly siteLimitsCacheTtlMillis = 600000; // 10 minutes
 
 
   async onInit() {
@@ -280,16 +284,65 @@ export class BatteryDevice extends SonnenDevice {
     const currentPowerValue = this.getCapabilityValue('target_power');
     const currentPower = currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue;
 
+    // Clamp the effective power to the device limits — the battery silently
+    // accepts oversized setpoints, so the clamp keeps flow feedback honest.
+    const effectivePower = requestedPower ?? currentPower;
+    let clampedPower: number | null = null;
+    if (effectivePower !== null) {
+      const clamped = TargetPowerLimits.clampTargetPower(effectivePower, this.powerLimits);
+      if (clamped.clamped) {
+        this.log('Clamping target power to device limits', effectivePower, '->', clamped.value, '(source:', this.powerLimits.source + ')');
+      }
+      clampedPower = clamped.value;
+    }
+
     const actions = TargetPowerMode.planPowerControl({
       requestedMode,
       previousMode: this.targetPowerModeState,
-      requestedPower,
-      currentPower,
+      requestedPower: clampedPower,
+      currentPower: requestedPower !== null ? null : currentPower,
       standbyActive: this.manualStandbyActive,
     });
 
     await this.applyControlActions(actions);
     this.targetPowerModeState = requestedMode;
+  }
+
+  /**
+   * Resolves the device's power limits from the cached `site/limits` response
+   * (preferred, newer systems) and `IC_InverterMaxPower_w` from the already
+   * fetched configurations (fallback). Results are stored as device settings
+   * for diagnostics.
+   */
+  private async refreshPowerLimits(configurationsJson: Record<string, unknown>): Promise<PowerLimits> {
+    const siteLimits = await this.getSiteLimitsCached();
+    const inverterMaxPowerW = configurationsJson['IC_InverterMaxPower_w'] as string | number | null | undefined ?? null;
+    const limits = TargetPowerLimits.resolve(siteLimits, inverterMaxPowerW);
+
+    if (limits.charge !== this.powerLimits.charge || limits.discharge !== this.powerLimits.discharge || limits.source !== this.powerLimits.source) {
+      this.log('Resolved power limits:', JSON.stringify(limits));
+      this.powerLimits = limits;
+    }
+
+    return limits;
+  }
+
+  private async getSiteLimitsCached(): Promise<SiteLimitsResponse | null> {
+    const now = Date.now();
+    if (this.siteLimitsCache && (now - this.siteLimitsCache.fetchedAt) < this.siteLimitsCacheTtlMillis) {
+      return this.siteLimitsCache.data;
+    }
+
+    try {
+      const data = await this.createSonnenBatterieClient().getSiteLimits() as SiteLimitsResponse;
+      this.siteLimitsCache = { fetchedAt: now, data };
+      return data;
+    } catch (error) {
+      // Older systems may not support the endpoint; fall back to the inverter limit
+      this.log('Could not read site limits, falling back to inverter limit', error);
+      this.siteLimitsCache = { fetchedAt: now, data: null };
+      return null;
+    }
   }
 
   /**
@@ -551,6 +604,13 @@ export class BatteryDevice extends SonnenDevice {
       const standbyReason = latestDataJson.ic_status['Standby Reason'];
       if (standbyReason) {
         this.manualStandbyActive = standbyReason.Manual === true;
+      }
+
+      // Refresh the device power limits used for target_power clamping
+      try {
+        await this.refreshPowerLimits(configurationsJson);
+      } catch (limitsError) {
+        this.error('Could not refresh power limits', limitsError);
       }
       
       const scheduleRaw = configurationsJson['EM_ToU_Schedule'];

@@ -192,7 +192,24 @@ export class SonnenBatterieClient {
       throw await SonnenBatterieClient.createFetchError(response);
     }
 
-    return await response.json();
+    return await response.json() as Record<string, unknown>;
+  }
+
+  /**
+   * Reads the site power limits (max AC charge/discharge power etc.).
+   * Only available on newer hybrid/AC-coupled system generations; older
+   * systems return an empty object.
+   */
+  public async getSiteLimits(): Promise<Record<string, unknown>> {
+    const response = await fetch(`${this.getBaseUrl()}/api/v2/site/limits`, {
+      headers: this.getHeaders()
+    });
+
+    if (!response.ok) {
+      throw await SonnenBatterieClient.createFetchError(response);
+    }
+
+    return await response.json() as Record<string, unknown>;
   }
 
   public static async discoverBatteries(): Promise<SonnenBatteries> {
