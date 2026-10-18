@@ -280,5 +280,11 @@
     "de": "Neue Time-of-Use-Flow-Karten, die Start- und Endzeit als Text akzeptieren: Zeitplan direkt aus Flows setzen oder pausieren. Neue Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen': Setzen des kompletten Zeitplans aus Flows im selben Format wie in den Geräteeinstellungen (eine Periode pro Zeile, 'HH:MM-HH:MM: maxW').",
     "da": "Nye Time-of-Use flowkort, der accepterer start- og sluttidspunkt som tekst: indstil eller sæt tidsplanen på pause direkte fra flows. Nyt handlingskort 'Indstil Time-of-Use tidsplan som tekst': indstil hele tidsplanen fra flows med samme format som i enhedsindstillingerne (én periode pr. linje, 'TT:MM-TT:MM: maksW').",
     "nl": "Nieuwe Time-of-Use flowkaarten die start- en eindtijd als tekst accepteren: stel het schema in of pauzeer het direct vanuit flows. Nieuwe actiekaart 'Stel Time-of-Use schema in als tekst': stel het volledige schema in vanuit flows met hetzelfde formaat als in de apparaatinstellingen (één periode per regel, 'UU:MM-UU:MM: maxW')."
+  },
+  "2.8.0": {
+    "en": "Homey Energy target power control: hidden target_power and target_power_mode capabilities to control charging/discharging via Flows or EMS apps. Idle uses manual standby, setpoints are clamped to the device limits. Requires Homey v12.13.0 or later.",
+    "de": "Homey Energy Zielleistungssteuerung: verborgene target_power- und target_power_mode-Funktionen zum Steuern von Laden/Entladen über Flows oder EMS-Apps. Leerlauf nutzt manuellen Standby, Sollwerte werden auf die Gerätelimits begrenzt. Erfordert Homey v12.13.0 oder höher.",
+    "da": "Homey Energy måleffektstyring: skjulte target_power- og target_power_mode-funktioner til styring af opladning/afladning via flows eller EMS-apps. Inaktivitet bruger manuel standby, målværdier begrænses til enhedens grænser. Kræver Homey v12.13.0 eller nyere.",
+    "nl": "Homey Energy streefvermogensturing: verborgen target_power- en target_power_mode-functies om laden/ontladen via flows of EMS-apps te sturen. Inactief gebruikt handmatige standby, streefwaarden worden begrensd tot de apparaatlimieten. Vereist Homey v12.13.0 of hoger."
   }
 }

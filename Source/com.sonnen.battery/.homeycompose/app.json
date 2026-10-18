@@ -1,6 +1,6 @@
 {
   "id": "com.sonnen.battery",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "compatibility": ">=12.13.0",
   "sdk": 3,
   "platforms": [
