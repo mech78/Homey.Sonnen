@@ -167,14 +167,6 @@ const [latestDataJson, statusJson, configurationsJson] = await Promise.all([
 
 ## Project-Specific Patterns
 
-### Plans & Feature Requests
-Long-form plans, implementation outlines and feature requests belong in the
-app folder's `plans/` directory (`Source/com.sonnen.battery/plans/`). One
-markdown file per topic, kebab-case naming (existing convention, some files
-may carry a type marker such as `feature-request-` in the name). Do not write
-plan/feature-request documents anywhere else (e.g. not into
-`~/.opencode/plan/`).
-
 ### Localization Pattern
 The project uses a `LocalizationService` singleton pattern:
 ```typescript
