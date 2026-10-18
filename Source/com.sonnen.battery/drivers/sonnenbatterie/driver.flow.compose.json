@@ -175,6 +175,62 @@
       ]
     },
     {
+      "id": "set_time_of_use_string",
+      "title": {
+        "en": "Set Time-of-Use with start and end time as text",
+        "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text",
+        "da": "Indstil Time-of-Use med start- og sluttidspunkt som tekst",
+        "nl": "Stel Time-of-Use in met start- en eindtijd als tekst"
+      },
+      "titleFormatted": {
+        "en": "Set Time-of-Use starting [[start]] and ending [[end]] with charge of maximum [[max_power]]W within this period.",
+        "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
+        "da": "Indstil Time-of-Use startende [[start]] og sluttende [[end]] med opladning af maksimalt [[max_power]]W i denne periode.",
+        "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode."
+      },
+      "hint": {
+        "en": "Set period for Time-of-Use",
+        "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
+        "da": "Indstil periode for Time-of-Use",
+        "nl": "Stel periode in voor Time-of-Use"
+      },
+      "args": [
+        {
+          "type": "text",
+          "name": "start",
+          "placeholder": {
+            "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+            "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+            "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+            "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+          }
+        },
+        {
+          "type": "text",
+          "name": "end",
+          "placeholder": {
+            "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
+            "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+            "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+            "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+          }
+        },
+        {
+          "type": "number",
+          "name": "max_power",
+          "placeholder": {
+            "en": "Max. power from grid (0-46000 W)",
+            "de": "Max. Leistung aus dem Netz (0-46000 W)",
+            "da": "Maks. effekt fra net (0-46000 W)",
+            "nl": "Max. vermogen van net (0-46000 W)"
+          },
+          "min": 0,
+          "max": 46000,
+          "step": 1
+        }
+      ]
+    },
+    {
       "id": "reset_time_of_use",
       "title": {
         "en": "Reset Time-of-Use",

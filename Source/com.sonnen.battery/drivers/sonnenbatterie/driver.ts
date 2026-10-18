@@ -20,6 +20,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("set_time_of_use_hours_string")
       .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
+    this.homey.flow.getActionCard("set_time_of_use_string")
+      .registerRunListener(async (args) => this.handleSetTimeOfUse(args));
+
     this.homey.flow.getActionCard("reset_time_of_use")
       .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
