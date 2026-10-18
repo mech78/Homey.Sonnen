@@ -120,7 +120,8 @@
       "invalid_installation_date_format": "Ugyldigt installationsdatoformat. Brug venligst et gyldigt datoformat.",
       "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden.",
       "backupBuffer": "Ugyldig backup-bufferværdi. Gyldige værdier er 0 (deaktiveret) eller 5–100 %.",
-      "invalid_setpoint_power": "Ugyldig effektværdi: __power__. Kun hele ikke-negative watt understøttes."
+      "invalid_setpoint_power": "Ugyldig effektværdi: __power__. Kun hele ikke-negative watt understøttes.",
+      "invalid_target_power_mode": "Ugyldig måleffekttilstand: __mode__."
     }
   }
 }

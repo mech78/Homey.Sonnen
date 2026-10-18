@@ -120,7 +120,8 @@
       "invalid_installation_date_format": "Ungültiges Installationsdatum. Bitte verwenden Sie ein gültiges Datumsformat.",
       "installation_date_in_future": "Das Installationsdatum darf nicht in der Zukunft liegen.",
       "backupBuffer": "Ungültiger Backup-Puffer-Wert. Gültige Werte sind 0 (deaktiviert) oder 5–100 %.",
-      "invalid_setpoint_power": "Ungültiger Sollleistungswert: __power__. Nur ganze nicht-negative Watt werden unterstützt."
+      "invalid_setpoint_power": "Ungültiger Sollleistungswert: __power__. Nur ganze nicht-negative Watt werden unterstützt.",
+      "invalid_target_power_mode": "Ungültiger Zielleistungsmodus: __mode__."
     }
   }
 }

@@ -114,6 +114,7 @@
       "installation_date_in_future": "Installation date cannot be in the future.",
       "backupBuffer": "Invalid backup buffer value. Valid values are 0 (disabled) or 5-100 %.",
       "invalid_setpoint_power": "Invalid setpoint power value: __power__. Only whole non-negative watts are supported.",
+      "invalid_target_power_mode": "Invalid target power mode: __mode__.",
       "ToU": {
         "invalid threshold": "Time-of-Use max. power value must be between 0 and 46000 watts.",
         "ToU windows overlap": "Time-of-Use windows must not overlap."

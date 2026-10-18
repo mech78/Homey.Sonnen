@@ -1,0 +1,170 @@
+import { LocalizedError } from './LocalizedError';
+
+/**
+ * Values supported by the Homey `target_power_mode` capability.
+ *
+ * `homey` is Homey's reserved value for "Homey is in control". The device-side
+ * values intentionally mirror the sonnenBatterie operating modes that are
+ * relevant for power management, so the capability doubles as a standardized
+ * representation of the battery's operating mode.
+ */
+export type TargetPowerModeValue = 'homey' | 'self_consumption' | 'time_of_use';
+
+/**
+ * Direction of a sonnenBatterie setpoint command.
+ */
+export type SetpointDirection = 'charge' | 'discharge';
+
+/**
+ * sonnenBatterie `EM_OperatingMode` values used by this feature:
+ * 1 = Manual (carrier mode for Homey-controlled setpoints),
+ * 2 = Self consumption, 10 = Time-of-Use.
+ */
+const MODE_TO_OPERATING_MODE: Record<Exclude<TargetPowerModeValue, 'homey'>, string> = {
+  self_consumption: '2',
+  time_of_use: '10',
+};
+
+const OPERATING_MODE_TO_MODE: Record<string, TargetPowerModeValue> = {
+  '1': 'homey',
+  '2': 'self_consumption',
+  '10': 'time_of_use',
+};
+
+/**
+ * A concrete setpoint command for the sonnenBatterie API.
+ */
+export interface SetpointCommand {
+  direction: SetpointDirection;
+  watts: number;
+}
+
+/**
+ * The actions a control transition requires. The device layer applies these
+ * sequentially to the sonnenBatterie API; the planning itself is pure logic.
+ */
+export interface ControlActions {
+  /** True when manual standby must be disabled before anything else. */
+  disableStandby: boolean;
+  /** True when manual standby must be enabled (idle request). */
+  enableStandby: boolean;
+  /** `EM_OperatingMode` to switch to, or null when the mode is unchanged. */
+  operatingMode: string | null;
+  /** Setpoint to apply, or null when no setpoint is needed (e.g. idle). */
+  setpoint: SetpointCommand | null;
+}
+
+export interface PlanPowerControlInput {
+  /** The new `target_power_mode` capability value. */
+  requestedMode: TargetPowerModeValue;
+  /** The previous `target_power_mode` capability value, or null when unknown. */
+  previousMode: TargetPowerModeValue | null;
+  /** The new `target_power` value in watts, or null when only the mode changed. */
+  requestedPower: number | null;
+  /** The previously stored `target_power` value in watts, or null when unknown. */
+  currentPower: number | null;
+  /** Whether manual standby is currently active on the battery. */
+  standbyActive: boolean;
+}
+
+/**
+ * Pure mapping/decision logic for the Homey `target_power` / `target_power_mode`
+ * capabilities against the sonnenBatterie operating modes and setpoint API.
+ */
+export class TargetPowerMode {
+
+  /**
+   * Maps a `target_power_mode` value to the sonnenBatterie `EM_OperatingMode`.
+   * `homey` maps to Manual (1), the only mode in which the battery holds a
+   * setpoint without an expiry timer.
+   */
+  public static toOperatingMode(mode: TargetPowerModeValue): string {
+    if (mode === 'homey') {
+      return '1';
+    }
+    const operatingMode = MODE_TO_OPERATING_MODE[mode];
+    if (operatingMode === undefined) {
+      throw new LocalizedError('error.validation.invalid_target_power_mode', { mode });
+    }
+    return operatingMode;
+  }
+
+  /**
+   * Maps a sonnenBatterie `EM_OperatingMode` back to a `target_power_mode`
+   * value, or null when the operating mode has no capability representation
+   * (e.g. mode 6 "Module extension"). Used to sync the capability with
+   * externally changed modes.
+   */
+  public static fromOperatingMode(operatingMode: string): TargetPowerModeValue | null {
+    return OPERATING_MODE_TO_MODE[String(operatingMode)] ?? null;
+  }
+
+  /**
+   * Validates that a power value is a whole non-negative number of watts,
+   * matching the battery's setpoint API constraints (negative or fractional
+   * values are rejected with "invalid argument").
+   */
+  public static isValidTargetPower(watts: number): boolean {
+    return Number.isInteger(watts) && watts >= 0;
+  }
+
+  /**
+   * Decomposes a signed `target_power` value into a setpoint command.
+   * Positive values charge, negative values discharge, zero means idle
+   * (no setpoint — manual standby is used instead).
+   */
+  public static decomposeTargetPower(watts: number): SetpointCommand | null {
+    if (!this.isValidTargetPower(Math.abs(watts))) {
+      throw new LocalizedError('error.validation.invalid_setpoint_power', { power: String(watts) });
+    }
+    if (watts > 0) {
+      return { direction: 'charge', watts };
+    }
+    if (watts < 0) {
+      return { direction: 'discharge', watts: Math.abs(watts) };
+    }
+    return null;
+  }
+
+  /**
+   * Plans the actions required for a `target_power` / `target_power_mode`
+   * capability change. Pure function — the device layer applies the returned
+   * actions in order: disableStandby → operatingMode → enableStandby/setpoint.
+   */
+  public static planPowerControl(input: PlanPowerControlInput): ControlActions {
+    const power = input.requestedPower ?? input.currentPower ?? 0;
+    if (!this.isValidTargetPower(Math.abs(power))) {
+      throw new LocalizedError('error.validation.invalid_setpoint_power', { power: String(power) });
+    }
+
+    const modeChanged = input.requestedMode !== input.previousMode;
+
+    if (input.requestedMode !== 'homey') {
+      return {
+        disableStandby: input.standbyActive,
+        enableStandby: false,
+        operatingMode: modeChanged ? this.toOperatingMode(input.requestedMode) : null,
+        setpoint: null,
+      };
+    }
+
+    // Homey in control: Manual mode carries the setpoint (no expiry timer).
+    // Idle (0 W) is implemented via persistent manual standby instead of a
+    // transient 0 W setpoint.
+    if (power === 0) {
+      return {
+        disableStandby: false,
+        enableStandby: !input.standbyActive,
+        operatingMode: modeChanged ? '1' : null,
+        setpoint: null,
+      };
+    }
+
+    return {
+      disableStandby: input.standbyActive,
+      enableStandby: false,
+      operatingMode: modeChanged ? '1' : null,
+      setpoint: this.decomposeTargetPower(power),
+    };
+  }
+}
