@@ -29,6 +29,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("pause_time_of_use")
       .registerRunListener(async (args) => this.handlePauseTimeOfUse(args));
 
+    this.homey.flow.getActionCard("pause_time_of_use_string")
+      .registerRunListener(async (args) => this.handlePauseTimeOfUse(args));
+
     this.homey.flow.getActionCard("start_charge")
       .registerRunListener(async (args) => this.handleStartTimeOfUse(args));
 

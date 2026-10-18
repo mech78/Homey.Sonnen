@@ -291,6 +291,49 @@
       ]
     },
     {
+      "id": "pause_time_of_use_string",
+      "title": {
+        "en": "Pause Time-of-Use with start and end time as text",
+        "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text pausieren",
+        "da": "Sæt Time-of-Use på pause med start- og sluttidspunkt som tekst",
+        "nl": "Pauzeer Time-of-Use met start- en eindtijd als tekst"
+      },
+      "titleFormatted": {
+        "en": "Pause Time-of-Use starting [[start]] and ending [[end]]. Battery will be paused within this period.",
+        "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]]. Die Batterie wird während dieser Zeitspanne pausiert.",
+        "da": "Sæt Time-of-Use på pause startende [[start]] og sluttende [[end]]. Batteriet vil blive sat på pause i denne periode.",
+        "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode."
+      },
+      "hint": {
+        "en": "Pause battery consumption within a given period of time",
+        "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne",
+        "da": "Sæt batteriforbrug på pause inden for en given periode",
+        "nl": "Pauzeer batterijverbruik binnen een bepaalde periode"
+      },
+      "args": [
+        {
+          "type": "text",
+          "name": "start",
+          "placeholder": {
+            "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+            "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+            "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+            "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+          }
+        },
+        {
+          "type": "text",
+          "name": "end",
+          "placeholder": {
+            "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
+            "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+            "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+            "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+          }
+        }
+      ]
+    },
+    {
       "id": "start_charge",
       "title": {
         "en": "Start charge",
