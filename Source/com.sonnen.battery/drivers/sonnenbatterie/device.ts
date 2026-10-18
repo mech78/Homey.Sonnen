@@ -6,6 +6,7 @@ import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
+import { ControlActions, TargetPowerMode, TargetPowerModeValue } from '../../domain/TargetPowerMode';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -14,6 +15,8 @@ export class BatteryDevice extends SonnenDevice {
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
   private lastReportedOperatingMode: string | null = null;
   private missingCapabilitiesWarned = new Set<string>();
+  private manualStandbyActive: boolean = false;
+  private targetPowerModeState: TargetPowerModeValue | null = null;
 
 
   async onInit() {
@@ -21,6 +24,8 @@ export class BatteryDevice extends SonnenDevice {
 
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
+    this.registerTargetPowerControls();
+    await this.initializeTargetPowerCapabilities();
 
     const batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
@@ -237,6 +242,88 @@ export class BatteryDevice extends SonnenDevice {
     });
   }
 
+  /**
+   * Registers the combined listener for the Homey Energy `target_power` and
+   * `target_power_mode` capabilities so mode + power changes are applied as a
+   * single debounced operation (Homey recommends 500ms).
+   */
+  private registerTargetPowerControls() {
+    this.registerMultipleCapabilityListener(['target_power', 'target_power_mode'], async (values) => {
+      this.log('Target power change:', JSON.stringify(values));
+      await this.handleTargetPowerChange(values);
+    }, 500);
+  }
+
+  /**
+   * Initializes the target power capability values for freshly added
+   * capabilities (existing devices get them via the graceful migration).
+   * Default is device control in self consumption, consistent with the
+   * settings-page operating mode default.
+   */
+  private async initializeTargetPowerCapabilities() {
+    this.targetPowerModeState = (this.getCapabilityValue('target_power_mode') as TargetPowerModeValue) ?? null;
+    if (this.targetPowerModeState === null || this.targetPowerModeState === undefined) {
+      await this.setCapabilityValue('target_power_mode', 'self_consumption');
+      this.targetPowerModeState = 'self_consumption';
+    }
+    const currentPower = this.getCapabilityValue('target_power');
+    if (currentPower === null || currentPower === undefined) {
+      await this.setCapabilityValue('target_power', 0);
+    }
+  }
+
+  private async handleTargetPowerChange(values: Record<string, unknown>): Promise<void> {
+    const requestedMode = (values.target_power_mode
+      ?? this.targetPowerModeState
+      ?? 'self_consumption') as TargetPowerModeValue;
+    const requestedPower = values.target_power !== undefined && values.target_power !== null ? +values.target_power : null;
+    const currentPowerValue = this.getCapabilityValue('target_power');
+    const currentPower = currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue;
+
+    const actions = TargetPowerMode.planPowerControl({
+      requestedMode,
+      previousMode: this.targetPowerModeState,
+      requestedPower,
+      currentPower,
+      standbyActive: this.manualStandbyActive,
+    });
+
+    await this.applyControlActions(actions);
+    this.targetPowerModeState = requestedMode;
+  }
+
+  /**
+   * Applies the planned control actions sequentially to the battery:
+   * disableStandby → operatingMode → enableStandby → setpoint.
+   */
+  private async applyControlActions(actions: ControlActions): Promise<void> {
+    const client = this.createSonnenBatterieClient();
+
+    try {
+      if (actions.disableStandby) {
+        await client.setStandby(false);
+        this.manualStandbyActive = false;
+      }
+      if (actions.operatingMode !== null) {
+        await client.setOperatingMode(actions.operatingMode);
+      }
+      if (actions.enableStandby) {
+        await client.setStandby(true);
+        this.manualStandbyActive = true;
+      }
+      if (actions.setpoint) {
+        await client.setSetpoint(actions.setpoint.direction, actions.setpoint.watts);
+      }
+    } catch (error) {
+      // Re-throw localized so the error surfaces in the Flow card / UI
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
+
+    if (actions.operatingMode !== null || actions.setpoint !== null || actions.enableStandby || actions.disableStandby) {
+      await this.refreshState(); // immediately refresh UI
+    }
+  }
+
   private async gracefullyAddOrRemoveCapabilities() {
     // https://apps.developer.homey.app/guides/how-to-breaking-changes
 
@@ -255,7 +342,9 @@ export class BatteryDevice extends SonnenDevice {
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
       'cyclecount_30day_rate_capability',
-      'cyclecount_installation_rate_capability'
+      'cyclecount_installation_rate_capability',
+      'target_power',
+      'target_power_mode'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -456,6 +545,13 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValueSafe('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValueSafe('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValueSafe('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
+
+      // Track the manual standby flag (used by the target power idle logic);
+      // automatic/protective standby reasons are ignored here on purpose.
+      const standbyReason = latestDataJson.ic_status['Standby Reason'];
+      if (standbyReason) {
+        this.manualStandbyActive = standbyReason.Manual === true;
+      }
       
       const scheduleRaw = configurationsJson['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
@@ -476,6 +572,16 @@ export class BatteryDevice extends SonnenDevice {
         await this.setSettingsSafe({ 'operating_mode': reportedOperatingMode });
       } else if (syncAction === 'unknown') {
         this.error('Battery reported unknown operating mode "' + reportedOperatingMode + '", not syncing it into the operating_mode setting');
+      }
+
+      // Sync the target_power_mode capability with externally changed operating
+      // modes (sonnen app, battery UI, other flows). Modes without a capability
+      // representation (e.g. 6 = module extension) leave the capability unchanged.
+      const targetPowerMode = TargetPowerMode.fromOperatingMode(operatingMode);
+      if (targetPowerMode !== null && targetPowerMode !== this.targetPowerModeState) {
+        this.log('Syncing target_power_mode with externally changed operating mode', operatingMode, '->', targetPowerMode);
+        await this.setCapabilityValueSafe('target_power_mode', targetPowerMode);
+        this.targetPowerModeState = targetPowerMode;
       }
 
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];
