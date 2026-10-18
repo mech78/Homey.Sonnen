@@ -110,6 +110,9 @@
       "other": "Uventet HTTP __statusCode__ fejl opstod."
     },
     "vpp_priority": "Ikke tilladt, da SonnenVPP har prioritet.",
+    "standby": {
+      "not_supported": "Standby understøttes ikke af dette Sonnen Batterie system."
+    },
     "validation": {
       "failed": "Validering mislykkedes: __error__.",
       "failed_to_parse_schedule_json": "Kunne ikke analysere tidsplan JSON: __error__.",
@@ -127,7 +130,8 @@
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use.",
       "invalid_installation_date_format": "Ugyldigt installationsdatoformat. Brug venligst et gyldigt datoformat.",
       "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden.",
-      "backupBuffer": "Ugyldig backup-bufferværdi. Gyldige værdier er 0 (deaktiveret) eller 5–100 %."
+      "backupBuffer": "Ugyldig backup-bufferværdi. Gyldige værdier er 0 (deaktiveret) eller 5–100 %.",
+      "invalid_setpoint_power": "Ugyldig effektværdi: __power__. Kun hele ikke-negative watt understøttes."
     }
   }
 }
