@@ -110,7 +110,7 @@ This is a Homey app for integrating with Sonnen Battery systems, specifically fo
 - Handle authentication through Auth-Token header
 - Implement proper error handling for API responses
 - Use consistent base URL construction with `getBaseUrl()`
-- Follow the API documentation for endpoint usage
+- Consult `openapi.json` in the app root (if available) as the authoritative reference for endpoint usage — it documents endpoint paths, payload shapes and Auth-Token usage; ask the user for it if missing. It is proprietary sonnen content, git-ignored (`/openapi.json`), and must not be committed or pushed
 
 ### 4.2 HTTP Requests
 

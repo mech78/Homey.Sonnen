@@ -262,5 +262,11 @@
     "de": "Zyklusrate seit Installationsdatum. Upgrade auf Node.js 22. Migriert von Axios zu nativer fetch API. Erfordert Homey v12.9.0 oder höher.",
     "da": "Cyklusrate siden installationsdato. Opgraderet til Node.js 22. Migreret fra Axios til native fetch API. Kræver Homey v12.9.0 eller nyere.",
     "nl": "Cyclus snelheid sinds installatiedatum. Geüpgraded naar Node.js 22. Gemigreerd van Axios naar native fetch API. Vereist Homey v12.9.0 of hoger."
+  },
+  "2.6.0": {
+    "en": "Bugfix #66 (correct battery capacity), dependency updates, opencode dev tooling added.",
+    "de": "Bugfix #66 (korrekte Batteriekapazität), Abhängigkeitsaktualisierungen, opencode Dev-Tooling ergänzt.",
+    "da": "Bugfix #66 (korrekt batterikapacitet), afhængighedsopdateringer, opencode dev-værktøj tilføjet.",
+    "nl": "Bugfix #66 (juiste batterijcapaciteit), afhankelijkheidsupdates, opencode dev-tooling toegevoegd."
   }
 }

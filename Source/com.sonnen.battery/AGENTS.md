@@ -189,6 +189,14 @@ const client = this.createSonnenBatterieClient();
 const latestDataJson = await client.getLatestData();
 ```
 
+### REST API Reference (openapi.json)
+If `openapi.json` is present in the app root (git-ignored, so it may not exist on fresh clones), use it as the authoritative reference when implementing or extending `SonnenBatterieClient` — it documents endpoint paths, request/response payload shapes and Auth-Token usage (e.g. `GET /api/v2/latestdata`). Prefer its field names when parsing API responses or deciding how to access a new endpoint.
+
+Note that `openapi.json` is proprietary sonnen content and deliberately excluded via `.gitignore` (`/openapi.json`). If the file is missing, ask the user to provide it rather than guessing API details. Do not commit or push it.
+
+### sb CLI for ad-hoc API queries
+Use the `scripts/sb` CLI (app folder, next to this file) for ad-hoc queries against the local sonnenBatterie REST API: `sb endpoints [pattern]` lists documented endpoints, `sb show <path>` prints one endpoint's spec, and `sb curl <path> [METHOD] [JSON-BODY]` performs an authenticated request (pipe to `jq`). It resolves the battery hostname automatically (`sb host`) and injects the Auth-Token from `~/.config/sonnen/token` without ever printing it — never read, print, or echo that token; it is protected by deny rules in `.opencode/opencode.json`.
+
 ## Homey-Specific Considerations
 
 1. Follow Homey app structure conventions
