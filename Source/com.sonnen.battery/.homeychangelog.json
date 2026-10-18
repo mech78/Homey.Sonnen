@@ -268,5 +268,11 @@
     "de": "Bugfix #66 (korrekte Batteriekapazität), Abhängigkeitsaktualisierungen, opencode Dev-Tooling ergänzt.",
     "da": "Bugfix #66 (korrekt batterikapacitet), afhængighedsopdateringer, opencode dev-værktøj tilføjet.",
     "nl": "Bugfix #66 (juiste batterijcapaciteit), afhankelijkheidsupdates, opencode dev-tooling toegevoegd."
+  },
+  "2.6.1": {
+    "en": "Crash fixes: invalid operating_mode setting no longer crashes polling; device capabilities self-heal from manifest; guarded capability writes; settings refresh no longer conflicts with onSettings.",
+    "de": "Crash-Behebungen: ungültiger Betriebsmodus führt nicht mehr zum Absturz der Abfrage; Gerätefähigkeiten heilen selbst aus dem Manifest; abgesicherte Fähigkeits-Schreibzugriffe; Einstellungs-Refresh kollidiert nicht mehr mit onSettings.",
+    "da": "Crash-fixes: ugyldig driftsmodus får ikke længere polling til at crashe; enhedens capabilities self-healer fra manifestet; beskyttede capability-skrivninger; indstillingsopdatering konflikter ikke længere med onSettings.",
+    "nl": "Crash-oplossingen: ongeldige bedrijfsmodus laat polling niet meer crashen; apparaat-capabilities herstellen zichzelf vanuit het manifest; beveiligde capability-writes; instellingen-refresh conflicteert niet langer met onSettings."
   }
 }
