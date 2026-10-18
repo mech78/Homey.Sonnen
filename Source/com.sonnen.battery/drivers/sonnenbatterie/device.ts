@@ -273,6 +273,23 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
+    // Self-healing: sync with the driver manifest. Devices paired with old app
+    // versions can miss capabilities that no migration list covers; every
+    // setCapabilityValue() on such a capability then crashes with
+    // "Invalid Capability: ..." on each poll. Repair them on every init.
+    const manifestCapabilities: string[] = this.driver.manifest?.capabilities ?? [];
+    const conditionalEnergyCapabilities = ['meter_power.charged', 'meter_power.discharged'];
+    for (const capability of manifestCapabilities) {
+      // Sub-capabilities of the energy system are conditionally managed above
+      if (!this.isEnergyFullySupported() && conditionalEnergyCapabilities.includes(capability)) {
+        continue;
+      }
+      if (!this.hasCapability(capability)) {
+        this.log('Self-healing: adding missing capability: ' + capability);
+        await this.addCapability(capability);
+      }
+    }
+
     // TODO: maybe add a gracefully migration from store-based "autodiscovery" and "lanip" to settings-based "device_discovery" and "device_ip"
   }
 
