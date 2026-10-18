@@ -10,7 +10,7 @@
       },
       "titleFormatted": {
         "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
-        "da": "Watt forbrug fra net !{{er|er ikke}} over [[power]] W",
+        "da": "Forbruget fra nettet !{{er|er ikke}} over [[power]] W",
         "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
         "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
       },
@@ -28,7 +28,7 @@
             "en": "Power (W)",
             "da": "Watt (W)",
             "de": "Leistung (W)",
-            "nl": "Power (W)"
+            "nl": "Vermogen (W)"
           },
           "min": 1,
           "step": 1
@@ -63,7 +63,7 @@
             "en": "Power (W)",
             "da": "Watt (W)",
             "de": "Leistung (W)",
-            "nl": "Power (W)"
+            "nl": "Vermogen (W)"
           },
           "min": 1,
           "step": 1

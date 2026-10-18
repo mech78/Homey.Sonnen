@@ -180,16 +180,16 @@
       {
         "id": "battery_level_above_or_equal",
         "title": {
-          "en": "Battery level above",
-          "da": "Batteriniveau over",
-          "de": "Batteriestand über",
-          "nl": "Batterijniveau boven"
+          "en": "Battery level above or equal",
+          "da": "Batteriniveau over eller lig",
+          "de": "Batteriestand über oder gleich",
+          "nl": "Batterijniveau boven of gelijk aan"
         },
         "titleFormatted": {
-          "en": "Battery level !{{is|isn't}} above [[percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
-          "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
-          "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
+          "en": "Battery level !{{is|isn't}} above or equal to [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} over eller lig [[percentage]]%",
+          "de": "Batteriestand !{{liegt|liegt nicht}} über oder gleich [[percentage]]%",
+          "nl": "Batterijniveau !{{is|is niet}} boven of gelijk aan [[percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
@@ -374,7 +374,7 @@
         },
         "titleFormatted": {
           "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
-          "da": "Watt forbrug fra net !{{er|er ikke}} over [[power]] W",
+          "da": "Forbruget fra nettet !{{er|er ikke}} over [[power]] W",
           "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
           "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
         },
@@ -397,7 +397,7 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Power (W)"
+              "nl": "Vermogen (W)"
             },
             "min": 1,
             "step": 1
@@ -437,7 +437,7 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Power (W)"
+              "nl": "Vermogen (W)"
             },
             "min": 1,
             "step": 1
