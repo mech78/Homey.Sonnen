@@ -68,7 +68,11 @@ describe('TimeOfUseSchedule', () => {
   });
 
   describe('Time format validation (protects string-based flow card args)', () => {
-    const invalidTimes = ['25:00', '24:00', '13:5', 'ab:cd', '13:15:30', ''];
+    const invalidTimes = [
+      '25:00', '24:00', '24:01', '23:60',   // hour/minute overflows — API-confirmed: sonnen rejects 24:00 as stop
+      '-01:32', '+08:15', '8:15',           // sign prefixes & missing leading zero
+      '13:5', 'ab:cd', '13:15:30', ''       // malformed basics
+    ];
 
     it.each(invalidTimes)('should reject invalid time "%s"', (time) => {
       expect(() => new TimeOfUseSchedule({
