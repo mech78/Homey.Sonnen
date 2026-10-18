@@ -6,10 +6,17 @@ import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 
+// Operating modes as defined in driver.settings.compose.json ("operating_mode" dropdown).
+// The battery's EM_OperatingMode can report values outside this list (e.g. other
+// firmware modes); writing them into the dropdown setting would make Homey reject
+// the whole settings object with "Invalid Value: operating_mode".
+const KNOWN_OPERATING_MODES = ['1', '2', '6', '10'];
+
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
+  private lastReportedOperatingMode: string | null = null;
 
 
   async onInit() {
@@ -108,16 +115,22 @@ export class BatteryDevice extends SonnenDevice {
         }
       }
 
-      try {
-        await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
-        
-        // Clear time-of-use schedule when operating mode is changed away from 10
-        if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
-          this.log("Settings", "Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
-          await this.createSonnenBatterieClient().clearSchedule();
-        }     
-      } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error);
+      // Skip the battery round-trip when the change was just a programmatic sync
+      // of a mode the battery itself reported (setSettings re-enters onSettings)
+      if (this.lastReportedOperatingMode !== null && newOperatingMode === this.lastReportedOperatingMode) {
+        this.log("Settings", "OperatingMode", newOperatingMode, "already active on battery, skipping battery write");
+      } else {
+        try {
+          await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
+
+          // Clear time-of-use schedule when operating mode is changed away from 10
+          if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
+            this.log("Settings", "Clearing time-of-use schedule as operating mode is changed away from Time-of-Use");
+            await this.createSonnenBatterieClient().clearSchedule();
+          }
+        } catch (error) {
+          LocalizationService.getInstance().throwLocalizedError(error);
+        }
       }
     }
 
@@ -411,7 +424,17 @@ export class BatteryDevice extends SonnenDevice {
       const operatingMode = configurationsJson['EM_OperatingMode'];
       const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
       this.setCapabilityValue('operating_mode_capability', operatingModeText);
-      this.setSettings({ 'operating_mode': '' + operatingMode });
+
+      const reportedOperatingMode = operatingMode === undefined || operatingMode === null ? null : String(operatingMode);
+      this.lastReportedOperatingMode = reportedOperatingMode;
+      if (reportedOperatingMode !== null && KNOWN_OPERATING_MODES.includes(reportedOperatingMode)) {
+        const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
+        if (storedOperatingMode !== reportedOperatingMode) {
+          this.setSettings({ 'operating_mode': reportedOperatingMode });
+        }
+      } else if (reportedOperatingMode !== null) {
+        this.error('Battery reported unknown operating mode "' + reportedOperatingMode + '", not syncing it into the operating_mode setting');
+      }
 
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];
       const prognosisChargingMode = prognosisCharging === "1";
