@@ -98,6 +98,9 @@
       "other": "Onverwachte HTTP __statusCode__ fout opgetreden."
     },
     "vpp_priority": "Niet toegestaan omdat SonnenVPP prioriteit heeft.",
+    "standby": {
+      "not_supported": "Standby wordt niet ondersteund door dit Sonnen Batterie systeem."
+    },
     "validation": {
       "failed": "Validatie mislukt: __error__.",
       "failed_to_parse_schedule_json": "Kan schema JSON niet parseren: __error__.",
@@ -114,7 +117,8 @@
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan Time-of-Use schema niet toepassen wanneer bedrijfsmodus wordt gewijzigd van Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is.",
       "invalid_installation_date_format": "Ongeldig installatiedatumformaat. Gebruik een geldig datumformaat.",
-      "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen."
+      "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen.",
+      "invalid_setpoint_power": "Ongeldig streefvermogen: __power__. Alleen hele niet-negatieve watt worden ondersteund."
     }
   }
 }

@@ -81,7 +81,16 @@ export class SonnenBatterieClient {
     }
   }
 
+  /**
+   * Sets a manual charge/discharge setpoint in watts.
+   * The battery only accepts non-negative integers; negative or fractional values
+   * are rejected by the device with an "invalid argument" error, so validate upfront.
+   */
   public async setSetpoint(direction: 'charge' | 'discharge', watts: number): Promise<void> {
+    if (!Number.isInteger(watts) || watts < 0) {
+      throw new LocalizedError("error.validation.invalid_setpoint_power", { power: String(watts) });
+    }
+
     try {
       const response = await fetch(`${this.getBaseUrl()}/api/v2/setpoint/${direction}/${watts}`, {
         method: "POST",
@@ -101,6 +110,41 @@ export class SonnenBatterieClient {
       }
       throw SonnenBatterieClient.getLocalizedError(error);
     }
+  }
+
+  /**
+   * Enables or disables manual standby (the API equivalent of the sonnen UI
+   * "Manual Standby" switch). Persistent, works independent of the operating mode
+   * and does not modify the Time-of-Use schedule.
+   */
+  public async setStandby(enabled: boolean): Promise<void> {
+    try {
+      const response = await fetch(`${this.getBaseUrl()}/api/v2/standby`, {
+        method: "POST",
+        headers: this.getHeaders(),
+        body: JSON.stringify({ "enabled": enabled })
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          // The spec defines 400 as "Standby is not supported" (older systems/firmware)
+          throw new LocalizedError("error.standby.not_supported");
+        }
+        throw await SonnenBatterieClient.createFetchError(response);
+      }
+    } catch (error) {
+      if (error instanceof LocalizedError) {
+        throw error;
+      }
+      throw SonnenBatterieClient.getLocalizedError(error);
+    }
+  }
+
+  /**
+   * Convenience wrapper to leave standby and hand control back to the battery.
+   */
+  public async stopPowerControl(): Promise<void> {
+    return this.setStandby(false);
   }
 
   public async getLatestData(): Promise<any> {
