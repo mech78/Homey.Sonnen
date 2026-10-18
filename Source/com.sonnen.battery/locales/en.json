@@ -86,7 +86,7 @@
     "startedManualCharging": "Sonnen Batterie: Started manual charging with max. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Started manual discharging with max. __maxPower__W."
   },
-  "active": "active", 
+  "active": "active",
   "inactive": "inactive",
   "error": {
     "unknown": "An unknown error occurred: __error__.",
@@ -99,7 +99,7 @@
     "vpp_priority": "Not allowed as SonnenVPP has priority.",
     "validation": {
       "failed": "Validation failed: __error__.",
-"failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__.",
+      "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__.",
       "invalid_schedule_format": "Invalid schedule format: expected an array.",
       "invalid_schedule_item_missing_properties": "Invalid schedule item at index __index__: missing required properties.",
       "invalid_schedule_item_time_format": "Invalid schedule item at index __index__: invalid time format: \"__time__\".",
