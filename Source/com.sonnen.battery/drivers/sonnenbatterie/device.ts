@@ -17,6 +17,7 @@ export class BatteryDevice extends SonnenDevice {
   private updateIntervalId: NodeJS.Timeout | undefined;
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
   private lastReportedOperatingMode: string | null = null;
+  private missingCapabilitiesWarned = new Set<string>();
 
 
   async onInit() {
@@ -395,23 +396,23 @@ export class BatteryDevice extends SonnenDevice {
       }
       this.homey.emit('sonnenBatterieUpdate', currentState, statusJson);
 
-      this.setCapabilityValue('measure_battery', +statusJson.USOC); // Percentage on battery
-      this.setCapabilityValue('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
+      this.setCapabilityValueSafe('measure_battery', +statusJson.USOC); // Percentage on battery
+      this.setCapabilityValueSafe('measure_power', -statusJson.Pac_total_W); // inverted to match the Homey Energy (positive = charging, negative = discharging)
       if (this.isEnergyFullySupported()) {
-        this.setCapabilityValue('meter_power.charged', currentState.totalToBattery_Wh / 1000);
-        this.setCapabilityValue('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
+        this.setCapabilityValueSafe('meter_power.charged', currentState.totalToBattery_Wh / 1000);
+        this.setCapabilityValueSafe('meter_power.discharged', currentState.totalFromBattery_Wh / 1000);
       }
 
-      this.setCapabilityValue('to_battery_capability', toBattery_W);
-      this.setCapabilityValue('from_battery_capability', fromBattery_W);
-      this.setCapabilityValue('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
-      this.setCapabilityValue('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
-      this.setCapabilityValue('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
+      this.setCapabilityValueSafe('to_battery_capability', toBattery_W);
+      this.setCapabilityValueSafe('from_battery_capability', fromBattery_W);
+      this.setCapabilityValueSafe('to_battery_daily_capability', currentState.totalDailyToBattery_Wh / 1000);
+      this.setCapabilityValueSafe('from_battery_daily_capability', currentState.totalDailyFromBattery_Wh / 1000);
+      this.setCapabilityValueSafe('to_battery_total_capability', currentState.totalToBattery_Wh / 1000);
+      this.setCapabilityValueSafe('from_battery_total_capability', currentState.totalFromBattery_Wh / 1000);
 
       const fullChargeCapacity_Wh = +batteryJson.fullchargecapacitywh;
-      this.setCapabilityValue('capacity_capability', fullChargeCapacity_Wh / 1000); // kWh
-      this.setCapabilityValue('capacity_remaining_capability', fullChargeCapacity_Wh * (+statusJson.USOC / 100) / 1000); // usable energy in kWh
+      this.setCapabilityValueSafe('capacity_capability', fullChargeCapacity_Wh / 1000); // kWh
+      this.setCapabilityValueSafe('capacity_remaining_capability', fullChargeCapacity_Wh * (+statusJson.USOC / 100) / 1000); // usable energy in kWh
 
       let chargingState: string;
       if (statusJson.Pac_total_W < 0) {
@@ -421,15 +422,15 @@ export class BatteryDevice extends SonnenDevice {
       } else {
         chargingState = 'idle';
       }
-      this.setCapabilityValue('battery_charging_state', chargingState);
+      this.setCapabilityValueSafe('battery_charging_state', chargingState);
 
-      this.setCapabilityValue('number_battery_capability', numberBatteries);
-      this.setCapabilityValue('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
-      this.setCapabilityValue('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', '')) ?? latestDataJson.ic_status.statebms);
-      this.setCapabilityValue('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.stateinverter.replaceAll(' ', '')) ?? latestDataJson.ic_status.stateinverter);
-      this.setCapabilityValue('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
-      this.setCapabilityValue('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
-      this.setCapabilityValue('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
+      this.setCapabilityValueSafe('number_battery_capability', numberBatteries);
+      this.setCapabilityValueSafe('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
+      this.setCapabilityValueSafe('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', '')) ?? latestDataJson.ic_status.statebms);
+      this.setCapabilityValueSafe('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.stateinverter.replaceAll(' ', '')) ?? latestDataJson.ic_status.stateinverter);
+      this.setCapabilityValueSafe('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
+      this.setCapabilityValueSafe('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
+      this.setCapabilityValueSafe('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
       
       const scheduleRaw = configurationsJson['EM_ToU_Schedule'];
       const tou = new TimeOfUseSchedule(scheduleRaw);
@@ -440,7 +441,7 @@ export class BatteryDevice extends SonnenDevice {
 
       const operatingMode = configurationsJson['EM_OperatingMode'];
       const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
-      this.setCapabilityValue('operating_mode_capability', operatingModeText);
+      this.setCapabilityValueSafe('operating_mode_capability', operatingModeText);
 
       const reportedOperatingMode = operatingMode === undefined || operatingMode === null ? null : String(operatingMode);
       this.lastReportedOperatingMode = reportedOperatingMode;
@@ -455,22 +456,22 @@ export class BatteryDevice extends SonnenDevice {
 
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];
       const prognosisChargingMode = prognosisCharging === "1";
-      this.setCapabilityValue('prognosis_charging_capability', prognosisChargingMode);
+      this.setCapabilityValueSafe('prognosis_charging_capability', prognosisChargingMode);
       this.setSettings({ 'prognosis_charging': prognosisChargingMode });
       
       if (shouldUpdateBatteryData) {
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
       }
 
-      this.setCapabilityValue('total_cyclecount_capability', currentState.total_cycleCount);
-      this.setCapabilityValue('cyclecount_7day_rate_capability', currentState.get7DayAverageCycleCountRate());    
-      this.setCapabilityValue('cyclecount_30day_rate_capability', currentState.get30DayAverageCycleCountRate());
+      this.setCapabilityValueSafe('total_cyclecount_capability', currentState.total_cycleCount);
+      this.setCapabilityValueSafe('cyclecount_7day_rate_capability', currentState.get7DayAverageCycleCountRate());    
+      this.setCapabilityValueSafe('cyclecount_30day_rate_capability', currentState.get30DayAverageCycleCountRate());
 
       const installationDateSetting = this.getSetting('installation_date') as string | undefined;
       const trimmedDate = installationDateSetting?.trim();
       currentState.installationDate = trimmedDate ? new Date(trimmedDate) : null;
 
-      this.setCapabilityValue('cyclecount_installation_rate_capability', currentState.getInstallationAverageCycleCountRate()); 
+      this.setCapabilityValueSafe('cyclecount_installation_rate_capability', currentState.getInstallationAverageCycleCountRate()); 
  
       if (this.isNewDay(currentUpdate, lastState.lastUpdate) || shouldUpdateBatteryData) {
         this.saveDeviceState(); // backup state at least once a day or when batteryData is updated as there seems to be no proper hook during an app shutdown/restart one can use.
@@ -487,6 +488,22 @@ export class BatteryDevice extends SonnenDevice {
   private isUpdateDue(currentUpdate: Date, lastUpdate: Date | null, updateIntervalSeconds: number): boolean {
     return !lastUpdate ||
       (currentUpdate.getTime() - lastUpdate.getTime()) > (updateIntervalSeconds * 1000);
+  }
+
+  /**
+   * setCapabilityValue() on a capability the device does not have does not
+   * throw at the call site; the error is emitted asynchronously and reported
+   * as a crash on every poll. Guard the call and warn only once per capability.
+   */
+  private async setCapabilityValueSafe(capability: string, value: unknown): Promise<void> {
+    if (!this.hasCapability(capability)) {
+      if (!this.missingCapabilitiesWarned.has(capability)) {
+        this.missingCapabilitiesWarned.add(capability);
+        this.error('Skipping update for missing capability: ' + capability);
+      }
+      return;
+    }
+    await this.setCapabilityValue(capability, value);
   }
 
   private async mayRetryWithAutoDiscovery(lastState: SonnenState, retryOnError: boolean): Promise<SonnenState> {
