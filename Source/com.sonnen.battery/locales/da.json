@@ -118,7 +118,8 @@
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use.",
       "invalid_installation_date_format": "Ugyldigt installationsdatoformat. Brug venligst et gyldigt datoformat.",
       "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden.",
-      "invalid_setpoint_power": "Ugyldig effektværdi: __power__. Kun hele ikke-negative watt understøttes."
+      "invalid_setpoint_power": "Ugyldig effektværdi: __power__. Kun hele ikke-negative watt understøttes.",
+      "invalid_target_power_mode": "Ugyldig måleffekttilstand: __mode__."
     }
   }
 }

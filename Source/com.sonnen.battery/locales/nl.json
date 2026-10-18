@@ -118,7 +118,8 @@
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is.",
       "invalid_installation_date_format": "Ongeldig installatiedatumformaat. Gebruik een geldig datumformaat.",
       "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen.",
-      "invalid_setpoint_power": "Ongeldig streefvermogen: __power__. Alleen hele niet-negatieve watt worden ondersteund."
+      "invalid_setpoint_power": "Ongeldig streefvermogen: __power__. Alleen hele niet-negatieve watt worden ondersteund.",
+      "invalid_target_power_mode": "Ongeldige streefvermogenmodus: __mode__."
     }
   }
 }

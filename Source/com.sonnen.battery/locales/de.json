@@ -118,7 +118,8 @@
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use Zeitplan kann nur festgelegt werden, wenn der Betriebsmodus Time-of-Use ist.",
       "invalid_installation_date_format": "Ungültiges Installationsdatum. Bitte verwenden Sie ein gültiges Datumsformat.",
       "installation_date_in_future": "Das Installationsdatum darf nicht in der Zukunft liegen.",
-      "invalid_setpoint_power": "Ungültiger Sollleistungswert: __power__. Nur ganze nicht-negative Watt werden unterstützt."
+      "invalid_setpoint_power": "Ungültiger Sollleistungswert: __power__. Nur ganze nicht-negative Watt werden unterstützt.",
+      "invalid_target_power_mode": "Ungültiger Zielleistungsmodus: __mode__."
     }
   }
 }

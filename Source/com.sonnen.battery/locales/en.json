@@ -112,6 +112,7 @@
       "invalid_installation_date_format": "Invalid installation date format. Please use a valid date format.",
       "installation_date_in_future": "Installation date cannot be in the future.",
       "invalid_setpoint_power": "Invalid setpoint power value: __power__. Only whole non-negative watts are supported.",
+      "invalid_target_power_mode": "Invalid target power mode: __mode__.",
       "ToU": {
         "invalid threshold": "Time-of-Use max. power value must be between 0 and 46000 watts.",
         "ToU windows overlap": "Time-of-Use windows must not overlap."
