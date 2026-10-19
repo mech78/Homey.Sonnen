@@ -1,4 +1,5 @@
 import { LocalizedError } from './LocalizedError';
+import { PowerLimits, TargetPowerLimits } from './TargetPowerLimits';
 
 /**
  * Values supported by the Homey `target_power_mode` capability.
@@ -65,6 +66,55 @@ export interface PlanPowerControlInput {
   currentPower: number | null;
   /** Whether manual standby is currently active on the battery. */
   standbyActive: boolean;
+}
+
+/**
+ * A capability change received by the combined `target_power` /
+ * `target_power_mode` listener. Fields are null when the capability was not
+ * part of the change.
+ */
+export interface CapabilityChangeRequest {
+  /** Newly written `target_power` value in watts, or null when unchanged. */
+  targetPower: number | null;
+  /** Newly written `target_power_mode` value, or null when unchanged. */
+  targetPowerMode: TargetPowerModeValue | null;
+}
+
+/**
+ * The capability/battery state a capability change is planned against.
+ */
+export interface CapabilityChangeState {
+  /** Current `target_power_mode` capability value, or null when unknown. */
+  currentMode: TargetPowerModeValue | null;
+  /** Current stored `target_power` capability value in watts, or null when unknown. */
+  currentPower: number | null;
+  /** Whether manual standby is currently active on the battery. */
+  standbyActive: boolean;
+  /** Device power limits used to clamp the effective power. */
+  limits: PowerLimits;
+}
+
+/**
+ * The result of planning a capability change: the actions to apply to the
+ * battery plus the bookkeeping the device needs to keep the stored capability
+ * state honest.
+ */
+export interface CapabilityChangePlan {
+  /** The effective requested mode after applying Homey's implied mode switch. */
+  requestedMode: TargetPowerModeValue;
+  /** Actions to apply to the battery. */
+  actions: ControlActions;
+  /**
+   * Clamped power to write back to the `target_power` capability so the stored
+   * value matches what was actually applied, or null when nothing was clamped.
+   */
+  writeBackPower: number | null;
+  /**
+   * True when Homey control was left and the stored target power must be
+   * reset to 0 so a later re-entry starts from idle instead of re-applying a
+   * stale setpoint.
+   */
+  resetTargetPower: boolean;
 }
 
 /**
@@ -165,6 +215,48 @@ export class TargetPowerMode {
       enableStandby: false,
       operatingMode: modeChanged ? '1' : null,
       setpoint: this.decomposeTargetPower(power),
+    };
+  }
+
+  /**
+   * Plans a combined `target_power` / `target_power_mode` capability change.
+   *
+   * Homey Energy semantics: writing `target_power` hands control to Homey
+   * (implied mode switch to `homey`) unless `target_power_mode` is written in
+   * the same change. The plan also carries the bookkeeping the device needs
+   * for honest capability state: the clamped power to write back when the
+   * requested value exceeded the device limits, and the reset of the stored
+   * target power when Homey control is left.
+   */
+  public static planCapabilityChange(request: CapabilityChangeRequest, state: CapabilityChangeState): CapabilityChangePlan {
+    const requestedMode = request.targetPowerMode
+      ?? (request.targetPower !== null ? 'homey' : state.currentMode ?? 'self_consumption');
+    const previousMode = state.currentMode;
+
+    const effectivePower = request.targetPower ?? state.currentPower;
+    let writeBackPower: number | null = null;
+    let power: number | null = null;
+    if (effectivePower !== null) {
+      const clamped = TargetPowerLimits.clampTargetPower(effectivePower, state.limits);
+      power = clamped.value;
+      if (clamped.clamped) {
+        writeBackPower = clamped.value;
+      }
+    }
+
+    const actions = this.planPowerControl({
+      requestedMode,
+      previousMode,
+      requestedPower: power,
+      currentPower: null,
+      standbyActive: state.standbyActive,
+    });
+
+    return {
+      requestedMode,
+      actions,
+      writeBackPower,
+      resetTargetPower: previousMode === 'homey' && requestedMode !== 'homey' && request.targetPower === null,
     };
   }
 }
