@@ -68,7 +68,8 @@
     "1": "Handmatig",
     "2": "Eigen verbruik",
     "6": "Module uitbreiding (30%)",
-    "10": "Time-of-Use"
+    "10": "Time-of-Use",
+    "11": "Automatisch - Optimalisatie"
   },
   "connection": {
     "error_no_batteries": "Kon geen Sonnen-batterijen vinden op het lokale netwerk. Controleer uw netwerk en probeer het opnieuw of geef een statisch IP-adres op.",

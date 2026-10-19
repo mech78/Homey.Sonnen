@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
@@ -323,6 +323,15 @@
                   "de": "Time-of-Use",
                   "da": "Time-of-Use",
                   "nl": "Time-of-Use"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "Automatic - Optimization",
+                  "de": "Automatik - Optimierung",
+                  "da": "Automatisk - Optimering",
+                  "nl": "Automatisch - Optimalisatie"
                 }
               }
             ]
@@ -832,6 +841,15 @@
                   "da": "Time-of-Use",
                   "nl": "Time-of-Use"
                 }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "Automatic - Optimization",
+                  "de": "Automatik - Optimierung",
+                  "da": "Automatisk - Optimering",
+                  "nl": "Automatisch - Optimalisatie"
+                }
               }
             ]
           }
@@ -1151,6 +1169,15 @@
                     "de": "Time-of-Use",
                     "da": "Time-of-Use",
                     "nl": "Time-of-Use"
+                  }
+                },
+                {
+                  "id": "11",
+                  "label": {
+                    "en": "Automatic - Optimization",
+                    "de": "Automatik - Optimierung",
+                    "da": "Automatisk - Optimering",
+                    "nl": "Automatisch - Optimalisatie"
                   }
                 }
               ]

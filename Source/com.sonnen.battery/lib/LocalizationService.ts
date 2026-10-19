@@ -40,7 +40,7 @@ export class LocalizationService {
   }
 
   public resolveOperatingMode(mode: string): string {
-    return this.app.homey.__('operatingMode.' + mode) ?? mode;
+    return this.resolveTranslation('operatingMode.' + mode, mode);
   }
 
   public resolveCircleColor(eclipseLed: Record<string, boolean>): string {
@@ -48,6 +48,16 @@ export class LocalizationService {
     if (eclipseLed) {
       key = Object.keys(eclipseLed).find(key => eclipseLed[key] === true) ?? key; 
     }
-    return this.app.homey.__('eclipseLed.' + key.replaceAll(' ', '')) ?? key;
+    return this.resolveTranslation('eclipseLed.' + key.replaceAll(' ', ''), key);
+  }
+
+  /**
+   * Resolves an i18n key to its translation.
+   * Homey's __() returns the key itself when no translation exists,
+   * so fall back to the provided fallback in that case.
+   */
+  private resolveTranslation(i18nKey: string, fallback: string): string {
+    const translated = this.app.homey.__(i18nKey);
+    return translated && translated !== i18nKey ? translated : fallback;
   }
 }
