@@ -5,12 +5,7 @@ import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
-
-// Operating modes as defined in driver.settings.compose.json ("operating_mode" dropdown).
-// The battery's EM_OperatingMode can report values outside this list (e.g. other
-// firmware modes); writing them into the dropdown setting would make Homey reject
-// the whole settings object with "Invalid Value: operating_mode".
-const KNOWN_OPERATING_MODES = ['1', '2', '6', '10', '11'];
+import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -138,7 +133,7 @@ export class BatteryDevice extends SonnenDevice {
 
       // Skip the battery round-trip when the change was just a programmatic sync
       // of a mode the battery itself reported (setSettings re-enters onSettings)
-      if (this.lastReportedOperatingMode !== null && newOperatingMode === this.lastReportedOperatingMode) {
+      if (!shouldWriteOperatingModeToBattery(newOperatingMode, this.lastReportedOperatingMode)) {
         this.log("Settings", "OperatingMode", newOperatingMode, "already active on battery, skipping battery write");
       } else {
         try {
@@ -475,12 +470,11 @@ export class BatteryDevice extends SonnenDevice {
 
       const reportedOperatingMode = operatingMode === undefined || operatingMode === null ? null : String(operatingMode);
       this.lastReportedOperatingMode = reportedOperatingMode;
-      if (reportedOperatingMode !== null && KNOWN_OPERATING_MODES.includes(reportedOperatingMode)) {
-        const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
-        if (storedOperatingMode !== reportedOperatingMode) {
-          await this.setSettingsSafe({ 'operating_mode': reportedOperatingMode });
-        }
-      } else if (reportedOperatingMode !== null) {
+      const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
+      const syncAction = resolveOperatingModeSyncAction(reportedOperatingMode, storedOperatingMode, KNOWN_OPERATING_MODES);
+      if (syncAction === 'sync') {
+        await this.setSettingsSafe({ 'operating_mode': reportedOperatingMode });
+      } else if (syncAction === 'unknown') {
         this.error('Battery reported unknown operating mode "' + reportedOperatingMode + '", not syncing it into the operating_mode setting');
       }
 
