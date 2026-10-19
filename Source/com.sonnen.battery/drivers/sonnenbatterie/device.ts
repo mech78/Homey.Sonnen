@@ -44,7 +44,13 @@ export class BatteryDevice extends SonnenDevice {
 
     // Pull battery status regularly
     this.updateIntervalId = this.homey.setInterval(async () => {
-      this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
+      // A rejection escaping a timer callback surfaces as an unhandled rejection,
+      // so contain it here even though loadLatestState has its own error handling.
+      try {
+        this.state.updateState(await this.loadLatestState(this.state, this.getSetting("device_discovery") ?? true));
+      } catch (e) {
+        this.error('Error during polling', e);
+      }
     }, batteryPullInterval * 1000);
 
     // Do an initial load
@@ -54,6 +60,7 @@ export class BatteryDevice extends SonnenDevice {
   async onDeleted() {
     if (this.updateIntervalId) {
       this.homey.clearInterval(this.updateIntervalId);
+      this.updateIntervalId = undefined;
     }
     if (this.refreshTimeoutId) {
       this.homey.clearTimeout(this.refreshTimeoutId);
@@ -65,6 +72,10 @@ export class BatteryDevice extends SonnenDevice {
   }
 
   async onUninit() {
+    if (this.updateIntervalId) {
+      this.homey.clearInterval(this.updateIntervalId);
+      this.updateIntervalId = undefined;
+    }
     if (this.refreshTimeoutId) {
       this.homey.clearTimeout(this.refreshTimeoutId);
       this.refreshTimeoutId = undefined;
@@ -456,7 +467,7 @@ export class BatteryDevice extends SonnenDevice {
       if (this.isDebugMode()) {
         this.log("Parsed Time-of-Use schedule: " + tou.toString());
       }
-      this.setSettings({ 'time_of_use_schedule': tou.toString() });
+      await this.setSettingsSafe({ 'time_of_use_schedule': tou.toString() });
 
       const operatingMode = configurationsJson['EM_OperatingMode'];
       const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
@@ -467,7 +478,7 @@ export class BatteryDevice extends SonnenDevice {
       if (reportedOperatingMode !== null && KNOWN_OPERATING_MODES.includes(reportedOperatingMode)) {
         const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
         if (storedOperatingMode !== reportedOperatingMode) {
-          this.setSettings({ 'operating_mode': reportedOperatingMode });
+          await this.setSettingsSafe({ 'operating_mode': reportedOperatingMode });
         }
       } else if (reportedOperatingMode !== null) {
         this.error('Battery reported unknown operating mode "' + reportedOperatingMode + '", not syncing it into the operating_mode setting');
@@ -476,7 +487,7 @@ export class BatteryDevice extends SonnenDevice {
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];
       const prognosisChargingMode = prognosisCharging === "1";
       this.setCapabilityValueSafe('prognosis_charging_capability', prognosisChargingMode);
-      this.setSettings({ 'prognosis_charging': prognosisChargingMode });
+      await this.setSettingsSafe({ 'prognosis_charging': prognosisChargingMode });
       
       if (shouldUpdateBatteryData) {
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
@@ -512,7 +523,8 @@ export class BatteryDevice extends SonnenDevice {
   /**
    * setCapabilityValue() on a capability the device does not have does not
    * throw at the call site; the error is emitted asynchronously and reported
-   * as a crash on every poll. Guard the call and warn only once per capability.
+   * as a crash on every poll. Guard the call, warn only once per capability
+   * and contain any other rejection so it cannot escape as an unhandled one.
    */
   private async setCapabilityValueSafe(capability: string, value: unknown): Promise<void> {
     if (!this.hasCapability(capability)) {
@@ -522,7 +534,24 @@ export class BatteryDevice extends SonnenDevice {
       }
       return;
     }
-    await this.setCapabilityValue(capability, value);
+    try {
+      await this.setCapabilityValue(capability, value);
+    } catch (e) {
+      this.error('Failed to set capability "' + capability + '"', e);
+    }
+  }
+
+  /**
+   * Settings written during polling can collide with an in-flight onSettings()
+   * ("Cannot set Settings while this.onSettings is still pending"); contain the
+   * rejection so it cannot surface as an unhandled one.
+   */
+  private async setSettingsSafe(settings: { [key: string]: boolean | string | number | undefined | null; }): Promise<void> {
+    try {
+      await this.setSettings(settings);
+    } catch (e) {
+      this.error('Failed to sync settings to device: ' + Object.keys(settings).join(', '), e);
+    }
   }
 
   private async mayRetryWithAutoDiscovery(lastState: SonnenState, retryOnError: boolean): Promise<SonnenState> {
@@ -534,9 +563,9 @@ export class BatteryDevice extends SonnenDevice {
           this.log(`Found device ${homeyDeviceId} with IP ${currentIP}`);
           const storedIP = this.getSetting("device_ip") as string;
           if (storedIP !== currentIP) {
-            this.setSettings({ "device_ip": currentIP });
+            await this.setSettingsSafe({ "device_ip": currentIP });
             const notification = this.homey.__("connection.notification_ip_changed", { ip: currentIP });
-            await this.homey.notifications.createNotification({ excerpt: notification });    
+            await this.homey.notifications.createNotification({ excerpt: notification });
             return await this.loadLatestState(lastState, false); // Try and reload data
           }
         }
@@ -561,8 +590,8 @@ export class BatteryDevice extends SonnenDevice {
     return currentUpdate.getDay() !== lastUpdate.getDay();
   }
 
-  public async refreshState() {
-    this.loadLatestState(this.state, false);
+  public async refreshState(): Promise<void> {
+    await this.loadLatestState(this.state, false);
   }
 
   public saveDeviceState(): Date | null {
