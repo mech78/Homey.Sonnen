@@ -10,7 +10,7 @@ import { LocalizationService } from '../../lib/LocalizationService';
 // The battery's EM_OperatingMode can report values outside this list (e.g. other
 // firmware modes); writing them into the dropdown setting would make Homey reject
 // the whole settings object with "Invalid Value: operating_mode".
-const KNOWN_OPERATING_MODES = ['1', '2', '6', '10'];
+const KNOWN_OPERATING_MODES = ['1', '2', '6', '10', '11'];
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();

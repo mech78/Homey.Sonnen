@@ -68,7 +68,8 @@
     "1": "Manuell",
     "2": "Eigenverbrauch",
     "6": "Modulerweiterung (30%)",
-    "10": "Time-of-Use"
+    "10": "Time-of-Use",
+    "11": "Automatik - Optimierung"
   },
   "connection": {
     "error_no_batteries": "Keine Sonnen-Batterien im lokalen Netzwerk gefunden. Bitte Netzwerk überprüfen und erneut versuchen oder eine statische IP-Adresse angeben.",

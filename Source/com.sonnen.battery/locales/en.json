@@ -68,7 +68,8 @@
     "1": "Manual",
     "2": "Self consumption",
     "6": "Module extension (30%)",
-    "10": "Time-of-Use"
+    "10": "Time-of-Use",
+    "11": "Automatic - Optimization"
   },
   "connection": {
     "error_no_batteries": "Could not find any Sonnen batteries on the local network. Please check your network and try again or provide static IP.",

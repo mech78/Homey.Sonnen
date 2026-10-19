@@ -60,6 +60,15 @@
               "da": "Time-of-Use",
               "nl": "Time-of-Use"
             }
+          },
+          {
+            "id": "11",
+            "label": {
+              "en": "Automatic - Optimization",
+              "de": "Automatik - Optimierung",
+              "da": "Automatisk - Optimering",
+              "nl": "Automatisch - Optimalisatie"
+            }
           }
         ]
       },

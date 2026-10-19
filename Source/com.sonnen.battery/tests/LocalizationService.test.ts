@@ -22,6 +22,7 @@ describe('LocalizationService', () => {
       ['2', 'Self consumption'],
       ['6', 'Module extension (30%)'],
       ['10', 'Time-of-Use'],
+      ['11', 'Automatic - Optimization'],
     ])('should resolve known operating mode %s to its translation', (mode, translation) => {
       translateMock.mockImplementation((key: string) =>
         key === 'operatingMode.' + mode ? translation : key
