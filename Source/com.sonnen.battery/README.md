@@ -22,7 +22,11 @@ raw power slider to every user); control happens via Flows (the auto-generated
     transient 0 W setpoint, which would expire outside Manual mode).
   - Values are clamped to the device's real limits, read from the battery
     (`IC_InverterMaxPower_w`, or `site/limits` on newer systems). The battery
-    silently accepts oversized setpoints, so the app enforces honest feedback.
+    silently accepts oversized setpoints, so the app enforces honest feedback:
+    the clamped value is written back to the `target_power` capability.
+  - Leaving `homey` control resets the stored target power to `0` so switching
+    back at a later time starts from idle instead of re-applying a stale
+    setpoint.
 
 Setting a target power via the flow card automatically switches
 `target_power_mode` to `homey` (Homey standard behavior).
