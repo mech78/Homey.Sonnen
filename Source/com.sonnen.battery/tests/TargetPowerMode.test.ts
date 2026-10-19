@@ -232,4 +232,125 @@ describe('TargetPowerMode', () => {
       })).toThrow(LocalizedError);
     });
   });
+
+  describe('planCapabilityChange (combined capability listener planning)', () => {
+    const limits = { charge: 46000, discharge: 46000, source: 'default' as const };
+    const baseState = {
+      currentMode: 'self_consumption' as const,
+      currentPower: 0,
+      standbyActive: false,
+      limits,
+    };
+
+    it('should hand control to Homey when only target_power is written (implied mode switch)', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: 2000, targetPowerMode: null },
+        baseState,
+      );
+
+      expect(plan.requestedMode).toBe('homey');
+      expect(plan.actions.operatingMode).toBe('1');
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 2000 });
+      expect(plan.writeBackPower).toBeNull();
+      expect(plan.resetTargetPower).toBe(false);
+    });
+
+    it('should let an explicit target_power_mode write win over the implied switch', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: 2000, targetPowerMode: 'self_consumption' },
+        baseState,
+      );
+
+      expect(plan.requestedMode).toBe('self_consumption');
+      expect(plan.actions.operatingMode).toBeNull();
+      expect(plan.actions.setpoint).toBeNull();
+      expect(plan.resetTargetPower).toBe(false);
+    });
+
+    it('should write back the clamped value for an oversized charge request', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: 20000, targetPowerMode: null },
+        { ...baseState, limits: { charge: 5000, discharge: 5000, source: 'inverter' } },
+      );
+
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 5000 });
+      expect(plan.writeBackPower).toBe(5000);
+    });
+
+    it('should write back the clamped value for an oversized discharge request', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: -10000, targetPowerMode: null },
+        { ...baseState, limits: { charge: 46000, discharge: 3000, source: 'site' } },
+      );
+
+      expect(plan.actions.setpoint).toEqual({ direction: 'discharge', watts: 3000 });
+      expect(plan.writeBackPower).toBe(-3000);
+    });
+
+    it('should apply the stored power when only the mode is switched to homey', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'homey' },
+        { ...baseState, currentPower: -1500 },
+      );
+
+      expect(plan.requestedMode).toBe('homey');
+      expect(plan.actions.setpoint).toEqual({ direction: 'discharge', watts: 1500 });
+      expect(plan.writeBackPower).toBeNull();
+    });
+
+    it('should reset the stored power when Homey control is left via a mode-only change', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'self_consumption' },
+        { ...baseState, currentMode: 'homey', currentPower: -1500 },
+      );
+
+      expect(plan.requestedMode).toBe('self_consumption');
+      expect(plan.actions.setpoint).toBeNull();
+      expect(plan.resetTargetPower).toBe(true);
+    });
+
+    it('should not reset the stored power when the same change writes a new power value', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: 2000, targetPowerMode: 'self_consumption' },
+        { ...baseState, currentMode: 'homey', currentPower: -1500 },
+      );
+
+      expect(plan.resetTargetPower).toBe(false);
+    });
+
+    it('should plan nothing when the non-homey mode is unchanged', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'self_consumption' },
+        baseState,
+      );
+
+      expect(plan.actions).toEqual({
+        disableStandby: false,
+        enableStandby: false,
+        operatingMode: null,
+        setpoint: null,
+      });
+      expect(plan.writeBackPower).toBeNull();
+      expect(plan.resetTargetPower).toBe(false);
+    });
+
+    it('should plan the idle standby path when neither power nor mode was ever set', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'homey' },
+        { ...baseState, currentMode: null, currentPower: null },
+      );
+
+      expect(plan.requestedMode).toBe('homey');
+      expect(plan.actions.operatingMode).toBe('1');
+      expect(plan.actions.setpoint).toBeNull();
+      expect(plan.actions.enableStandby).toBe(true);
+    });
+
+    it('should throw a LocalizedError for a fractional requested power', () => {
+      expect(() => TargetPowerMode.planCapabilityChange(
+        { targetPower: 100.5, targetPowerMode: null },
+        baseState,
+      )).toThrow(LocalizedError);
+    });
+  });
 });
