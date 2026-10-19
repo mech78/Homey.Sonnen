@@ -6,7 +6,7 @@ import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
-import { ControlActions, TargetPowerMode, TargetPowerModeValue } from '../../domain/TargetPowerMode';
+import { CapabilityChangeRequest, ControlActions, TargetPowerMode, TargetPowerModeValue } from '../../domain/TargetPowerMode';
 import { PowerLimits, SiteLimitsResponse, TargetPowerLimits } from '../../domain/TargetPowerLimits';
 
 export class BatteryDevice extends SonnenDevice {
@@ -18,6 +18,7 @@ export class BatteryDevice extends SonnenDevice {
   private missingCapabilitiesWarned = new Set<string>();
   private manualStandbyActive: boolean = false;
   private targetPowerModeState: TargetPowerModeValue | null = null;
+  private isApplyingTargetPowerChange: boolean = false;
   private powerLimits: PowerLimits = { charge: TargetPowerLimits.DEFAULT_LIMIT_W, discharge: TargetPowerLimits.DEFAULT_LIMIT_W, source: 'default' };
   private siteLimitsCache: { fetchedAt: number; data: SiteLimitsResponse | null } | null = null;
   private readonly siteLimitsCacheTtlMillis = 600000; // 10 minutes
@@ -261,51 +262,69 @@ export class BatteryDevice extends SonnenDevice {
   /**
    * Initializes the target power capability values for freshly added
    * capabilities (existing devices get them via the graceful migration).
-   * Default is device control in self consumption, consistent with the
-   * settings-page operating mode default.
+   * Falls back to the persisted operating mode (synced from the battery by
+   * the polling loop) so flows act on the real mode even before the first
+   * poll completed; defaults to self consumption otherwise, consistent with
+   * the settings-page operating mode default.
    */
   private async initializeTargetPowerCapabilities() {
     this.targetPowerModeState = (this.getCapabilityValue('target_power_mode') as TargetPowerModeValue) ?? null;
     if (this.targetPowerModeState === null || this.targetPowerModeState === undefined) {
-      await this.setCapabilityValue('target_power_mode', 'self_consumption');
-      this.targetPowerModeState = 'self_consumption';
+      const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
+      const persistedMode = storedOperatingMode !== undefined && storedOperatingMode !== null
+        ? TargetPowerMode.fromOperatingMode(storedOperatingMode)
+        : null;
+      const initialMode: TargetPowerModeValue = persistedMode ?? 'self_consumption';
+      await this.setCapabilityValueSafe('target_power_mode', initialMode);
+      this.targetPowerModeState = initialMode;
     }
     const currentPower = this.getCapabilityValue('target_power');
     if (currentPower === null || currentPower === undefined) {
-      await this.setCapabilityValue('target_power', 0);
+      await this.setCapabilityValueSafe('target_power', 0);
     }
   }
 
   private async handleTargetPowerChange(values: Record<string, unknown>): Promise<void> {
-    const requestedMode = (values.target_power_mode
-      ?? this.targetPowerModeState
-      ?? 'self_consumption') as TargetPowerModeValue;
-    const requestedPower = values.target_power !== undefined && values.target_power !== null ? +values.target_power : null;
-    const currentPowerValue = this.getCapabilityValue('target_power');
-    const currentPower = currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue;
-
-    // Clamp the effective power to the device limits — the battery silently
-    // accepts oversized setpoints, so the clamp keeps flow feedback honest.
-    const effectivePower = requestedPower ?? currentPower;
-    let clampedPower: number | null = null;
-    if (effectivePower !== null) {
-      const clamped = TargetPowerLimits.clampTargetPower(effectivePower, this.powerLimits);
-      if (clamped.clamped) {
-        this.log('Clamping target power to device limits', effectivePower, '->', clamped.value, '(source:', this.powerLimits.source + ')');
-      }
-      clampedPower = clamped.value;
+    if (this.isApplyingTargetPowerChange) {
+      // Ignore echoes of the capability values this handler writes itself
+      // (clamp write-back / stored-power reset).
+      this.log('Ignoring target power change applied by this handler:', JSON.stringify(values));
+      return;
     }
 
-    const actions = TargetPowerMode.planPowerControl({
-      requestedMode,
-      previousMode: this.targetPowerModeState,
-      requestedPower: clampedPower,
-      currentPower: requestedPower !== null ? null : currentPower,
+    const request: CapabilityChangeRequest = {
+      targetPower: values.target_power !== undefined && values.target_power !== null ? +values.target_power : null,
+      targetPowerMode: (values.target_power_mode ?? null) as TargetPowerModeValue | null,
+    };
+    const currentPowerValue = this.getCapabilityValue('target_power');
+    const plan = TargetPowerMode.planCapabilityChange(request, {
+      currentMode: this.targetPowerModeState,
+      currentPower: currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue,
       standbyActive: this.manualStandbyActive,
+      limits: this.powerLimits,
     });
 
-    await this.applyControlActions(actions);
-    this.targetPowerModeState = requestedMode;
+    if (request.targetPowerMode === null && request.targetPower !== null && plan.requestedMode !== this.targetPowerModeState) {
+      this.log('Implied mode switch: writing target_power hands control to Homey');
+    }
+
+    this.isApplyingTargetPowerChange = true;
+    try {
+      await this.applyControlActions(plan.actions);
+      this.targetPowerModeState = plan.requestedMode;
+
+      // Keep the stored capability state honest: the battery silently accepts
+      // oversized setpoints, so write back the clamped value, and reset the
+      // stored power when Homey control is left so a later re-entry starts
+      // from idle instead of re-applying a stale setpoint.
+      if (plan.resetTargetPower) {
+        await this.setCapabilityValueSafe('target_power', 0);
+      } else if (plan.writeBackPower !== null) {
+        await this.setCapabilityValueSafe('target_power', plan.writeBackPower);
+      }
+    } finally {
+      this.isApplyingTargetPowerChange = false;
+    }
   }
 
   /**
@@ -350,6 +369,7 @@ export class BatteryDevice extends SonnenDevice {
    * disableStandby → operatingMode → enableStandby → setpoint.
    */
   private async applyControlActions(actions: ControlActions): Promise<void> {
+    this.log('Applying control actions:', JSON.stringify(actions));
     const client = this.createSonnenBatterieClient();
 
     try {
@@ -368,6 +388,13 @@ export class BatteryDevice extends SonnenDevice {
         await client.setSetpoint(actions.setpoint.direction, actions.setpoint.watts);
       }
     } catch (error) {
+      // Re-sync the local state with the battery: a partially applied
+      // sequence must not leave stale assumptions (e.g. the manual standby
+      // flag or the target_power_mode capability).
+      this.refreshState().catch((refreshError) => {
+        this.error('Failed to refresh state after a failed control action', refreshError);
+      });
+
       // Re-throw localized so the error surfaces in the Flow card / UI
       LocalizationService.getInstance().throwLocalizedError(error);
     }
