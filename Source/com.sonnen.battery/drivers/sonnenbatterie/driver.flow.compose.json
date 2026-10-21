@@ -119,7 +119,7 @@
       "id": "set_time_of_use_hours_string",
       "title": {
         "en": "Set Time-of-Use with custom string",
-        "de": "Zeitabhängige Steuerung mit Stundenangabe als Text",
+        "de": "Zeitabhängige Steuerung mit Stundenangabe als Text einstellen",
         "da": "Indstil Time-of-Use med brugerdefineret streng",
         "nl": "Stel Time-of-Use in met aangepaste string"
       },
@@ -178,7 +178,7 @@
       "id": "set_time_of_use_string",
       "title": {
         "en": "Set Time-of-Use with start and end time as text",
-        "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text",
+        "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text einstellen",
         "da": "Indstil Time-of-Use med start- og sluttidspunkt som tekst",
         "nl": "Stel Time-of-Use in met start- en eindtijd als tekst"
       },
@@ -560,6 +560,45 @@
           "min": 0,
           "max": 46000,
           "step": 1
+        }
+      ]
+    },
+    {
+      "id": "set_time_of_use_schedule",
+      "title": {
+        "en": "Set Time-of-Use schedule as text",
+        "de": "Zeitabhängige Steuerung mit Zeitplan als Text einstellen",
+        "da": "Indstil Time-of-Use tidsplan som tekst",
+        "nl": "Stel Time-of-Use schema in als tekst"
+      },
+      "titleFormatted": {
+        "en": "Set Time-of-Use schedule: [[schedule]]",
+        "de": "Einstellen der zeitabhängigen Steuerung mit Zeitplan: [[schedule]]",
+        "da": "Indstilling af Time-of-Use tidsplan: [[schedule]]",
+        "nl": "Stel Time-of-Use schema in: [[schedule]]"
+      },
+      "hint": {
+        "en": "One period per line, same format as the device settings: 'HH:MM-HH:MM: maxW', e.g. '00:00-09:00: 2000W' and '09:00-12:00: 3000W'. Press Shift+Enter for a new line. Tip: store schedules in variables and switch between them from flows.",
+        "de": "Eine Periode pro Zeile, gleiches Format wie in den Geräteeinstellungen: 'HH:MM-HH:MM: maxW', z.B. '00:00-09:00: 2000W' und '09:00-12:00: 3000W'. Mit Umschalt+Eingabe eine neue Zeile einfügen. Tipp: Zeitpläne in Variablen speichern und über Flows zwischen ihnen wechseln.",
+        "da": "Én periode pr. linje, samme format som i enhedsindstillingerne: 'TT:MM-TT:MM: maksW', f.eks. '00:00-09:00: 2000W' og '09:00-12:00: 3000W'. Tryk Skift+Enter for en ny linje. Tip: Gem tidsplaner i variabler og skift mellem dem via flows.",
+        "nl": "Eén periode per regel, zelfde formaat als in de apparaatinstellingen: 'UU:MM-UU:MM: maxW', bijv. '00:00-09:00: 2000W' en '09:00-12:00: 3000W'. Druk op Shift+Enter voor een nieuwe regel. Tip: bewaar schema's in variabelen en wissel ertussen via flows."
+      },
+      "args": [
+        {
+          "type": "text",
+          "name": "schedule",
+          "title": {
+            "en": "Schedule (one period per line)",
+            "de": "Zeitplan (eine Periode pro Zeile)",
+            "da": "Tidsplan (én periode pr. linje)",
+            "nl": "Schema (één periode per regel)"
+          },
+          "placeholder": {
+            "en": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+            "de": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+            "da": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+            "nl": "00:00-09:00: 2000W\n09:00-12:00: 3000W"
+          }
         }
       ]
     }

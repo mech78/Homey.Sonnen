@@ -81,6 +81,7 @@
     "clearedToU": "Sonnen Batterie: Cleared Time-of-Use schedule.",
     "pausedToU": "Sonnen Batterie: Paused Time-of-Use between __startTime__ and __endTime__.",
     "startedToU": "Sonnen Batterie: Started Time-of-Use (24h).",
+    "setToUSchedule": "Sonnen Batterie: Set Time-of-Use schedule:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Set operating mode to \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Set prognosis charging __state__.",
     "startedManualCharging": "Sonnen Batterie: Started manual charging with max. __maxPower__W.",

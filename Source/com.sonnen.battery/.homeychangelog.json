@@ -276,9 +276,9 @@
     "nl": "Crash-oplossingen: ongeldige bedrijfsmodus laat polling niet meer crashen; apparaat-capabilities herstellen zichzelf vanuit het manifest; beveiligde capability-writes; instellingen-refresh conflicteert niet langer met onSettings. Bedrijfsmodus 11 'Automatisch - Optimalisatie' toegevoegd aan instellingen, flows en vertalingen."
   },
   "2.7.0": {
-    "en": "New Time-of-Use flow cards accepting start and end times as text: set a schedule or pause it directly from Flows.",
-    "de": "Neue Time-of-Use-Flow-Karten, die Start- und Endzeit als Text akzeptieren: Zeitplan direkt aus Flows setzen oder pausieren.",
-    "da": "Nye Time-of-Use flowkort, der accepterer start- og sluttidspunkt som tekst: indstil eller sæt tidsplanen på pause direkte fra flows.",
-    "nl": "Nieuwe Time-of-Use flowkaarten die start- en eindtijd als tekst accepteren: stel het schema in of pauzeer het direct vanuit flows."
+    "en": "New Time-of-Use flow cards accepting start and end times as text: set a schedule or pause it directly from Flows. New action card 'Set Time-of-Use schedule as text': set the complete schedule from Flows using the same format as the device settings (one period per line, 'HH:MM-HH:MM: maxW').",
+    "de": "Neue Time-of-Use-Flow-Karten, die Start- und Endzeit als Text akzeptieren: Zeitplan direkt aus Flows setzen oder pausieren. Neue Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen': Setzen des kompletten Zeitplans aus Flows im selben Format wie in den Geräteeinstellungen (eine Periode pro Zeile, 'HH:MM-HH:MM: maxW').",
+    "da": "Nye Time-of-Use flowkort, der accepterer start- og sluttidspunkt som tekst: indstil eller sæt tidsplanen på pause direkte fra flows. Nyt handlingskort 'Indstil Time-of-Use tidsplan som tekst': indstil hele tidsplanen fra flows med samme format som i enhedsindstillingerne (én periode pr. linje, 'TT:MM-TT:MM: maksW').",
+    "nl": "Nieuwe Time-of-Use flowkaarten die start- en eindtijd als tekst accepteren: stel het schema in of pauzeer het direct vanuit flows. Nieuwe actiekaart 'Stel Time-of-Use schema in als tekst': stel het volledige schema in vanuit flows met hetzelfde formaat als in de apparaatinstellingen (één periode per regel, 'UU:MM-UU:MM: maxW')."
   }
 }

@@ -186,6 +186,24 @@ describe('TimeOfUseSchedule', () => {
       expect(TimeOfUseSchedule.fromString('   ').getSchedule()).toHaveLength(0);
     });
 
+    it('should accept CRLF line endings like the settings textarea (Windows paste)', () => {
+      const parsed = TimeOfUseSchedule.fromString('06:00-08:00: 2000W\r\n17:00-21:00: 46000W\r\n');
+
+      expect(parsed.getSchedule()).toEqual([
+        { start: '06:00', stop: '08:00', threshold_p_max: 2000 },
+        { start: '17:00', stop: '21:00', threshold_p_max: 46000 }
+      ]);
+    });
+
+    it('should ignore blank lines and per-line surrounding whitespace', () => {
+      const parsed = TimeOfUseSchedule.fromString('\n  06:00-08:00: 2000W  \n\n\t17:00-21:00: 46000W\t\n');
+
+      expect(parsed.getSchedule()).toEqual([
+        { start: '06:00', stop: '08:00', threshold_p_max: 2000 },
+        { start: '17:00', stop: '21:00', threshold_p_max: 46000 }
+      ]);
+    });
+
     it('should reject malformed schedule lines', () => {
       expect(() => TimeOfUseSchedule.fromString('06:00-08:00')).toThrow(LocalizedError);
     });
