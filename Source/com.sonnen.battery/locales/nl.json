@@ -81,6 +81,7 @@
     "clearedToU": "Sonnen Batterie: Time-of-Use schema gewist.",
     "pausedToU": "Sonnen Batterie: Time-of-Use gepauzeerd tussen __startTime__ en __endTime__.",
     "startedToU": "Sonnen Batterie: Time-of-Use gestart (24u).",
+    "setToUSchedule": "Sonnen Batterie: Time-of-Use schema ingesteld:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Stel bedrijfsmodus in op \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Stel prognose laden __state__.",
     "startedManualCharging": "Sonnen Batterie: Handmatig opladen gestart met max. __maxPower__W.",

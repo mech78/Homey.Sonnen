@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
@@ -180,16 +180,16 @@
       {
         "id": "battery_level_above_or_equal",
         "title": {
-          "en": "Battery level above",
-          "da": "Batteriniveau over",
-          "de": "Batteriestand über",
-          "nl": "Batterijniveau boven"
+          "en": "Battery level above or equal",
+          "da": "Batteriniveau over eller lig",
+          "de": "Batteriestand über oder gleich",
+          "nl": "Batterijniveau boven of gelijk aan"
         },
         "titleFormatted": {
-          "en": "Battery level !{{is|isn't}} above [[percentage]]%",
-          "da": "Batteriniveau !{{er|er ikke}} over [[percentage]]%",
-          "de": "Batteriestand !{{liegt|liegt nicht}} über [[percentage]]%",
-          "nl": "Batterijniveau !{{is|is niet}} hoger [[percentage]]%"
+          "en": "Battery level !{{is|isn't}} above or equal to [[percentage]]%",
+          "da": "Batteriniveau !{{er|er ikke}} over eller lig [[percentage]]%",
+          "de": "Batteriestand !{{liegt|liegt nicht}} über oder gleich [[percentage]]%",
+          "nl": "Batterijniveau !{{is|is niet}} boven of gelijk aan [[percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
@@ -374,7 +374,7 @@
         },
         "titleFormatted": {
           "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
-          "da": "Watt forbrug fra net !{{er|er ikke}} over [[power]] W",
+          "da": "Forbruget fra nettet !{{er|er ikke}} over [[power]] W",
           "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
           "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
         },
@@ -397,7 +397,7 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Power (W)"
+              "nl": "Vermogen (W)"
             },
             "min": 1,
             "step": 1
@@ -437,7 +437,7 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Power (W)"
+              "nl": "Vermogen (W)"
             },
             "min": 1,
             "step": 1
@@ -516,10 +516,10 @@
           "nl": "Stel Time-of-Use in met uren"
         },
         "titleFormatted": {
-          "en": "Set Time-of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+          "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
-          "da": "Indstil Time-of-Use startende [[start]] og sluttende efter timer af [[hours]] med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na uren van [[hours]] met een lading van maximaal [[max_power]]W binnen deze periode."
+          "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
@@ -575,15 +575,15 @@
         "id": "set_time_of_use_hours_string",
         "title": {
           "en": "Set Time-of-Use with custom string",
-          "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen",
+          "de": "Zeitabhängige Steuerung mit Stundenangabe als Text einstellen",
           "da": "Indstil Time-of-Use med brugerdefineret streng",
           "nl": "Stel Time-of-Use in met aangepaste string"
         },
         "titleFormatted": {
-          "en": "Set Time-of-Use starting [[start]] and ending after hours of [[hours]] with charge of maximum [[max_power]]W within this period.",
+          "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
-          "da": "Indstil Time-of-Use startende [[start]] og sluttende efter timer af [[hours]] med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na uren van [[hours]] met een lading van maximaal [[max_power]]W binnen deze periode."
+          "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
@@ -601,8 +601,8 @@
             "type": "text",
             "name": "start",
             "placeholder": {
-              "en": "Enter starting time for new charge event. String must be well-formated 24h format (ex: 13:15)",
-              "de": "Startzeit für neues Ladeereignis eingeben. String must be well-formated 24h format (ex: 13:15)",
+              "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
               "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
             }
@@ -619,6 +619,67 @@
             "min": 0,
             "max": 24,
             "step": 1
+          },
+          {
+            "type": "number",
+            "name": "max_power",
+            "placeholder": {
+              "en": "Max. power from grid (0-46000 W)",
+              "de": "Max. Leistung aus dem Netz (0-46000 W)",
+              "da": "Maks. effekt fra net (0-46000 W)",
+              "nl": "Max. vermogen van net (0-46000 W)"
+            },
+            "min": 0,
+            "max": 46000,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "set_time_of_use_string",
+        "title": {
+          "en": "Set Time-of-Use with start and end time as text",
+          "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text einstellen",
+          "da": "Indstil Time-of-Use med start- og sluttidspunkt som tekst",
+          "nl": "Stel Time-of-Use in met start- en eindtijd als tekst"
+        },
+        "titleFormatted": {
+          "en": "Set Time-of-Use starting [[start]] and ending [[end]] with charge of maximum [[max_power]]W within this period.",
+          "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
+          "da": "Indstil Time-of-Use startende [[start]] og sluttende [[end]] med opladning af maksimalt [[max_power]]W i denne periode.",
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode."
+        },
+        "hint": {
+          "en": "Set period for Time-of-Use",
+          "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
+          "da": "Indstil periode for Time-of-Use",
+          "nl": "Stel periode in voor Time-of-Use"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "text",
+            "name": "start",
+            "placeholder": {
+              "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+            }
+          },
+          {
+            "type": "text",
+            "name": "end",
+            "placeholder": {
+              "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+            }
           },
           {
             "type": "number",
@@ -703,6 +764,54 @@
               "de": "Endzeit für neues Ladeereignis eingeben",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed",
               "nl": "Voer eindtijd in voor het nieuwe laadmoment"
+            }
+          }
+        ]
+      },
+      {
+        "id": "pause_time_of_use_string",
+        "title": {
+          "en": "Pause Time-of-Use with start and end time as text",
+          "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text pausieren",
+          "da": "Sæt Time-of-Use på pause med start- og sluttidspunkt som tekst",
+          "nl": "Pauzeer Time-of-Use met start- en eindtijd als tekst"
+        },
+        "titleFormatted": {
+          "en": "Pause Time-of-Use starting [[start]] and ending [[end]]. Battery will be paused within this period.",
+          "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]]. Die Batterie wird während dieser Zeitspanne pausiert.",
+          "da": "Sæt Time-of-Use på pause startende [[start]] og sluttende [[end]]. Batteriet vil blive sat på pause i denne periode.",
+          "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode."
+        },
+        "hint": {
+          "en": "Pause battery consumption within a given period of time",
+          "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne",
+          "da": "Sæt batteriforbrug på pause inden for en given periode",
+          "nl": "Pauzeer batterijverbruik binnen een bepaalde periode"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "text",
+            "name": "start",
+            "placeholder": {
+              "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+            }
+          },
+          {
+            "type": "text",
+            "name": "end",
+            "placeholder": {
+              "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
             }
           }
         ]
@@ -968,6 +1077,50 @@
             "step": 1
           }
         ]
+      },
+      {
+        "id": "set_time_of_use_schedule",
+        "title": {
+          "en": "Set Time-of-Use schedule as text",
+          "de": "Zeitabhängige Steuerung mit Zeitplan als Text einstellen",
+          "da": "Indstil Time-of-Use tidsplan som tekst",
+          "nl": "Stel Time-of-Use schema in als tekst"
+        },
+        "titleFormatted": {
+          "en": "Set Time-of-Use schedule: [[schedule]]",
+          "de": "Einstellen der zeitabhängigen Steuerung mit Zeitplan: [[schedule]]",
+          "da": "Indstilling af Time-of-Use tidsplan: [[schedule]]",
+          "nl": "Stel Time-of-Use schema in: [[schedule]]"
+        },
+        "hint": {
+          "en": "One period per line, same format as the device settings: 'HH:MM-HH:MM: maxW', e.g. '00:00-09:00: 2000W' and '09:00-12:00: 3000W'. Press Shift+Enter for a new line. Tip: store schedules in variables and switch between them from flows.",
+          "de": "Eine Periode pro Zeile, gleiches Format wie in den Geräteeinstellungen: 'HH:MM-HH:MM: maxW', z.B. '00:00-09:00: 2000W' und '09:00-12:00: 3000W'. Mit Umschalt+Eingabe eine neue Zeile einfügen. Tipp: Zeitpläne in Variablen speichern und über Flows zwischen ihnen wechseln.",
+          "da": "Én periode pr. linje, samme format som i enhedsindstillingerne: 'TT:MM-TT:MM: maksW', f.eks. '00:00-09:00: 2000W' og '09:00-12:00: 3000W'. Tryk Skift+Enter for en ny linje. Tip: Gem tidsplaner i variabler og skift mellem dem via flows.",
+          "nl": "Eén periode per regel, zelfde formaat als in de apparaatinstellingen: 'UU:MM-UU:MM: maxW', bijv. '00:00-09:00: 2000W' en '09:00-12:00: 3000W'. Druk op Shift+Enter voor een nieuwe regel. Tip: bewaar schema's in variabelen en wissel ertussen via flows."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
+            "type": "text",
+            "name": "schedule",
+            "title": {
+              "en": "Schedule (one period per line)",
+              "de": "Zeitplan (eine Periode pro Zeile)",
+              "da": "Tidsplan (én periode pr. linje)",
+              "nl": "Schema (één periode per regel)"
+            },
+            "placeholder": {
+              "en": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+              "de": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+              "da": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+              "nl": "00:00-09:00: 2000W\n09:00-12:00: 3000W"
+            }
+          }
+        ]
       }
     ]
   },
@@ -1193,10 +1346,10 @@
               },
               "value": "",
               "hint": {
-                "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
-                "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen.",
-                "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information.",
-                "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+                "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information. You can also set this schedule from flows using the 'Set Time-of-Use schedule as text' action card.",
+                "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen. Sie können diesen Zeitplan auch über Flows setzen, mit der Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen'.",
+                "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information. Du kan også indstille denne tidsplan fra flows med handlingskortet 'Indstil Time-of-Use tidsplan som tekst'.",
+                "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'."
               }
             },
             {

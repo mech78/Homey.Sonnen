@@ -1,6 +1,7 @@
 import Homey from 'homey';
 import { SonnenDriver } from '../../lib/SonnenDriver';
 import { LocalizationService } from '../../lib/LocalizationService';
+import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { BatteryDevice } from './device';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
@@ -20,11 +21,20 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("set_time_of_use_hours_string")
       .registerRunListener(async (args) => this.handleSetTimeOfUseByStartTimeAndHours(args));
 
+    this.homey.flow.getActionCard("set_time_of_use_string")
+      .registerRunListener(async (args) => this.handleSetTimeOfUse(args));
+
     this.homey.flow.getActionCard("reset_time_of_use")
       .registerRunListener(async (args) => this.handleClearTimeOfUse(args));
 
     this.homey.flow.getActionCard("pause_time_of_use")
       .registerRunListener(async (args) => this.handlePauseTimeOfUse(args));
+
+    this.homey.flow.getActionCard("pause_time_of_use_string")
+      .registerRunListener(async (args) => this.handlePauseTimeOfUse(args));
+
+    this.homey.flow.getActionCard("set_time_of_use_schedule")
+      .registerRunListener(async (args) => this.handleSetTimeOfUseSchedule(args));
 
     this.homey.flow.getActionCard("start_charge")
       .registerRunListener(async (args) => this.handleStartTimeOfUse(args));
@@ -117,6 +127,25 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       await this.createSonnenBatterieClient(args.device).setScheduleEntry(timeStart, timeEnd, 0);
       
       const notification = this.homey.__("notification.pausedToU", { startTime: timeStart, endTime: timeEnd});
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      LocalizationService.getInstance().throwLocalizedError(error);
+    }
+  }
+
+  private async handleSetTimeOfUseSchedule(args: { device: BatteryDevice, schedule: string }): Promise<void> {
+    try {
+      const schedule = TimeOfUseSchedule.fromString(args.schedule);
+      await this.createSonnenBatterieClient(args.device).setSchedule(schedule);
+
+      // Empty input clears the schedule, mirroring the device settings dialog.
+      const isScheduleEmpty = schedule.getSchedule().length === 0;
+      const notification = this.homey.__(
+        isScheduleEmpty ? "notification.clearedToU" : "notification.setToUSchedule",
+        { schedule: schedule.toString() }
+      );
       await this.homey.notifications.createNotification({ excerpt: notification });
 
       await args.device.refreshState(); // immediately refresh UI

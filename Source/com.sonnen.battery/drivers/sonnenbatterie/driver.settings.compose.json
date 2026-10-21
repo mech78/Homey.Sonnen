@@ -83,10 +83,10 @@
         },
         "value": "",
         "hint": {
-          "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information.",
-          "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen.",
-          "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information.",
-          "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+          "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information. You can also set this schedule from flows using the 'Set Time-of-Use schedule as text' action card.",
+          "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen. Sie können diesen Zeitplan auch über Flows setzen, mit der Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen'.",
+          "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information. Du kan også indstille denne tidsplan fra flows med handlingskortet 'Indstil Time-of-Use tidsplan som tekst'.",
+          "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'."
         }
       },
       {
