@@ -5,6 +5,8 @@ The sonnenBatterie does not only store energy, it's smart. As an intelligent, ba
 This app allows you to set or reset Time-Of-Use, change the operating mode and enable/disable forecast/prognosis charging.
 This is very useful with changing energy prices, you can pause your batterie delivery on low tariff or charge batterie on low tariff - so being fully charged in times with high tariff.
 
+The battery's backup buffer (EM_USOC) - the state of charge the battery will not discharge below during normal operation - can be monitored on the device, changed in the device settings and automated from flows.
+
 Reset Time-Of-Use is very useful, because once schedule is set - the schedule is repeated daily. Reset will clear the schedule. Please use this before setting a new schedule. 
 
 Be aware, currently only one schedule/Time-Of-Use is supported to be set by a flow. 
