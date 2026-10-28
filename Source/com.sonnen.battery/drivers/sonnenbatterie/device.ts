@@ -6,6 +6,7 @@ import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { LocalizationService } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
+import { isValidBackupBuffer, parseBackupBuffer, shouldWriteBackupBufferToBattery } from '../../domain/BackupBuffer';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -13,6 +14,7 @@ export class BatteryDevice extends SonnenDevice {
   private refreshTimeoutId: NodeJS.Timeout | undefined;
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
   private lastReportedOperatingMode: string | null = null;
+  private lastReportedBackupBuffer: number | null = null;
   private missingCapabilitiesWarned = new Set<string>();
 
 
@@ -161,6 +163,27 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
+    if (_.contains(changedKeys, "backup_buffer")) {
+      const newBackupBuffer = Math.round(+(newSettings["backup_buffer"] as number));
+      this.log("Settings", "BackupBuffer", newBackupBuffer, this.lastReportedBackupBuffer);
+
+      if (!isValidBackupBuffer(newBackupBuffer)) {
+        LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.backupBuffer"));
+      }
+
+      // Skip the battery round-trip when the change was just a programmatic sync
+      // of a value the battery itself reported (setSettings re-enters onSettings)
+      if (!shouldWriteBackupBufferToBattery(newBackupBuffer, this.lastReportedBackupBuffer)) {
+        this.log("Settings", "BackupBuffer", newBackupBuffer, "already active on battery, skipping battery write");
+      } else {
+        try {
+          await this.createSonnenBatterieClient().setBackupBuffer(newBackupBuffer);
+        } catch (error) {
+          LocalizationService.getInstance().throwLocalizedError(error);
+        }
+      }
+    }
+
     if (_.contains(changedKeys, "installation_date")) {
       const newInstallationDate = newSettings["installation_date"] as string;
       this.log("Settings", "InstallationDate", newInstallationDate);
@@ -251,6 +274,7 @@ export class BatteryDevice extends SonnenDevice {
       'capacity_remaining_capability',
       'operating_mode_capability',
       'prognosis_charging_capability',
+      'backup_buffer_capability',
       'state_core_control_module_capability',
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
@@ -482,7 +506,18 @@ export class BatteryDevice extends SonnenDevice {
       const prognosisChargingMode = prognosisCharging === "1";
       this.setCapabilityValueSafe('prognosis_charging_capability', prognosisChargingMode);
       await this.setSettingsSafe({ 'prognosis_charging': prognosisChargingMode });
-      
+
+      const backupBuffer = parseBackupBuffer(configurationsJson['EM_USOC']);
+      if (backupBuffer !== null) {
+        this.lastReportedBackupBuffer = backupBuffer;
+        this.setCapabilityValueSafe('backup_buffer_capability', backupBuffer);
+        if (+(this.getSetting('backup_buffer') ?? NaN) !== backupBuffer) {
+          await this.setSettingsSafe({ 'backup_buffer': backupBuffer });
+        }
+      } else {
+        this.log('Battery reported no usable backup buffer value, keeping the last known value');
+      }
+
       if (shouldUpdateBatteryData) {
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
       }

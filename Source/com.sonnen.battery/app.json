@@ -1176,6 +1176,7 @@
         "number_battery_capability",
         "operating_mode_capability",
         "prognosis_charging_capability",
+        "backup_buffer_capability",
         "eclipse_capability",
         "state_inverter_capability",
         "state_bms_capability",
@@ -2048,6 +2049,25 @@
       "decimals": 0,
       "insights": true,
       "icon": "/assets/images/svg/battery-count.svg"
+    },
+    "backup_buffer_capability": {
+      "type": "number",
+      "title": {
+        "en": "Backup buffer",
+        "da": "Backup-buffer",
+        "de": "Backup-Puffer",
+        "nl": "Noodvoorraad"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
     },
     "online_capability": {
       "type": "boolean",
