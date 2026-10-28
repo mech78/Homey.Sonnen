@@ -1,6 +1,7 @@
 import { SonnenBatteries } from "../domain/SonnenBatteryDevices";
 import { TimeOfUseSchedule } from "../domain/TimeOfUse";
 import { LocalizedError } from "../domain/LocalizedError";
+import { isValidBackupBuffer } from "../domain/BackupBuffer";
 
 export class SonnenBatterieClient {
 
@@ -68,6 +69,34 @@ export class SonnenBatterieClient {
         method: "PUT",
         headers: this.getHeaders(),
         body: JSON.stringify({ "EM_Prognosis_Charging": prognosis_charging })
+      });
+
+      if (!response.ok) {
+        throw await SonnenBatterieClient.createFetchError(response);
+      }
+    } catch (error) {
+      if (error instanceof LocalizedError) {
+        throw error;
+      }
+      throw SonnenBatterieClient.getLocalizedError(error);
+    }
+  }
+
+  /**
+   * Sets the backup buffer (EM_USOC): the state of charge the battery will not
+   * discharge below during normal operation. Valid values are 0 (disabled) or
+   * an integer percentage between 5 and 100.
+   */
+  public async setBackupBuffer(percent: number): Promise<void> {
+    if (!isValidBackupBuffer(percent)) {
+      throw new LocalizedError("error.validation.backupBuffer");
+    }
+
+    try {
+      const response = await fetch(`${this.getBaseUrl()}/api/v2/configurations`, {
+        method: "PUT",
+        headers: this.getHeaders(),
+        body: JSON.stringify({ "EM_USOC": `${percent}` })
       });
 
       if (!response.ok) {
