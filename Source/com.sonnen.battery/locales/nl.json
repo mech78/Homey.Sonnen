@@ -84,6 +84,7 @@
     "setToUSchedule": "Sonnen Batterie: Time-of-Use schema ingesteld:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Stel bedrijfsmodus in op \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Stel prognose laden __state__.",
+    "changedBackupBuffer": "Sonnen Batterie: Stel noodvoorraad in op __percent__ %.",
     "startedManualCharging": "Sonnen Batterie: Handmatig opladen gestart met max. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Handmatig ontladen gestart met max. __maxPower__W."
   },
@@ -114,7 +115,8 @@
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan Time-of-Use schema niet toepassen wanneer bedrijfsmodus wordt gewijzigd van Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use schema kan alleen worden ingesteld wanneer bedrijfsmodus Time-of-Use is.",
       "invalid_installation_date_format": "Ongeldig installatiedatumformaat. Gebruik een geldig datumformaat.",
-      "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen."
+      "installation_date_in_future": "De installatiedatum mag niet in de toekomst liggen.",
+      "backupBuffer": "Ongeldige noodvoorraadwaarde. Geldige waarden zijn 0 (uitgeschakeld) of 5–100 %."
     }
   }
 }

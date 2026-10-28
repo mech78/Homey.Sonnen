@@ -84,6 +84,7 @@
     "setToUSchedule": "Sonnen Batterie: Set Time-of-Use schedule:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Set operating mode to \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Set prognosis charging __state__.",
+    "changedBackupBuffer": "Sonnen Batterie: Set backup buffer to __percent__ %.",
     "startedManualCharging": "Sonnen Batterie: Started manual charging with max. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Started manual discharging with max. __maxPower__W."
   },
@@ -108,6 +109,7 @@
       "invalid_ip_format": "Invalid IP address format. Please enter a valid IPv4 address.",
       "invalid_installation_date_format": "Invalid installation date format. Please use a valid date format.",
       "installation_date_in_future": "Installation date cannot be in the future.",
+      "backupBuffer": "Invalid backup buffer value. Valid values are 0 (disabled) or 5-100 %.",
       "ToU": {
         "invalid threshold": "Time-of-Use max. power value must be between 0 and 46000 watts.",
         "ToU windows overlap": "Time-of-Use windows must not overlap."

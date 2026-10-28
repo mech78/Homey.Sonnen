@@ -84,6 +84,7 @@
     "setToUSchedule": "Sonnen Batterie: Time-of-Use tidsplan indstillet:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Indstil driftstilstand til \"__operatingMode__\".",
     "changedPrognosisCharging": "Sonnen Batterie: Indstil prognosebaseret opladning __state__.",
+    "changedBackupBuffer": "Sonnen Batterie: Indstil backup-buffer til __percent__ %.",
     "startedManualCharging": "Sonnen Batterie: Startede manuel opladning med maks. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Startede manuel afladning med maks. __maxPower__W."
   },
@@ -114,7 +115,8 @@
       "timeOfUseChangeMismatchingOperatingModeChange": "Kan ikke anvende Time-of-Use tidsplan, når driftstilstanden ændres væk fra Time-of-Use.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use tidsplan kan kun indstilles, når driftstilstanden er Time-of-Use.",
       "invalid_installation_date_format": "Ugyldigt installationsdatoformat. Brug venligst et gyldigt datoformat.",
-      "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden."
+      "installation_date_in_future": "Installationsdatoen kan ikke være i fremtiden.",
+      "backupBuffer": "Ugyldig backup-bufferværdi. Gyldige værdier er 0 (deaktiveret) eller 5–100 %."
     }
   }
 }

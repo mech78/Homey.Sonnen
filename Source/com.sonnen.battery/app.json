@@ -260,6 +260,78 @@
         ]
       },
       {
+        "id": "backup_buffer_above_or_equal",
+        "title": {
+          "en": "Backup buffer above or equal",
+          "da": "Backup-buffer over eller lig",
+          "de": "Backup-Puffer über oder gleich",
+          "nl": "Noodvoorraad boven of gelijk aan"
+        },
+        "titleFormatted": {
+          "en": "Backup buffer !{{is|isn't}} above or equal to [[percentage]]%",
+          "da": "Backup-buffer !{{er|er ikke}} over eller lig [[percentage]]%",
+          "de": "Backup-Puffer !{{liegt|liegt nicht}} über oder gleich [[percentage]]%",
+          "nl": "Noodvoorraad !{{is|is niet}} boven of gelijk aan [[percentage]]%"
+        },
+        "hint": {
+          "en": "Backup buffer above or equal percentage provided.",
+          "da": "Backup-buffer er over eller lig med procent angivet.",
+          "de": "Backup-Puffer über oder gleich dem angegebenen Prozentsatz.",
+          "nl": "Noodvoorraad boven of gelijk percentage verstrekt."
+        },
+        "args": [
+          {
+            "type": "number",
+            "name": "percentage",
+            "placeholder": {
+              "en": "Backup buffer percentage",
+              "da": "Backup-bufferprocent",
+              "de": "Backup-Puffer-Prozentsatz",
+              "nl": "Noodvoorraadpercentage"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "backup_buffer_below",
+        "title": {
+          "en": "Backup buffer below",
+          "da": "Backup-buffer under",
+          "de": "Backup-Puffer under",
+          "nl": "Noodvoorraad hieronder"
+        },
+        "titleFormatted": {
+          "en": "Backup buffer !{{is|isn't}} below [[percentage]]%",
+          "da": "Backup-buffer !{{er|er ikke}} under [[percentage]]%",
+          "de": "Backup-Puffer !{{ist|ist nicht}} unter [[percentage]]%",
+          "nl": "De noodvoorraad !{{is|is niet}} lager [[percentage]]%"
+        },
+        "hint": {
+          "en": "Backup buffer below percentage provided.",
+          "da": "Backup-buffer er under procent angivet.",
+          "de": "Backup-Puffer unter dem angegebenen Prozentsatz.",
+          "nl": "Noodvoorraad lager dan aangegeven percentage"
+        },
+        "args": [
+          {
+            "type": "number",
+            "name": "percentage",
+            "placeholder": {
+              "en": "Backup buffer percentage",
+              "da": "Backup-bufferprocent",
+              "de": "Backup-Puffer-Prozentsatz",
+              "nl": "Noodvoorraadpercentage"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
         "id": "operating_mode_equals",
         "title": {
           "en": "Operating mode !{{is|isn't}}",
@@ -993,6 +1065,42 @@
           {
             "type": "checkbox",
             "name": "active"
+          }
+        ]
+      },
+      {
+        "id": "set_backup_buffer",
+        "title": {
+          "en": "Set backup buffer",
+          "de": "Backup-Puffer einstellen",
+          "da": "Indstil backup-buffer",
+          "nl": "Stel noodvoorraad in"
+        },
+        "titleFormatted": {
+          "en": "Set backup buffer to [[percent]] %",
+          "de": "Backup-Puffer auf [[percent]] % einstellen",
+          "da": "Indstil backup-buffer til [[percent]] %",
+          "nl": "Stel noodvoorraad in op [[percent]] %"
+        },
+        "hint": {
+          "en": "Set the state of charge the battery will not discharge below during normal operation. Valid values: 0 (disabled) or 5-100 %.",
+          "de": "Ladezustand (SoC) einstellen, den die Batterie im normalen Betrieb nicht unterschreitet. Gültige Werte: 0 (deaktiviert) oder 5–100 %.",
+          "da": "Indstil ladeandelen (SoC), som batteriet i normal drift ikke aflader under. Gyldige værdier: 0 (deaktiveret) eller 5–100 %.",
+          "nl": "Stel het laadniveau (SoC) in dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %."
+        },
+        "args": [
+          {
+            "type": "number",
+            "name": "percent",
+            "placeholder": {
+              "en": "Backup buffer percentage (0 = disabled, 5-100 %)",
+              "de": "Backup-Puffer-Prozentsatz (0 = deaktiviert, 5–100 %)",
+              "da": "Backup-bufferprocent (0 = deaktiveret, 5–100 %)",
+              "nl": "Noodvoorraadpercentage (0 = uitgeschakeld, 5–100 %)"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
           }
         ]
       },
