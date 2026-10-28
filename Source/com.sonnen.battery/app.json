@@ -1354,6 +1354,25 @@
               }
             },
             {
+              "id": "backup_buffer",
+              "type": "number",
+              "value": 0,
+              "min": 0,
+              "max": 100,
+              "label": {
+                "en": "Backup buffer",
+                "de": "Backup-Puffer",
+                "da": "Backup-buffer",
+                "nl": "Noodvoorraad"
+              },
+              "hint": {
+                "en": "Backup buffer: the state of charge the battery will not discharge below during normal operation. Valid values: 0 (disabled) or 5-100 %. Changes are written to the battery. You can also set this dynamically from flows using the 'Set backup buffer' action card.",
+                "de": "Backup-Puffer: der Ladezustand (SoC), den die Batterie im normalen Betrieb nicht unterschreitet. Gültige Werte: 0 (deaktiviert) oder 5–100 %. Änderungen werden an die Batterie übertragen. Sie können diesen Wert auch dynamisch über Flows mit der Aktionskarte 'Backup-Puffer einstellen' setzen.",
+                "da": "Backup-buffer: ladeandelen (SoC), som batteriet i normal drift ikke aflader under. Gyldige værdier: 0 (deaktiveret) eller 5–100 %. Ændringer skrives til batteriet. Du kan også indstille denne dynamisk fra flows med handlingskortet 'Indstil backup-buffer'.",
+                "nl": "Noodvoorraad: het laadniveau (SoC) dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %. Wijzigingen worden naar de batterij geschreven. U kunt dit ook dynamisch instellen vanuit flows met de actiekaart 'Stel noodvoorraad in'."
+              }
+            },
+            {
               "id": "prognosis_charging",
               "type": "checkbox",
               "label": {
