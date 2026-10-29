@@ -281,6 +281,11 @@
         },
         "args": [
           {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
             "type": "number",
             "name": "percentage",
             "placeholder": {
@@ -300,7 +305,7 @@
         "title": {
           "en": "Backup buffer below",
           "da": "Backup-buffer under",
-          "de": "Backup-Puffer under",
+          "de": "Backup-Puffer unter",
           "nl": "Noodvoorraad hieronder"
         },
         "titleFormatted": {
@@ -316,6 +321,11 @@
           "nl": "Noodvoorraad lager dan aangegeven percentage"
         },
         "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
           {
             "type": "number",
             "name": "percentage",
@@ -1090,6 +1100,11 @@
         },
         "args": [
           {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=sonnenbatterie"
+          },
+          {
             "type": "number",
             "name": "percent",
             "placeholder": {
@@ -1771,6 +1786,25 @@
       "insights": true,
       "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
     },
+    "backup_buffer_capability": {
+      "type": "number",
+      "title": {
+        "en": "Backup buffer",
+        "da": "Backup-buffer",
+        "de": "Backup-Puffer",
+        "nl": "Noodvoorraad"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
+    },
     "capacity_capability": {
       "type": "number",
       "title": {
@@ -2176,25 +2210,6 @@
       "decimals": 0,
       "insights": true,
       "icon": "/assets/images/svg/battery-count.svg"
-    },
-    "backup_buffer_capability": {
-      "type": "number",
-      "title": {
-        "en": "Backup buffer",
-        "da": "Backup-buffer",
-        "de": "Backup-Puffer",
-        "nl": "Noodvoorraad"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "units": {
-        "en": "%"
-      },
-      "min": 0,
-      "max": 100,
-      "decimals": 0,
-      "insights": true,
-      "icon": "/assets/images/svg/percentage-percent-svgrepo-com.svg"
     },
     "online_capability": {
       "type": "boolean",
