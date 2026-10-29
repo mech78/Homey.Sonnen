@@ -231,7 +231,7 @@ Key enforced rules from eslint.config.js:
 1. Make changes to TypeScript files (and compose sources, see below)
 2. Run `npm run lint` to check code style
 3. Run `npm run build` to compile
-4. Run `homey app validate --level publish` from `Source/com.sonnen.battery/` — it works offline (no Homey login), re-merges the compose layer in memory, compiles TypeScript and applies publish-level manifest validation (the same check the GitHub Actions CI in `.github/workflows/ci.js.yml` enforces) without modifying any tracked file
+4. Run `homey app validate --level publish` from `Source/com.sonnen.battery/` — it works offline (no Homey login), re-merges the compose layer in memory, compiles TypeScript and applies publish-level manifest validation (the same check the GitHub Actions CI in `.github/workflows/ci.js.yml` enforces) without modifying any tracked file. Skip this step when the immediate next action is `homey app run` or `homey app install` — both validate implicitly, so a separate run would only delay the deployment (the publish-level check then happens remotely via CI on push)
 5. If compose sources were changed, verify `homey app build` produces no diff to the committed `app.json` — or commit the regenerated `app.json` together with the compose change (see below)
 6. Test using Homey CLI or deploy to device
 7. Commit changes with descriptive messages
