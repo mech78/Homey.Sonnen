@@ -1,5 +1,5 @@
 import Homey from 'homey';
-import { LocalizationService } from './lib/LocalizationService';
+import { initialize } from './lib/LocalizationService';
 
 module.exports = class BatteryApp extends Homey.App {
 
@@ -10,7 +10,7 @@ module.exports = class BatteryApp extends Homey.App {
     this.log(`BatteryApp has been initialized. Running on Node.js ${process.version}`);
     
     // Initialize the error handling service
-    LocalizationService.initialize(this);
+    initialize(this);
     
     this.homey.on('unload', this.onUninitialize);
   }

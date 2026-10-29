@@ -1,6 +1,6 @@
 import Homey from 'homey';
 import { SonnenDriver } from '../../lib/SonnenDriver';
-import { LocalizationService } from '../../lib/LocalizationService';
+import { throwLocalizedError, resolveOperatingMode } from '../../lib/LocalizationService';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { BatteryDevice } from './device';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
@@ -111,7 +111,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -124,7 +124,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -140,7 +140,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -159,7 +159,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -172,21 +172,21 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
   private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: string }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
-      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
+      const operatingModeText = resolveOperatingMode(args.operating_mode);
 
       const notification = this.homey.__("notification.changedOperatingMode", { operatingMode: operatingModeText });
       await this.homey.notifications.createNotification({ excerpt: notification });
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -200,7 +200,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -213,7 +213,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -226,7 +226,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -240,7 +240,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -282,7 +282,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: string }): Promise<boolean> {
     const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
-    const operatingMode = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
+    const operatingMode = resolveOperatingMode(args.operating_mode);
 
     const result = currentOperatingMode === operatingMode;
     this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);
