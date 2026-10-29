@@ -1,8 +1,22 @@
 import Homey from 'homey';
 import { SonnenBatterieClient } from '../service/SonnenBatterieClient';
+
+const IPV4_REGEX = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+
+/**
+ * Whether a device setting value is a usable IPv4 address.
+ * Rejects null/empty values (which device settings can transiently
+ * return while the platform applies a settings write).
+ */
+export function isValidIPv4(value: unknown): value is string {
+  return typeof value === 'string' && IPV4_REGEX.test(value.trim());
+}
+
 export abstract class SonnenDevice extends Homey.Device {
 
   protected DEBUG_MODE: boolean = false;
+  private lastKnownDeviceIp: string | null = null;
+
 
   /**
    * onInit is called when the device is initialized.
@@ -77,7 +91,19 @@ export abstract class SonnenDevice extends Homey.Device {
 
   protected createSonnenBatterieClient(): SonnenBatterieClient {
     const batteryAuthToken: string = this.homey.settings.get("BatteryAuthToken");
-    return new SonnenBatterieClient(batteryAuthToken, this.getSetting("device_ip") as string);
+    const deviceIp: unknown = this.getSetting("device_ip");
+    if (isValidIPv4(deviceIp)) {
+      this.lastKnownDeviceIp = deviceIp.trim();
+    } else if (isValidIPv4(this.lastKnownDeviceIp)) {
+      // The settings store can transiently return an empty/invalid value
+      // while the platform applies a settings write (observed on Homey 2019),
+      // breaking only the fetches that happen inside that window. Fall back
+      // to the last known good IP; the in-memory cache is never persisted,
+      // so it cannot go stale across restarts or real IP changes.
+      this.log('Device IP setting is not readable (' + JSON.stringify(deviceIp) + '), falling back to last known IP');
+    }
+    const effectiveIp = isValidIPv4(deviceIp) ? deviceIp.trim() : this.lastKnownDeviceIp;
+    return new SonnenBatterieClient(batteryAuthToken, effectiveIp as string);
   }
 
 };

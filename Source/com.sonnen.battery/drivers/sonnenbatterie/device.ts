@@ -7,6 +7,7 @@ import { LocalizedError } from '../../domain/LocalizedError';
 import { throwLocalizedError, resolveOperatingMode, resolveCircleColor } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
 import { isValidBackupBuffer, parseBackupBuffer, shouldWriteBackupBufferToBattery } from '../../domain/BackupBuffer';
+import { isValidIPv4 } from '../../lib/SonnenDevice';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -99,11 +100,8 @@ export class BatteryDevice extends SonnenDevice {
       const newDeviceIP = newSettings["device_ip"] as string;
       this.log("Settings", "IP", newDeviceIP);
 
-      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
-        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
-        if (!ipv4Regex.test(newDeviceIP)) {
-          throwLocalizedError(new LocalizedError("error.validation.invalid_ip_format"));
-        }
+      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim()) && !isValidIPv4(newDeviceIP)) {
+        throwLocalizedError(new LocalizedError("error.validation.invalid_ip_format"));
       }
     }
 
