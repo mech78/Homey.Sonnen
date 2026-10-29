@@ -28,12 +28,18 @@ npm run lint:fix
 
 ### Testing Commands
 ```bash
-# Note: This project doesn't appear to have unit tests configured
-# Testing is typically done through Homey app testing procedures
+# Run the jest unit tests (tests/ directory)
+npm test
+
+# Run tests in watch mode
+npx jest --watch
+
+# Run a single test file
+npx jest tests/BackupBuffer.test.ts
 ```
 
 Running a single test:
-Since this project doesn't have explicit unit tests configured, testing is done through Homey's app development framework:
+Use `npx jest tests/SomeFile.test.ts` directly; `npm test` runs all suites. On-device verification is still done through Homey's app development framework:
 1. Install the app on a Homey device or simulator
 2. Find more Homey CLI documentation: https://apps.developer.homey.app/the-basics/getting-started
 3. Use Homey CLI for development testing:
@@ -47,8 +53,12 @@ homey app run
 # Run the app in development mode without Docker
 homey app run --remote
 
-# Validate app structure
-homey app validate
+# Validate app structure against the strictest (publish) rules,
+# offline and without modifying tracked files
+homey app validate --level publish
+
+# Package the app offline into .homeybuild/ (no login, no deploy)
+homey app build
 ```
 
 ## Code Style Guidelines
@@ -218,11 +228,22 @@ Key enforced rules from eslint.config.js:
 
 ## Development Workflow
 
-1. Make changes to TypeScript files
+1. Make changes to TypeScript files (and compose sources, see below)
 2. Run `npm run lint` to check code style
 3. Run `npm run build` to compile
-4. Test using Homey CLI or deploy to device
-5. Commit changes with descriptive messages
+4. Run `homey app validate --level publish` from `Source/com.sonnen.battery/` — it works offline (no Homey login), re-merges the compose layer in memory, compiles TypeScript and applies publish-level manifest validation (the same check the GitHub Actions CI in `.github/workflows/ci.js.yml` enforces) without modifying any tracked file
+5. If compose sources were changed, verify `homey app build` produces no diff to the committed `app.json` — or commit the regenerated `app.json` together with the compose change (see below)
+6. Test using Homey CLI or deploy to device
+7. Commit changes with descriptive messages
+
+### Generated manifest (`app.json`)
+
+`Source/com.sonnen.battery/app.json` is **generated**: `homey app install` and `homey app run` merge the compose layer (`.homeycompose/**`, `drivers/*/driver*.compose.json`) and write the result back into `app.json`. Consequences:
+
+- Never hand-edit `app.json`; treat it as a build artifact. Fix compose sources instead.
+- When `homey app install`/`run` produces a modified `app.json`, the regenerated file belongs in the same commit that changed the underlying compose sources.
+- The `.homeybuild/` directory is a local build artifact and stays uncommitted.
+- `homey app build` packages the app offline (no login) into `.homeybuild/` without touching tracked files — useful as a pre-commit sanity check.
 
 ## Troubleshooting Tips
 
