@@ -236,6 +236,21 @@ Key enforced rules from eslint.config.js:
 6. Test using Homey CLI or deploy to device
 7. Commit changes with descriptive messages
 
+### Lint gate (mandatory before every commit)
+
+The workflow fails CI when `npm run lint` reports **any error**, so never commit with one. Verify the gate by reading the summary line of the lint output — the line starting with `✖`:
+
+```text
+✖ 28 problems (0 errors, 28 warnings)   ← 0 errors here = gate passed
+```
+
+Two traps to avoid:
+
+- Do **not** judge the result by the line `0 errors and N warnings potentially fixable with the --fix option` — it only counts auto-fixable issues. Non-fixable errors (e.g. `no-duplicate-imports`) are invisible there while still failing CI.
+- Warnings do not fail CI (the lint script has no `--max-warnings` flag), but keep them from growing: new `no-explicit-any` warnings in changed code should be fixed or explicitly justified.
+
+The commit is only made once the summary line shows `0 errors`. If an error appears, fix it (or fold the changed imports into one statement etc.) and re-run — do not push expecting CI to tolerate it.
+
 ### Generated manifest (`app.json`)
 
 `Source/com.sonnen.battery/app.json` is **generated**: `homey app install` and `homey app run` merge the compose layer (`.homeycompose/**`, `drivers/*/driver*.compose.json`) and write the result back into `app.json`. Consequences:
