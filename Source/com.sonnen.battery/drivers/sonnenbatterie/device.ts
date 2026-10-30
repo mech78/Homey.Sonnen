@@ -1,13 +1,12 @@
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
-import { SonnenDevice } from '../../lib/SonnenDevice';
+import { isValidIPv4, SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
 import { throwLocalizedError, resolveOperatingMode, resolveCircleColor } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
 import { isValidBackupBuffer, parseBackupBuffer, shouldWriteBackupBufferToBattery } from '../../domain/BackupBuffer';
-import { isValidIPv4 } from '../../lib/SonnenDevice';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
