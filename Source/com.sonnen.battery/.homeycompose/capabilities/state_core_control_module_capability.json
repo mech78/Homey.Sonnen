@@ -4,7 +4,8 @@
     "en": "Core Control Module",
     "da": "Centralt styreenhed",
     "nl": "Centrale regeleenheid",
-    "de": "Zentrales Steuergerät"
+    "de": "Zentrales Steuergerät",
+    "sv": "Central styrenhet"
   },
   "uiComponent": "sensor",
   "getable": true,

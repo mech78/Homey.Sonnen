@@ -4,7 +4,8 @@
     "en": "∑ Charged Energy",
     "da": "∑ Opladet energi",
     "de": "∑ Geladene Energie",
-    "nl": "∑ Geladen energie"
+    "nl": "∑ Geladen energie",
+    "sv": "∑ laddad energi"
   },
   "uiComponent": "sensor",
   "getable": true,

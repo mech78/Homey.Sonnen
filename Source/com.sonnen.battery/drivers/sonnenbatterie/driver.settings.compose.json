@@ -5,7 +5,8 @@
       "en": "Battery Settings",
       "de": "Batterie Einstellungen",
       "da": "Batteri-indstillinger",
-      "nl": "Batterij-instellingen"
+      "nl": "Batterij-instellingen",
+      "sv": "Batteriinställningar"
     },
     "children": [
       {
@@ -16,13 +17,15 @@
           "en": "Operating Mode",
           "de": "Betriebsmodus",
           "da": "Driftsmodus",
-          "nl": "Bedrijfsmodus"
+          "nl": "Bedrijfsmodus",
+          "sv": "Driftsläge"
         },
         "hint": {
           "en": "Refer to Sonnen Batterie manual for more information.",
           "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
           "da": "Se Sonnen Batterie manualen for mere information.",
-          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie.",
+          "sv": "Se Sonnen Batterie-manualen för mer information."
         },
         "values": [
           {
@@ -31,7 +34,8 @@
               "en": "Manual",
               "de": "Manuell",
               "da": "Manuel",
-              "nl": "Handmatig"
+              "nl": "Handmatig",
+              "sv": "Manuell"
             }
           },
           {
@@ -40,7 +44,8 @@
               "en": "Self consumption",
               "de": "Eigenverbrauch",
               "da": "Eget forbrug",
-              "nl": "Eigen verbruik"
+              "nl": "Eigen verbruik",
+              "sv": "Egenförbrukning"
             }
           },
           {
@@ -49,7 +54,8 @@
               "en": "Module extension (30%)",
               "de": "Modulerweiterung (30%)",
               "da": "Moduludvidelse (30%)",
-              "nl": "Module uitbreiding (30%)"
+              "nl": "Module uitbreiding (30%)",
+              "sv": "Modulutbyggnad (30%)"
             }
           },
           {
@@ -58,7 +64,8 @@
               "en": "Time-of-Use",
               "de": "Time-of-Use",
               "da": "Time-of-Use",
-              "nl": "Time-of-Use"
+              "nl": "Time-of-Use",
+              "sv": "Time-of-Use"
             }
           },
           {
@@ -67,7 +74,8 @@
               "en": "Automatic - Optimization",
               "de": "Automatik - Optimierung",
               "da": "Automatisk - Optimering",
-              "nl": "Automatisch - Optimalisatie"
+              "nl": "Automatisch - Optimalisatie",
+              "sv": "Automatisk - Optimering"
             }
           }
         ]
@@ -79,14 +87,16 @@
           "en": "Time-of-Use Schedule",
           "de": "Time-of-Use Zeitplan",
           "da": "Time-of-Use tidsplan",
-          "nl": "Time-of-Use schema"
+          "nl": "Time-of-Use schema",
+          "sv": "Time-of-Use-schema"
         },
         "value": "",
         "hint": {
           "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information. You can also set this schedule from flows using the 'Set Time-of-Use schedule as text' action card.",
           "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen. Sie können diesen Zeitplan auch über Flows setzen, mit der Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen'.",
           "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information. Du kan også indstille denne tidsplan fra flows med handlingskortet 'Indstil Time-of-Use tidsplan som tekst'.",
-          "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'."
+          "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'.",
+          "sv": "Format för varje rad (startTid-slutTid: maxW): 'TT:MM-TT:MM: nW', t.ex.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsläget 'Time-of-Use' måste vara aktivt för att använda denna funktion. Se Sonnen Batterie-manualen för mer information. Du kan också ställa in schemat från flöden med åtgärdskortet 'Ställ in Time-of-Use-schema som text'."
         }
       },
       {
@@ -99,13 +109,15 @@
           "en": "Backup buffer",
           "de": "Backup-Puffer",
           "da": "Backup-buffer",
-          "nl": "Noodvoorraad"
+          "nl": "Noodvoorraad",
+          "sv": "Reservbuffert"
         },
         "hint": {
           "en": "Backup buffer: the state of charge the battery will not discharge below during normal operation. Valid values: 0 (disabled) or 5-100 %. Changes are written to the battery. You can also set this dynamically from flows using the 'Set backup buffer' action card.",
           "de": "Backup-Puffer: der Ladezustand (SoC), den die Batterie im normalen Betrieb nicht unterschreitet. Gültige Werte: 0 (deaktiviert) oder 5–100 %. Änderungen werden an die Batterie übertragen. Sie können diesen Wert auch dynamisch über Flows mit der Aktionskarte 'Backup-Puffer einstellen' setzen.",
           "da": "Backup-buffer: ladeandelen (SoC), som batteriet i normal drift ikke aflader under. Gyldige værdier: 0 (deaktiveret) eller 5–100 %. Ændringer skrives til batteriet. Du kan også indstille denne dynamisk fra flows med handlingskortet 'Indstil backup-buffer'.",
-          "nl": "Noodvoorraad: het laadniveau (SoC) dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %. Wijzigingen worden naar de batterij geschreven. U kunt dit ook dynamisch instellen vanuit flows met de actiekaart 'Stel noodvoorraad in'."
+          "nl": "Noodvoorraad: het laadniveau (SoC) dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %. Wijzigingen worden naar de batterij geschreven. U kunt dit ook dynamisch instellen vanuit flows met de actiekaart 'Stel noodvoorraad in'.",
+          "sv": "Reservbuffert: laddningsnivån som batteriet inte urladdar under i normal drift. Giltiga värden: 0 (inaktiverat) eller 5–100 %. Ändringar skrivs till batteriet. Du kan också ställa in detta dynamiskt från flöden med åtgärdskortet 'Ställ in reservbuffert'."
         }
       },
       {
@@ -115,14 +127,16 @@
           "en": "Prognosis Charging",
           "de": "Prognosebasiertes Laden",
           "da": "Prognosebaseret opladning",
-          "nl": "Prognose laden"
+          "nl": "Prognose laden",
+          "sv": "Prognosbaserad laddning"
         },
         "value": false,
         "hint": {
           "en": "Refer to Sonnen Batterie manual for more information.",
           "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
           "da": "Se Sonnen Batterie manualen for mere information.",
-          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+          "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie.",
+          "sv": "Se Sonnen Batterie-manualen för mer information."
         }
       },
       {
@@ -132,14 +146,16 @@
           "en": "Installation Date",
           "de": "Installationsdatum",
           "da": "Installationsdato",
-          "nl": "Installatiedatum"
+          "nl": "Installatiedatum",
+          "sv": "Installationsdatum"
         },
         "value": "",
         "hint": {
           "en": "Enter the date when the battery was installed in ISO 8601 format (e.g., 2020-12-31). Used to calculate the average daily cycle count since installation. The installation date can be found in the Sonnen App's battery details.",
           "de": "Geben Sie das Datum im ISO 8601-Format (z.B. 2020-12-31) ein, an dem die Batterie installiert wurde. Wird verwendet, um die durchschnittliche tägliche Zyklenzahl seit der Installation zu berechnen. Das Installationsdatum ist bei den Batteriedetails in der Sonnen App zu finden.",
           "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen. Installationsdatoen kan findes i batteridetaljeskærmen i Sonnen-appen.",
-          "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App."
+          "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App.",
+          "sv": "Ange datumet då batteriet installerades i ISO 8601-format (t.ex. 2020-12-31). Används för att beräkna det genomsnittliga dagliga antalet cykler sedan installationen. Installationsdatumet finns i batteridetaljerna i Sonnen-appen."
         }
       }
     ]
@@ -150,7 +166,8 @@
       "en": "Connection",
       "de": "Verbindung",
       "da": "Forbindelse",
-      "nl": "Verbinding"
+      "nl": "Verbinding",
+      "sv": "Anslutning"
     },
     "children": [
       {
@@ -160,14 +177,16 @@
           "en": "IP address",
           "de": "IP Adresse",
           "da": "IP-adresse",
-          "nl": "IP-adres"
+          "nl": "IP-adres",
+          "sv": "IP-adress"
         },
         "value": "",
         "hint": {
           "en": "Shows the current IP of the Sonnen Batterie. Optional: Disable auto-discovery and set the static IPv4 address (e.g. 192.168.1.xxx) manually.",
           "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben.",
           "da": "Viser den nuværende IP-adresse for Sonnen Batterien. Valgfrit: Deaktiver automatisk opdagelse og indstil den statiske IPv4-adresse (f.eks. 192.168.1.xxx) manuelt.",
-          "nl": "Toont het huidige IP-adres van de Sonnen Batterij. Optioneel: Schakel automatische detectie uit en stel het statische IPv4-adres (bijv. 192.168.1.xxx) handmatig in."
+          "nl": "Toont het huidige IP-adres van de Sonnen Batterij. Optioneel: Schakel automatische detectie uit en stel het statische IPv4-adres (bijv. 192.168.1.xxx) handmatig in.",
+          "sv": "Visar aktuell IP-adress för Sonnen Batterie. Valfritt: inaktivera automatisk upptäckt och ange den statiska IPv4-adressen (t.ex. 192.168.1.xxx) manuellt."
         }
       },
       {
@@ -177,14 +196,16 @@
           "en": "Auto-discover IP address",
           "de": "IP Adresse automatisch ermitteln",
           "da": "Find IP-adresse automatisk",
-          "nl": "IP-adres automatisch ontdekken"
+          "nl": "IP-adres automatisch ontdekken",
+          "sv": "Upptäck IP-adress automatiskt"
         },
         "value": true,
         "hint": {
           "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of the IP address. Requires local-network.",
           "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk.",
           "da": "Brug 'https://find-my.sonnen-batterie.com/find' til at spore ændringer i IP-adressen. Kræver lokalt netværk.",
-          "nl": "Gebruik 'https://find-my.sonnen-batterie.com/find' om wijzigingen in het IP-adres te volgen. Vereist lokaal netwerk."
+          "nl": "Gebruik 'https://find-my.sonnen-batterie.com/find' om wijzigingen in het IP-adres te volgen. Vereist lokaal netwerk.",
+          "sv": "Använd 'https://find-my.sonnen-batterie.com/find' för att följa ändringar av IP-adressen. Kräver lokalt nätverk."
         }
       }
     ]

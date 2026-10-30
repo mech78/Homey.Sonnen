@@ -4,7 +4,8 @@
     "en": "⌀ Cycle rate (30d)",
     "de": "⌀ Zyklusrate (30d)",
     "da": "⌀ cyklusrate (30d)",
-    "nl": "⌀ cyclussnelheid (30d)"
+    "nl": "⌀ cyclussnelheid (30d)",
+    "sv": "⌀ Cykeltakt (30 d)"
   },
   "uiComponent": "sensor",
   "getable": true,
@@ -12,7 +13,8 @@
     "en": "cycles/d",
     "de": "Zyklen/d",
     "da": "cyklus/d",
-    "nl": "cycli/d"
+    "nl": "cycli/d",
+    "sv": "cykler/d"
   },
   "min": 0,
   "decimals": 3,

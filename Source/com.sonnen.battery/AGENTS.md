@@ -185,6 +185,12 @@ LocalizationService.getInstance().throwLocalizedError(
 );
 ```
 
+The app is localized in **5 languages: en, nl, de, da, sv**. When adding any user-facing string, provide it in all 5 languages:
+- Locale keys: add to every file in `/locales/` (all locale files must keep identical key sets).
+- Compose sources: capability titles in `.homeycompose/capabilities/`, flow cards and driver names in `drivers/*/driver*.compose.json`, app name/description in `.homeycompose/app.json` — add the new language key wherever `en`/`da` blocks exist.
+- Changelog: every new entry in `.homeychangelog.json` must include the note in all 5 languages, matching the style of existing entries (short, imperative; product names, technical terms and version references stay untranslated).
+- `app.json` is a generated build artifact — regenerate it (see Development Workflow) after changing compose language strings; never hand-edit it.
+
 ### State Management
 Device state is managed through the `SonnenState` class and persisted using Homey settings:
 ```typescript

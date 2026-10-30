@@ -4,7 +4,8 @@
     "en": "Backup buffer",
     "da": "Backup-buffer",
     "de": "Backup-Puffer",
-    "nl": "Noodvoorraad"
+    "nl": "Noodvoorraad",
+    "sv": "Reservbuffert"
   },
   "uiComponent": "sensor",
   "getable": true,

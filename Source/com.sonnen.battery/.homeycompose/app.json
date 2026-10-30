@@ -10,13 +10,15 @@
     "en": "Sonnen Batterie",
     "de": "Sonnen Batterie",
     "da": "Sonnen Batteri",
-    "nl": "Sonnen Batterij"
+    "nl": "Sonnen Batterij",
+    "sv": "Sonnen Batteri"
   },
   "description": {
     "en": "Clean and affordable energy for everyone.",
     "de": "Sauberer und bezahlbarer Strom für alle.",
     "da": "Ren og billig energi til alle.",
-    "nl": "Schone en betaalbare energie voor iedereen."
+    "nl": "Schone en betaalbare energie voor iedereen.",
+    "sv": "Ren och prisvärd energi för alla."
   },
   "category": [
     "energy"

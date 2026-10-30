@@ -4,7 +4,8 @@
     "en": "Eclipse color",
     "da": "Cirkel farve",
     "nl": "Eclipse kleur",
-    "de": "Eclipse-Farbe"
+    "de": "Eclipse-Farbe",
+    "sv": "Eclipse-färg"
   },
   "uiComponent": "sensor",
   "getable": true,

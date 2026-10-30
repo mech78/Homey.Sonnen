@@ -4,7 +4,8 @@
     "en": "Grid feed-in",
     "da": "Til net",
     "de": "Netzeinspeisung",
-    "nl": "Roosterinvoer"
+    "nl": "Roosterinvoer",
+    "sv": "Inmatning till nätet"
   },
   "uiComponent": "sensor",
   "getable": true,

@@ -6,19 +6,22 @@
         "en": "Consumption from grid",
         "da": "Forbrug fra net",
         "de": "Netzbezug",
-        "nl": "Verbruik uit net"
+        "nl": "Verbruik uit net",
+        "sv": "Förbrukning från nätet"
       },
       "titleFormatted": {
         "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
         "da": "Forbruget fra nettet !{{er|er ikke}} over [[power]] W",
         "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
-        "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
+        "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W",
+        "sv": "Förbrukning från nätet !{{är|är inte}} större än [[power]] W"
       },
       "hint": {
         "en": "Is consuming power from grid.",
         "da": "Henter forbrug fra net",
         "de": "Bezug aus dem Stromnetz",
-        "nl": "Verbruikt stroom van het elektriciteitsnet"
+        "nl": "Verbruikt stroom van het elektriciteitsnet",
+        "sv": "Drar effekt från nätet."
       },
       "args": [
         {
@@ -28,7 +31,8 @@
             "en": "Power (W)",
             "da": "Watt (W)",
             "de": "Leistung (W)",
-            "nl": "Vermogen (W)"
+            "nl": "Vermogen (W)",
+            "sv": "Effekt (W)"
           },
           "min": 1,
           "step": 1
@@ -41,19 +45,22 @@
         "en": "Feed-in to grid",
         "da": "Leverer til net",
         "de": "Netzeinspeisung",
-        "nl": "Leveren aan het net"
+        "nl": "Leveren aan het net",
+        "sv": "Inmatning till nätet"
       },
       "titleFormatted": {
         "en": "Feed-in to grid !{{is|isn't}} greater than [[power]] W",
         "da": "Leverer til net !{{er|er ikke}} mere end [[power]] W",
         "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
-        "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W"
+        "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W",
+        "sv": "Inmatning till nätet !{{är|är inte}} större än [[power]] W"
       },
       "hint": {
         "en": "Feeding-in power to grid",
         "da": "Leverer strøm til nettet",
         "de": "Einspeisung in das Stromnetz",
-        "nl": "Stroom leveren aan het net"
+        "nl": "Stroom leveren aan het net",
+        "sv": "Matar in effekt på nätet"
       },
       "args": [
         {
@@ -63,7 +70,8 @@
             "en": "Power (W)",
             "da": "Watt (W)",
             "de": "Leistung (W)",
-            "nl": "Vermogen (W)"
+            "nl": "Vermogen (W)",
+            "sv": "Effekt (W)"
           },
           "min": 1,
           "step": 1

@@ -11,13 +11,15 @@
     "en": "Sonnen Batterie",
     "de": "Sonnen Batterie",
     "da": "Sonnen Batteri",
-    "nl": "Sonnen Batterij"
+    "nl": "Sonnen Batterij",
+    "sv": "Sonnen Batteri"
   },
   "description": {
     "en": "Clean and affordable energy for everyone.",
     "de": "Sauberer und bezahlbarer Strom für alle.",
     "da": "Ren og billig energi til alle.",
-    "nl": "Schone en betaalbare energie voor iedereen."
+    "nl": "Schone en betaalbare energie voor iedereen.",
+    "sv": "Ren och prisvärd energi för alla."
   },
   "category": [
     "energy"
@@ -83,7 +85,8 @@
           "en": "The operating mode changed",
           "de": "Der Betriebsmodus wurde geändert",
           "da": "Driftsmodus blev ændret",
-          "nl": "De bedrijfsmodus is gewijzigd"
+          "nl": "De bedrijfsmodus is gewijzigd",
+          "sv": "Driftsläget ändrades"
         },
         "tokens": [
           {
@@ -93,13 +96,15 @@
               "en": "Operating Mode",
               "de": "Betriebsmodus",
               "da": "Driftsmodus",
-              "nl": "Bedrijfsmodus"
+              "nl": "Bedrijfsmodus",
+              "sv": "Driftsläge"
             },
             "example": {
               "en": "Self consumption",
               "de": "Eigenverbrauch",
               "da": "Eget forbrug",
-              "nl": "Eigen verbruik"
+              "nl": "Eigen verbruik",
+              "sv": "Egenförbrukning"
             }
           }
         ],
@@ -117,7 +122,8 @@
           "en": "The prognosis charging is active",
           "de": "Prognosebasiertes Laden ist aktiv",
           "da": "Den prognosebaserede opladning er aktiv",
-          "nl": "Het prognose laden is actief"
+          "nl": "Het prognose laden is actief",
+          "sv": "Den prognosbaserade laddningen är aktiv"
         },
         "args": [
           {
@@ -133,7 +139,8 @@
           "en": "The prognosis charging is inactive",
           "de": "Prognosebasiertes Laden ist inaktiv",
           "da": "Den prognosebaserede opladning er inaktiv",
-          "nl": "Het prognose laden is inactief"
+          "nl": "Het prognose laden is inactief",
+          "sv": "Den prognosbaserade laddningen är inaktiv"
         },
         "args": [
           {
@@ -149,7 +156,8 @@
           "en": "Connection alarm turned on",
           "de": "Verbindungsalarm aktiviert",
           "da": "Forbindelsesalarm aktiveret",
-          "nl": "Verbindingsalarm ingeschakeld"
+          "nl": "Verbindingsalarm ingeschakeld",
+          "sv": "Anslutningslarm aktiverat"
         },
         "args": [
           {
@@ -165,7 +173,8 @@
           "en": "Connection alarm turned off",
           "de": "Verbindungsalarm deaktiviert",
           "da": "Forbindelsesalarm deaktiveret",
-          "nl": "Verbindingsalarm uitgeschakeld"
+          "nl": "Verbindingsalarm uitgeschakeld",
+          "sv": "Anslutningslarm inaktiverat"
         },
         "args": [
           {
@@ -183,19 +192,22 @@
           "en": "Battery level above or equal",
           "da": "Batteriniveau over eller lig",
           "de": "Batteriestand über oder gleich",
-          "nl": "Batterijniveau boven of gelijk aan"
+          "nl": "Batterijniveau boven of gelijk aan",
+          "sv": "Batterinivå över eller lika med"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} above or equal to [[percentage]]%",
           "da": "Batteriniveau !{{er|er ikke}} over eller lig [[percentage]]%",
           "de": "Batteriestand !{{liegt|liegt nicht}} über oder gleich [[percentage]]%",
-          "nl": "Batterijniveau !{{is|is niet}} boven of gelijk aan [[percentage]]%"
+          "nl": "Batterijniveau !{{is|is niet}} boven of gelijk aan [[percentage]]%",
+          "sv": "Batterinivå !{{är|är inte}} över eller lika med [[percentage]]%"
         },
         "hint": {
           "en": "Battery level above or equal percentage provided.",
           "da": "Batteriniveau er over eller lig med procent angivet.",
           "de": "Batteriestand über oder gleich dem angegebenen Prozentsatz.",
-          "nl": "Batterijniveau boven of gelijk percentage verstrekt."
+          "nl": "Batterijniveau boven of gelijk percentage verstrekt.",
+          "sv": "Batterinivån är över eller lika med angiven procentsats."
         },
         "args": [
           {
@@ -210,7 +222,8 @@
               "en": "Battery percentage level",
               "da": "Batteriniveau",
               "de": "Prozentualer Batteriestand",
-              "nl": "Batterijpercentageniveau"
+              "nl": "Batterijpercentageniveau",
+              "sv": "Batterinivå i procent"
             },
             "min": 0,
             "max": 100,
@@ -224,19 +237,22 @@
           "en": "Battery level below",
           "da": "Batteriniveau under",
           "de": "Batteriestand unter",
-          "nl": "Batterijniveau hieronder"
+          "nl": "Batterijniveau hieronder",
+          "sv": "Batterinivå under"
         },
         "titleFormatted": {
           "en": "Battery level !{{is|isn't}} below [[percentage]]%",
           "da": "Batteriniveau !{{er|er ikke}} under [[percentage]]%",
           "de": "Batteriestand !{{ist|ist nicht}} unter [[percentage]]%",
-          "nl": "Het batterijniveau !{{is|is niet}} lager [[percentage]]%"
+          "nl": "Het batterijniveau !{{is|is niet}} lager [[percentage]]%",
+          "sv": "Batterinivå !{{är|är inte}} under [[percentage]]%"
         },
         "hint": {
           "en": "Battery level below percentage provided.",
           "da": "Batteriniveau er under procent angivet.",
           "de": "Batteriestand unter dem angegebenen Prozentsatz.",
-          "nl": "Batterijniveau lager dan aangegeven percentage"
+          "nl": "Batterijniveau lager dan aangegeven percentage",
+          "sv": "Batterinivån är under angiven procentsats."
         },
         "args": [
           {
@@ -251,7 +267,8 @@
               "en": "Battery percentage level",
               "da": "Batteriniveau",
               "de": "Prozentualer Batteriestand",
-              "nl": "Batterijpercentageniveau"
+              "nl": "Batterijpercentageniveau",
+              "sv": "Batterinivå i procent"
             },
             "min": 0,
             "max": 100,
@@ -265,19 +282,22 @@
           "en": "Backup buffer above or equal",
           "da": "Backup-buffer over eller lig",
           "de": "Backup-Puffer über oder gleich",
-          "nl": "Noodvoorraad boven of gelijk aan"
+          "nl": "Noodvoorraad boven of gelijk aan",
+          "sv": "Reservbuffert över eller lika med"
         },
         "titleFormatted": {
           "en": "Backup buffer !{{is|isn't}} above or equal to [[percentage]]%",
           "da": "Backup-buffer !{{er|er ikke}} over eller lig [[percentage]]%",
           "de": "Backup-Puffer !{{liegt|liegt nicht}} über oder gleich [[percentage]]%",
-          "nl": "Noodvoorraad !{{is|is niet}} boven of gelijk aan [[percentage]]%"
+          "nl": "Noodvoorraad !{{is|is niet}} boven of gelijk aan [[percentage]]%",
+          "sv": "Reservbuffert !{{är|är inte}} över eller lika med [[percentage]]%"
         },
         "hint": {
           "en": "Backup buffer above or equal percentage provided.",
           "da": "Backup-buffer er over eller lig med procent angivet.",
           "de": "Backup-Puffer über oder gleich dem angegebenen Prozentsatz.",
-          "nl": "Noodvoorraad boven of gelijk percentage verstrekt."
+          "nl": "Noodvoorraad boven of gelijk percentage verstrekt.",
+          "sv": "Reservbufferten är över eller lika med angiven procentsats."
         },
         "args": [
           {
@@ -292,7 +312,8 @@
               "en": "Backup buffer percentage",
               "da": "Backup-bufferprocent",
               "de": "Backup-Puffer-Prozentsatz",
-              "nl": "Noodvoorraadpercentage"
+              "nl": "Noodvoorraadpercentage",
+              "sv": "Reservbuffert i procent"
             },
             "min": 0,
             "max": 100,
@@ -306,19 +327,22 @@
           "en": "Backup buffer below",
           "da": "Backup-buffer under",
           "de": "Backup-Puffer unter",
-          "nl": "Noodvoorraad hieronder"
+          "nl": "Noodvoorraad hieronder",
+          "sv": "Reservbuffert under"
         },
         "titleFormatted": {
           "en": "Backup buffer !{{is|isn't}} below [[percentage]]%",
           "da": "Backup-buffer !{{er|er ikke}} under [[percentage]]%",
           "de": "Backup-Puffer !{{ist|ist nicht}} unter [[percentage]]%",
-          "nl": "De noodvoorraad !{{is|is niet}} lager [[percentage]]%"
+          "nl": "De noodvoorraad !{{is|is niet}} lager [[percentage]]%",
+          "sv": "Reservbuffert !{{är|är inte}} under [[percentage]]%"
         },
         "hint": {
           "en": "Backup buffer below percentage provided.",
           "da": "Backup-buffer er under procent angivet.",
           "de": "Backup-Puffer unter dem angegebenen Prozentsatz.",
-          "nl": "Noodvoorraad lager dan aangegeven percentage"
+          "nl": "Noodvoorraad lager dan aangegeven percentage",
+          "sv": "Reservbufferten är under angiven procentsats."
         },
         "args": [
           {
@@ -333,7 +357,8 @@
               "en": "Backup buffer percentage",
               "da": "Backup-bufferprocent",
               "de": "Backup-Puffer-Prozentsatz",
-              "nl": "Noodvoorraadpercentage"
+              "nl": "Noodvoorraadpercentage",
+              "sv": "Reservbuffert i procent"
             },
             "min": 0,
             "max": 100,
@@ -347,19 +372,22 @@
           "en": "Operating mode !{{is|isn't}}",
           "de": "Betriebsmodus !{{ist|ist nicht}}",
           "da": "Driftsmodus !{{er|er ikke}}",
-          "nl": "Bedrijfsmodus !{{is|is niet}}"
+          "nl": "Bedrijfsmodus !{{is|is niet}}",
+          "sv": "Driftsläge !{{är|är inte}}"
         },
         "titleFormatted": {
           "en": "Operating mode !{{is|isn't}} [[operating_mode]]",
           "de": "Betriebsmodus !{{ist|ist nicht}} [[operating_mode]]",
           "da": "Driftsmodus !{{er|er ikke}} [[operating_mode]]",
-          "nl": "Bedrijfsmodus !{{is|is niet}} [[operating_mode]]"
+          "nl": "Bedrijfsmodus !{{is|is niet}} [[operating_mode]]",
+          "sv": "Driftsläge !{{är|är inte}} [[operating_mode]]"
         },
         "hint": {
           "en": "Current operating mode",
           "de": "Aktueller Betriebsmodus",
           "da": "Nuværende driftsmodus",
-          "nl": "Huidige bedrijfsmodus"
+          "nl": "Huidige bedrijfsmodus",
+          "sv": "Aktuellt driftsläge"
         },
         "args": [
           {
@@ -377,7 +405,8 @@
                   "en": "Manual",
                   "de": "Manuell",
                   "da": "Manuel",
-                  "nl": "Handmatig"
+                  "nl": "Handmatig",
+                  "sv": "Manuell"
                 }
               },
               {
@@ -386,7 +415,8 @@
                   "en": "Self consumption",
                   "de": "Eigenverbrauch",
                   "da": "Eget forbrug",
-                  "nl": "Eigen verbruik"
+                  "nl": "Eigen verbruik",
+                  "sv": "Egenförbrukning"
                 }
               },
               {
@@ -395,7 +425,8 @@
                   "en": "Module extension (30%)",
                   "de": "Modulerweiterung (30%)",
                   "da": "Moduludvidelse (30%)",
-                  "nl": "Module uitbreiding (30%)"
+                  "nl": "Module uitbreiding (30%)",
+                  "sv": "Modulutbyggnad (30%)"
                 }
               },
               {
@@ -404,7 +435,8 @@
                   "en": "Time-of-Use",
                   "de": "Time-of-Use",
                   "da": "Time-of-Use",
-                  "nl": "Time-of-Use"
+                  "nl": "Time-of-Use",
+                  "sv": "Time-of-Use"
                 }
               },
               {
@@ -413,7 +445,8 @@
                   "en": "Automatic - Optimization",
                   "de": "Automatik - Optimierung",
                   "da": "Automatisk - Optimering",
-                  "nl": "Automatisch - Optimalisatie"
+                  "nl": "Automatisch - Optimalisatie",
+                  "sv": "Automatisk - Optimering"
                 }
               }
             ]
@@ -426,13 +459,15 @@
           "en": "Prognosis charging is !{{active|inactive}}",
           "de": "Prognosebasiertes Laden ist !{{aktiv|inaktiv}}",
           "da": "Prognosebaseret opladning er !{{aktiv|inaktiv}}",
-          "nl": "Prognose laden is !{{actief|inactief}}"
+          "nl": "Prognose laden is !{{actief|inactief}}",
+          "sv": "Prognosbaserad laddning är !{{aktiv|inaktiv}}"
         },
         "titleFormatted": {
           "en": "Prognosis charging !{{is|isn't}} active: [[active]]",
           "de": "Prognosebasiertes Laden !{{ist|ist nicht}} aktiv: [[active]]",
           "da": "Prognosebaseret opladning !{{er|er ikke}} aktiv: [[active]]",
-          "nl": "Prognose laden !{{is|is niet}} actief: [[active]]"
+          "nl": "Prognose laden !{{is|is niet}} actief: [[active]]",
+          "sv": "Prognosbaserad laddning !{{är|är inte}} aktiv: [[active]]"
         },
         "args": [
           {
@@ -452,19 +487,22 @@
           "en": "Consumption from grid",
           "da": "Forbrug fra net",
           "de": "Netzbezug",
-          "nl": "Verbruik uit net"
+          "nl": "Verbruik uit net",
+          "sv": "Förbrukning från nätet"
         },
         "titleFormatted": {
           "en": "Consuming watts from grid !{{is|isn't}} greater than [[power]] W",
           "da": "Forbruget fra nettet !{{er|er ikke}} over [[power]] W",
           "de": "Bezug aus dem Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
-          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W"
+          "nl": "Het verbruik van watt uit het elektriciteitsnet !{{is|is niet}} groter dan [[power]] W",
+          "sv": "Förbrukning från nätet !{{är|är inte}} större än [[power]] W"
         },
         "hint": {
           "en": "Is consuming power from grid.",
           "da": "Henter forbrug fra net",
           "de": "Bezug aus dem Stromnetz",
-          "nl": "Verbruikt stroom van het elektriciteitsnet"
+          "nl": "Verbruikt stroom van het elektriciteitsnet",
+          "sv": "Drar effekt från nätet."
         },
         "args": [
           {
@@ -479,7 +517,8 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Vermogen (W)"
+              "nl": "Vermogen (W)",
+              "sv": "Effekt (W)"
             },
             "min": 1,
             "step": 1
@@ -492,19 +531,22 @@
           "en": "Feed-in to grid",
           "da": "Leverer til net",
           "de": "Netzeinspeisung",
-          "nl": "Leveren aan het net"
+          "nl": "Leveren aan het net",
+          "sv": "Inmatning till nätet"
         },
         "titleFormatted": {
           "en": "Feed-in to grid !{{is|isn't}} greater than [[power]] W",
           "da": "Leverer til net !{{er|er ikke}} mere end [[power]] W",
           "de": "Einspeisung in das Stromnetz !{{ist|ist nicht}} größer als [[power]] W",
-          "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W"
+          "nl": "Leveren aan net !{{is|is niet}} groter dan [[power]] W",
+          "sv": "Inmatning till nätet !{{är|är inte}} större än [[power]] W"
         },
         "hint": {
           "en": "Feeding-in power to grid",
           "da": "Leverer strøm til nettet",
           "de": "Einspeisung in das Stromnetz",
-          "nl": "Stroom leveren aan het net"
+          "nl": "Stroom leveren aan het net",
+          "sv": "Matar in effekt på nätet"
         },
         "args": [
           {
@@ -519,7 +561,8 @@
               "en": "Power (W)",
               "da": "Watt (W)",
               "de": "Leistung (W)",
-              "nl": "Vermogen (W)"
+              "nl": "Vermogen (W)",
+              "sv": "Effekt (W)"
             },
             "min": 1,
             "step": 1
@@ -534,19 +577,22 @@
           "en": "Set Time-of-Use",
           "de": "Zeitabhängige Steuerung einstellen",
           "da": "Indstil Time-of-Use",
-          "nl": "Stel Time-of-Use in"
+          "nl": "Stel Time-of-Use in",
+          "sv": "Ställ in Time-of-Use"
         },
         "titleFormatted": {
           "en": "Set Time-of-Use starting [[start]] and ending [[end]] with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
           "da": "Indstil Time-of-Use startende [[start]] og sluttende [[end]] med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode."
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode.",
+          "sv": "Ställ in Time-of-Use med start [[start]] och slut [[end]] med maximal laddning [[max_power]]W under perioden."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
           "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
           "da": "Indstil periode for Time-of-Use",
-          "nl": "Stel periode in voor Time-of-Use"
+          "nl": "Stel periode in voor Time-of-Use",
+          "sv": "Ange period för Time-of-Use"
         },
         "args": [
           {
@@ -561,7 +607,8 @@
               "en": "Enter starting time for new charge event",
               "de": "Startzeit für neues Ladeereignis eingeben",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed",
-              "nl": "Voer begintijd in voor nieuw laadmoment"
+              "nl": "Voer begintijd in voor nieuw laadmoment",
+              "sv": "Ange starttid för den nya laddningen"
             }
           },
           {
@@ -571,7 +618,8 @@
               "en": "Enter end time for the new charge event",
               "de": "Endzeit für neues Ladeereignis eingeben",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment"
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment",
+              "sv": "Ange sluttid för den nya laddningen"
             }
           },
           {
@@ -581,7 +629,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
               "da": "Maks. effekt fra net (0-46000 W)",
-              "nl": "Max. vermogen van net (0-46000 W)"
+              "nl": "Max. vermogen van net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -595,19 +644,22 @@
           "en": "Set Time-of-Use with hours",
           "de": "Zeitabhängige Steuerung mit Stundenangabe einstellen",
           "da": "Indstil Time-of-Use med timer",
-          "nl": "Stel Time-of-Use in met uren"
+          "nl": "Stel Time-of-Use in met uren",
+          "sv": "Ställ in Time-of-Use med timmar"
         },
         "titleFormatted": {
           "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
           "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode.",
+          "sv": "Ställ in Time-of-Use med start [[start]] och slut efter [[hours]] timmar med maximal laddning [[max_power]]W under perioden."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
           "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
           "da": "Indstil periode for Time-of-Use",
-          "nl": "Stel periode in voor Time-of-Use"
+          "nl": "Stel periode in voor Time-of-Use",
+          "sv": "Ange period för Time-of-Use"
         },
         "args": [
           {
@@ -622,7 +674,8 @@
               "en": "Enter starting time for new charge event",
               "de": "Startzeit für neues Ladeereignis eingeben",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed",
-              "nl": "Voer begintijd in voor nieuw laadmoment"
+              "nl": "Voer begintijd in voor nieuw laadmoment",
+              "sv": "Ange starttid för den nya laddningen"
             }
           },
           {
@@ -632,7 +685,8 @@
               "en": "Specify hours after 'start' to end of schedule",
               "de": "Stundenanzahl ab dem 'Start' bis zum Ende des Ladevorgangs",
               "da": "Angiv timer efter 'start' til slutningen af skemaet",
-              "nl": "Specificeer uren na 'start' tot einde van schema"
+              "nl": "Specificeer uren na 'start' tot einde van schema",
+              "sv": "Ange timmar efter 'start' till schemats slut"
             },
             "min": 0,
             "max": 24,
@@ -645,7 +699,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
               "da": "Maks. effekt fra net (0-46000 W)",
-              "nl": "Max. vermogen van net (0-46000 W)"
+              "nl": "Max. vermogen van net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -659,19 +714,22 @@
           "en": "Set Time-of-Use with custom string",
           "de": "Zeitabhängige Steuerung mit Stundenangabe als Text einstellen",
           "da": "Indstil Time-of-Use med brugerdefineret streng",
-          "nl": "Stel Time-of-Use in met aangepaste string"
+          "nl": "Stel Time-of-Use in met aangepaste string",
+          "sv": "Ställ in Time-of-Use med anpassad sträng"
         },
         "titleFormatted": {
           "en": "Set Time-of-Use starting [[start]] and ending after [[hours]] hours with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und nach [[hours]] Stunden endend mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
           "da": "Indstil Time-of-Use startende [[start]] og sluttende efter [[hours]] timer med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode."
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend na [[hours]] uur met een lading van maximaal [[max_power]]W binnen deze periode.",
+          "sv": "Ställ in Time-of-Use med start [[start]] och slut efter [[hours]] timmar med maximal laddning [[max_power]]W under perioden."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
           "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
           "da": "Indstil periode for Time-of-Use",
-          "nl": "Stel periode in voor Time-of-Use"
+          "nl": "Stel periode in voor Time-of-Use",
+          "sv": "Ange period för Time-of-Use"
         },
         "args": [
           {
@@ -686,7 +744,8 @@
               "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
           {
@@ -696,7 +755,8 @@
               "en": "Specify hours after 'Start' to end of schedule",
               "de": "Stundenanzahl ab dem 'Start' bis zum Ende des Ladevorgangs",
               "da": "Angiv timer efter 'Start' til slutningen af skemaet",
-              "nl": "Specificeer uren na 'Start' tot einde van schema"
+              "nl": "Specificeer uren na 'Start' tot einde van schema",
+              "sv": "Ange timmar efter 'Start' till schemats slut"
             },
             "min": 0,
             "max": 24,
@@ -709,7 +769,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
               "da": "Maks. effekt fra net (0-46000 W)",
-              "nl": "Max. vermogen van net (0-46000 W)"
+              "nl": "Max. vermogen van net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -723,19 +784,22 @@
           "en": "Set Time-of-Use with start and end time as text",
           "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text einstellen",
           "da": "Indstil Time-of-Use med start- og sluttidspunkt som tekst",
-          "nl": "Stel Time-of-Use in met start- en eindtijd als tekst"
+          "nl": "Stel Time-of-Use in met start- en eindtijd als tekst",
+          "sv": "Ställ in Time-of-Use med start- och sluttid som text"
         },
         "titleFormatted": {
           "en": "Set Time-of-Use starting [[start]] and ending [[end]] with charge of maximum [[max_power]]W within this period.",
           "de": "Einstellen der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]] mit maximaler Leistung [[max_power]]W in dieser Zeitspanne.",
           "da": "Indstil Time-of-Use startende [[start]] og sluttende [[end]] med opladning af maksimalt [[max_power]]W i denne periode.",
-          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode."
+          "nl": "Stel Time-of-Use in beginnend [[start]] en eindigend [[end]] met een lading van maximaal [[max_power]]W binnen deze periode.",
+          "sv": "Ställ in Time-of-Use med start [[start]] och slut [[end]] med maximal laddning [[max_power]]W under perioden."
         },
         "hint": {
           "en": "Set period for Time-of-Use",
           "de": "Einstellen der Dauer der zeitabhängigen Steuerung",
           "da": "Indstil periode for Time-of-Use",
-          "nl": "Stel periode in voor Time-of-Use"
+          "nl": "Stel periode in voor Time-of-Use",
+          "sv": "Ange period för Time-of-Use"
         },
         "args": [
           {
@@ -750,7 +814,8 @@
               "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
           {
@@ -760,7 +825,8 @@
               "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "sv": "Ange sluttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
           {
@@ -770,7 +836,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
               "da": "Maks. effekt fra net (0-46000 W)",
-              "nl": "Max. vermogen van net (0-46000 W)"
+              "nl": "Max. vermogen van net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -784,13 +851,15 @@
           "en": "Reset Time-of-Use",
           "de": "Zurücksetzen der zeitabhängigen Steuerung",
           "da": "Nulstil Time-of-Use",
-          "nl": "Reset Time-of-Use"
+          "nl": "Reset Time-of-Use",
+          "sv": "Återställ Time-of-Use"
         },
         "hint": {
           "en": "Resets the schedule for Time-of-Use",
           "de": "Zurücksetzen des Zeitplans der zeitabhängigen Steuerung",
           "da": "Nulstiller tidsplanen for Time-of-Use",
-          "nl": "Reset het schema voor Time-of-Use"
+          "nl": "Reset het schema voor Time-of-Use",
+          "sv": "Återställer schemat för Time-of-Use"
         },
         "highlight": true,
         "args": [
@@ -807,20 +876,23 @@
           "en": "Pause Time-of-Use",
           "de": "Pausieren der zeitabhängigen Steuerung",
           "da": "Sæt Time-of-Use på pause",
-          "nl": "Pauzeer Time-of-Use"
+          "nl": "Pauzeer Time-of-Use",
+          "sv": "Pausa Time-of-Use"
         },
         "highlight": true,
         "titleFormatted": {
           "en": "Pause Time-of-Use starting [[start]] and ending [[end]]. Battery will be paused within this period.",
           "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]]. Die Batterie wird während dieser Zeitspanne pausiert.",
           "da": "Sæt Time-of-Use på pause startende [[start]] og sluttende [[end]]. Batteriet vil blive sat på pause i denne periode.",
-          "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode."
+          "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode.",
+          "sv": "Pausa Time-of-Use med start [[start]] och slut [[end]]. Batteriet pausas under perioden."
         },
         "hint": {
           "en": "Pause battery consumption within a given period of time",
           "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne",
           "da": "Sæt batteriforbrug på pause inden for en given periode",
-          "nl": "Pauzeer batterijverbruik binnen een bepaalde periode"
+          "nl": "Pauzeer batterijverbruik binnen een bepaalde periode",
+          "sv": "Pausa batteriförbrukningen under en viss tidsperiod"
         },
         "args": [
           {
@@ -835,7 +907,8 @@
               "en": "Enter starting time for new charge event",
               "de": "Startzeit für neues Ladeereignis eingeben",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed",
-              "nl": "Voer begintijd in voor nieuw laadmoment"
+              "nl": "Voer begintijd in voor nieuw laadmoment",
+              "sv": "Ange starttid för den nya laddningen"
             }
           },
           {
@@ -845,7 +918,8 @@
               "en": "Enter end time for the new charge event",
               "de": "Endzeit für neues Ladeereignis eingeben",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment"
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment",
+              "sv": "Ange sluttid för den nya laddningen"
             }
           }
         ]
@@ -856,19 +930,22 @@
           "en": "Pause Time-of-Use with start and end time as text",
           "de": "Zeitabhängige Steuerung mit Start- und Endzeit als Text pausieren",
           "da": "Sæt Time-of-Use på pause med start- og sluttidspunkt som tekst",
-          "nl": "Pauzeer Time-of-Use met start- en eindtijd als tekst"
+          "nl": "Pauzeer Time-of-Use met start- en eindtijd als tekst",
+          "sv": "Pausa Time-of-Use med start- och sluttid som text"
         },
         "titleFormatted": {
           "en": "Pause Time-of-Use starting [[start]] and ending [[end]]. Battery will be paused within this period.",
           "de": "Pausieren der zeitabhängigen Steuerung beginnend um [[start]] und endend um [[end]]. Die Batterie wird während dieser Zeitspanne pausiert.",
           "da": "Sæt Time-of-Use på pause startende [[start]] og sluttende [[end]]. Batteriet vil blive sat på pause i denne periode.",
-          "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode."
+          "nl": "Pauzeer Time-of-Use beginnend [[start]] en eindigend [[end]]. De batterij wordt gepauzeerd binnen deze periode.",
+          "sv": "Pausa Time-of-Use med start [[start]] och slut [[end]]. Batteriet pausas under perioden."
         },
         "hint": {
           "en": "Pause battery consumption within a given period of time",
           "de": "Pausieren des Batterieverbrauchs innerhalb einer bestimmten Zeitspanne",
           "da": "Sæt batteriforbrug på pause inden for en given periode",
-          "nl": "Pauzeer batterijverbruik binnen een bepaalde periode"
+          "nl": "Pauzeer batterijverbruik binnen een bepaalde periode",
+          "sv": "Pausa batteriförbrukningen under en viss tidsperiod"
         },
         "args": [
           {
@@ -883,7 +960,8 @@
               "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
           {
@@ -893,7 +971,8 @@
               "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)"
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "sv": "Ange sluttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           }
         ]
@@ -904,19 +983,22 @@
           "en": "Start charge",
           "da": "Start opladning",
           "nl": "Beginnen met opladen",
-          "de": "Starte Ladevorgang"
+          "de": "Starte Ladevorgang",
+          "sv": "Starta laddning"
         },
         "titleFormatted": {
           "en": "Start charging of battery with max. power [[power]] W",
           "da": "Start opladning af batteri med max. power [[power]] W",
           "de": "Starte Ladevorgang der Batterie mit max. Leistung [[power]] W",
-          "nl": "Begin met het opladen van de batterij met max. stroom [[power]] W"
+          "nl": "Begin met het opladen van de batterij met max. stroom [[power]] W",
+          "sv": "Starta laddning av batteriet med max. effekt [[power]] W"
         },
         "hint": {
           "en": "Start charging of battery (Time-of-Use)",
           "da": "Start opladning af batteri (Time-of-Use)",
           "de": "Starte Ladevorgang der Batterie (Time-of-Use)",
-          "nl": "Begin met het opladen van de batterij (Time-of-Use)"
+          "nl": "Begin met het opladen van de batterij (Time-of-Use)",
+          "sv": "Starta laddning av batteriet (Time-of-Use)"
         },
         "args": [
           {
@@ -931,7 +1013,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "da": "Max. power fra net (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
-              "nl": "Max. stroom uit het net (0-46000 W)"
+              "nl": "Max. stroom uit het net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -945,19 +1028,22 @@
           "en": "Stop charge",
           "da": "Stop opladning",
           "de": "Stoppe Ladevorgang",
-          "nl": "Stop met opladen"
+          "nl": "Stop met opladen",
+          "sv": "Stoppa laddning"
         },
         "titleFormatted": {
           "en": "Stop charging of battery",
           "da": "Stop opladning af batteri",
           "de": "Stoppe Ladevorgang der Batterie",
-          "nl": "Stop met het opladen van de batterij"
+          "nl": "Stop met het opladen van de batterij",
+          "sv": "Stoppa laddning av batteriet"
         },
         "hint": {
           "en": "Stop charging of battery (Time-of-Use)",
           "da": "Stop opladning af batteri (Time-of-Use)",
           "de": "Stoppe Ladevorgang der Batterie (Time-of-Use)",
-          "nl": "Stop met het opladen van de batterij (Time-of-Use)"
+          "nl": "Stop met het opladen van de batterij (Time-of-Use)",
+          "sv": "Stoppa laddning av batteriet (Time-of-Use)"
         },
         "args": [
           {
@@ -973,19 +1059,22 @@
           "en": "Switch operating mode",
           "de": "Betriebsmodus umschalten",
           "da": "Skift driftsmodus",
-          "nl": "Schakel bedrijfsmodus"
+          "nl": "Schakel bedrijfsmodus",
+          "sv": "Växla driftsläge"
         },
         "titleFormatted": {
           "en": "Switch operating mode to [[operating_mode]]",
           "de": "Betriebsmodus auf [[operating_mode]] umschalten",
           "da": "Skift driftsmodus til [[operating_mode]]",
-          "nl": "Schakel bedrijfsmodus naar [[operating_mode]]"
+          "nl": "Schakel bedrijfsmodus naar [[operating_mode]]",
+          "sv": "Växla driftsläge till [[operating_mode]]"
         },
         "hint": {
           "en": "Switch to the appropriate operating mode to have e.g. the Time-of-Use schedule applied",
           "de": "Zum passenden Betriebsmodus wechseln, damit z.B. der Time-of-Use Zeitplan verwendet wird",
           "da": "Skift til den passende driftsmodus for at få f.eks. tidsplanen for Time-of-Use anvendt",
-          "nl": "Schakel over naar de juiste bedrijfsmodus om bijvoorbeeld het Time-of-Use schema toe te passen"
+          "nl": "Schakel over naar de juiste bedrijfsmodus om bijvoorbeeld het Time-of-Use schema toe te passen",
+          "sv": "Växla till lämpligt driftsläge för att t.ex. få Time-of-Use-schemat tillämpat"
         },
         "args": [
           {
@@ -1003,7 +1092,8 @@
                   "en": "Manual",
                   "de": "Manuell",
                   "da": "Manuel",
-                  "nl": "Handmatig"
+                  "nl": "Handmatig",
+                  "sv": "Manuell"
                 }
               },
               {
@@ -1012,7 +1102,8 @@
                   "en": "Self consumption",
                   "de": "Eigenverbrauch",
                   "da": "Eget forbrug",
-                  "nl": "Eigen verbruik"
+                  "nl": "Eigen verbruik",
+                  "sv": "Egenförbrukning"
                 }
               },
               {
@@ -1021,7 +1112,8 @@
                   "en": "Module extension (30%)",
                   "de": "Modulerweiterung (30%)",
                   "da": "Moduludvidelse (30%)",
-                  "nl": "Module uitbreiding (30%)"
+                  "nl": "Module uitbreiding (30%)",
+                  "sv": "Modulutbyggnad (30%)"
                 }
               },
               {
@@ -1030,7 +1122,8 @@
                   "en": "Time-of-Use",
                   "de": "Time-of-Use",
                   "da": "Time-of-Use",
-                  "nl": "Time-of-Use"
+                  "nl": "Time-of-Use",
+                  "sv": "Time-of-Use"
                 }
               },
               {
@@ -1039,7 +1132,8 @@
                   "en": "Automatic - Optimization",
                   "de": "Automatik - Optimierung",
                   "da": "Automatisk - Optimering",
-                  "nl": "Automatisch - Optimalisatie"
+                  "nl": "Automatisch - Optimalisatie",
+                  "sv": "Automatisk - Optimering"
                 }
               }
             ]
@@ -1052,19 +1146,22 @@
           "en": "Prognosis charging",
           "de": "Prognosebasiertes Laden",
           "da": "Prognosebaseret opladning",
-          "nl": "Prognose laden"
+          "nl": "Prognose laden",
+          "sv": "Prognosbaserad laddning"
         },
         "titleFormatted": {
           "en": "Prognosis charging: [[active]]",
           "de": "Prognosebasiertes Laden: [[active]]",
           "da": "Prognosebaseret opladning: [[active]]",
-          "nl": "Prognose laden: [[active]]"
+          "nl": "Prognose laden: [[active]]",
+          "sv": "Prognosbaserad laddning: [[active]]"
         },
         "hint": {
           "en": "Toggle prognosis charging",
           "de": "Prognosebasiertes Laden umschalten",
           "da": "Slå prognosebaseret opladning til/fra",
-          "nl": "Schakel prognose laden"
+          "nl": "Schakel prognose laden",
+          "sv": "Växla prognosbaserad laddning"
         },
         "args": [
           {
@@ -1084,19 +1181,22 @@
           "en": "Set backup buffer",
           "de": "Backup-Puffer einstellen",
           "da": "Indstil backup-buffer",
-          "nl": "Stel noodvoorraad in"
+          "nl": "Stel noodvoorraad in",
+          "sv": "Ställ in reservbuffert"
         },
         "titleFormatted": {
           "en": "Set backup buffer to [[percent]] %",
           "de": "Backup-Puffer auf [[percent]] % einstellen",
           "da": "Indstil backup-buffer til [[percent]] %",
-          "nl": "Stel noodvoorraad in op [[percent]] %"
+          "nl": "Stel noodvoorraad in op [[percent]] %",
+          "sv": "Ställ in reservbufferten på [[percent]] %"
         },
         "hint": {
           "en": "Set the state of charge the battery will not discharge below during normal operation. Valid values: 0 (disabled) or 5-100 %.",
           "de": "Ladezustand (SoC) einstellen, den die Batterie im normalen Betrieb nicht unterschreitet. Gültige Werte: 0 (deaktiviert) oder 5–100 %.",
           "da": "Indstil ladeandelen (SoC), som batteriet i normal drift ikke aflader under. Gyldige værdier: 0 (deaktiveret) eller 5–100 %.",
-          "nl": "Stel het laadniveau (SoC) in dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %."
+          "nl": "Stel het laadniveau (SoC) in dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %.",
+          "sv": "Ställ in den laddningsnivå som batteriet inte urladdar under i normal drift. Giltiga värden: 0 (inaktiverat) eller 5-100 %."
         },
         "args": [
           {
@@ -1111,7 +1211,8 @@
               "en": "Backup buffer percentage (0 = disabled, 5-100 %)",
               "de": "Backup-Puffer-Prozentsatz (0 = deaktiviert, 5–100 %)",
               "da": "Backup-bufferprocent (0 = deaktiveret, 5–100 %)",
-              "nl": "Noodvoorraadpercentage (0 = uitgeschakeld, 5–100 %)"
+              "nl": "Noodvoorraadpercentage (0 = uitgeschakeld, 5–100 %)",
+              "sv": "Reservbuffert i procent (0 = inaktiverat, 5-100 %)"
             },
             "min": 0,
             "max": 100,
@@ -1125,19 +1226,22 @@
           "en": "Set manual charging",
           "da": "Set manuel opladning",
           "nl": "Stel handmatig opladen in",
-          "de": "Manuelles Laden einstellen"
+          "de": "Manuelles Laden einstellen",
+          "sv": "Ställ in manuell laddning"
         },
         "titleFormatted": {
           "en": "Manual charging of battery with max. power [[power]] W",
           "da": "Manuel opladning af batteri med max. power [[power]] W",
           "de": "Manuelles Laden der Batterie mit max. Leistung [[power]] W",
-          "nl": "Handmatig opladen van de batterij met max. stroom [[power]] W"
+          "nl": "Handmatig opladen van de batterij met max. stroom [[power]] W",
+          "sv": "Manuell laddning av batteriet med max. effekt [[power]] W"
         },
         "hint": {
           "en": "Use with operating mode: Manual",
           "da": "Bruges med driftsmodus: Manuel",
           "de": "Zur Verwendung mit Betriebsmodus: Manuell",
-          "nl": "Te gebruiken met de bedieningsmodus: Handmatig"
+          "nl": "Te gebruiken met de bedieningsmodus: Handmatig",
+          "sv": "Används med driftsläget: Manuell"
         },
         "args": [
           {
@@ -1152,7 +1256,8 @@
               "en": "Max. power from grid (0-46000 W)",
               "da": "Max. power fra net (0-46000 W)",
               "de": "Max. Leistung aus dem Netz (0-46000 W)",
-              "nl": "Max. stroom uit het net (0-46000 W)"
+              "nl": "Max. stroom uit het net (0-46000 W)",
+              "sv": "Max. effekt från nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -1166,19 +1271,22 @@
           "en": "Set manual discharging",
           "da": "Set manuel afladning",
           "nl": "Stel handmatig ontladen in",
-          "de": "Manuelles Entladen einstellen"
+          "de": "Manuelles Entladen einstellen",
+          "sv": "Ställ in manuell urladdning"
         },
         "titleFormatted": {
           "en": "Set manual discharging of battery with max. power [[power]] W",
           "da": "Set manuel afladning af batteri med max. power [[power]] W",
           "de": "Manuelles Endladen der Batterie mit max. Leistung [[power]] W",
-          "nl": "Begin met het handmatig ontladen van de batterij met max. stroom [[power]] W"
+          "nl": "Begin met het handmatig ontladen van de batterij met max. stroom [[power]] W",
+          "sv": "Ställ in manuell urladdning av batteriet med max. effekt [[power]] W"
         },
         "hint": {
           "en": "Use with operating mode: Manual",
           "da": "Bruges med driftsmodus: Manuel",
           "de": "Zur Verwendung mit Betriebsmodus: Manuell",
-          "nl": "Te gebruiken met de bedieningsmodus: Handmatig"
+          "nl": "Te gebruiken met de bedieningsmodus: Handmatig",
+          "sv": "Används med driftsläget: Manuell"
         },
         "args": [
           {
@@ -1193,7 +1301,8 @@
               "en": "Max. power to grid (0-46000 W)",
               "da": "Max. power til net (0-46000 W)",
               "de": "Max. Leistung in das Netz (0-46000 W)",
-              "nl": "Max. stroom naar het net (0-46000 W)"
+              "nl": "Max. stroom naar het net (0-46000 W)",
+              "sv": "Max. effekt till nätet (0-46000 W)"
             },
             "min": 0,
             "max": 46000,
@@ -1207,19 +1316,22 @@
           "en": "Set Time-of-Use schedule as text",
           "de": "Zeitabhängige Steuerung mit Zeitplan als Text einstellen",
           "da": "Indstil Time-of-Use tidsplan som tekst",
-          "nl": "Stel Time-of-Use schema in als tekst"
+          "nl": "Stel Time-of-Use schema in als tekst",
+          "sv": "Ställ in Time-of-Use-schema som text"
         },
         "titleFormatted": {
           "en": "Set Time-of-Use schedule: [[schedule]]",
           "de": "Einstellen der zeitabhängigen Steuerung mit Zeitplan: [[schedule]]",
           "da": "Indstilling af Time-of-Use tidsplan: [[schedule]]",
-          "nl": "Stel Time-of-Use schema in: [[schedule]]"
+          "nl": "Stel Time-of-Use schema in: [[schedule]]",
+          "sv": "Ställ in Time-of-Use-schema: [[schedule]]"
         },
         "hint": {
           "en": "One period per line, same format as the device settings: 'HH:MM-HH:MM: maxW', e.g. '00:00-09:00: 2000W' and '09:00-12:00: 3000W'. Press Shift+Enter for a new line. Tip: store schedules in variables and switch between them from flows.",
           "de": "Eine Periode pro Zeile, gleiches Format wie in den Geräteeinstellungen: 'HH:MM-HH:MM: maxW', z.B. '00:00-09:00: 2000W' und '09:00-12:00: 3000W'. Mit Umschalt+Eingabe eine neue Zeile einfügen. Tipp: Zeitpläne in Variablen speichern und über Flows zwischen ihnen wechseln.",
           "da": "Én periode pr. linje, samme format som i enhedsindstillingerne: 'TT:MM-TT:MM: maksW', f.eks. '00:00-09:00: 2000W' og '09:00-12:00: 3000W'. Tryk Skift+Enter for en ny linje. Tip: Gem tidsplaner i variabler og skift mellem dem via flows.",
-          "nl": "Eén periode per regel, zelfde formaat als in de apparaatinstellingen: 'UU:MM-UU:MM: maxW', bijv. '00:00-09:00: 2000W' en '09:00-12:00: 3000W'. Druk op Shift+Enter voor een nieuwe regel. Tip: bewaar schema's in variabelen en wissel ertussen via flows."
+          "nl": "Eén periode per regel, zelfde formaat als in de apparaatinstellingen: 'UU:MM-UU:MM: maxW', bijv. '00:00-09:00: 2000W' en '09:00-12:00: 3000W'. Druk op Shift+Enter voor een nieuwe regel. Tip: bewaar schema's in variabelen en wissel ertussen via flows.",
+          "sv": "En period per rad, samma format som i enhetens inställningar: 'HH:MM-HH:MM: maxW', t.ex. '00:00-09:00: 2000W' och '09:00-12:00: 3000W'. Tryck Skift+Enter för en ny rad. Tips: lagra scheman i variabler och växla mellan dem från flöden."
         },
         "args": [
           {
@@ -1234,13 +1346,15 @@
               "en": "Schedule (one period per line)",
               "de": "Zeitplan (eine Periode pro Zeile)",
               "da": "Tidsplan (én periode pr. linje)",
-              "nl": "Schema (één periode per regel)"
+              "nl": "Schema (één periode per regel)",
+              "sv": "Schema (en period per rad)"
             },
             "placeholder": {
               "en": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
               "de": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
               "da": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
-              "nl": "00:00-09:00: 2000W\n09:00-12:00: 3000W"
+              "nl": "00:00-09:00: 2000W\n09:00-12:00: 3000W",
+              "sv": "00:00-09:00: 2000W\n09:00-12:00: 3000W"
             }
           }
         ]
@@ -1277,7 +1391,8 @@
         "en": "sonnenBatterie",
         "de": "sonnenBatterie",
         "da": "sonnenBatterie",
-        "nl": "sonnenBatterie"
+        "nl": "sonnenBatterie",
+        "sv": "sonnenBatterie"
       },
       "class": "battery",
       "capabilities": [
@@ -1317,13 +1432,15 @@
             "en": "Reset totals",
             "de": "Summen zurücksetzen",
             "da": "Nulstil totaler",
-            "nl": "Totalen resetten"
+            "nl": "Totalen resetten",
+            "sv": "Återställ totaler"
           },
           "desc": {
             "en": "Resets totals (kWh). This can not be restored.",
             "de": "Setzt die Gesamtsummen (kWh) zurück. Dies kann nicht rückgängig gemacht werden.",
             "da": "Nulstiller totaler (kWh). Dette kan ikke gendannes.",
-            "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld."
+            "nl": "Reset de totalen (kWh). Dit kan niet worden hersteld.",
+            "sv": "Återställer totaler (kWh). Detta kan inte ångras."
           }
         },
         "measure_power": {
@@ -1343,7 +1460,8 @@
             "en": "Charging State",
             "de": "Ladezustand",
             "da": "Opladningsstatus",
-            "nl": "Laadstatus"
+            "nl": "Laadstatus",
+            "sv": "Laddstatus"
           },
           "values": [
             {
@@ -1352,7 +1470,8 @@
                 "en": "Charging",
                 "de": "Laden",
                 "da": "Oplader",
-                "nl": "Opladen"
+                "nl": "Opladen",
+                "sv": "Laddar"
               }
             },
             {
@@ -1361,7 +1480,8 @@
                 "en": "Discharging",
                 "de": "Entladen",
                 "da": "Aflader",
-                "nl": "Ontladen"
+                "nl": "Ontladen",
+                "sv": "Urladdar"
               }
             },
             {
@@ -1370,7 +1490,8 @@
                 "en": "Idle",
                 "de": "Im Leerlauf",
                 "da": "Inaktiv",
-                "nl": "Inactief"
+                "nl": "Inactief",
+                "sv": "Inaktiv"
               }
             }
           ]
@@ -1392,7 +1513,8 @@
             "en": "Battery Settings",
             "de": "Batterie Einstellungen",
             "da": "Batteri-indstillinger",
-            "nl": "Batterij-instellingen"
+            "nl": "Batterij-instellingen",
+            "sv": "Batteriinställningar"
           },
           "children": [
             {
@@ -1403,13 +1525,15 @@
                 "en": "Operating Mode",
                 "de": "Betriebsmodus",
                 "da": "Driftsmodus",
-                "nl": "Bedrijfsmodus"
+                "nl": "Bedrijfsmodus",
+                "sv": "Driftsläge"
               },
               "hint": {
                 "en": "Refer to Sonnen Batterie manual for more information.",
                 "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
                 "da": "Se Sonnen Batterie manualen for mere information.",
-                "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+                "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie.",
+                "sv": "Se Sonnen Batterie-manualen för mer information."
               },
               "values": [
                 {
@@ -1418,7 +1542,8 @@
                     "en": "Manual",
                     "de": "Manuell",
                     "da": "Manuel",
-                    "nl": "Handmatig"
+                    "nl": "Handmatig",
+                    "sv": "Manuell"
                   }
                 },
                 {
@@ -1427,7 +1552,8 @@
                     "en": "Self consumption",
                     "de": "Eigenverbrauch",
                     "da": "Eget forbrug",
-                    "nl": "Eigen verbruik"
+                    "nl": "Eigen verbruik",
+                    "sv": "Egenförbrukning"
                   }
                 },
                 {
@@ -1436,7 +1562,8 @@
                     "en": "Module extension (30%)",
                     "de": "Modulerweiterung (30%)",
                     "da": "Moduludvidelse (30%)",
-                    "nl": "Module uitbreiding (30%)"
+                    "nl": "Module uitbreiding (30%)",
+                    "sv": "Modulutbyggnad (30%)"
                   }
                 },
                 {
@@ -1445,7 +1572,8 @@
                     "en": "Time-of-Use",
                     "de": "Time-of-Use",
                     "da": "Time-of-Use",
-                    "nl": "Time-of-Use"
+                    "nl": "Time-of-Use",
+                    "sv": "Time-of-Use"
                   }
                 },
                 {
@@ -1454,7 +1582,8 @@
                     "en": "Automatic - Optimization",
                     "de": "Automatik - Optimierung",
                     "da": "Automatisk - Optimering",
-                    "nl": "Automatisch - Optimalisatie"
+                    "nl": "Automatisch - Optimalisatie",
+                    "sv": "Automatisk - Optimering"
                   }
                 }
               ]
@@ -1466,14 +1595,16 @@
                 "en": "Time-of-Use Schedule",
                 "de": "Time-of-Use Zeitplan",
                 "da": "Time-of-Use tidsplan",
-                "nl": "Time-of-Use schema"
+                "nl": "Time-of-Use schema",
+                "sv": "Time-of-Use-schema"
               },
               "value": "",
               "hint": {
                 "en": "Format of each line (startTime-endTime: maxW): 'HH:MM-HH:MM: nW', e.g.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. The operating mode 'Time-of-Use' must be active to use this feature. Refer to Sonnen Batterie manual for more information. You can also set this schedule from flows using the 'Set Time-of-Use schedule as text' action card.",
                 "de": "Format jeder Zeile (StartZeit-EndZeit: maxW): 'HH:MM-HH:MM: nW', z.B.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Der Betriebsmodus 'Time-of-Use' muss aktiv sein, um diese Funktion zu nutzen. Siehe Sonnen Batterie Handbuch für weitere Informationen. Sie können diesen Zeitplan auch über Flows setzen, mit der Aktionskarte 'Zeitabhängige Steuerung mit Zeitplan als Text einstellen'.",
                 "da": "Format for hver linje (startTid-slutTid: maksW): 'TT:MM-TT:MM: nW', f.eks.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsmodus 'Time-of-Use' skal være aktiv for at bruge denne funktion. Se Sonnen Batterie manualen for mere information. Du kan også indstille denne tidsplan fra flows med handlingskortet 'Indstil Time-of-Use tidsplan som tekst'.",
-                "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'."
+                "nl": "Formaat van elke regel (startTijd-eindTijd: maxW): 'UU:MM-UU:MM: nW', bijv.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. De bedrijfsmodus 'Time-of-Use' moet actief zijn om deze functie te gebruiken. Raadpleeg de Sonnen Batterie handleiding voor meer informatie. U kunt dit schema ook vanuit flows instellen met de actiekaart 'Stel Time-of-Use schema in als tekst'.",
+                "sv": "Format för varje rad (startTid-slutTid: maxW): 'TT:MM-TT:MM: nW', t.ex.\n00:00-09:00: 2000W\n09:00-12:00: 3000W\n12:00-24:00: 2000W. Driftsläget 'Time-of-Use' måste vara aktivt för att använda denna funktion. Se Sonnen Batterie-manualen för mer information. Du kan också ställa in schemat från flöden med åtgärdskortet 'Ställ in Time-of-Use-schema som text'."
               }
             },
             {
@@ -1486,13 +1617,15 @@
                 "en": "Backup buffer",
                 "de": "Backup-Puffer",
                 "da": "Backup-buffer",
-                "nl": "Noodvoorraad"
+                "nl": "Noodvoorraad",
+                "sv": "Reservbuffert"
               },
               "hint": {
                 "en": "Backup buffer: the state of charge the battery will not discharge below during normal operation. Valid values: 0 (disabled) or 5-100 %. Changes are written to the battery. You can also set this dynamically from flows using the 'Set backup buffer' action card.",
                 "de": "Backup-Puffer: der Ladezustand (SoC), den die Batterie im normalen Betrieb nicht unterschreitet. Gültige Werte: 0 (deaktiviert) oder 5–100 %. Änderungen werden an die Batterie übertragen. Sie können diesen Wert auch dynamisch über Flows mit der Aktionskarte 'Backup-Puffer einstellen' setzen.",
                 "da": "Backup-buffer: ladeandelen (SoC), som batteriet i normal drift ikke aflader under. Gyldige værdier: 0 (deaktiveret) eller 5–100 %. Ændringer skrives til batteriet. Du kan også indstille denne dynamisk fra flows med handlingskortet 'Indstil backup-buffer'.",
-                "nl": "Noodvoorraad: het laadniveau (SoC) dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %. Wijzigingen worden naar de batterij geschreven. U kunt dit ook dynamisch instellen vanuit flows met de actiekaart 'Stel noodvoorraad in'."
+                "nl": "Noodvoorraad: het laadniveau (SoC) dat de batterij in normaal gebruik niet onder ontlaadt. Geldige waarden: 0 (uitgeschakeld) of 5–100 %. Wijzigingen worden naar de batterij geschreven. U kunt dit ook dynamisch instellen vanuit flows met de actiekaart 'Stel noodvoorraad in'.",
+                "sv": "Reservbuffert: laddningsnivån som batteriet inte urladdar under i normal drift. Giltiga värden: 0 (inaktiverat) eller 5–100 %. Ändringar skrivs till batteriet. Du kan också ställa in detta dynamiskt från flöden med åtgärdskortet 'Ställ in reservbuffert'."
               }
             },
             {
@@ -1502,14 +1635,16 @@
                 "en": "Prognosis Charging",
                 "de": "Prognosebasiertes Laden",
                 "da": "Prognosebaseret opladning",
-                "nl": "Prognose laden"
+                "nl": "Prognose laden",
+                "sv": "Prognosbaserad laddning"
               },
               "value": false,
               "hint": {
                 "en": "Refer to Sonnen Batterie manual for more information.",
                 "de": "Siehe Sonnen Batterie Handbuch für weitere Informationen.",
                 "da": "Se Sonnen Batterie manualen for mere information.",
-                "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie."
+                "nl": "Raadpleeg de Sonnen Batterie handleiding voor meer informatie.",
+                "sv": "Se Sonnen Batterie-manualen för mer information."
               }
             },
             {
@@ -1519,14 +1654,16 @@
                 "en": "Installation Date",
                 "de": "Installationsdatum",
                 "da": "Installationsdato",
-                "nl": "Installatiedatum"
+                "nl": "Installatiedatum",
+                "sv": "Installationsdatum"
               },
               "value": "",
               "hint": {
                 "en": "Enter the date when the battery was installed in ISO 8601 format (e.g., 2020-12-31). Used to calculate the average daily cycle count since installation. The installation date can be found in the Sonnen App's battery details.",
                 "de": "Geben Sie das Datum im ISO 8601-Format (z.B. 2020-12-31) ein, an dem die Batterie installiert wurde. Wird verwendet, um die durchschnittliche tägliche Zyklenzahl seit der Installation zu berechnen. Das Installationsdatum ist bei den Batteriedetails in der Sonnen App zu finden.",
                 "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen. Installationsdatoen kan findes i batteridetaljeskærmen i Sonnen-appen.",
-                "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App."
+                "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App.",
+                "sv": "Ange datumet då batteriet installerades i ISO 8601-format (t.ex. 2020-12-31). Används för att beräkna det genomsnittliga dagliga antalet cykler sedan installationen. Installationsdatumet finns i batteridetaljerna i Sonnen-appen."
               }
             }
           ]
@@ -1537,7 +1674,8 @@
             "en": "Connection",
             "de": "Verbindung",
             "da": "Forbindelse",
-            "nl": "Verbinding"
+            "nl": "Verbinding",
+            "sv": "Anslutning"
           },
           "children": [
             {
@@ -1547,14 +1685,16 @@
                 "en": "IP address",
                 "de": "IP Adresse",
                 "da": "IP-adresse",
-                "nl": "IP-adres"
+                "nl": "IP-adres",
+                "sv": "IP-adress"
               },
               "value": "",
               "hint": {
                 "en": "Shows the current IP of the Sonnen Batterie. Optional: Disable auto-discovery and set the static IPv4 address (e.g. 192.168.1.xxx) manually.",
                 "de": "Zeigt die aktuelle IP der Sonnen Batterie. Optional: Automatische Ermittlung deaktivieren und die statische IPv4 Adresse (z.B. 192.168.1.xxx) selbst angeben.",
                 "da": "Viser den nuværende IP-adresse for Sonnen Batterien. Valgfrit: Deaktiver automatisk opdagelse og indstil den statiske IPv4-adresse (f.eks. 192.168.1.xxx) manuelt.",
-                "nl": "Toont het huidige IP-adres van de Sonnen Batterij. Optioneel: Schakel automatische detectie uit en stel het statische IPv4-adres (bijv. 192.168.1.xxx) handmatig in."
+                "nl": "Toont het huidige IP-adres van de Sonnen Batterij. Optioneel: Schakel automatische detectie uit en stel het statische IPv4-adres (bijv. 192.168.1.xxx) handmatig in.",
+                "sv": "Visar aktuell IP-adress för Sonnen Batterie. Valfritt: inaktivera automatisk upptäckt och ange den statiska IPv4-adressen (t.ex. 192.168.1.xxx) manuellt."
               }
             },
             {
@@ -1564,14 +1704,16 @@
                 "en": "Auto-discover IP address",
                 "de": "IP Adresse automatisch ermitteln",
                 "da": "Find IP-adresse automatisk",
-                "nl": "IP-adres automatisch ontdekken"
+                "nl": "IP-adres automatisch ontdekken",
+                "sv": "Upptäck IP-adress automatiskt"
               },
               "value": true,
               "hint": {
                 "en": "Use 'https://find-my.sonnen-batterie.com/find' to track changes of the IP address. Requires local-network.",
                 "de": "Benutze 'https://find-my.sonnen-batterie.com/find' um Änderungen der IP Adresse zu verfolgen. Erfordert ein lokales Netzwerk.",
                 "da": "Brug 'https://find-my.sonnen-batterie.com/find' til at spore ændringer i IP-adressen. Kræver lokalt netværk.",
-                "nl": "Gebruik 'https://find-my.sonnen-batterie.com/find' om wijzigingen in het IP-adres te volgen. Vereist lokaal netwerk."
+                "nl": "Gebruik 'https://find-my.sonnen-batterie.com/find' om wijzigingen in het IP-adres te volgen. Vereist lokaal netwerk.",
+                "sv": "Använd 'https://find-my.sonnen-batterie.com/find' för att följa ändringar av IP-adressen. Kräver lokalt nätverk."
               }
             }
           ]
@@ -1607,7 +1749,8 @@
         "en": "sonnenBatterie Grid",
         "de": "sonnenBatterie Netz",
         "da": "sonnenBatterie Net",
-        "nl": "sonnenBatterie Net"
+        "nl": "sonnenBatterie Net",
+        "sv": "sonnenBatterie Nät"
       },
       "class": "sensor",
       "capabilities": [
@@ -1673,7 +1816,8 @@
         "en": "sonnenBatterie household",
         "de": "sonnenBatterie Haushalt",
         "da": "sonnenBatterie Husholdning",
-        "nl": "sonnenBatterie Huishouden"
+        "nl": "sonnenBatterie Huishouden",
+        "sv": "sonnenBatterie Hushåll"
       },
       "class": "sensor",
       "capabilities": [
@@ -1725,7 +1869,8 @@
         "en": "sonnenBatterie solar panel",
         "de": "sonnenBatterie Solarmodul",
         "da": "sonnenBatterie Solcellepanel",
-        "nl": "sonnenBatterie Zonnepaneel"
+        "nl": "sonnenBatterie Zonnepaneel",
+        "sv": "sonnenBatterie Solpanel"
       },
       "class": "solarpanel",
       "capabilities": [
@@ -1773,7 +1918,8 @@
         "en": "Selfsupply",
         "da": "Selvforsyning",
         "de": "Autarkie",
-        "nl": "Autarkie"
+        "nl": "Autarkie",
+        "sv": "Egenförsörjning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1792,7 +1938,8 @@
         "en": "Backup buffer",
         "da": "Backup-buffer",
         "de": "Backup-Puffer",
-        "nl": "Noodvoorraad"
+        "nl": "Noodvoorraad",
+        "sv": "Reservbuffert"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1811,7 +1958,8 @@
         "en": "Capacity",
         "da": "Kapacitet",
         "de": "Kapazität",
-        "nl": "Capaciteit"
+        "nl": "Capaciteit",
+        "sv": "Kapacitet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1828,7 +1976,8 @@
         "en": "Charged",
         "da": "Opladet",
         "de": "Gespeichert",
-        "nl": "Opgeslagen"
+        "nl": "Opgeslagen",
+        "sv": "Laddat"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1845,7 +1994,8 @@
         "en": "Consumption",
         "da": "Forbrug",
         "de": "Verbrauch",
-        "nl": "verbruik"
+        "nl": "verbruik",
+        "sv": "Förbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1862,7 +2012,8 @@
         "en": "∑d consumption",
         "da": "∑d forbrug",
         "de": "∑d Verbrauch",
-        "nl": "∑d verbruik"
+        "nl": "∑d verbruik",
+        "sv": "∑d förbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1880,7 +2031,8 @@
         "en": "▲d consumption",
         "da": "▲d forbrug",
         "de": "▲d Verbrauch",
-        "nl": "▲d verbruik"
+        "nl": "▲d verbruik",
+        "sv": "▲d förbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1897,7 +2049,8 @@
         "en": "▼d consumption",
         "da": "▼d forbrug",
         "de": "▼d Verbrauch",
-        "nl": "▼d verbruik"
+        "nl": "▼d verbruik",
+        "sv": "▼d förbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1914,7 +2067,8 @@
         "en": "∑ consumption",
         "da": "∑ forbrug",
         "de": "∑ Verbrauch",
-        "nl": "∑ verbruik"
+        "nl": "∑ verbruik",
+        "sv": "∑ förbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1932,7 +2086,8 @@
         "en": "⌀ Cycle rate (30d)",
         "de": "⌀ Zyklusrate (30d)",
         "da": "⌀ cyklusrate (30d)",
-        "nl": "⌀ cyclussnelheid (30d)"
+        "nl": "⌀ cyclussnelheid (30d)",
+        "sv": "⌀ Cykeltakt (30 d)"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1940,7 +2095,8 @@
         "en": "cycles/d",
         "de": "Zyklen/d",
         "da": "cyklus/d",
-        "nl": "cycli/d"
+        "nl": "cycli/d",
+        "sv": "cykler/d"
       },
       "min": 0,
       "decimals": 3,
@@ -1953,7 +2109,8 @@
         "en": "⌀ Cycle rate (7d)",
         "de": "⌀ Zyklusrate (7d)",
         "da": "⌀ cyklusrate (7d)",
-        "nl": "⌀ cyclussnelheid (7d)"
+        "nl": "⌀ cyclussnelheid (7d)",
+        "sv": "⌀ Cykeltakt (7 d)"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1961,7 +2118,8 @@
         "en": "cycles/d",
         "de": "Zyklen/d",
         "da": "cyklus/d",
-        "nl": "cycli/d"
+        "nl": "cycli/d",
+        "sv": "cykler/d"
       },
       "min": 0,
       "decimals": 3,
@@ -1974,7 +2132,8 @@
         "en": "⌀ Cycle rate (∞)",
         "de": "⌀ Zyklusrate (∞)",
         "da": "⌀ cyklusrate (∞)",
-        "nl": "⌀ cyclussnelheid (∞)"
+        "nl": "⌀ cyclussnelheid (∞)",
+        "sv": "⌀ Cykeltakt (∞)"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1982,7 +2141,8 @@
         "en": "cycles/d",
         "de": "Zyklen/d",
         "da": "cyklus/d",
-        "nl": "cycli/d"
+        "nl": "cycli/d",
+        "sv": "cykler/d"
       },
       "min": 0,
       "decimals": 3,
@@ -1995,7 +2155,8 @@
         "en": "Eclipse color",
         "da": "Cirkel farve",
         "nl": "Eclipse kleur",
-        "de": "Eclipse-Farbe"
+        "de": "Eclipse-Farbe",
+        "sv": "Eclipse-färg"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2008,7 +2169,8 @@
         "en": "From battery",
         "da": "Fra batteri",
         "nl": "Van de batterij",
-        "de": "Entladeleistung"
+        "de": "Entladeleistung",
+        "sv": "Från batteriet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2026,7 +2188,8 @@
         "en": "∑d Discharged energy",
         "da": "∑d Udladet energi",
         "nl": "∑d Ontladen energie",
-        "de": "∑d Entladene Energie"
+        "de": "∑d Entladene Energie",
+        "sv": "∑d urladdad energi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2044,7 +2207,8 @@
         "en": "∑ Discharged energy",
         "da": "∑ Udladet energi",
         "nl": "∑ Ontladen energie",
-        "de": "∑ Entladene Energie"
+        "de": "∑ Entladene Energie",
+        "sv": "∑ urladdad energi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2062,7 +2226,8 @@
         "en": "Grid consumption",
         "da": "Netforbrug",
         "de": "Netzbezug",
-        "nl": "Roosterverbruik"
+        "nl": "Roosterverbruik",
+        "sv": "Nätförbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2079,7 +2244,8 @@
         "en": "∑d Grid consumption",
         "da": "∑d Netforbrug",
         "de": "∑d Netzbezug",
-        "nl": "∑d Roosterverbruik"
+        "nl": "∑d Roosterverbruik",
+        "sv": "∑d nätförbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2097,7 +2263,8 @@
         "en": "▲d Grid consumption",
         "da": "▲d Netforbrug",
         "de": "▲d Netzbezug",
-        "nl": "▲d Roosterverbruik"
+        "nl": "▲d Roosterverbruik",
+        "sv": "▲d nätförbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2114,7 +2281,8 @@
         "en": "∑ Grid consumption",
         "da": "∑ Netforbrug",
         "de": "∑ Netzbezug",
-        "nl": "∑ Roosterverbruik"
+        "nl": "∑ Roosterverbruik",
+        "sv": "∑ nätförbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2132,7 +2300,8 @@
         "en": "Grid feed-in",
         "da": "Til net",
         "de": "Netzeinspeisung",
-        "nl": "Roosterinvoer"
+        "nl": "Roosterinvoer",
+        "sv": "Inmatning till nätet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2149,7 +2318,8 @@
         "en": "∑d Grid feed-in",
         "da": "∑d Til net",
         "de": "∑d Netzeinspeisung",
-        "nl": "∑d Roosterinvoer"
+        "nl": "∑d Roosterinvoer",
+        "sv": "∑d inmatning till nätet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2167,7 +2337,8 @@
         "en": "▲d Grid feed-in",
         "da": "▲d Til net",
         "de": "▲d Netzeinspeisung",
-        "nl": "▲d Roosterinvoer"
+        "nl": "▲d Roosterinvoer",
+        "sv": "▲d inmatning till nätet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2184,7 +2355,8 @@
         "en": "∑ Grid feed-in",
         "da": "∑ Til net",
         "de": "∑ Netzeinspeisung",
-        "nl": "∑ Roosterinvoer"
+        "nl": "∑ Roosterinvoer",
+        "sv": "∑ inmatning till nätet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2202,7 +2374,8 @@
         "en": "# Batteries",
         "da": "# Batterier",
         "de": "# Batterien",
-        "nl": "# Batterijen"
+        "nl": "# Batterijen",
+        "sv": "# Batterier"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2217,7 +2390,8 @@
         "en": "Active",
         "da": "Aktiv",
         "nl": "Actief",
-        "de": "Aktiv"
+        "de": "Aktiv",
+        "sv": "Aktiv"
       },
       "getable": true,
       "uiComponent": "sensor",
@@ -2227,13 +2401,15 @@
         "en": "Connection alarm turned on",
         "nl": "Connection alarm ging af",
         "da": "Forbindelsesalarm blev aktiveret",
-        "de": "Verbindungsalarm aktiviert"
+        "de": "Verbindungsalarm aktiviert",
+        "sv": "Anslutningslarm aktiverat"
       },
       "insightsTitleFalse": {
         "en": "Connection alarm turned off",
         "nl": "Connection alarm ging uit",
         "da": "Forbindelsesalarm blev deaktiveret",
-        "de": "Verbindungsalarm deaktiviert"
+        "de": "Verbindungsalarm deaktiviert",
+        "sv": "Anslutningslarm inaktiverat"
       }
     },
     "operating_mode_capability": {
@@ -2242,7 +2418,8 @@
         "en": "Operating Mode",
         "da": "Driftstilstand",
         "de": "Betriebsmodus",
-        "nl": "Bedrijfsmodus"
+        "nl": "Bedrijfsmodus",
+        "sv": "Driftsläge"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2254,7 +2431,8 @@
         "en": "Solar Power",
         "da": "Solenergi",
         "de": "Solarleistung",
-        "nl": "Zonnevermogen"
+        "nl": "Zonnevermogen",
+        "sv": "Solenergi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2271,7 +2449,8 @@
         "en": "∑d Production",
         "da": "∑d Produktion",
         "de": "∑d Erzeugung",
-        "nl": "∑d Productie"
+        "nl": "∑d Productie",
+        "sv": "∑d produktion"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2289,7 +2468,8 @@
         "en": "▲d Solar Power",
         "da": "▲d Solenergi",
         "de": "▲d Solarleistung",
-        "nl": "▲d Zonnevermogen"
+        "nl": "▲d Zonnevermogen",
+        "sv": "▲d solenergi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2306,7 +2486,8 @@
         "en": "∑ Production",
         "da": "∑ Produktion",
         "de": "∑ Erzeugung",
-        "nl": "∑ Productie"
+        "nl": "∑ Productie",
+        "sv": "∑ produktion"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2324,7 +2505,8 @@
         "en": "Prognosis Charging",
         "da": "Prognose opladning",
         "de": "Prognose Laden",
-        "nl": "Prognose laden"
+        "nl": "Prognose laden",
+        "sv": "Prognosbaserad laddning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2336,7 +2518,8 @@
         "en": "Self-consumption",
         "da": "Selvforbrug",
         "de": "Eigenverbrauch",
-        "nl": "Eigenverbruik"
+        "nl": "Eigenverbruik",
+        "sv": "Egenförbrukning"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2355,7 +2538,8 @@
         "en": "BMS",
         "da": "BMS",
         "de": "BMS",
-        "nl": "BMS"
+        "nl": "BMS",
+        "sv": "BMS"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2367,7 +2551,8 @@
         "en": "Core Control Module",
         "da": "Centralt styreenhed",
         "nl": "Centrale regeleenheid",
-        "de": "Zentrales Steuergerät"
+        "de": "Zentrales Steuergerät",
+        "sv": "Central styrenhet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2379,7 +2564,8 @@
         "en": "Inverter",
         "da": "Inverter",
         "nl": "Omvormer",
-        "de": "Wechselrichter"
+        "de": "Wechselrichter",
+        "sv": "Växelriktare"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2391,7 +2577,8 @@
         "en": "To battery",
         "da": "Til batteri",
         "de": "Ladeleistung",
-        "nl": "Naar batterij"
+        "nl": "Naar batterij",
+        "sv": "Till batteriet"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2409,7 +2596,8 @@
         "en": "∑d Charged energy",
         "da": "∑d Opladet energi",
         "de": "∑d Geladene Energie",
-        "nl": "∑d Geladen energie"
+        "nl": "∑d Geladen energie",
+        "sv": "∑d laddad energi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2427,7 +2615,8 @@
         "en": "∑ Charged Energy",
         "da": "∑ Opladet energi",
         "de": "∑ Geladene Energie",
-        "nl": "∑ Geladen energie"
+        "nl": "∑ Geladen energie",
+        "sv": "∑ laddad energi"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -2445,7 +2634,8 @@
         "en": "Total cycle count",
         "de": "Gesamtzyklenzahl",
         "da": "Samlet cyklus antal",
-        "nl": "Totaal aantal cycli"
+        "nl": "Totaal aantal cycli",
+        "sv": "Totalt antal cykler"
       },
       "uiComponent": "sensor",
       "getable": true,

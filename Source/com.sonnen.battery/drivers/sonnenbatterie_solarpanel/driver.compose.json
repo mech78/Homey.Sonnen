@@ -4,7 +4,8 @@
     "en": "sonnenBatterie solar panel",
     "de": "sonnenBatterie Solarmodul",
     "da": "sonnenBatterie Solcellepanel",
-    "nl": "sonnenBatterie Zonnepaneel"
+    "nl": "sonnenBatterie Zonnepaneel",
+    "sv": "sonnenBatterie Solpanel"
   },
   "class": "solarpanel",
   "capabilities": [

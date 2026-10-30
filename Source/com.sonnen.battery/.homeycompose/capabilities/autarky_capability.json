@@ -4,7 +4,8 @@
     "en": "Selfsupply",
     "da": "Selvforsyning",
     "de": "Autarkie",
-    "nl": "Autarkie"
+    "nl": "Autarkie",
+    "sv": "Egenförsörjning"
   },
   "uiComponent": "sensor",
   "getable": true,
