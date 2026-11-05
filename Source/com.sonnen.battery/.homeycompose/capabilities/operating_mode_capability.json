@@ -4,7 +4,8 @@
     "en": "Operating Mode",
     "da": "Driftstilstand",
     "de": "Betriebsmodus",
-    "nl": "Bedrijfsmodus"
+    "nl": "Bedrijfsmodus",
+    "sv": "Driftsläge"
   },
   "uiComponent": "sensor",
   "getable": true,

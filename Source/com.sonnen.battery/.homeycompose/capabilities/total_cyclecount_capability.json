@@ -4,7 +4,8 @@
     "en": "Total cycle count",
     "de": "Gesamtzyklenzahl",
     "da": "Samlet cyklus antal",
-    "nl": "Totaal aantal cycli"
+    "nl": "Totaal aantal cycli",
+    "sv": "Totalt antal cykler"
   },
   "uiComponent": "sensor",
   "getable": true,

@@ -4,7 +4,8 @@
     "en": "Self-consumption",
     "da": "Selvforbrug",
     "de": "Eigenverbrauch",
-    "nl": "Eigenverbruik"
+    "nl": "Eigenverbruik",
+    "sv": "Egenförbrukning"
   },
   "uiComponent": "sensor",
   "getable": true,

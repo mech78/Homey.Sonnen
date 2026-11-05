@@ -4,7 +4,8 @@
     "en": "∑ consumption",	
     "da": "∑ forbrug",
     "de": "∑ Verbrauch",
-    "nl": "∑ verbruik"
+    "nl": "∑ verbruik",
+    "sv": "∑ förbrukning"
   },
   "uiComponent": "sensor",
   "getable": true,

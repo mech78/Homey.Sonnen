@@ -4,7 +4,8 @@
     "en": "Prognosis Charging",
     "da": "Prognose opladning",
     "de": "Prognose Laden",
-    "nl": "Prognose laden"
+    "nl": "Prognose laden",
+    "sv": "Prognosbaserad laddning"
   },
   "uiComponent": "sensor",
   "getable": true,

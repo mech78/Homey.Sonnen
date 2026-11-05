@@ -4,7 +4,8 @@
     "en": "Inverter",
     "da": "Inverter",
     "nl": "Omvormer",
-    "de": "Wechselrichter"
+    "de": "Wechselrichter",
+    "sv": "Växelriktare"
   },
   "uiComponent": "sensor",
   "getable": true,

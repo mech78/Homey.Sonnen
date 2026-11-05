@@ -4,7 +4,8 @@
     "en": "Active",
     "da": "Aktiv",
     "nl": "Actief",
-    "de": "Aktiv"
+    "de": "Aktiv",
+    "sv": "Aktiv"
   },
   "getable": true,
   "uiComponent": "sensor",
@@ -14,12 +15,14 @@
     "en": "Connection alarm turned on",
     "nl": "Connection alarm ging af",
     "da": "Forbindelsesalarm blev aktiveret",
-    "de": "Verbindungsalarm aktiviert"
+    "de": "Verbindungsalarm aktiviert",
+    "sv": "Anslutningslarm aktiverat"
   },
   "insightsTitleFalse": {
     "en": "Connection alarm turned off",
     "nl": "Connection alarm ging uit",
     "da": "Forbindelsesalarm blev deaktiveret",
-    "de": "Verbindungsalarm deaktiviert"
+    "de": "Verbindungsalarm deaktiviert",
+    "sv": "Anslutningslarm inaktiverat"
   }
 }

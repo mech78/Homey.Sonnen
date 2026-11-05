@@ -4,7 +4,8 @@
     "en": "▲d Solar Power",
     "da": "▲d Solenergi",
     "de": "▲d Solarleistung",
-    "nl": "▲d Zonnevermogen"
+    "nl": "▲d Zonnevermogen",
+    "sv": "▲d solenergi"
   },
   "uiComponent": "sensor",
   "getable": true,

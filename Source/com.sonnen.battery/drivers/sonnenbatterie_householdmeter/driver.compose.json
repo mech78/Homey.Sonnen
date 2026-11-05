@@ -4,7 +4,8 @@
     "en": "sonnenBatterie household",
     "de": "sonnenBatterie Haushalt",
     "da": "sonnenBatterie Husholdning",
-    "nl": "sonnenBatterie Huishouden"
+    "nl": "sonnenBatterie Huishouden",
+    "sv": "sonnenBatterie Hushåll"
   },
   "class": "sensor",
   "capabilities": [

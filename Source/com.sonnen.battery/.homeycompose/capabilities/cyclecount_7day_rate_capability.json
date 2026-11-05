@@ -4,7 +4,8 @@
     "en": "⌀ Cycle rate (7d)",
     "de": "⌀ Zyklusrate (7d)",
     "da": "⌀ cyklusrate (7d)",
-    "nl": "⌀ cyclussnelheid (7d)"
+    "nl": "⌀ cyclussnelheid (7d)",
+    "sv": "⌀ Cykeltakt (7 d)"
   },
   "uiComponent": "sensor",
   "getable": true,
@@ -12,7 +13,8 @@
     "en": "cycles/d",
     "de": "Zyklen/d",
     "da": "cyklus/d",
-    "nl": "cycli/d"
+    "nl": "cycli/d",
+    "sv": "cykler/d"
   },
   "min": 0,
   "decimals": 3,

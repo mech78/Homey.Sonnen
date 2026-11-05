@@ -4,7 +4,8 @@
     "en": "∑d Discharged energy",
     "da": "∑d Udladet energi",
     "nl": "∑d Ontladen energie",
-    "de": "∑d Entladene Energie"
+    "de": "∑d Entladene Energie",
+    "sv": "∑d urladdad energi"
   },
   "uiComponent": "sensor",
   "getable": true,

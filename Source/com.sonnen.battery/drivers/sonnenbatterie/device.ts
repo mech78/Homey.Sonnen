@@ -1,11 +1,12 @@
 import _ from 'underscore';
 import { SonnenBatterieClient } from '../../service/SonnenBatterieClient';
-import { SonnenDevice } from '../../lib/SonnenDevice';
+import { isValidIPv4, SonnenDevice } from '../../lib/SonnenDevice';
 import { SonnenState } from '../../domain/SonnenState';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { LocalizedError } from '../../domain/LocalizedError';
-import { LocalizationService } from '../../lib/LocalizationService';
+import { throwLocalizedError, resolveOperatingMode, resolveCircleColor } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
+import { isValidBackupBuffer, parseBackupBuffer, shouldWriteBackupBufferToBattery } from '../../domain/BackupBuffer';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -13,6 +14,7 @@ export class BatteryDevice extends SonnenDevice {
   private refreshTimeoutId: NodeJS.Timeout | undefined;
   private readonly batteryDateUpdateInterval = 3600; // 1 hour in seconds
   private lastReportedOperatingMode: string | null = null;
+  private lastReportedBackupBuffer: number | null = null;
   private missingCapabilitiesWarned = new Set<string>();
 
 
@@ -97,11 +99,8 @@ export class BatteryDevice extends SonnenDevice {
       const newDeviceIP = newSettings["device_ip"] as string;
       this.log("Settings", "IP", newDeviceIP);
 
-      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim())) {
-        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/; // "pattern" property in json doesn't appear to work
-        if (!ipv4Regex.test(newDeviceIP)) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.invalid_ip_format"));
-        }
+      if (newDeviceIP && !_.isEmpty(newDeviceIP.trim()) && !isValidIPv4(newDeviceIP)) {
+        throwLocalizedError(new LocalizedError("error.validation.invalid_ip_format"));
       }
     }
 
@@ -112,7 +111,7 @@ export class BatteryDevice extends SonnenDevice {
       if (useAutoDiscovery) {
         const discoveredIP = await SonnenBatterieClient.findBatteryIP(this.getData().id);
         if (!discoveredIP) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("connection.error_no_batteries"));
+          throwLocalizedError(new LocalizedError("connection.error_no_batteries"));
         }
       }
     }
@@ -127,7 +126,7 @@ export class BatteryDevice extends SonnenDevice {
         const scheduleRaw = newSettings["time_of_use_schedule"] as string;
         const isScheduleEmpty = !scheduleRaw || scheduleRaw.trim() === '';
         if (!isScheduleEmpty) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
+          throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
         }
       }
 
@@ -145,7 +144,7 @@ export class BatteryDevice extends SonnenDevice {
             await this.createSonnenBatterieClient().clearSchedule();
           }
         } catch (error) {
-          LocalizationService.getInstance().throwLocalizedError(error);
+          throwLocalizedError(error);
         }
       }
     }
@@ -157,7 +156,28 @@ export class BatteryDevice extends SonnenDevice {
       try {
         await this.createSonnenBatterieClient().setPrognosisCharging(prognosisCharging);
       } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error);
+        throwLocalizedError(error);
+      }
+    }
+
+    if (_.contains(changedKeys, "backup_buffer")) {
+      const newBackupBuffer = Math.round(+(newSettings["backup_buffer"] as number));
+      this.log("Settings", "BackupBuffer", newBackupBuffer, this.lastReportedBackupBuffer);
+
+      if (!isValidBackupBuffer(newBackupBuffer)) {
+        throwLocalizedError(new LocalizedError("error.validation.backupBuffer"));
+      }
+
+      // Skip the battery round-trip when the change was just a programmatic sync
+      // of a value the battery itself reported (setSettings re-enters onSettings)
+      if (!shouldWriteBackupBufferToBattery(newBackupBuffer, this.lastReportedBackupBuffer)) {
+        this.log("Settings", "BackupBuffer", newBackupBuffer, "already active on battery, skipping battery write");
+      } else {
+        try {
+          await this.createSonnenBatterieClient().setBackupBuffer(newBackupBuffer);
+        } catch (error) {
+          throwLocalizedError(error);
+        }
       }
     }
 
@@ -169,10 +189,10 @@ export class BatteryDevice extends SonnenDevice {
         const installationDate = new Date(newInstallationDate);
         const localNow = this.getLocalNow();
         if (isNaN(installationDate.getTime())) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.invalid_installation_date_format"));
+          throwLocalizedError(new LocalizedError("error.validation.invalid_installation_date_format"));
         }
         if (installationDate > localNow) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.installation_date_in_future"));
+          throwLocalizedError(new LocalizedError("error.validation.installation_date_in_future"));
         }
       }
     }
@@ -189,12 +209,12 @@ export class BatteryDevice extends SonnenDevice {
       if (!isScheduleEmpty) {
         // Prevent applying schedule if operating mode is being changed away from Time-of-Use
         if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
+          throwLocalizedError(new LocalizedError("error.validation.operatingModeChangeMismatchingTimeOfUseScheduleChange"));
         }
         
         // Only allow setting schedule when either current or new operating mode is Time-of-Use
         if (currentOperatingMode !== mode_ToU && newOperatingMode !== mode_ToU) {
-          LocalizationService.getInstance().throwLocalizedError(new LocalizedError("error.validation.timeOfUseChangeMismatchingOperatingMode"));
+          throwLocalizedError(new LocalizedError("error.validation.timeOfUseChangeMismatchingOperatingMode"));
         }
       }
       
@@ -202,7 +222,7 @@ export class BatteryDevice extends SonnenDevice {
         const schedule = TimeOfUseSchedule.fromString(scheduleRaw);
         await this.createSonnenBatterieClient().setSchedule(schedule);
       } catch (error) {
-        LocalizationService.getInstance().throwLocalizedError(error);
+        throwLocalizedError(error);
       }
     }
 
@@ -251,6 +271,7 @@ export class BatteryDevice extends SonnenDevice {
       'capacity_remaining_capability',
       'operating_mode_capability',
       'prognosis_charging_capability',
+      'backup_buffer_capability',
       'state_core_control_module_capability',
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
@@ -450,7 +471,7 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValueSafe('battery_charging_state', chargingState);
 
       this.setCapabilityValueSafe('number_battery_capability', numberBatteries);
-      this.setCapabilityValueSafe('eclipse_capability', LocalizationService.getInstance().resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
+      this.setCapabilityValueSafe('eclipse_capability', resolveCircleColor(latestDataJson.ic_status['Eclipse Led']));
       this.setCapabilityValueSafe('state_bms_capability', this.homey.__('stateBms.' + latestDataJson.ic_status.statebms.replaceAll(' ', '')) ?? latestDataJson.ic_status.statebms);
       this.setCapabilityValueSafe('state_inverter_capability', this.homey.__('stateInverter.' + latestDataJson.ic_status.stateinverter.replaceAll(' ', '')) ?? latestDataJson.ic_status.stateinverter);
       this.setCapabilityValueSafe('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
@@ -465,7 +486,7 @@ export class BatteryDevice extends SonnenDevice {
       await this.setSettingsSafe({ 'time_of_use_schedule': tou.toString() });
 
       const operatingMode = configurationsJson['EM_OperatingMode'];
-      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(operatingMode);
+      const operatingModeText = resolveOperatingMode(operatingMode);
       this.setCapabilityValueSafe('operating_mode_capability', operatingModeText);
 
       const reportedOperatingMode = operatingMode === undefined || operatingMode === null ? null : String(operatingMode);
@@ -482,7 +503,18 @@ export class BatteryDevice extends SonnenDevice {
       const prognosisChargingMode = prognosisCharging === "1";
       this.setCapabilityValueSafe('prognosis_charging_capability', prognosisChargingMode);
       await this.setSettingsSafe({ 'prognosis_charging': prognosisChargingMode });
-      
+
+      const backupBuffer = parseBackupBuffer(configurationsJson['EM_USOC']);
+      if (backupBuffer !== null) {
+        this.lastReportedBackupBuffer = backupBuffer;
+        this.setCapabilityValueSafe('backup_buffer_capability', backupBuffer);
+        if (+(this.getSetting('backup_buffer') ?? NaN) !== backupBuffer) {
+          await this.setSettingsSafe({ 'backup_buffer': backupBuffer });
+        }
+      } else {
+        this.log('Battery reported no usable backup buffer value, keeping the last known value');
+      }
+
       if (shouldUpdateBatteryData) {
         currentState.addCycleCountSnapshot(currentUpdate, batteryJson.cyclecount);
       }

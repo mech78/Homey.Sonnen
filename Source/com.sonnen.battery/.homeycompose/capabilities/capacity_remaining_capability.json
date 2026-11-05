@@ -4,7 +4,8 @@
     "en": "Charged",
     "da": "Opladet",
     "de": "Gespeichert",
-    "nl": "Opgeslagen"
+    "nl": "Opgeslagen",
+    "sv": "Laddat"
   },
   "uiComponent": "sensor",
   "getable": true,

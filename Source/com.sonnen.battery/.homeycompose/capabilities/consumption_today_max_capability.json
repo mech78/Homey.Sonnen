@@ -4,7 +4,8 @@
     "en": "▲d consumption",	
     "da": "▲d forbrug",
     "de": "▲d Verbrauch",
-    "nl": "▲d verbruik"
+    "nl": "▲d verbruik",
+    "sv": "▲d förbrukning"
   },
   "uiComponent": "sensor",
   "getable": true,

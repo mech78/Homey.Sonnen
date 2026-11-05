@@ -4,7 +4,8 @@
     "en": "Solar Power",
     "da": "Solenergi",
     "de": "Solarleistung",
-    "nl": "Zonnevermogen"
+    "nl": "Zonnevermogen",
+    "sv": "Solenergi"
   },
   "uiComponent": "sensor",
   "getable": true,

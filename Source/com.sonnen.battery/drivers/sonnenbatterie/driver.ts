@@ -1,6 +1,6 @@
 import Homey from 'homey';
 import { SonnenDriver } from '../../lib/SonnenDriver';
-import { LocalizationService } from '../../lib/LocalizationService';
+import { throwLocalizedError, resolveOperatingMode } from '../../lib/LocalizationService';
 import { TimeOfUseSchedule } from '../../domain/TimeOfUse';
 import { BatteryDevice } from './device';
 module.exports = class SonnenBatterieDriver extends SonnenDriver {
@@ -54,6 +54,9 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     this.homey.flow.getActionCard("set_manual_discharging")
       .registerRunListener(async (args) => this.handleManualDischarging(args));     
 
+    this.homey.flow.getActionCard("set_backup_buffer")
+      .registerRunListener(async (args) => this.handleSetBackupBuffer(args));
+
     // Device-specific conditions:
 
     this.homey.flow.getConditionCard("battery_level_below")
@@ -61,6 +64,12 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
     this.homey.flow.getConditionCard("battery_level_above_or_equal")
       .registerRunListener(async (args) => this.handleBatteryLevelAboveOrEqual(args));
+
+    this.homey.flow.getConditionCard("backup_buffer_above_or_equal")
+      .registerRunListener(async (args) => this.handleBackupBufferAboveOrEqual(args));
+
+    this.homey.flow.getConditionCard("backup_buffer_below")
+      .registerRunListener(async (args) => this.handleBackupBufferBelow(args));
 
     this.homey.flow.getConditionCard("operating_mode_equals")
       .registerRunListener(async (args) => this.handleOperatingModeEquals(args));
@@ -102,7 +111,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -115,7 +124,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -131,7 +140,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -150,7 +159,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -163,21 +172,21 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
       
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
   private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: string }): Promise<void> {
     try {
       await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
-      const operatingModeText = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
+      const operatingModeText = resolveOperatingMode(args.operating_mode);
 
       const notification = this.homey.__("notification.changedOperatingMode", { operatingMode: operatingModeText });
       await this.homey.notifications.createNotification({ excerpt: notification });
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -191,7 +200,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -204,7 +213,7 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
     }
   }
 
@@ -217,7 +226,21 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
       await args.device.refreshState(); // immediately refresh UI
     } catch (error) {
-      LocalizationService.getInstance().throwLocalizedError(error);
+      throwLocalizedError(error);
+    }
+  }
+
+  private async handleSetBackupBuffer(args: { device: BatteryDevice, percent: number }): Promise<void> {
+    const percent = Math.round(args.percent);
+    try {
+      await this.createSonnenBatterieClient(args.device).setBackupBuffer(percent);
+
+      const notification = this.homey.__("notification.changedBackupBuffer", { percent: percent });
+      await this.homey.notifications.createNotification({ excerpt: notification });
+
+      await args.device.refreshState(); // immediately refresh UI
+    } catch (error) {
+      throwLocalizedError(error);
     }
   }
 
@@ -239,9 +262,27 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
     return (batteryLevel >= argPercentage);
   }
 
+  private async handleBackupBufferAboveOrEqual(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const backupBuffer = +args.device.getCapabilityValue("backup_buffer_capability");
+
+    this.log("CONDITION", "backup buffer above or equal", backupBuffer, "arg", argPercentage, "VALID", backupBuffer >= argPercentage);
+
+    return (backupBuffer >= argPercentage);
+  }
+
+  private async handleBackupBufferBelow(args: { device: Homey.Device, percentage: number }): Promise<boolean> {
+    const argPercentage = args.percentage;
+    const backupBuffer = +args.device.getCapabilityValue("backup_buffer_capability");
+
+    this.log("CONDITION", "backup buffer below", backupBuffer, "arg", argPercentage, "VALID", backupBuffer < argPercentage);
+
+    return (backupBuffer < argPercentage);
+  }
+
   private async handleOperatingModeEquals(args: { device: Homey.Device, operating_mode: string }): Promise<boolean> {
     const currentOperatingMode = args.device.getCapabilityValue("operating_mode_capability");
-    const operatingMode = LocalizationService.getInstance().resolveOperatingMode(args.operating_mode);
+    const operatingMode = resolveOperatingMode(args.operating_mode);
 
     const result = currentOperatingMode === operatingMode;
     this.log("CONDITION", "operating mode", currentOperatingMode, "arg", args.operating_mode, "->", operatingMode, "VALID", result);

@@ -4,7 +4,8 @@
     "en": "BMS",
     "da": "BMS",
     "de": "BMS",
-    "nl": "BMS"
+    "nl": "BMS",
+    "sv": "BMS"
   },
   "uiComponent": "sensor",
   "getable": true,

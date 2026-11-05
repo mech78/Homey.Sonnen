@@ -4,7 +4,8 @@
     "en": "∑ Production",
     "da": "∑ Produktion",
     "de": "∑ Erzeugung",
-    "nl": "∑ Productie"
+    "nl": "∑ Productie",
+    "sv": "∑ produktion"
   },
   "uiComponent": "sensor",
   "getable": true,

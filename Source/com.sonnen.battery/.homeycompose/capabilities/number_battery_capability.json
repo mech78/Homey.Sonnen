@@ -4,7 +4,8 @@
     "en": "# Batteries",
     "da": "# Batterier",
     "de": "# Batterien",
-    "nl": "# Batterijen"
+    "nl": "# Batterijen",
+    "sv": "# Batterier"
   },
   "uiComponent": "sensor",
   "getable": true,

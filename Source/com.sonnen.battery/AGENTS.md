@@ -28,12 +28,18 @@ npm run lint:fix
 
 ### Testing Commands
 ```bash
-# Note: This project doesn't appear to have unit tests configured
-# Testing is typically done through Homey app testing procedures
+# Run the jest unit tests (tests/ directory)
+npm test
+
+# Run tests in watch mode
+npx jest --watch
+
+# Run a single test file
+npx jest tests/BackupBuffer.test.ts
 ```
 
 Running a single test:
-Since this project doesn't have explicit unit tests configured, testing is done through Homey's app development framework:
+Use `npx jest tests/SomeFile.test.ts` directly; `npm test` runs all suites. On-device verification is still done through Homey's app development framework:
 1. Install the app on a Homey device or simulator
 2. Find more Homey CLI documentation: https://apps.developer.homey.app/the-basics/getting-started
 3. Use Homey CLI for development testing:
@@ -47,8 +53,12 @@ homey app run
 # Run the app in development mode without Docker
 homey app run --remote
 
-# Validate app structure
-homey app validate
+# Validate app structure against the strictest (publish) rules,
+# offline and without modifying tracked files
+homey app validate --level publish
+
+# Package the app offline into .homeybuild/ (no login, no deploy)
+homey app build
 ```
 
 ## Code Style Guidelines
@@ -175,6 +185,12 @@ LocalizationService.getInstance().throwLocalizedError(
 );
 ```
 
+The app is localized in **5 languages: en, nl, de, da, sv**. When adding any user-facing string, provide it in all 5 languages:
+- Locale keys: add to every file in `/locales/` (all locale files must keep identical key sets).
+- Compose sources: capability titles in `.homeycompose/capabilities/`, flow cards and driver names in `drivers/*/driver*.compose.json`, app name/description in `.homeycompose/app.json` — add the new language key wherever `en`/`da` blocks exist.
+- Changelog: every new entry in `.homeychangelog.json` must include the note in all 5 languages, matching the style of existing entries (short, imperative; product names, technical terms and version references stay untranslated).
+- `app.json` is a generated build artifact — regenerate it (see Development Workflow) after changing compose language strings; never hand-edit it.
+
 ### State Management
 Device state is managed through the `SonnenState` class and persisted using Homey settings:
 ```typescript
@@ -218,11 +234,37 @@ Key enforced rules from eslint.config.js:
 
 ## Development Workflow
 
-1. Make changes to TypeScript files
+1. Make changes to TypeScript files (and compose sources, see below)
 2. Run `npm run lint` to check code style
 3. Run `npm run build` to compile
-4. Test using Homey CLI or deploy to device
-5. Commit changes with descriptive messages
+4. Run `homey app validate --level publish` from `Source/com.sonnen.battery/` — it works offline (no Homey login), re-merges the compose layer in memory, compiles TypeScript and applies publish-level manifest validation (the same check the GitHub Actions CI in `.github/workflows/ci.js.yml` enforces) without modifying any tracked file. Skip this step when the immediate next action is `homey app run` or `homey app install` — both validate implicitly, so a separate run would only delay the deployment (the publish-level check then happens remotely via CI on push)
+5. If compose sources were changed, verify `homey app build` produces no diff to the committed `app.json` — or commit the regenerated `app.json` together with the compose change (see below)
+6. Test using Homey CLI or deploy to device
+7. Commit changes with descriptive messages
+
+### Lint gate (mandatory before every commit)
+
+The workflow fails CI when `npm run lint` reports **any error**, so never commit with one. Verify the gate by reading the summary line of the lint output — the line starting with `✖`:
+
+```text
+✖ 28 problems (0 errors, 28 warnings)   ← 0 errors here = gate passed
+```
+
+Two traps to avoid:
+
+- Do **not** judge the result by the line `0 errors and N warnings potentially fixable with the --fix option` — it only counts auto-fixable issues. Non-fixable errors (e.g. `no-duplicate-imports`) are invisible there while still failing CI.
+- Warnings do not fail CI (the lint script has no `--max-warnings` flag), but keep them from growing: new `no-explicit-any` warnings in changed code should be fixed or explicitly justified.
+
+The commit is only made once the summary line shows `0 errors`. If an error appears, fix it (or fold the changed imports into one statement etc.) and re-run — do not push expecting CI to tolerate it.
+
+### Generated manifest (`app.json`)
+
+`Source/com.sonnen.battery/app.json` is **generated**: `homey app install` and `homey app run` merge the compose layer (`.homeycompose/**`, `drivers/*/driver*.compose.json`) and write the result back into `app.json`. Consequences:
+
+- Never hand-edit `app.json`; treat it as a build artifact. Fix compose sources instead.
+- When `homey app install`/`run` produces a modified `app.json`, the regenerated file belongs in the same commit that changed the underlying compose sources.
+- The `.homeybuild/` directory is a local build artifact and stays uncommitted.
+- `homey app build` packages the app offline (no login) into `.homeybuild/` without touching tracked files — useful as a pre-commit sanity check.
 
 ## Troubleshooting Tips
 

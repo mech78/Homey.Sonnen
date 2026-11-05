@@ -4,7 +4,8 @@
     "en": "To battery",
     "da": "Til batteri",
     "de": "Ladeleistung",
-    "nl": "Naar batterij"
+    "nl": "Naar batterij",
+    "sv": "Till batteriet"
   },
   "uiComponent": "sensor",
   "getable": true,

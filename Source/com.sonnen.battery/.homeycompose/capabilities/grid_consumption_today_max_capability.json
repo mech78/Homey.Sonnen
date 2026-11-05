@@ -4,7 +4,8 @@
     "en": "▲d Grid consumption",
     "da": "▲d Netforbrug",
     "de": "▲d Netzbezug",
-    "nl": "▲d Roosterverbruik"
+    "nl": "▲d Roosterverbruik",
+    "sv": "▲d nätförbrukning"
   },
   "uiComponent": "sensor",
   "getable": true,

@@ -1,13 +1,17 @@
-import { LocalizationService } from '../lib/LocalizationService';
+import {
+  initialize,
+  resolveCircleColor,
+  resolveOperatingMode,
+} from '../lib/LocalizationService';
 
-type InitApp = Parameters<typeof LocalizationService.initialize>[0];
+type InitApp = Parameters<typeof initialize>[0];
 
-describe('LocalizationService', () => {
+describe('LocalizationService helpers', () => {
   const translateMock = jest.fn((_key: string): string | undefined => undefined);
 
   beforeAll(() => {
     const app = { homey: { __: translateMock } } as unknown as InitApp;
-    LocalizationService.initialize(app);
+    initialize(app);
   });
 
   beforeEach(() => {
@@ -28,25 +32,25 @@ describe('LocalizationService', () => {
         key === 'operatingMode.' + mode ? translation : key
       );
 
-      expect(LocalizationService.getInstance().resolveOperatingMode(mode)).toBe(translation);
+      expect(resolveOperatingMode(mode)).toBe(translation);
       expect(translateMock).toHaveBeenCalledWith('operatingMode.' + mode);
     });
 
     it('should fall back to the raw mode for an unknown mode instead of the i18n key', () => {
       // Homey's __() returns the requested key when the translation is missing
-      expect(LocalizationService.getInstance().resolveOperatingMode('8')).toBe('8');
+      expect(resolveOperatingMode('8')).toBe('8');
     });
 
     it('should fall back to the raw mode when the translation is undefined', () => {
       translateMock.mockReturnValue(undefined);
 
-      expect(LocalizationService.getInstance().resolveOperatingMode('8')).toBe('8');
+      expect(resolveOperatingMode('8')).toBe('8');
     });
 
     it('should fall back to the raw mode when the translation is empty', () => {
       translateMock.mockReturnValue('');
 
-      expect(LocalizationService.getInstance().resolveOperatingMode('8')).toBe('8');
+      expect(resolveOperatingMode('8')).toBe('8');
     });
   });
 
@@ -56,18 +60,14 @@ describe('LocalizationService', () => {
         key === 'eclipseLed.SolidRed' ? 'solid red' : key
       );
 
-      expect(
-        LocalizationService.getInstance().resolveCircleColor({ 'Solid Red': true })
-      ).toBe('solid red');
+      expect(resolveCircleColor({ 'Solid Red': true })).toBe('solid red');
       expect(translateMock).toHaveBeenCalledWith('eclipseLed.SolidRed');
     });
 
     it('should fall back to the state name for an unknown Eclipse LED state', () => {
       // No translation for 'SolidMagenta', so __() returns the key itself;
       // the fallback is the state name as found on the Eclipse LED record
-      expect(
-        LocalizationService.getInstance().resolveCircleColor({ 'Solid Magenta': true })
-      ).toBe('Solid Magenta');
+      expect(resolveCircleColor({ 'Solid Magenta': true })).toBe('Solid Magenta');
     });
 
     it('should resolve to Unknown when no LED state is active', () => {
@@ -75,28 +75,30 @@ describe('LocalizationService', () => {
         key === 'eclipseLed.Unknown' ? 'unknown' : key
       );
 
-      expect(LocalizationService.getInstance().resolveCircleColor({ 'Solid Red': false })).toBe('unknown');
+      expect(resolveCircleColor({ 'Solid Red': false })).toBe('unknown');
       expect(translateMock).toHaveBeenCalledWith('eclipseLed.Unknown');
     });
 
-    it('should resolve to Unknown when the Eclipse LED state is missing', () => {
+    it('should resolve to Unknown when the eclipse LED object is missing', () => {
       translateMock.mockImplementation((key: string) =>
         key === 'eclipseLed.Unknown' ? 'unknown' : key
       );
 
-      expect(LocalizationService.getInstance().resolveCircleColor(null as unknown as Record<string, boolean>)).toBe('unknown');
+      expect(resolveCircleColor(null as unknown as Record<string, boolean>)).toBe('unknown');
+      expect(translateMock).toHaveBeenCalledWith('eclipseLed.Unknown');
     });
   });
 
   describe('initialization', () => {
     it('should throw when initialized twice', () => {
-      // Load a fresh module copy so the singleton starts uninitialized
+      // Load a fresh module copy so the module reference starts uninitialized
       jest.resetModules();
-      const { LocalizationService: FreshService } = require('../lib/LocalizationService');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fresh = require('../lib/LocalizationService');
 
       const app = { homey: { __: () => undefined } } as unknown as InitApp;
-      expect(() => FreshService.initialize(app)).not.toThrow();
-      expect(() => FreshService.initialize(app)).toThrow('has already been initialized');
+      expect(() => fresh.initialize(app)).not.toThrow();
+      expect(() => fresh.initialize(app)).toThrow('has already been initialized');
     });
   });
 });

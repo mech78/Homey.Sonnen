@@ -4,7 +4,8 @@
     "en": "Capacity",
     "da": "Kapacitet",
     "de": "Kapazität",
-    "nl": "Capaciteit"
+    "nl": "Capaciteit",
+    "sv": "Kapacitet"
   },
   "uiComponent": "sensor",
   "getable": true,

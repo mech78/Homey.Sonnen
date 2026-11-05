@@ -1,0 +1,122 @@
+{
+  "settings": {
+    "title": "Sonnen Batterie-inställningar",
+    "subtitle": "Ange information för API-användning.",
+    "baseUrl": "Bas-URL",
+    "save": "Spara ändringar",
+    "remark": "Anmärkning:",
+    "note": "Starta om appen efter att du har ändrat inställningarna.",
+    "frequency": "Datahämntningsintervall",
+    "frequencyHint": "Frekvens i sekunder. Hur ofta data ska hämtas. Standard är 30 sekunder (30).",
+    "authToken": "Auth-Token",
+    "authTokenHint": "Auth-Token hämtas via inloggning på ditt Sonnen Batterie-system.",
+    "savedOk": "Inställningarna har sparats. Du kan stänga dialogrutan nu.",
+    "savedError": "Ett fel uppstod.",
+    "saveDeviceState": "Spara aktuellt enhetstillstånd",
+    "deviceState": "Enhetstillstånd (JSON)",
+    "deviceStateSaved": "Enhetstillståndet har sparats.\nStatus: __lastUpdate__",
+    "deviceStateNotSaved": "Kunde inte spara enhetstillståndet.",
+    "settings.deviceState": "Enhetstillstånd (JSON)",
+    "settings.deviceStateHint": "Visar aktuellt enhetstillstånd.",
+    "resetCycleCountQueues": "Återställ cykelräknare",
+    "confirmResetCycleCountQueues": "Är du säker på att du vill återställa cykelräknarna? Detta raderar all ackumulerad cykelhistorik.",
+    "cycleCountQueuesReset": "Cykelräknarna har återställts.",
+    "cycleCountQueuesNotReset": "Kunde inte återställa cykelräknarna."
+  },
+  "eclipseLed": {
+    "BlinkingRed": "blinkar rött",
+    "PulsingGreen": "pulsar grönt",
+    "PulsingOrange": "pulsar orange",
+    "PulsingWhite": "pulsar vitt",
+    "SolidRed": "jämnt rött",
+    "Unknown": "okänt"
+  },
+  "stateBms": {
+    "ready": "klar",
+    "notready": "inte klar",
+    "error": "fel",
+    "initializing": "initierar",
+    "init": "initierar"
+  },
+  "stateCoreControlModule": {
+    "ready": "klar",
+    "notready": "inte klar",
+    "init": "initierar",
+    "reinit": "initierar",
+    "ongrid": "på nätet",
+    "offgrid": "från nätet",
+    "criticalerror": "allvarligt fel"
+  },
+  "stateInverter": {
+    "running": "igång",
+    "notready": "inte klar",
+    "error": "fel"
+  },
+  "widget": {
+    "production": "Produktion",
+    "consumption": "Förbrukning",
+    "fromBattery": "Från batteriet",
+    "fromGrid": "Från nätet"
+  },
+  "device": {
+    "solarPanel": "solpanel",
+    "battery": "batteri",
+    "gridMeter": "nät",
+    "householdMeter": "hushåll"
+  },
+  "operatingMode": {
+    "1": "Manuell",
+    "2": "Egenförbrukning",
+    "6": "Modulutbyggnad (30%)",
+    "10": "Time-of-Use",
+    "11": "Automatisk - Optimering"
+  },
+  "connection": {
+    "error_no_batteries": "Kunde inte hitta några Sonnen-batterier på det lokala nätverket. Kontrollera ditt nätverk och försök igen eller ange en statisk IP-adress.",
+    "notification_ip_changed": "Sonnen Batterie: IP-adressändring upptäckt. Ny IP-adress: __ip__.",
+    "error": "Kunde inte ansluta till batteriet med IP '__ip__'. Kontrollera enhetens inställningar."
+  },
+  "notification": {
+    "setToU": "Sonnen Batterie: Ställer in Time-of-Use mellan __startTime__ och __endTime__ med max. __maxPower__W.",
+    "clearedToU": "Sonnen Batterie: Tog bort Time-of-Use-schemat.",
+    "pausedToU": "Sonnen Batterie: Pausade Time-of-Use mellan __startTime__ och __endTime__.",
+    "startedToU": "Sonnen Batterie: Startade Time-of-Use (24 h).",
+    "setToUSchedule": "Sonnen Batterie: Ställde in Time-of-Use-schema:\n__schedule__.",
+    "changedOperatingMode": "Sonnen Batterie: Ställde in driftsläget till \"__operatingMode__\".",
+    "changedPrognosisCharging": "Sonnen Batterie: Ställde in prognosbaserad laddning __state__.",
+    "changedBackupBuffer": "Sonnen Batterie: Ställde in reservbufferten till __percent__ %.",
+    "startedManualCharging": "Sonnen Batterie: Startade manuell laddning med max. __maxPower__W.",
+    "startedManualDischarging": "Sonnen Batterie: Startade manuell urladdning med max. __maxPower__W."
+  },
+  "active": "aktiv",
+  "inactive": "inaktiv",
+  "error": {
+    "unknown": "Ett okänt fel uppstod: __error__.",
+    "http": {
+      "400": "Felaktig begäran. Ogiltiga data eller valideringen misslyckades.",
+      "401": "Ogiltig Auth-Token eller nödvändigt läs-/skriv-API är inte aktiverat.",
+      "403": "Åtkomst nekad.",
+      "other": "Oväntat HTTP-fel __statusCode__ uppstod."
+    },
+    "vpp_priority": "Inte tillåtet eftersom SonnenVPP har prioritet.",
+    "validation": {
+      "failed": "Valideringen misslyckades: __error__.",
+      "failed_to_parse_schedule_json": "Kunde inte tolka schema-JSON: __error__.",
+      "invalid_schedule_format": "Ogiltigt schemaformat: en array förväntades.",
+      "invalid_schedule_item_missing_properties": "Ogiltigt schemaobjekt på index __index__: obligatoriska egenskaper saknas.",
+      "invalid_schedule_item_time_format": "Ogiltigt schemaobjekt på index __index__: ogiltigt tidsformat: \"__time__\".",
+      "invalid_schedule_line_format": "Ogiltigt radformat i schemat: \"__line__\".",
+      "invalid_ip_format": "Ogiltigt IP-adressformat. Ange en giltig IPv4-adress.",
+      "invalid_installation_date_format": "Ogiltigt datumformat för installationsdatum. Använd ett giltigt datumformat.",
+      "installation_date_in_future": "Installationsdatumet kan inte ligga i framtiden.",
+      "backupBuffer": "Ogiltigt värde för reservbuffert. Giltiga värden är 0 (inaktiverat) eller 5-100 %.",
+      "ToU": {
+        "invalid threshold": "Time-of-Use max. effekt måste vara mellan 0 och 46000 watt.",
+        "ToU windows overlap": "Time-of-Use-fönster får inte överlappa."
+      },
+      "operatingModeChangeMismatchingTimeOfUseScheduleChange": "Driftsläget kan inte ändras bort från Time-of-Use samtidigt som ett icke-tomt Time-of-Use-schema ställs in.",
+      "timeOfUseChangeMismatchingOperatingModeChange": "Time-of-Use-schema kan inte tillämpas när driftsläget ändras bort från Time-of-Use.",
+      "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use-schema kan bara ställas in när driftsläget är Time-of-Use."
+    }
+  }
+}

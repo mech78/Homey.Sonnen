@@ -84,6 +84,7 @@
     "setToUSchedule": "Sonnen Batterie: Time-of-Use Zeitplan gesetzt:\n__schedule__.",
     "changedOperatingMode": "Sonnen Batterie: Betriebsmodus auf \"__operatingMode__\" gesetzt.",
     "changedPrognosisCharging": "Sonnen Batterie: Prognosebasiertes Laden auf __state__ gesetzt.",
+    "changedBackupBuffer": "Sonnen Batterie: Backup-Puffer auf __percent__ % eingestellt.",
     "startedManualCharging": "Sonnen Batterie: Manuelles Laden mit max. __maxPower__W gestartet.",
     "startedManualDischarging": "Sonnen Batterie: Manuelles Entladen mit max. __maxPower__W gestartet."
   },
@@ -114,7 +115,8 @@
       "timeOfUseChangeMismatchingOperatingModeChange": "Time-of-Use Zeitplan kann nicht angewendet werden, wenn der Betriebsmodus weg von Time-of-Use geändert wird.",
       "timeOfUseChangeMismatchingOperatingMode": "Time-of-Use Zeitplan kann nur festgelegt werden, wenn der Betriebsmodus Time-of-Use ist.",
       "invalid_installation_date_format": "Ungültiges Installationsdatum. Bitte verwenden Sie ein gültiges Datumsformat.",
-      "installation_date_in_future": "Das Installationsdatum darf nicht in der Zukunft liegen."
+      "installation_date_in_future": "Das Installationsdatum darf nicht in der Zukunft liegen.",
+      "backupBuffer": "Ungültiger Backup-Puffer-Wert. Gültige Werte sind 0 (deaktiviert) oder 5–100 %."
     }
   }
 }
