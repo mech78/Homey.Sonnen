@@ -1491,6 +1491,16 @@
               }
             },
             {
+              "id": "manual",
+              "title": {
+                "en": "Manual",
+                "de": "Manuell",
+                "da": "Manuel",
+                "nl": "Handmatig",
+                "sv": "Manuell"
+              }
+            },
+            {
               "id": "self_consumption",
               "title": {
                 "en": "Self consumption",
@@ -1501,6 +1511,16 @@
               }
             },
             {
+              "id": "module_extension",
+              "title": {
+                "en": "Module extension (30%)",
+                "de": "Modulerweiterung (30%)",
+                "da": "Moduludvidelse (30%)",
+                "nl": "Module uitbreiding (30%)",
+                "sv": "Modulutbyggnad (30%)"
+              }
+            },
+            {
               "id": "time_of_use",
               "title": {
                 "en": "Time-of-Use",
@@ -1508,6 +1528,16 @@
                 "da": "Time-of-Use",
                 "nl": "Time-of-Use",
                 "sv": "Time-of-Use"
+              }
+            },
+            {
+              "id": "optimization",
+              "title": {
+                "en": "Automatic - Optimization",
+                "de": "Automatik - Optimierung",
+                "da": "Automatisk - Optimering",
+                "nl": "Automatisch - Optimalisatie",
+                "sv": "Automatisk - Optimering"
               }
             }
           ]
@@ -1721,6 +1751,49 @@
                 "da": "Indtast datoen for, hvornår batteriet blev installeret i ISO 8601-format (f.eks. 2020-12-31). Bruges til at beregne det gennemsnitlige daglige antal cyklusser siden installationen. Installationsdatoen kan findes i batteridetaljeskærmen i Sonnen-appen.",
                 "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App.",
                 "sv": "Ange datumet då batteriet installerades i ISO 8601-format (t.ex. 2020-12-31). Används för att beräkna det genomsnittliga dagliga antalet cykler sedan installationen. Installationsdatumet finns i batteridetaljerna i Sonnen-appen."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "EMS support",
+            "de": "EMS-Unterstützung",
+            "da": "EMS-understøttelse",
+            "nl": "EMS-ondersteuning",
+            "sv": "EMS-stöd"
+          },
+          "children": [
+            {
+              "id": "show_target_power_controls",
+              "type": "checkbox",
+              "value": false,
+              "label": {
+                "en": "Show target power controls",
+                "de": "Zielleistungssteuerung anzeigen",
+                "da": "Vis styring af måleffekt",
+                "nl": "Streefvermogenbesturing tonen",
+                "sv": "Vis måleffektsstyrning"
+              },
+              "hint": {
+                "en": "Toggles the EMS control components on/off.",
+                "de": "Schaltet die EMS-Steuerelemente an/aus.",
+                "da": "Slår EMS-styringselementerne til/fra.",
+                "nl": "Schakelt de EMS-besturingselementen in/uit.",
+                "sv": "Slår EMS-styrningskomponenterna av/på."
+              }
+            },
+            {
+              "id": "hems_support_note",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Note",
+                "de": "Hinweis",
+                "da": "Bemærkning",
+                "nl": "Opmerking",
+                "sv": "Anmärkning"
               }
             }
           ]
@@ -2626,6 +2699,104 @@
       },
       "uiComponent": "sensor",
       "getable": true,
+      "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
+    },
+    "target_power_mode_visible_capability": {
+      "type": "enum",
+      "title": {
+        "en": "Target Power Mode (Homey control)",
+        "de": "Zielleistungsmodus (Homey-Steuerung)",
+        "da": "Måleffekttilstand (Homey-styring)",
+        "nl": "Streefvermogenmodus (Homey-sturing)",
+        "sv": "Måleffektsläge (Homey-styrning)"
+      },
+      "uiComponent": "picker",
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "homey",
+          "title": {
+            "en": "Homey",
+            "de": "Homey",
+            "da": "Homey",
+            "nl": "Homey",
+            "sv": "Homey"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual",
+            "de": "Manuell",
+            "da": "Manuel",
+            "nl": "Handmatig",
+            "sv": "Manuell"
+          }
+        },
+        {
+          "id": "self_consumption",
+          "title": {
+            "en": "Self consumption",
+            "de": "Eigenverbrauch",
+            "da": "Eget forbrug",
+            "nl": "Eigen verbruik",
+            "sv": "Egen förbrukning"
+          }
+        },
+        {
+          "id": "module_extension",
+          "title": {
+            "en": "Module extension (30%)",
+            "de": "Modulerweiterung (30%)",
+            "da": "Moduludvidelse (30%)",
+            "nl": "Module uitbreiding (30%)",
+            "sv": "Modulutbyggnad (30%)"
+          }
+        },
+        {
+          "id": "time_of_use",
+          "title": {
+            "en": "Time-of-Use",
+            "de": "Time-of-Use",
+            "da": "Time-of-Use",
+            "nl": "Time-of-Use",
+            "sv": "Time-of-Use"
+          }
+        },
+        {
+          "id": "optimization",
+          "title": {
+            "en": "Automatic - Optimization",
+            "de": "Automatik - Optimierung",
+            "da": "Automatisk - Optimering",
+            "nl": "Automatisch - Optimalisatie",
+            "sv": "Automatisk - Optimering"
+          }
+        }
+      ],
+      "insights": false,
+      "icon": "/assets/images/svg/switch-button-svgrepo-com.svg"
+    },
+    "target_power_visible_capability": {
+      "type": "number",
+      "title": {
+        "en": "Target Power (Homey control)",
+        "de": "Zielleistung (Homey-Steuerung)",
+        "da": "Måleffekt (Homey-styring)",
+        "nl": "Streefvermogen (Homey-sturing)",
+        "sv": "Måleffekt (Homey-styrning)"
+      },
+      "uiComponent": "slider",
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "W"
+      },
+      "min": -46000,
+      "max": 46000,
+      "step": 100,
+      "insights": false,
       "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
     },
     "to_battery_capability": {

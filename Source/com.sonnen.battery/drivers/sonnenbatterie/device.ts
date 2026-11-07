@@ -11,6 +11,17 @@ import { CapabilityChangeRequest, ControlActions, TargetPowerMode, TargetPowerMo
 import { PowerLimits, SiteLimitsResponse, TargetPowerLimits } from '../../domain/TargetPowerLimits';
 
 export class BatteryDevice extends SonnenDevice {
+  /**
+   * Visible counterparts of the hidden Homey Energy target power capabilities.
+   * They are opt-in via the "show_target_power_controls" device setting and
+   * only exist on the device while that setting is enabled; the hidden
+   * built-ins always remain present so flows and EMS apps keep working.
+   */
+  private static readonly TARGET_POWER_VISIBLE_CAPABILITIES: readonly string[] = [
+    'target_power_visible_capability',
+    'target_power_mode_visible_capability',
+  ];
+
   private state: SonnenState = new SonnenState();
   private updateIntervalId: NodeJS.Timeout | undefined;
   private refreshTimeoutId: NodeJS.Timeout | undefined;
@@ -21,6 +32,8 @@ export class BatteryDevice extends SonnenDevice {
   private manualStandbyActive: boolean = false;
   private targetPowerModeState: TargetPowerModeValue | null = null;
   private isApplyingTargetPowerChange: boolean = false;
+  private targetPowerControlsRegistered: boolean = false;
+  private targetPowerVisibleControlsRegistered: boolean = false;
   private powerLimits: PowerLimits = { charge: TargetPowerLimits.DEFAULT_LIMIT_W, discharge: TargetPowerLimits.DEFAULT_LIMIT_W, source: 'default' };
   private siteLimitsCache: { fetchedAt: number; data: SiteLimitsResponse | null } | null = null;
   private readonly siteLimitsCacheTtlMillis = 600000; // 10 minutes
@@ -31,8 +44,8 @@ export class BatteryDevice extends SonnenDevice {
 
     await this.gracefullyAddOrRemoveCapabilities();
     this.registerResetMetersButton();
-    this.registerTargetPowerControls();
-    await this.initializeTargetPowerCapabilities();
+    await this.syncTargetPowerControls(this.getSetting('show_target_power_controls') === true);
+    await this.updateHemsSupportNote();
 
     const batteryPullInterval = +(this.homey.settings.get('BatteryPullInterval') || '30');
 
@@ -236,6 +249,13 @@ export class BatteryDevice extends SonnenDevice {
       }
     }
 
+    if (_.contains(changedKeys, "show_target_power_controls")) {
+      const showTargetPowerControls = newSettings["show_target_power_controls"] === true;
+      this.log("Settings", "ShowTargetPowerControls", showTargetPowerControls);
+
+      await this.syncTargetPowerControls(showTargetPowerControls);
+    }
+
     // Defer the refresh until this onSettings handler has completed: the
     // setSettings() calls inside loadLatestState() fail with
     // "Cannot set Settings while this.onSettings is still pending"
@@ -270,13 +290,95 @@ export class BatteryDevice extends SonnenDevice {
   /**
    * Registers the combined listener for the Homey Energy `target_power` and
    * `target_power_mode` capabilities so mode + power changes are applied as a
-   * single debounced operation (Homey recommends 500ms).
+   * single debounced operation (Homey recommends 500ms). Once-guarded: it
+   * must only run after the capabilities are present, and Homey offers no
+   * unregister, so repeated calls would leak duplicate handlers.
    */
   private registerTargetPowerControls() {
+    if (this.targetPowerControlsRegistered) {
+      return;
+    }
+    this.targetPowerControlsRegistered = true;
     this.registerMultipleCapabilityListener(['target_power', 'target_power_mode'], async (values) => {
       this.log('Target power change:', JSON.stringify(values));
       await this.handleTargetPowerChange(values);
     }, 500);
+  }
+
+  /**
+   * Registers the combined listener for the visible counterparts of the
+   * target power capabilities. Called as soon as the twins are added (opt-in
+   * setting enabled or restored on init). Registration happens only once per
+   * session: Homey offers no unregister, and a removed capability stops
+   * producing events anyway, so re-registering on every toggle would leak
+   * duplicate handlers.
+   */
+  private registerTargetPowerVisibleControls() {
+    if (this.targetPowerVisibleControlsRegistered) {
+      return;
+    }
+    this.targetPowerVisibleControlsRegistered = true;
+    this.registerMultipleCapabilityListener([...BatteryDevice.TARGET_POWER_VISIBLE_CAPABILITIES], async (values) => {
+      this.log('Target power change (visible controls):', JSON.stringify(values));
+      await this.handleTargetPowerChange(values);
+    }, 500);
+  }
+
+  /**
+   * Synchronizes the target power capabilities with the EMS toggle.
+   * Platform-adaptive, because the built-in capabilities cannot be hidden on
+   * Homey Pro 2019 (that platform ignores `uiComponent` overrides for
+   * built-in capabilities, in the manifest merge as well as at runtime):
+   *
+   * - Homey Pro (Early 2023) and newer honor `uiComponent: null`: the
+   *   built-ins stay on the device (hidden from the card) so flows and EMS
+   *   apps always work, and the toggle adds/removes the visible twin
+   *   capabilities.
+   * - Homey Pro 2019: the toggle controls the built-ins' presence instead —
+   *   off removes them entirely (clean metrics card, no EMS control), on
+   *   adds them back. They render visibly and are already interactive there,
+   *   so the twins would only duplicate them and are never used.
+   */
+  private async syncTargetPowerControls(show: boolean): Promise<void> {
+    const builtInsAlwaysPresent = this.isEnergyFullySupported();
+    await this.syncTargetPowerBuiltInPresence(show || builtInsAlwaysPresent);
+    if (show || builtInsAlwaysPresent) {
+      this.registerTargetPowerControls();
+      await this.initializeTargetPowerCapabilities();
+    }
+    if (builtInsAlwaysPresent) {
+      await this.syncTargetPowerVisibleCapabilities(show);
+    }
+  }
+
+  /**
+   * Adds or removes the hidden built-in target power capabilities.
+   */
+  private async syncTargetPowerBuiltInPresence(present: boolean): Promise<void> {
+    for (const capability of ['target_power', 'target_power_mode']) {
+      const has = this.hasCapability(capability);
+      if (present && !has) {
+        await this.addCapability(capability);
+      } else if (!present && has) {
+        await this.removeCapability(capability);
+      }
+    }
+  }
+
+  /**
+   * The settings dialog is a static manifest declaration, but the EMS
+   * toggle's effect differs per Homey generation. This app-maintained
+   * label-type note renders the platform-specific sentence next to the
+   * toggle, so each user only ever reads the sentence that is true for
+   * their Homey.
+   */
+  private async updateHemsSupportNote(): Promise<void> {
+    const note = this.isEnergyFullySupported()
+      ? this.homey.__('settings.hemsSupportNoteVisibility')
+      : this.homey.__('settings.hemsSupportNotePresence');
+    if (this.getSetting('hems_support_note') !== note) {
+      await this.setSettingsSafe({ hems_support_note: note });
+    }
   }
 
   /**
@@ -304,6 +406,75 @@ export class BatteryDevice extends SonnenDevice {
     }
   }
 
+  /**
+   * Adds or removes the visible counterparts of the hidden Homey Energy
+   * target power capabilities, depending on the user's opt-in setting.
+   * The hidden built-ins stay present either way so flows and EMS apps
+   * keep working; the twins only mirror them on the device UI.
+   *
+   * Only called on platforms that honor the `uiComponent: null` hide for
+   * built-in capabilities (Homey Pro (Early 2023) and newer); Homey Pro 2019
+   * manages the built-ins' presence instead and never uses the twins.
+   */
+  private async syncTargetPowerVisibleCapabilities(show: boolean): Promise<void> {
+    for (const capability of BatteryDevice.TARGET_POWER_VISIBLE_CAPABILITIES) {
+      const has = this.hasCapability(capability);
+      if (show && !has) {
+        await this.addCapability(capability);
+      } else if (!show && has) {
+        await this.removeCapability(capability);
+      }
+    }
+
+    if (show) {
+      this.registerTargetPowerVisibleControls();
+
+      // Freshly added capabilities start without a value: seed them from the
+      // canonical hidden built-ins so the card opens on the real state. The
+      // twins were just added (or already exist) when show is true, so the
+      // writes go through setCapabilityValueSafe directly. The echo guard
+      // keeps the seeding writes from re-entering the control pipeline as
+      // if the user had dragged the slider.
+      const power = this.getCapabilityValue('target_power');
+      const mode = this.targetPowerModeState ?? (this.getCapabilityValue('target_power_mode') as TargetPowerModeValue | null);
+      this.isApplyingTargetPowerChange = true;
+      try {
+        await this.setCapabilityValueSafe('target_power_visible_capability', power === null || power === undefined ? 0 : +power);
+        await this.setCapabilityValueSafe('target_power_mode_visible_capability', mode ?? 'self_consumption');
+      } finally {
+        this.isApplyingTargetPowerChange = false;
+      }
+    }
+  }
+
+  /**
+   * Writes a value onto a visible twin of the target power capabilities.
+   * The twins are opt-in and may be absent; unlike setCapabilityValueSafe
+   * this must not log for every user without the setting enabled.
+   */
+  private async setTargetPowerTwinValueIfPresent(capability: string, value: unknown): Promise<void> {
+    if (!this.hasCapability(capability)) {
+      return;
+    }
+    await this.setCapabilityValueSafe(capability, value);
+  }
+
+  /**
+   * Extracts the requested power/mode from a capability change batch, no
+   * matter which surface it arrived on (hidden built-in or visible twin).
+   * A value written on the twin takes precedence when both surfaces report
+   * in the same debounced batch; a twin value of 0 is a legitimate request
+   * and must not be skipped.
+   */
+  private static readControlRequest(values: Record<string, unknown>): CapabilityChangeRequest {
+    const power = values.target_power_visible_capability ?? values.target_power ?? null;
+    const mode = values.target_power_mode_visible_capability ?? values.target_power_mode ?? null;
+    return {
+      targetPower: power !== null && power !== undefined ? +power : null,
+      targetPowerMode: mode as TargetPowerModeValue | null,
+    };
+  }
+
   private async handleTargetPowerChange(values: Record<string, unknown>): Promise<void> {
     if (this.isApplyingTargetPowerChange) {
       // Ignore echoes of the capability values this handler writes itself
@@ -312,10 +483,7 @@ export class BatteryDevice extends SonnenDevice {
       return;
     }
 
-    const request: CapabilityChangeRequest = {
-      targetPower: values.target_power !== undefined && values.target_power !== null ? +values.target_power : null,
-      targetPowerMode: (values.target_power_mode ?? null) as TargetPowerModeValue | null,
-    };
+    const request = BatteryDevice.readControlRequest(values);
     const currentPowerValue = this.getCapabilityValue('target_power');
     const plan = TargetPowerMode.planCapabilityChange(request, {
       currentMode: this.targetPowerModeState,
@@ -336,12 +504,21 @@ export class BatteryDevice extends SonnenDevice {
       // Keep the stored capability state honest: the battery silently accepts
       // oversized setpoints, so write back the clamped value, and reset the
       // stored power when Homey control is left so a later re-entry starts
-      // from idle instead of re-applying a stale setpoint.
+      // from idle instead of re-applying a stale setpoint. The request may
+      // have arrived from either surface (hidden built-in or visible twin),
+      // so the final state is mirrored onto both.
       if (plan.resetTargetPower) {
         await this.setCapabilityValueSafe('target_power', 0);
-      } else if (plan.writeBackPower !== null) {
-        await this.setCapabilityValueSafe('target_power', plan.writeBackPower);
+        await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', 0);
+      } else {
+        const finalPower = plan.writeBackPower !== null ? plan.writeBackPower : request.targetPower;
+        if (finalPower !== null) {
+          await this.setCapabilityValueSafe('target_power', finalPower);
+          await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', finalPower);
+        }
       }
+      await this.setCapabilityValueSafe('target_power_mode', plan.requestedMode);
+      await this.setTargetPowerTwinValueIfPresent('target_power_mode_visible_capability', plan.requestedMode);
     } finally {
       this.isApplyingTargetPowerChange = false;
     }
@@ -443,9 +620,7 @@ export class BatteryDevice extends SonnenDevice {
       'total_cyclecount_capability',
       'cyclecount_7day_rate_capability',
       'cyclecount_30day_rate_capability',
-      'cyclecount_installation_rate_capability',
-      'target_power',
-      'target_power_mode'
+      'cyclecount_installation_rate_capability'
     ];
 
     if (this.isEnergyFullySupported()) {
@@ -495,9 +670,18 @@ export class BatteryDevice extends SonnenDevice {
     // "Invalid Capability: ..." on each poll. Repair them on every init.
     const manifestCapabilities: string[] = this.driver.manifest?.capabilities ?? [];
     const conditionalEnergyCapabilities = ['meter_power.charged', 'meter_power.discharged'];
+    // The target power capabilities are opt-in on Homey Pro 2019 (their
+    // presence is controlled by the EMS toggle, see syncTargetPowerControls):
+    // never self-heal them there while the toggle is off, or every boot would
+    // resurrect the tiles.
+    const targetPowerCapabilities = ['target_power', 'target_power_mode'];
+    const targetPowerOptOut = !this.isEnergyFullySupported() && this.getSetting('show_target_power_controls') !== true;
     for (const capability of manifestCapabilities) {
       // Sub-capabilities of the energy system are conditionally managed above
       if (!this.isEnergyFullySupported() && conditionalEnergyCapabilities.includes(capability)) {
+        continue;
+      }
+      if (targetPowerOptOut && targetPowerCapabilities.includes(capability)) {
         continue;
       }
       if (!this.hasCapability(capability)) {
@@ -684,12 +868,16 @@ export class BatteryDevice extends SonnenDevice {
       }
 
       // Sync the target_power_mode capability with externally changed operating
-      // modes (sonnen app, battery UI, other flows). Modes without a capability
-      // representation (e.g. 6 = module extension) leave the capability unchanged.
-      const targetPowerMode = TargetPowerMode.fromOperatingMode(operatingMode);
-      if (targetPowerMode !== null && targetPowerMode !== this.targetPowerModeState) {
+      // modes (sonnen app, battery UI, other flows). Skipped while the
+      // built-ins are absent (Homey Pro 2019 with the EMS toggle off).
+      // Modes without a capability representation leave the capability
+      // unchanged. Manual (mode 1) is ambiguous (homey and manual are both
+      // its carriers), so the resolution is sticky on the current state.
+      const targetPowerMode = TargetPowerMode.resolveExternalMode(operatingMode, this.targetPowerModeState);
+      if (targetPowerMode !== null && this.hasCapability('target_power_mode') && targetPowerMode !== this.targetPowerModeState) {
         this.log('Syncing target_power_mode with externally changed operating mode', operatingMode, '->', targetPowerMode);
         await this.setCapabilityValueSafe('target_power_mode', targetPowerMode);
+        await this.setTargetPowerTwinValueIfPresent('target_power_mode_visible_capability', targetPowerMode);
         this.targetPowerModeState = targetPowerMode;
       }
 

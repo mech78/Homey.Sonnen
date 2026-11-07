@@ -163,6 +163,49 @@
   {
     "type": "group",
     "label": {
+      "en": "EMS support",
+      "de": "EMS-Unterstützung",
+      "da": "EMS-understøttelse",
+      "nl": "EMS-ondersteuning",
+      "sv": "EMS-stöd"
+    },
+    "children": [
+      {
+        "id": "show_target_power_controls",
+        "type": "checkbox",
+        "value": false,
+        "label": {
+          "en": "Show target power controls",
+          "de": "Zielleistungssteuerung anzeigen",
+          "da": "Vis styring af måleffekt",
+          "nl": "Streefvermogenbesturing tonen",
+          "sv": "Vis måleffektsstyrning"
+        },
+        "hint": {
+          "en": "Toggles the EMS control components on/off.",
+          "de": "Schaltet die EMS-Steuerelemente an/aus.",
+          "da": "Slår EMS-styringselementerne til/fra.",
+          "nl": "Schakelt de EMS-besturingselementen in/uit.",
+          "sv": "Slår EMS-styrningskomponenterna av/på."
+        }
+      },
+      {
+        "id": "hems_support_note",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Note",
+          "de": "Hinweis",
+          "da": "Bemærkning",
+          "nl": "Opmerking",
+          "sv": "Anmärkning"
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
       "en": "Connection",
       "de": "Verbindung",
       "da": "Forbindelse",

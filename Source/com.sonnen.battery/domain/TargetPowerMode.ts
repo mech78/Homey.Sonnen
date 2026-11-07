@@ -4,12 +4,16 @@ import { PowerLimits, TargetPowerLimits } from './TargetPowerLimits';
 /**
  * Values supported by the Homey `target_power_mode` capability.
  *
- * `homey` is Homey's reserved value for "Homey is in control". The device-side
- * values intentionally mirror the sonnenBatterie operating modes that are
- * relevant for power management, so the capability doubles as a standardized
+ * `homey` is Homey's reserved value for "an EMS (Homey Energy / EMS apps) is
+ * in control". The device-side values mirror the sonnenBatterie operating
+ * modes one-to-one, so the capability doubles as a standardized
  * representation of the battery's operating mode.
+ *
+ * `homey` and `manual` both map to battery operating mode 1 (Manual): the
+ * difference is purely who is expected to write setpoints — an EMS for
+ * `homey`, the sonnen app for `manual`.
  */
-export type TargetPowerModeValue = 'homey' | 'self_consumption' | 'time_of_use';
+export type TargetPowerModeValue = 'homey' | 'manual' | 'self_consumption' | 'module_extension' | 'time_of_use' | 'optimization';
 
 /**
  * Direction of a sonnenBatterie setpoint command.
@@ -18,18 +22,24 @@ export type SetpointDirection = 'charge' | 'discharge';
 
 /**
  * sonnenBatterie `EM_OperatingMode` values used by this feature:
- * 1 = Manual (carrier mode for Homey-controlled setpoints),
- * 2 = Self consumption, 10 = Time-of-Use.
+ * 1 = Manual (carrier mode for setpoints, held by both `homey` and `manual`),
+ * 2 = Self consumption, 6 = Module extension (30%), 10 = Time-of-Use,
+ * 11 = Automatic - Optimization.
  */
 const MODE_TO_OPERATING_MODE: Record<Exclude<TargetPowerModeValue, 'homey'>, string> = {
+  manual: '1',
   self_consumption: '2',
+  module_extension: '6',
   time_of_use: '10',
+  optimization: '11',
 };
 
 const OPERATING_MODE_TO_MODE: Record<string, TargetPowerModeValue> = {
-  '1': 'homey',
+  '1': 'manual',
   '2': 'self_consumption',
+  '6': 'module_extension',
   '10': 'time_of_use',
+  '11': 'optimization',
 };
 
 /**
@@ -140,13 +150,37 @@ export class TargetPowerMode {
   }
 
   /**
-   * Maps a sonnenBatterie `EM_OperatingMode` back to a `target_power_mode`
-   * value, or null when the operating mode has no capability representation
-   * (e.g. mode 6 "Module extension"). Used to sync the capability with
-   * externally changed modes.
+   * Maps a sonnenBatterie `EM_OperatingMode` back to the device-side
+   * `target_power_mode` value, or null when the operating mode has no
+   * capability representation. Mode 1 (Manual) maps to `manual`, the
+   * device-side carrier; `homey` is Homey-side state and is never derived
+   * from the battery. Use {@link resolveExternalMode} for polling syncs,
+   * which must keep an established `homey`/`manual` state sticky.
    */
   public static fromOperatingMode(operatingMode: string): TargetPowerModeValue | null {
     return OPERATING_MODE_TO_MODE[String(operatingMode)] ?? null;
+  }
+
+  /**
+   * Resolves the `target_power_mode` value for an operating mode read from
+   * the battery (polling sync), given the current capability state.
+   *
+   * Battery mode 1 (Manual) is ambiguous: both `homey` and `manual` are its
+   * carriers. The rule is sticky:
+   * - current state `homey` or `manual` → keep it (Homey control implies
+   *   battery mode 1; a user-chosen `manual` must survive polling)
+   * - any other current state → the battery was switched to Manual
+   *   externally (e.g. via the sonnen app), so Homey is not in control
+   *
+   * All other operating modes map directly; unknown modes yield null and the
+   * caller must leave the capability unchanged.
+   */
+  public static resolveExternalMode(operatingMode: string, currentState: TargetPowerModeValue | null): TargetPowerModeValue | null {
+    const mode = String(operatingMode);
+    if (mode === '1' && (currentState === 'homey' || currentState === 'manual')) {
+      return currentState;
+    }
+    return OPERATING_MODE_TO_MODE[mode] ?? null;
   }
 
   /**

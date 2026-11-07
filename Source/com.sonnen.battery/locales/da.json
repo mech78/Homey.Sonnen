@@ -21,7 +21,9 @@
     "resetCycleCountQueues": "Nulstil cyklustællinger",
     "confirmResetCycleCountQueues": "Er du sikker på, at du vil nulstille cyklustællingerne? Dette sletter al akkumuleret cyklus-tællingshistorik.",
     "cycleCountQueuesReset": "Cyklustællinger nulstillet med succes.",
-    "cycleCountQueuesNotReset": "Kunne ikke nulstille cyklustællinger."
+    "cycleCountQueuesNotReset": "Kunne ikke nulstille cyklustællinger.",
+    "hemsSupportNoteVisibility": "EMS-styringen forbliver aktiv; denne indstilling viser eller skjuler kun måleffektstyringen på enhedskortet. Flows og EMS-apps fungerer i begge tilfælde.",
+    "hemsSupportNotePresence": "Er denne indstilling slået fra, deaktiveres EMS-styringen af batteriet helt, herunder flow-kortene og EMS-apps; slået til tilføjes måleffektstyringen til enhedskortet."
   },
   "eclipseLed": {
     "Blinkingblue": "blinkende blå",
