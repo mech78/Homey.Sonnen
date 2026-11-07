@@ -24,11 +24,22 @@
     "cycleCountQueuesNotReset": "Kunne ikke nulstille cyklustællinger."
   },
   "eclipseLed": {
+    "Blinkingblue": "blinkende blå",
+    "BlinkingGreen": "blinkende grøn",
+    "Blinkingpurple": "blinkende lilla",
+    "BlinkingsonnenGradient": "blinkende sonnen-farveovergang",
     "BlinkingRed": "blinkende rød",
+    "Pulsingblue": "pulserende blå",
     "PulsingGreen": "pulserende grøn",
     "PulsingOrange": "pulserende orange",
+    "Pulsingpurple": "pulserende lilla",
+    "PulsingRed": "pulserende rød",
     "PulsingWhite": "pulserende hvid",
+    "RotatingsonnenGradient": "roterende sonnen-farveovergang",
+    "Solidblue": "fast blå",
+    "Solidpurple": "fast lilla",
     "SolidRed": "fast rød",
+    "SolidsonnenGradient": "fast sonnen-farveovergang",
     "Unknown": "ukendt"
   },
   "stateBms": {

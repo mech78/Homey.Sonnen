@@ -24,11 +24,22 @@
     "cycleCountQueuesNotReset": "Kunde inte återställa cykelräknarna."
   },
   "eclipseLed": {
+    "Blinkingblue": "blinkar blått",
+    "BlinkingGreen": "blinkar grönt",
+    "Blinkingpurple": "blinkar lila",
+    "BlinkingsonnenGradient": "blinkar i sonnen-färgövergång",
     "BlinkingRed": "blinkar rött",
+    "Pulsingblue": "pulsar blått",
     "PulsingGreen": "pulsar grönt",
     "PulsingOrange": "pulsar orange",
+    "Pulsingpurple": "pulsar lila",
+    "PulsingRed": "pulsar rött",
     "PulsingWhite": "pulsar vitt",
+    "RotatingsonnenGradient": "roterar i sonnen-färgövergång",
+    "Solidblue": "jämnt blått",
+    "Solidpurple": "jämnt lila",
     "SolidRed": "jämnt rött",
+    "SolidsonnenGradient": "jämnt i sonnen-färgövergång",
     "Unknown": "okänt"
   },
   "stateBms": {
