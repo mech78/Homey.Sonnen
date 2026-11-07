@@ -99,6 +99,9 @@
       "other": "Oväntat HTTP-fel __statusCode__ uppstod."
     },
     "vpp_priority": "Inte tillåtet eftersom SonnenVPP har prioritet.",
+    "standby": {
+      "not_supported": "Standby stöds inte av detta Sonnen Batterie-system."
+    },
     "validation": {
       "failed": "Valideringen misslyckades: __error__.",
       "failed_to_parse_schedule_json": "Kunde inte tolka schema-JSON: __error__.",
@@ -110,6 +113,8 @@
       "invalid_installation_date_format": "Ogiltigt datumformat för installationsdatum. Använd ett giltigt datumformat.",
       "installation_date_in_future": "Installationsdatumet kan inte ligga i framtiden.",
       "backupBuffer": "Ogiltigt värde för reservbuffert. Giltiga värden är 0 (inaktiverat) eller 5-100 %.",
+      "invalid_setpoint_power": "Ogiltigt effektvärde: __power__. Endast hela icke-negativa watt stöds.",
+      "invalid_target_power_mode": "Ogiltigt måleffektsläge: __mode__.",
       "ToU": {
         "invalid threshold": "Time-of-Use max. effekt måste vara mellan 0 och 46000 watt.",
         "ToU windows overlap": "Time-of-Use-fönster får inte överlappa."

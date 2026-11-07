@@ -77,13 +77,15 @@
         "en": "Target Power (Homey control)",
         "de": "Zielleistung (Homey-Steuerung)",
         "da": "Måleffekt (Homey-styring)",
-        "nl": "Streefvermogen (Homey-sturing)"
+        "nl": "Streefvermogen (Homey-sturing)",
+        "sv": "Måleffekt (Homey-styrning)"
       },
       "desc": {
         "en": "Signed power setpoint in watts for Homey-controlled operation: positive charges, negative discharges, 0 idles. Hidden from the UI; set via flows, EMS apps or the 'Set target power' card.",
         "de": "Signiertes Sollleistung in Watt für die Homey-gesteuerte Nutzung: positiv lädt, negativ entlädt, 0 bedeutet Leerlauf. In der UI ausgeblendet; über Flows, EMS-Apps oder die Karte 'Zielleistung setzen' setzen.",
         "da": "Signeret effektmålværdi i watt til Homey-styret drift: positiv oplader, negativ aflader, 0 er inaktiv. Skjult i UI; angives via flows, EMS-apps eller 'Angiv måleffekt'-kortet.",
-        "nl": "Getekend streefvermogen in watt voor Homey-gestuurde werking: positief laadt, negatief ontlaadt, 0 is inactief. Verborgen in de UI; instelbaar via flows, EMS-apps of de 'Streefvermogen instellen'-kaart."
+        "nl": "Getekend streefvermogen in watt voor Homey-gestuurde werking: positief laadt, negatief ontlaadt, 0 is inactief. Verborgen in de UI; instelbaar via flows, EMS-apps of de 'Streefvermogen instellen'-kaart.",
+        "sv": "Signerad effektinställning i watt för Homey-styrd drift: positiv laddar, negativ urladdar, 0 är vila. Dold i UI; ställs in via flöden, EMS-appar eller kortet 'Ställ in måleffekt'."
       }
     },
     "target_power_mode": {
@@ -95,7 +97,8 @@
             "en": "Homey",
             "de": "Homey",
             "da": "Homey",
-            "nl": "Homey"
+            "nl": "Homey",
+            "sv": "Homey"
           }
         },
         {
@@ -104,7 +107,8 @@
             "en": "Self consumption",
             "de": "Eigenverbrauch",
             "da": "Eget forbrug",
-            "nl": "Eigen verbruik"
+            "nl": "Eigen verbruik",
+            "sv": "Egen förbrukning"
           }
         },
         {
@@ -113,7 +117,8 @@
             "en": "Time-of-Use",
             "de": "Time-of-Use",
             "da": "Time-of-Use",
-            "nl": "Time-of-Use"
+            "nl": "Time-of-Use",
+            "sv": "Time-of-Use"
           }
         }
       ]
