@@ -15,8 +15,19 @@ describe('TargetPowerMode', () => {
       expect(TargetPowerMode.toOperatingMode('time_of_use')).toBe('10');
     });
 
-    it('should round-trip with fromOperatingMode for all supported values', () => {
-      const modes = ['homey', 'self_consumption', 'time_of_use'] as const;
+    it('should map manual, module_extension and optimization to their modes', () => {
+      expect(TargetPowerMode.toOperatingMode('manual')).toBe('1');
+      expect(TargetPowerMode.toOperatingMode('module_extension')).toBe('6');
+      expect(TargetPowerMode.toOperatingMode('optimization')).toBe('11');
+    });
+
+    it('should share the Manual (1) carrier between homey and manual', () => {
+      expect(TargetPowerMode.toOperatingMode('homey')).toBe('1');
+      expect(TargetPowerMode.toOperatingMode('manual')).toBe('1');
+    });
+
+    it('should round-trip with fromOperatingMode for all device-side values', () => {
+      const modes = ['manual', 'self_consumption', 'module_extension', 'time_of_use', 'optimization'] as const;
       for (const mode of modes) {
         expect(TargetPowerMode.fromOperatingMode(TargetPowerMode.toOperatingMode(mode))).toBe(mode);
       }
@@ -28,18 +39,54 @@ describe('TargetPowerMode', () => {
   });
 
   describe('fromOperatingMode (state sync)', () => {
-    it('should map operating modes 1, 2 and 10', () => {
-      expect(TargetPowerMode.fromOperatingMode('1')).toBe('homey');
+    it('should map the device-side operating modes', () => {
+      expect(TargetPowerMode.fromOperatingMode('1')).toBe('manual');
       expect(TargetPowerMode.fromOperatingMode('2')).toBe('self_consumption');
+      expect(TargetPowerMode.fromOperatingMode('6')).toBe('module_extension');
       expect(TargetPowerMode.fromOperatingMode('10')).toBe('time_of_use');
+      expect(TargetPowerMode.fromOperatingMode('11')).toBe('optimization');
     });
 
-    it('should return null for modes without a capability representation (e.g. module extension)', () => {
-      expect(TargetPowerMode.fromOperatingMode('6')).toBeNull();
+    it('should never derive homey from a battery operating mode', () => {
+      // homey is Homey-side state; even mode 1 maps to the device-side manual
+      expect(TargetPowerMode.fromOperatingMode('1')).toBe('manual');
+    });
+
+    it('should return null for modes without a capability representation', () => {
+      expect(TargetPowerMode.fromOperatingMode('8')).toBeNull();
+      expect(TargetPowerMode.fromOperatingMode('99')).toBeNull();
     });
 
     it('should accept numeric input', () => {
       expect(TargetPowerMode.fromOperatingMode(10 as unknown as string)).toBe('time_of_use');
+    });
+  });
+
+  describe('resolveExternalMode (polling sync with sticky Manual carrier)', () => {
+    it('should keep homey sticky when the battery reports Manual (mode 1)', () => {
+      expect(TargetPowerMode.resolveExternalMode('1', 'homey')).toBe('homey');
+    });
+
+    it('should keep a user-chosen manual sticky when the battery reports mode 1', () => {
+      expect(TargetPowerMode.resolveExternalMode('1', 'manual')).toBe('manual');
+    });
+
+    it('should resolve an external switch to Manual from another strategy as manual', () => {
+      expect(TargetPowerMode.resolveExternalMode('1', 'self_consumption')).toBe('manual');
+      expect(TargetPowerMode.resolveExternalMode('1', 'time_of_use')).toBe('manual');
+      expect(TargetPowerMode.resolveExternalMode('1', null)).toBe('manual');
+    });
+
+    it('should map the strategy modes directly regardless of the current state', () => {
+      expect(TargetPowerMode.resolveExternalMode('2', 'homey')).toBe('self_consumption');
+      expect(TargetPowerMode.resolveExternalMode('6', 'manual')).toBe('module_extension');
+      expect(TargetPowerMode.resolveExternalMode('10', 'homey')).toBe('time_of_use');
+      expect(TargetPowerMode.resolveExternalMode('11', null)).toBe('optimization');
+    });
+
+    it('should return null for unknown operating modes', () => {
+      expect(TargetPowerMode.resolveExternalMode('8', 'homey')).toBeNull();
+      expect(TargetPowerMode.resolveExternalMode('99', null)).toBeNull();
     });
   });
 
@@ -192,6 +239,73 @@ describe('TargetPowerMode', () => {
       });
     });
 
+    it('should switch the operating mode for the full strategy set when leaving homey mode', () => {
+      const expectations: Record<string, string> = {
+        manual: '1',
+        self_consumption: '2',
+        module_extension: '6',
+        time_of_use: '10',
+        optimization: '11',
+      };
+      for (const [requestedMode, operatingMode] of Object.entries(expectations)) {
+        const actions = TargetPowerMode.planPowerControl({
+          ...base,
+          previousMode: 'homey',
+          requestedMode: requestedMode as never,
+        });
+
+        expect(actions.operatingMode).toBe(operatingMode);
+        expect(actions.setpoint).toBeNull();
+      }
+    });
+
+    it('should re-assert the Manual carrier mode when homey control starts from manual', () => {
+      // manual and homey share carrier mode 1; the idempotent re-write guards
+      // against a stale capability state (external change between polls)
+      const actions = TargetPowerMode.planPowerControl({
+        ...base,
+        previousMode: 'manual',
+        requestedMode: 'homey',
+        requestedPower: 1200,
+      });
+
+      expect(actions.operatingMode).toBe('1');
+      expect(actions.setpoint).toEqual({ direction: 'charge', watts: 1200 });
+    });
+
+    it('should disable standby and drop the setpoint when handing control from homey to manual', () => {
+      const actions = TargetPowerMode.planPowerControl({
+        ...base,
+        previousMode: 'homey',
+        requestedMode: 'manual',
+        currentPower: 2500,
+        standbyActive: true,
+      });
+
+      expect(actions).toEqual({
+        disableStandby: true,
+        enableStandby: false,
+        operatingMode: '1',
+        setpoint: null,
+      });
+    });
+
+    it('should do nothing when manual is unchanged', () => {
+      const actions = TargetPowerMode.planPowerControl({
+        ...base,
+        previousMode: 'manual',
+        requestedMode: 'manual',
+        currentPower: 3000,
+      });
+
+      expect(actions).toEqual({
+        disableStandby: false,
+        enableStandby: false,
+        operatingMode: null,
+        setpoint: null,
+      });
+    });
+
     it('should disable standby when leaving homey mode while standby is active', () => {
       const actions = TargetPowerMode.planPowerControl({
         ...base,
@@ -307,6 +421,30 @@ describe('TargetPowerMode', () => {
       expect(plan.requestedMode).toBe('self_consumption');
       expect(plan.actions.setpoint).toBeNull();
       expect(plan.resetTargetPower).toBe(true);
+    });
+
+    it('should also reset the stored power when Homey control is handed to manual', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'manual' },
+        { ...baseState, currentMode: 'homey', currentPower: -1500 },
+      );
+
+      expect(plan.requestedMode).toBe('manual');
+      expect(plan.actions.setpoint).toBeNull();
+      expect(plan.actions.disableStandby).toBe(false);
+      expect(plan.resetTargetPower).toBe(true);
+    });
+
+    it('should hand EMS control to manual-side homey with an implied mode switch', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: 2500, targetPowerMode: null },
+        { ...baseState, currentMode: 'manual', currentPower: 0 },
+      );
+
+      expect(plan.requestedMode).toBe('homey');
+      expect(plan.actions.operatingMode).toBe('1');
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 2500 });
+      expect(plan.resetTargetPower).toBe(false);
     });
 
     it('should not reset the stored power when the same change writes a new power value', () => {

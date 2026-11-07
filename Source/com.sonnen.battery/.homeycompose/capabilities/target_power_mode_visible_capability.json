@@ -1,0 +1,77 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Target Power Mode (Homey control)",
+    "de": "Zielleistungsmodus (Homey-Steuerung)",
+    "da": "Måleffekttilstand (Homey-styring)",
+    "nl": "Streefvermogenmodus (Homey-sturing)",
+    "sv": "Måleffektsläge (Homey-styrning)"
+  },
+  "uiComponent": "picker",
+  "getable": true,
+  "setable": true,
+  "values": [
+    {
+      "id": "homey",
+      "title": {
+        "en": "Homey",
+        "de": "Homey",
+        "da": "Homey",
+        "nl": "Homey",
+        "sv": "Homey"
+      }
+    },
+    {
+      "id": "manual",
+      "title": {
+        "en": "Manual",
+        "de": "Manuell",
+        "da": "Manuel",
+        "nl": "Handmatig",
+        "sv": "Manuell"
+      }
+    },
+    {
+      "id": "self_consumption",
+      "title": {
+        "en": "Self consumption",
+        "de": "Eigenverbrauch",
+        "da": "Eget forbrug",
+        "nl": "Eigen verbruik",
+        "sv": "Egen förbrukning"
+      }
+    },
+    {
+      "id": "module_extension",
+      "title": {
+        "en": "Module extension (30%)",
+        "de": "Modulerweiterung (30%)",
+        "da": "Moduludvidelse (30%)",
+        "nl": "Module uitbreiding (30%)",
+        "sv": "Modulutbyggnad (30%)"
+      }
+    },
+    {
+      "id": "time_of_use",
+      "title": {
+        "en": "Time-of-Use",
+        "de": "Time-of-Use",
+        "da": "Time-of-Use",
+        "nl": "Time-of-Use",
+        "sv": "Time-of-Use"
+      }
+    },
+    {
+      "id": "optimization",
+      "title": {
+        "en": "Automatic - Optimization",
+        "de": "Automatik - Optimierung",
+        "da": "Automatisk - Optimering",
+        "nl": "Automatisch - Optimalisatie",
+        "sv": "Automatisk - Optimering"
+      }
+    }
+  ],
+  "insights": false,
+  "icon": "/assets/images/svg/switch-button-svgrepo-com.svg"
+}

@@ -21,7 +21,9 @@
     "resetCycleCountQueues": "Återställ cykelräknare",
     "confirmResetCycleCountQueues": "Är du säker på att du vill återställa cykelräknarna? Detta raderar all ackumulerad cykelhistorik.",
     "cycleCountQueuesReset": "Cykelräknarna har återställts.",
-    "cycleCountQueuesNotReset": "Kunde inte återställa cykelräknarna."
+    "cycleCountQueuesNotReset": "Kunde inte återställa cykelräknarna.",
+    "hemsSupportNoteVisibility": "EMS-styrningen förblir aktiv; denna inställning visar eller döljer bara måleffektsstyrningen på enhetskortet. Flöden och EMS-appar fungerar i båda fallen.",
+    "hemsSupportNotePresence": "När denna inställning är av stängs EMS-styrningen av batteriet av helt, inklusive flödeskorten och EMS-appar; när den är på läggs måleffektsstyrningen till på enhetskortet."
   },
   "eclipseLed": {
     "Blinkingblue": "blinkar blått",

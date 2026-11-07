@@ -21,7 +21,9 @@
     "resetCycleCountQueues": "Reset cycle counts",
     "confirmResetCycleCountQueues": "Are you sure you want to reset the cycle counts? This will delete all accumulated cycle count history.",
     "cycleCountQueuesReset": "Cycle counts reset successfully.",
-    "cycleCountQueuesNotReset": "Could not reset cycle counts."
+    "cycleCountQueuesNotReset": "Could not reset cycle counts.",
+    "hemsSupportNoteVisibility": "EMS control stays active; this setting only shows or hides the target power controls on the device card. Flows and EMS apps keep working either way.",
+    "hemsSupportNotePresence": "Toggling this off disables EMS control of the battery entirely, including the flow cards and EMS apps; toggling it on adds the target power controls to the device card."
   },
   "eclipseLed": {
     "Blinkingblue": "blinking blue",

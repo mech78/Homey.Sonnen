@@ -91,6 +91,7 @@ describe('gracefullyAddOrRemoveCapabilities (self-healing)', () => {
       },
     };
     device.isEnergyFullySupported = jest.fn(() => energyFullySupported);
+    device.getSetting = jest.fn(() => undefined);
     // Everything already exists except "some_missing_capability"
     device.hasCapability = jest.fn((capability: string) => capability !== 'some_missing_capability');
     device.addCapability = jest.fn();
@@ -140,5 +141,57 @@ describe('gracefullyAddOrRemoveCapabilities (self-healing)', () => {
     for (const capability of removed) {
       expect(manifestCapabilities).not.toContain(capability);
     }
+  });
+});
+
+describe('gracefullyAddOrRemoveCapabilities (target power opt-out on Homey Pro 2019)', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type AnyDevice = Record<string, any>;
+
+  function createTargetPowerSelfHealDevice(energyFullySupported: boolean, showToggle: boolean): AnyDevice {
+    const device = Object.create(BatteryDevice.prototype) as AnyDevice;
+    device.missingCapabilitiesWarned = new Set<string>();
+    device.log = jest.fn();
+    device.error = jest.fn();
+    device.driver = {
+      manifest: {
+        capabilities: ['measure_power', 'target_power', 'target_power_mode', 'some_missing_capability'],
+      },
+    };
+    device.isEnergyFullySupported = jest.fn(() => energyFullySupported);
+    device.getSetting = jest.fn((key: string) => (key === 'show_target_power_controls' ? showToggle : undefined));
+    // Nothing exists yet: every manifest capability is a self-healing candidate
+    device.hasCapability = jest.fn(() => false);
+    device.addCapability = jest.fn();
+    device.removeCapability = jest.fn();
+    return device;
+  }
+
+  it('does not self-heal the target power capabilities on Homey Pro 2019 with the toggle off', async () => {
+    const device = createTargetPowerSelfHealDevice(false, false);
+
+    await device.gracefullyAddOrRemoveCapabilities();
+
+    expect(device.addCapability).not.toHaveBeenCalledWith('target_power');
+    expect(device.addCapability).not.toHaveBeenCalledWith('target_power_mode');
+    expect(device.addCapability).toHaveBeenCalledWith('some_missing_capability');
+  });
+
+  it('self-heals the target power capabilities on Homey Pro 2019 with the toggle on', async () => {
+    const device = createTargetPowerSelfHealDevice(false, true);
+
+    await device.gracefullyAddOrRemoveCapabilities();
+
+    expect(device.addCapability).toHaveBeenCalledWith('target_power');
+    expect(device.addCapability).toHaveBeenCalledWith('target_power_mode');
+  });
+
+  it('always self-heals the target power capabilities on Homey Pro 2023+', async () => {
+    const device = createTargetPowerSelfHealDevice(true, false);
+
+    await device.gracefullyAddOrRemoveCapabilities();
+
+    expect(device.addCapability).toHaveBeenCalledWith('target_power');
+    expect(device.addCapability).toHaveBeenCalledWith('target_power_mode');
   });
 });

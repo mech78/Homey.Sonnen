@@ -21,7 +21,9 @@
     "resetCycleCountQueues": "Cyclus-tellingen resetten",
     "confirmResetCycleCountQueues": "Weet u zeker dat u de cyclus-tellingen wilt resetten? Dit verwijdert alle opgeslagen cyclus-telling historie.",
     "cycleCountQueuesReset": "Cyclus-tellingen succesvol gereset.",
-    "cycleCountQueuesNotReset": "Kon cyclus-tellingen niet resetten."
+    "cycleCountQueuesNotReset": "Kon cyclus-tellingen niet resetten.",
+    "hemsSupportNoteVisibility": "EMS-besturing blijft actief; deze instelling toont of verbergt alleen de streefvermogenbesturing op de apparaatkaart. Flows en EMS-apps werken in beide gevallen.",
+    "hemsSupportNotePresence": "Staat deze instelling uit, dan wordt EMS-besturing van de batterij volledig uitgeschakeld, inclusief de flowkaarten en EMS-apps; staat ze aan, dan wordt de streefvermogenbesturing aan de apparaatkaart toegevoegd."
   },
   "eclipseLed": {
     "Blinkingblue": "knipperend blauw",

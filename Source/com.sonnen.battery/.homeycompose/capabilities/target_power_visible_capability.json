@@ -1,0 +1,21 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Target Power (Homey control)",
+    "de": "Zielleistung (Homey-Steuerung)",
+    "da": "Måleffekt (Homey-styring)",
+    "nl": "Streefvermogen (Homey-sturing)",
+    "sv": "Måleffekt (Homey-styrning)"
+  },
+  "uiComponent": "slider",
+  "getable": true,
+  "setable": true,
+  "units": {
+    "en": "W"
+  },
+  "min": -46000,
+  "max": 46000,
+  "step": 100,
+  "insights": false,
+  "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
+}
