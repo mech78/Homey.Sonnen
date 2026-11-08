@@ -29,9 +29,18 @@ export class BatteryDevice extends SonnenDevice {
   private lastReportedOperatingMode: string | null = null;
   private lastReportedBackupBuffer: number | null = null;
   private missingCapabilitiesWarned = new Set<string>();
-  private manualStandbyActive: boolean = false;
   private targetPowerModeState: TargetPowerModeValue | null = null;
-  private isApplyingTargetPowerChange: boolean = false;
+  /**
+   * Tail of the target-power application chain: batches are appended via
+   * promise chaining and applied strictly one at a time, in order.
+   */
+  private targetPowerQueueWorker: Promise<void> = Promise.resolve();
+  /** Batches queued or in flight (liveness signal for the verification). */
+  private pendingTargetPowerBatches: number = 0;
+  /** The state the last processed batch wrote (no-op/echo filter). */
+  private lastWrittenTargetPowerState: { power: number | null; mode: TargetPowerModeValue | null } | null = null;
+  private targetPowerVerifyTimeoutId: NodeJS.Timeout | undefined;
+  private readonly targetPowerVerificationDelayMillis = 1500;
   private targetPowerControlsRegistered: boolean = false;
   private targetPowerVisibleControlsRegistered: boolean = false;
   private powerLimits: PowerLimits = { charge: TargetPowerLimits.DEFAULT_LIMIT_W, discharge: TargetPowerLimits.DEFAULT_LIMIT_W, source: 'default' };
@@ -86,6 +95,10 @@ export class BatteryDevice extends SonnenDevice {
       this.homey.clearTimeout(this.refreshTimeoutId);
       this.refreshTimeoutId = undefined;
     }
+    if (this.targetPowerVerifyTimeoutId) {
+      this.homey.clearTimeout(this.targetPowerVerifyTimeoutId);
+      this.targetPowerVerifyTimeoutId = undefined;
+    }
     this.saveDeviceState();
 
     super.onDeleted();
@@ -99,6 +112,15 @@ export class BatteryDevice extends SonnenDevice {
     if (this.refreshTimeoutId) {
       this.homey.clearTimeout(this.refreshTimeoutId);
       this.refreshTimeoutId = undefined;
+    }
+    // Let an in-flight target power application finish so the battery is not
+    // left with a half-applied control sequence and stale capability values.
+    // The verification timer is cleared only afterwards: the final batch
+    // schedules it during application.
+    await this.targetPowerQueueWorker.catch(() => undefined);
+    if (this.targetPowerVerifyTimeoutId) {
+      this.homey.clearTimeout(this.targetPowerVerifyTimeoutId);
+      this.targetPowerVerifyTimeoutId = undefined;
     }
     this.saveDeviceState();
 
@@ -404,6 +426,14 @@ export class BatteryDevice extends SonnenDevice {
     if (currentPower === null || currentPower === undefined) {
       await this.setCapabilityValueSafe('target_power', 0);
     }
+    // Seed the bookkeeping from the final state so an echo of these writes
+    // (should the platform re-invoke listeners on app-side writes) is
+    // recognized as a no-op instead of being applied to the battery at boot.
+    const seededPower = this.getCapabilityValue('target_power');
+    this.lastWrittenTargetPowerState = {
+      power: seededPower === null || seededPower === undefined ? null : +seededPower,
+      mode: this.targetPowerModeState,
+    };
   }
 
   /**
@@ -432,18 +462,16 @@ export class BatteryDevice extends SonnenDevice {
       // Freshly added capabilities start without a value: seed them from the
       // canonical hidden built-ins so the card opens on the real state. The
       // twins were just added (or already exist) when show is true, so the
-      // writes go through setCapabilityValueSafe directly. The echo guard
-      // keeps the seeding writes from re-entering the control pipeline as
-      // if the user had dragged the slider.
+      // writes go through setCapabilityValueSafe directly.
       const power = this.getCapabilityValue('target_power');
       const mode = this.targetPowerModeState ?? (this.getCapabilityValue('target_power_mode') as TargetPowerModeValue | null);
-      this.isApplyingTargetPowerChange = true;
-      try {
-        await this.setCapabilityValueSafe('target_power_visible_capability', power === null || power === undefined ? 0 : +power);
-        await this.setCapabilityValueSafe('target_power_mode_visible_capability', mode ?? 'self_consumption');
-      } finally {
-        this.isApplyingTargetPowerChange = false;
-      }
+      const seededPower = power === null || power === undefined ? 0 : +power;
+      const seededMode = mode ?? 'self_consumption';
+      await this.setCapabilityValueSafe('target_power_visible_capability', seededPower);
+      await this.setCapabilityValueSafe('target_power_mode_visible_capability', seededMode);
+      // Seed the bookkeeping so an echo of these writes is recognized as a
+      // no-op instead of being applied to the battery.
+      this.lastWrittenTargetPowerState = { power: seededPower, mode: seededMode };
     }
   }
 
@@ -475,20 +503,59 @@ export class BatteryDevice extends SonnenDevice {
     };
   }
 
-  private async handleTargetPowerChange(values: Record<string, unknown>): Promise<void> {
-    if (this.isApplyingTargetPowerChange) {
-      // Ignore echoes of the capability values this handler writes itself
-      // (clamp write-back / stored-power reset).
-      this.log('Ignoring target power change applied by this handler:', JSON.stringify(values));
-      return;
+  /**
+   * Entry point for all target-power capability writes (both surfaces, both
+   * listeners). Batches are chained onto {@link targetPowerQueueWorker} and
+   * applied strictly one at a time, in order: every user intent is processed
+   * exactly once and the final processed batch converges the capability
+   * state to the actually applied (clamped) value — WYSIWYG between the
+   * slider, the list row and the battery, no matter how fast the value is
+   * changed.
+   *
+   * Resolves immediately on purpose: Homey finalizes the user's raw
+   * capability value after the listener returns, so a corrective write made
+   * within the listener transaction is discarded (observed 2026-11-08: a
+   * clamped 32500 W → 4600 W write-back was overwritten by the raw drag
+   * value). The chained application runs after the transaction has closed,
+   * and {@link scheduleTargetPowerVerification} re-checks the result.
+   */
+  private handleTargetPowerChange(values: Record<string, unknown>): Promise<void> {
+    if (this.isNoOpTargetPowerChange(values)) {
+      // Re-applying the state this handler just wrote (echo of the clamp
+      // write-back / reset / mode write, or a repeated identical user write)
+      // would be a no-op; skipping it also rules out write-back echo loops.
+      this.log('Ignoring no-op target power change:', JSON.stringify(values));
+      return Promise.resolve();
     }
+    this.pendingTargetPowerBatches++;
+    this.targetPowerQueueWorker = this.targetPowerQueueWorker
+      .catch(() => undefined) // isolate a failed batch from the ones after it
+      .then(() => this.applyTargetPowerChange(values))
+      .catch((e) => {
+        // The listener resolves immediately, so errors can no longer surface
+        // through the capability UI; log them and keep the chain alive.
+        this.error('Failed to apply target power change', e);
+      })
+      .finally(() => {
+        this.pendingTargetPowerBatches--;
+      });
+    return Promise.resolve();
+  }
 
+  /**
+   * Applies one batch: plan the control transition, drive the battery, and
+   * write the resulting state back onto both surfaces so the stored
+   * capability values always match what was actually applied (the battery
+   * silently accepts oversized setpoints, so the clamped value is written
+   * back; leaving Homey control resets the stored power so a later re-entry
+   * starts from idle).
+   */
+  private async applyTargetPowerChange(values: Record<string, unknown>): Promise<void> {
     const request = BatteryDevice.readControlRequest(values);
     const currentPowerValue = this.getCapabilityValue('target_power');
     const plan = TargetPowerMode.planCapabilityChange(request, {
       currentMode: this.targetPowerModeState,
       currentPower: currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue,
-      standbyActive: this.manualStandbyActive,
       limits: this.powerLimits,
     });
 
@@ -496,32 +563,125 @@ export class BatteryDevice extends SonnenDevice {
       this.log('Implied mode switch: writing target_power hands control to Homey');
     }
 
-    this.isApplyingTargetPowerChange = true;
-    try {
-      await this.applyControlActions(plan.actions);
-      this.targetPowerModeState = plan.requestedMode;
+    await this.applyControlActions(plan.actions);
+    this.targetPowerModeState = plan.requestedMode;
 
-      // Keep the stored capability state honest: the battery silently accepts
-      // oversized setpoints, so write back the clamped value, and reset the
-      // stored power when Homey control is left so a later re-entry starts
-      // from idle instead of re-applying a stale setpoint. The request may
-      // have arrived from either surface (hidden built-in or visible twin),
-      // so the final state is mirrored onto both.
-      if (plan.resetTargetPower) {
-        await this.setCapabilityValueSafe('target_power', 0);
-        await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', 0);
-      } else {
-        const finalPower = plan.writeBackPower !== null ? plan.writeBackPower : request.targetPower;
-        if (finalPower !== null) {
-          await this.setCapabilityValueSafe('target_power', finalPower);
-          await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', finalPower);
-        }
+    let writtenPower: number | null = null;
+    if (plan.resetTargetPower) {
+      writtenPower = 0;
+      await this.setCapabilityValueSafe('target_power', 0);
+      await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', 0);
+    } else {
+      writtenPower = plan.writeBackPower !== null ? plan.writeBackPower : request.targetPower;
+      if (writtenPower !== null) {
+        await this.setCapabilityValueSafe('target_power', writtenPower);
+        await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', writtenPower);
       }
-      await this.setCapabilityValueSafe('target_power_mode', plan.requestedMode);
-      await this.setTargetPowerTwinValueIfPresent('target_power_mode_visible_capability', plan.requestedMode);
-    } finally {
-      this.isApplyingTargetPowerChange = false;
     }
+    await this.setCapabilityValueSafe('target_power_mode', plan.requestedMode);
+    await this.setTargetPowerTwinValueIfPresent('target_power_mode_visible_capability', plan.requestedMode);
+    this.lastWrittenTargetPowerState = {
+      power: writtenPower !== null ? writtenPower : this.lastWrittenTargetPowerState?.power ?? null,
+      mode: plan.requestedMode,
+    };
+    if (plan.writeBackPower !== null) {
+      // A clamp correction happened: this is the only write Homey's delayed
+      // finalization of the user's raw set can revert, so schedule the
+      // verification re-check for exactly this signature.
+      this.scheduleTargetPowerVerification(writtenPower as number, request.targetPower as number);
+    }
+  }
+
+  /**
+   * Schedules a delayed re-check of the capability values a batch wrote. The
+   * listener resolves before the write-back happens (see
+   * {@link handleTargetPowerChange}), so in the rare case where Homey's own
+   * finalization of the user's raw set lands *after* our correction, this
+   * re-write heals the divergence instead of leaving the raw value displayed.
+   */
+  private scheduleTargetPowerVerification(expectedPower: number, rawPower: number): void {
+    if (this.targetPowerVerifyTimeoutId) {
+      this.homey.clearTimeout(this.targetPowerVerifyTimeoutId);
+    }
+    this.targetPowerVerifyTimeoutId = this.homey.setTimeout(() => {
+      this.targetPowerVerifyTimeoutId = undefined;
+      this.verifyTargetPowerWrittenState(expectedPower, rawPower);
+    }, this.targetPowerVerificationDelayMillis);
+  }
+
+  /**
+   * Re-reads the power surfaces and re-writes the clamped value when Homey
+   * overrode it after the listener transaction. The heal is deliberately
+   * narrow: a surface is only corrected when it holds the **raw requested
+   * value** — the identifiable signature of the platform finalization. Any
+   * other divergence is a legitimate external write (sonnen app, other apps,
+   * flows) that must not be touched. Skipped while batches are queued or in
+   * flight — newer activity owns the state then.
+   */
+  private async verifyTargetPowerWrittenState(expectedPower: number, rawPower: number): Promise<void> {
+    try {
+      if (this.pendingTargetPowerBatches > 0) {
+        return; // newer batches are queued or in flight and own the state
+      }
+      const overridden = (capability: string): boolean => {
+        if (!this.hasCapability(capability)) {
+          return false;
+        }
+        const stored = this.getCapabilityValue(capability);
+        return stored !== null && stored !== undefined && +stored === rawPower && rawPower !== expectedPower;
+      };
+      const builtInOverridden = overridden('target_power');
+      const twinOverridden = overridden('target_power_visible_capability');
+      if (!builtInOverridden && !twinOverridden) {
+        return;
+      }
+      this.error('Target power capability value was overridden after the listener transaction, re-writing:',
+        'expected', expectedPower,
+        'raw', rawPower,
+        'built-in', this.getCapabilityValue('target_power'),
+        'twin', this.getCapabilityValue('target_power_visible_capability'));
+      if (builtInOverridden) {
+        await this.setCapabilityValueSafe('target_power', expectedPower);
+      }
+      if (twinOverridden) {
+        await this.setTargetPowerTwinValueIfPresent('target_power_visible_capability', expectedPower);
+      }
+    } catch (e) {
+      this.error('Failed to verify/re-write the target power capability value', e);
+    }
+  }
+
+  /**
+   * True when a batch requests exactly the state this handler last wrote —
+   * an echo of the write-back/reset/mode write, or a repeated identical user
+   * write. Both are no-ops: the capability state and the battery setpoint
+   * already match the request.
+   *
+   * The comparison includes the **actual stored state**, not just the
+   * bookkeeping: external writers (the polling mode sync, the sonnen app,
+   * other apps) can move the capabilities without a batch, and a request
+   * matching only stale bookkeeping must still be applied.
+   */
+  private isNoOpTargetPowerChange(values: Record<string, unknown>): boolean {
+    const applied = this.lastWrittenTargetPowerState;
+    if (!applied) {
+      return false;
+    }
+    if (this.targetPowerModeState !== applied.mode) {
+      // The mode moved externally since the last write: re-assert control.
+      return false;
+    }
+    const request = BatteryDevice.readControlRequest(values);
+    const storedPower = this.getCapabilityValue('target_power');
+    const storedPowerNum = storedPower === null || storedPower === undefined ? null : +storedPower;
+    if (request.targetPower !== null
+      && (request.targetPower !== storedPowerNum || request.targetPower !== applied.power)) {
+      return false;
+    }
+    if (request.targetPowerMode !== null && request.targetPowerMode !== applied.mode) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -534,10 +694,16 @@ export class BatteryDevice extends SonnenDevice {
     const siteLimits = await this.getSiteLimitsCached();
     const inverterMaxPowerW = configurationsJson['IC_InverterMaxPower_w'] as string | number | null | undefined ?? null;
     const limits = TargetPowerLimits.resolve(siteLimits, inverterMaxPowerW);
+    const chargeSetting = `${limits.charge} W (${limits.source})`;
+    const dischargeSetting = `${limits.discharge} W (${limits.source})`;
 
-    if (limits.charge !== this.powerLimits.charge || limits.discharge !== this.powerLimits.discharge || limits.source !== this.powerLimits.source) {
+    // The setting comparison also covers the initial sync: without it, a device
+    // whose resolved limits equal the in-memory default would keep empty labels.
+    if (limits.charge !== this.powerLimits.charge || limits.discharge !== this.powerLimits.discharge || limits.source !== this.powerLimits.source
+      || this.getSetting('max_charge_power') !== chargeSetting || this.getSetting('max_discharge_power') !== dischargeSetting) {
       this.log('Resolved power limits:', JSON.stringify(limits));
       this.powerLimits = limits;
+      await this.setSettingsSafe({ max_charge_power: chargeSetting, max_discharge_power: dischargeSetting });
     }
 
     return limits;
@@ -563,31 +729,23 @@ export class BatteryDevice extends SonnenDevice {
 
   /**
    * Applies the planned control actions sequentially to the battery:
-   * disableStandby → operatingMode → enableStandby → setpoint.
+   * operatingMode → setpoint.
    */
   private async applyControlActions(actions: ControlActions): Promise<void> {
     this.log('Applying control actions:', JSON.stringify(actions));
     const client = this.createSonnenBatterieClient();
 
     try {
-      if (actions.disableStandby) {
-        await client.setStandby(false);
-        this.manualStandbyActive = false;
-      }
       if (actions.operatingMode !== null) {
         await client.setOperatingMode(actions.operatingMode);
-      }
-      if (actions.enableStandby) {
-        await client.setStandby(true);
-        this.manualStandbyActive = true;
       }
       if (actions.setpoint) {
         await client.setSetpoint(actions.setpoint.direction, actions.setpoint.watts);
       }
     } catch (error) {
       // Re-sync the local state with the battery: a partially applied
-      // sequence must not leave stale assumptions (e.g. the manual standby
-      // flag or the target_power_mode capability).
+      // sequence must not leave stale assumptions (e.g. the target_power_mode
+      // capability).
       this.refreshState().catch((refreshError) => {
         this.error('Failed to refresh state after a failed control action', refreshError);
       });
@@ -596,7 +754,7 @@ export class BatteryDevice extends SonnenDevice {
       throwLocalizedError(error);
     }
 
-    if (actions.operatingMode !== null || actions.setpoint !== null || actions.enableStandby || actions.disableStandby) {
+    if (actions.operatingMode !== null || actions.setpoint !== null) {
       await this.refreshState(); // immediately refresh UI
     }
   }
@@ -831,13 +989,6 @@ export class BatteryDevice extends SonnenDevice {
       this.setCapabilityValueSafe('state_core_control_module_capability', this.homey.__('stateCoreControlModule.' + latestDataJson.ic_status.statecorecontrolmodule.replaceAll(' ', '')) ?? latestDataJson.ic_status.statecorecontrolmodule);
       this.setCapabilityValueSafe('online_capability', !latestDataJson.ic_status['DC Shutdown Reason'].HW_Shutdown);
       this.setCapabilityValueSafe('alarm_generic', latestDataJson.ic_status['Eclipse Led']['Solid Red']);
-
-      // Track the manual standby flag (used by the target power idle logic);
-      // automatic/protective standby reasons are ignored here on purpose.
-      const standbyReason = latestDataJson.ic_status['Standby Reason'];
-      if (standbyReason) {
-        this.manualStandbyActive = standbyReason.Manual === true;
-      }
 
       // Refresh the device power limits used for target_power clamping
       try {

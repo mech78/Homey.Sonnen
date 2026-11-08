@@ -101,7 +101,7 @@
     "startedManualCharging": "Sonnen Batterie: Startede manuel opladning med maks. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Startede manuel afladning med maks. __maxPower__W."
   },
-  "active": "aktiv", 
+  "active": "aktiv",
   "inactive": "inaktiv",
   "error": {
     "unknown": "Der opstod en ukendt fejl: __error__.",
@@ -112,9 +112,6 @@
       "other": "Uventet HTTP __statusCode__ fejl opstod."
     },
     "vpp_priority": "Ikke tilladt, da SonnenVPP har prioritet.",
-    "standby": {
-      "not_supported": "Standby understøttes ikke af dette Sonnen Batterie system."
-    },
     "validation": {
       "failed": "Validering mislykkedes: __error__.",
       "failed_to_parse_schedule_json": "Kunne ikke analysere tidsplan JSON: __error__.",

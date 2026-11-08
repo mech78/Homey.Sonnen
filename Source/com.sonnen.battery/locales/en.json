@@ -112,9 +112,6 @@
       "other": "Unexpected HTTP __statusCode__ error occurred."
     },
     "vpp_priority": "Not allowed as SonnenVPP has priority.",
-    "standby": {
-      "not_supported": "Standby is not supported by this Sonnen Batterie system."
-    },
     "validation": {
       "failed": "Validation failed: __error__.",
       "failed_to_parse_schedule_json": "Failed to parse schedule JSON: __error__.",

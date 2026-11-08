@@ -121,12 +121,11 @@ describe('TargetPowerMode', () => {
     });
   });
 
-  describe('planPowerControl (idle/standby state machine)', () => {
+  describe('planPowerControl (control state machine)', () => {
     const base = {
       previousMode: 'self_consumption' as const,
       requestedPower: null,
       currentPower: null,
-      standbyActive: false,
     };
 
     it('should switch to Manual and apply the setpoint when entering homey mode', () => {
@@ -137,28 +136,15 @@ describe('TargetPowerMode', () => {
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
         operatingMode: '1',
         setpoint: { direction: 'charge', watts: 3000 },
       });
     });
 
-    it('should disable standby before applying a setpoint when standby is active', () => {
-      const actions = TargetPowerMode.planPowerControl({
-        ...base,
-        requestedMode: 'homey',
-        requestedPower: -2000,
-        currentPower: -2000,
-        standbyActive: true,
-      });
-
-      expect(actions.disableStandby).toBe(true);
-      expect(actions.enableStandby).toBe(false);
-      expect(actions.setpoint).toEqual({ direction: 'discharge', watts: 2000 });
-    });
-
-    it('should enable standby for 0 W when not already in standby', () => {
+    it('should apply an explicit 0 W stop setpoint for idle when entering homey mode', () => {
+      // Validated on hardware 2026-11-08: a 0 W stop ends an active 4200 W
+      // charge within seconds and leaves the system healthy; manual standby
+      // round-trips can wedge the battery startup and must never be used.
       const actions = TargetPowerMode.planPowerControl({
         ...base,
         requestedMode: 'homey',
@@ -166,26 +152,22 @@ describe('TargetPowerMode', () => {
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: true,
         operatingMode: '1',
-        setpoint: null,
+        setpoint: { direction: 'charge', watts: 0 },
       });
     });
 
-    it('should keep an already active standby for 0 W and only switch the operating mode', () => {
+    it('should re-apply the 0 W stop when idle is written while already in homey mode', () => {
       const actions = TargetPowerMode.planPowerControl({
         ...base,
+        previousMode: 'homey',
         requestedMode: 'homey',
         requestedPower: 0,
-        standbyActive: true,
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
-        operatingMode: '1',
-        setpoint: null,
+        operatingMode: null,
+        setpoint: { direction: 'charge', watts: 0 },
       });
     });
 
@@ -232,8 +214,6 @@ describe('TargetPowerMode', () => {
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
         operatingMode: '2',
         setpoint: null,
       });
@@ -273,18 +253,15 @@ describe('TargetPowerMode', () => {
       expect(actions.setpoint).toEqual({ direction: 'charge', watts: 1200 });
     });
 
-    it('should disable standby and drop the setpoint when handing control from homey to manual', () => {
+    it('should drop the setpoint when handing control from homey to manual', () => {
       const actions = TargetPowerMode.planPowerControl({
         ...base,
         previousMode: 'homey',
         requestedMode: 'manual',
         currentPower: 2500,
-        standbyActive: true,
       });
 
       expect(actions).toEqual({
-        disableStandby: true,
-        enableStandby: false,
         operatingMode: '1',
         setpoint: null,
       });
@@ -299,25 +276,7 @@ describe('TargetPowerMode', () => {
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
         operatingMode: null,
-        setpoint: null,
-      });
-    });
-
-    it('should disable standby when leaving homey mode while standby is active', () => {
-      const actions = TargetPowerMode.planPowerControl({
-        ...base,
-        previousMode: 'homey',
-        requestedMode: 'time_of_use',
-        standbyActive: true,
-      });
-
-      expect(actions).toEqual({
-        disableStandby: true,
-        enableStandby: false,
-        operatingMode: '10',
         setpoint: null,
       });
     });
@@ -331,8 +290,6 @@ describe('TargetPowerMode', () => {
       });
 
       expect(actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
         operatingMode: null,
         setpoint: null,
       });
@@ -352,7 +309,6 @@ describe('TargetPowerMode', () => {
     const baseState = {
       currentMode: 'self_consumption' as const,
       currentPower: 0,
-      standbyActive: false,
       limits,
     };
 
@@ -401,14 +357,26 @@ describe('TargetPowerMode', () => {
       expect(plan.writeBackPower).toBe(-3000);
     });
 
-    it('should apply the stored power when only the mode is switched to homey', () => {
+    it('should start from idle when only the mode is switched to homey', () => {
+      // A stale stored target power must never re-apply implicitly: the
+      // battery stops (0 W stop setpoint) and the stored value resets to 0.
       const plan = TargetPowerMode.planCapabilityChange(
         { targetPower: null, targetPowerMode: 'homey' },
         { ...baseState, currentPower: -1500 },
       );
 
       expect(plan.requestedMode).toBe('homey');
-      expect(plan.actions.setpoint).toEqual({ direction: 'discharge', watts: 1500 });
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 0 });
+      expect(plan.writeBackPower).toBe(0);
+    });
+
+    it('should not rewrite the stored power on entry when it is already 0', () => {
+      const plan = TargetPowerMode.planCapabilityChange(
+        { targetPower: null, targetPowerMode: 'homey' },
+        { ...baseState, currentPower: 0 },
+      );
+
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 0 });
       expect(plan.writeBackPower).toBeNull();
     });
 
@@ -431,7 +399,6 @@ describe('TargetPowerMode', () => {
 
       expect(plan.requestedMode).toBe('manual');
       expect(plan.actions.setpoint).toBeNull();
-      expect(plan.actions.disableStandby).toBe(false);
       expect(plan.resetTargetPower).toBe(true);
     });
 
@@ -463,8 +430,6 @@ describe('TargetPowerMode', () => {
       );
 
       expect(plan.actions).toEqual({
-        disableStandby: false,
-        enableStandby: false,
         operatingMode: null,
         setpoint: null,
       });
@@ -472,7 +437,7 @@ describe('TargetPowerMode', () => {
       expect(plan.resetTargetPower).toBe(false);
     });
 
-    it('should plan the idle standby path when neither power nor mode was ever set', () => {
+    it('should plan the idle zero-stop path when neither power nor mode was ever set', () => {
       const plan = TargetPowerMode.planCapabilityChange(
         { targetPower: null, targetPowerMode: 'homey' },
         { ...baseState, currentMode: null, currentPower: null },
@@ -480,8 +445,7 @@ describe('TargetPowerMode', () => {
 
       expect(plan.requestedMode).toBe('homey');
       expect(plan.actions.operatingMode).toBe('1');
-      expect(plan.actions.setpoint).toBeNull();
-      expect(plan.actions.enableStandby).toBe(true);
+      expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 0 });
     });
 
     it('should throw a LocalizedError for a fractional requested power', () => {

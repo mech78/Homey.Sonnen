@@ -55,13 +55,12 @@ export interface SetpointCommand {
  * sequentially to the sonnenBatterie API; the planning itself is pure logic.
  */
 export interface ControlActions {
-  /** True when manual standby must be disabled before anything else. */
-  disableStandby: boolean;
-  /** True when manual standby must be enabled (idle request). */
-  enableStandby: boolean;
   /** `EM_OperatingMode` to switch to, or null when the mode is unchanged. */
   operatingMode: string | null;
-  /** Setpoint to apply, or null when no setpoint is needed (e.g. idle). */
+  /**
+   * Setpoint to apply (a 0 W charge setpoint stops power), or null when no
+   * setpoint is needed (e.g. a mode-only change).
+   */
   setpoint: SetpointCommand | null;
 }
 
@@ -74,8 +73,6 @@ export interface PlanPowerControlInput {
   requestedPower: number | null;
   /** The previously stored `target_power` value in watts, or null when unknown. */
   currentPower: number | null;
-  /** Whether manual standby is currently active on the battery. */
-  standbyActive: boolean;
 }
 
 /**
@@ -98,8 +95,6 @@ export interface CapabilityChangeState {
   currentMode: TargetPowerModeValue | null;
   /** Current stored `target_power` capability value in watts, or null when unknown. */
   currentPower: number | null;
-  /** Whether manual standby is currently active on the battery. */
-  standbyActive: boolean;
   /** Device power limits used to clamp the effective power. */
   limits: PowerLimits;
 }
@@ -194,8 +189,8 @@ export class TargetPowerMode {
 
   /**
    * Decomposes a signed `target_power` value into a setpoint command.
-   * Positive values charge, negative values discharge, zero means idle
-   * (no setpoint — manual standby is used instead).
+   * Positive values charge, negative values discharge; zero yields null here —
+   * idle is planned as an explicit 0 W stop setpoint (see {@link planPowerControl}).
    */
   public static decomposeTargetPower(watts: number): SetpointCommand | null {
     if (!this.isValidTargetPower(Math.abs(watts))) {
@@ -213,7 +208,14 @@ export class TargetPowerMode {
   /**
    * Plans the actions required for a `target_power` / `target_power_mode`
    * capability change. Pure function — the device layer applies the returned
-   * actions in order: disableStandby → operatingMode → enableStandby/setpoint.
+   * actions in order: operatingMode → setpoint.
+   *
+   * Idle (0 W) is an explicit 0 W stop setpoint. Manual standby must never be
+   * used: its enable/disable round-trips force an inverter/DC re-init cycle,
+   * and setpoints arriving inside that startup window can leave the battery
+   * permanently wedged in `Init`/STARTUP (observed 2026-11-08, recoverable
+   * only via power cycle). A validated 0 W stop stops an active 4200 W charge
+   * within seconds and leaves the system healthy.
    */
   public static planPowerControl(input: PlanPowerControlInput): ControlActions {
     const power = input.requestedPower ?? input.currentPower ?? 0;
@@ -224,31 +226,19 @@ export class TargetPowerMode {
     const modeChanged = input.requestedMode !== input.previousMode;
 
     if (input.requestedMode !== 'homey') {
+      // The battery follows its own strategy; a stored setpoint expires on its
+      // own via the remote-command timeout outside Manual mode, and Manual mode
+      // is the device-side carrier for external (sonnen app) setpoints.
       return {
-        disableStandby: input.standbyActive,
-        enableStandby: false,
         operatingMode: modeChanged ? this.toOperatingMode(input.requestedMode) : null,
         setpoint: null,
       };
     }
 
     // Homey in control: Manual mode carries the setpoint (no expiry timer).
-    // Idle (0 W) is implemented via persistent manual standby instead of a
-    // transient 0 W setpoint.
-    if (power === 0) {
-      return {
-        disableStandby: false,
-        enableStandby: !input.standbyActive,
-        operatingMode: modeChanged ? '1' : null,
-        setpoint: null,
-      };
-    }
-
     return {
-      disableStandby: input.standbyActive,
-      enableStandby: false,
       operatingMode: modeChanged ? '1' : null,
-      setpoint: this.decomposeTargetPower(power),
+      setpoint: power === 0 ? { direction: 'charge', watts: 0 } : this.decomposeTargetPower(power),
     };
   }
 
@@ -257,8 +247,11 @@ export class TargetPowerMode {
    *
    * Homey Energy semantics: writing `target_power` hands control to Homey
    * (implied mode switch to `homey`) unless `target_power_mode` is written in
-   * the same change. The plan also carries the bookkeeping the device needs
-   * for honest capability state: the clamped power to write back when the
+   * the same change. A mode-only write to `homey` starts from idle: the
+   * effective power is 0 (a stale stored target power is never re-applied
+   * implicitly) and the stored value resets to 0 so the capability state
+   * stays honest. The plan also carries the bookkeeping the device needs for
+   * honest capability state: the clamped power to write back when the
    * requested value exceeded the device limits, and the reset of the stored
    * target power when Homey control is left.
    */
@@ -267,7 +260,10 @@ export class TargetPowerMode {
       ?? (request.targetPower !== null ? 'homey' : state.currentMode ?? 'self_consumption');
     const previousMode = state.currentMode;
 
-    const effectivePower = request.targetPower ?? state.currentPower;
+    // Observed 2026-11-08: a mode-only UI toggle to homey re-applied a stale
+    // stored 4200 W charge. Handing control to Homey must start from idle.
+    const isModeOnlyHomeyEntry = request.targetPower === null && requestedMode === 'homey';
+    const effectivePower = isModeOnlyHomeyEntry ? 0 : request.targetPower ?? state.currentPower;
     let writeBackPower: number | null = null;
     let power: number | null = null;
     if (effectivePower !== null) {
@@ -275,6 +271,9 @@ export class TargetPowerMode {
       power = clamped.value;
       if (clamped.clamped) {
         writeBackPower = clamped.value;
+      } else if (isModeOnlyHomeyEntry && state.currentPower !== null && state.currentPower !== 0) {
+        // Reset the stale stored power so the capability mirrors the idle start
+        writeBackPower = 0;
       }
     }
 
@@ -283,7 +282,6 @@ export class TargetPowerMode {
       previousMode,
       requestedPower: power,
       currentPower: null,
-      standbyActive: state.standbyActive,
     });
 
     return {

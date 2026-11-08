@@ -101,7 +101,7 @@
     "startedManualCharging": "Sonnen Batterie: Manuelles Laden mit max. __maxPower__W gestartet.",
     "startedManualDischarging": "Sonnen Batterie: Manuelles Entladen mit max. __maxPower__W gestartet."
   },
-  "active": "aktiv", 
+  "active": "aktiv",
   "inactive": "inaktiv",
   "error": {
     "unknown": "Ein unbekannter Fehler ist aufgetreten: __error__.",
@@ -112,9 +112,6 @@
       "other": "Unerwarteter HTTP __statusCode__ Fehler aufgetreten."
     },
     "vpp_priority": "Nicht erlaubt, weil SonnenVPP Priorität hat.",
-    "standby": {
-      "not_supported": "Standby wird von diesem Sonnen Batterie System nicht unterstützt."
-    },
     "validation": {
       "failed": "Validierung fehlgeschlagen: __error__.",
       "failed_to_parse_schedule_json": "Fehler beim Parsen des Zeitplan-JSON: __error__.",

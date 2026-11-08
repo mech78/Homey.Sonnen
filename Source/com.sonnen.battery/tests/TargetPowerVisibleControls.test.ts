@@ -29,6 +29,25 @@ function createDevice(): AnyDevice {
   device.removeCapability = jest.fn();
   device.registerMultipleCapabilityListener = jest.fn();
   device.targetPowerVisibleControlsRegistered = false;
+  device.targetPowerQueueWorker = Promise.resolve();
+  device.lastWrittenTargetPowerState = null;
+  device.pendingTargetPowerBatches = 0;
+  device.targetPowerVerifyTimeoutId = undefined;
+  // Capture the verification callbacks so tests can fire them deliberately
+  const verifyFns: Array<() => unknown> = [];
+  device.homey = {
+    setTimeout: jest.fn((fn: () => void) => {
+      verifyFns.push(fn);
+      return verifyFns.length;
+    }),
+    clearTimeout: jest.fn(),
+  };
+  device.firePendingVerification = async () => {
+    const fn = [...verifyFns].reverse().find((f) => f);
+    if (fn) {
+      await fn();
+    }
+  };
   return device;
 }
 
@@ -307,16 +326,23 @@ describe('handleTargetPowerChange (twin surfaces)', () => {
    */
   function createControlDevice(
     currentMode: string | null,
-    currentPower: number | null,
-    standbyActive = false
+    currentPower: number | null
   ): AnyDevice {
     const device = createDevice();
     device.targetPowerModeState = currentMode;
-    device.manualStandbyActive = standbyActive;
-    device.isApplyingTargetPowerChange = false;
     device.powerLimits = { charge: 46000, discharge: 46000, source: 'default' };
+    // Stateful capability store: writes are visible to subsequent reads, so
+    // the no-op filter's actual-state comparison behaves like on hardware.
+    const stored: Record<string, unknown> = {
+      target_power: currentPower,
+      target_power_mode: currentMode,
+    };
+    device.stored = stored;
     device.getCapabilityValue = jest.fn((capability: string) =>
-      capability === 'target_power' ? currentPower : null);
+      capability in stored ? stored[capability] : null);
+    device.setCapabilityValue = jest.fn((capability: string, value: unknown) => {
+      stored[capability] = value;
+    });
     device.applyControlActions = jest.fn();
     return device;
   }
@@ -325,6 +351,7 @@ describe('handleTargetPowerChange (twin surfaces)', () => {
     const device = createControlDevice('self_consumption', 0);
 
     await device.handleTargetPowerChange({ target_power_visible_capability: 1000 });
+    await device.targetPowerQueueWorker;
 
     // Control actions: hand control to Homey (mode switch to manual) + setpoint
     expect(device.applyControlActions).toHaveBeenCalledWith(expect.objectContaining({
@@ -341,6 +368,7 @@ describe('handleTargetPowerChange (twin surfaces)', () => {
     const device = createControlDevice('homey', 1000);
 
     await device.handleTargetPowerChange({ target_power_mode_visible_capability: 'self_consumption' });
+    await device.targetPowerQueueWorker;
 
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'self_consumption');
     // Leaving Homey control resets the stored power on both surfaces
@@ -354,10 +382,178 @@ describe('handleTargetPowerChange (twin surfaces)', () => {
     device.powerLimits = { charge: 2000, discharge: 2000, source: 'inverter' };
 
     await device.handleTargetPowerChange({ target_power: 5000 });
+    await device.targetPowerQueueWorker;
 
     // The battery silently accepts oversized setpoints; the clamped value is
     // written back to the hidden built-in and mirrored onto the twin
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power', 2000);
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_visible_capability', 2000);
+  });
+
+  it('resolves the listener immediately and processes the batch asynchronously', async () => {
+    const device = createControlDevice('homey', 0);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+
+    // Homey finalizes the user's raw capability value after the listener
+    // returns, so the listener must not block on the corrective write-back
+    await expect(device.handleTargetPowerChange({ target_power_visible_capability: 3000 })).resolves.toBeUndefined();
+
+    await device.targetPowerQueueWorker;
+
+    expect(device.applyControlActions).toHaveBeenCalledWith(expect.objectContaining({
+      setpoint: { direction: 'charge', watts: 3000 },
+    }));
+  });
+
+  it('processes a batch that is chained while another application is in flight', async () => {
+    // Observed 2026-11-08: the final batch of a fast slider drag was dropped
+    // by the re-entrancy guard, leaving the capabilities at the raw dragged
+    // value while only an earlier batch's clamped setpoint was applied. The
+    // chain guarantees every batch is applied in order.
+    const device = createControlDevice('homey', 4600);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+
+    // Simulate a slow application: the first batch is still in flight when
+    // the final drag batch arrives
+    let releaseFirstApplication: () => void = () => undefined;
+    device.applyControlActions = jest.fn()
+      .mockImplementationOnce(() => new Promise<void>((resolve) => {
+        releaseFirstApplication = resolve;
+      }))
+      .mockResolvedValue(undefined);
+
+    device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    device.handleTargetPowerChange({ target_power_visible_capability: 34500 });
+
+    // Let the chain reach the first (pending) application before releasing it
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    releaseFirstApplication();
+    await device.targetPowerQueueWorker;
+
+    // The chained batch is applied with full clamping and write-back — the
+    // display converges to 4600
+    expect(device.applyControlActions).toHaveBeenCalledTimes(2);
+    expect(device.applyControlActions).toHaveBeenLastCalledWith(expect.objectContaining({
+      setpoint: { direction: 'charge', watts: 4600 },
+    }));
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power', 4600);
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_visible_capability', 4600);
+    expect(device.pendingTargetPowerBatches).toBe(0);
+  });
+
+  it('skips a batch that repeats the state just written (no-op/echo)', async () => {
+    const device = createControlDevice('homey', 0);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+
+    await device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    await device.targetPowerQueueWorker;
+    await device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    await device.targetPowerQueueWorker;
+
+    expect(device.applyControlActions).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps every queued batch and applies them in order (last write wins)', async () => {
+    const device = createControlDevice('homey', 4600);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+
+    let releaseApplication: () => void = () => undefined;
+    device.applyControlActions = jest.fn()
+      .mockImplementationOnce(() => new Promise<void>((resolve) => {
+        releaseApplication = resolve;
+      }))
+      .mockResolvedValue(undefined);
+
+    device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    device.handleTargetPowerChange({ target_power_visible_capability: 20000 });
+    device.handleTargetPowerChange({ target_power_visible_capability: 34500 });
+
+    // Let the chain reach the first (pending) application before releasing it
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    releaseApplication();
+    await device.targetPowerQueueWorker;
+
+    expect(device.applyControlActions).toHaveBeenCalledTimes(3);
+    expect(device.applyControlActions).toHaveBeenLastCalledWith(expect.objectContaining({
+      setpoint: { direction: 'charge', watts: 4600 },
+    }));
+  });
+
+  it('re-applies user intent after an external mode sync (stale bookkeeping)', async () => {
+    const device = createControlDevice('homey', 3000);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+
+    await device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    await device.targetPowerQueueWorker;
+
+    // External switch to Time-of-Use (sonnen app): the polling sync updates
+    // the mode state and capability without a batch
+    device.targetPowerModeState = 'time_of_use';
+    device.stored['target_power_mode'] = 'time_of_use';
+
+    // Re-dragging the same value must re-assert Homey control — it must not
+    // be skipped as a no-op against stale bookkeeping (review finding)
+    await device.handleTargetPowerChange({ target_power_visible_capability: 3000 });
+    await device.targetPowerQueueWorker;
+
+    expect(device.applyControlActions).toHaveBeenCalledTimes(2);
+    expect(device.applyControlActions).toHaveBeenLastCalledWith(expect.objectContaining({
+      operatingMode: '1',
+      setpoint: { direction: 'charge', watts: 3000 },
+    }));
+    expect(device.targetPowerModeState).toBe('homey');
+  });
+
+  it('keeps processing chained batches after a failed application', async () => {
+    const device = createControlDevice('homey', 4600);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+    device.applyControlActions = jest.fn()
+      .mockRejectedValueOnce(new Error('battery offline'))
+      .mockResolvedValue(undefined);
+
+    device.handleTargetPowerChange({ target_power_visible_capability: 1000 });
+    device.handleTargetPowerChange({ target_power_visible_capability: 2000 });
+    await device.targetPowerQueueWorker;
+
+    expect(device.applyControlActions).toHaveBeenCalledTimes(2);
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power', 2000);
+    expect(device.error).toHaveBeenCalled();
+    expect(device.pendingTargetPowerBatches).toBe(0);
+  });
+
+  it('heals a platform-clobbered clamp write-back (raw value signature)', async () => {
+    const device = createControlDevice('homey', 0);
+    device.powerLimits = { charge: 2000, discharge: 2000, source: 'inverter' };
+
+    await device.handleTargetPowerChange({ target_power_visible_capability: 5000 });
+    await device.targetPowerQueueWorker;
+    expect(device.stored['target_power']).toBe(2000);
+
+    // Simulate Homey finalizing the user's raw set after our write-back
+    device.stored['target_power'] = 5000;
+    device.stored['target_power_visible_capability'] = 5000;
+
+    await device.firePendingVerification();
+
+    expect(device.stored['target_power']).toBe(2000);
+    expect(device.stored['target_power_visible_capability']).toBe(2000);
+    expect(device.error).toHaveBeenCalled();
+  });
+
+  it('leaves legitimate external writes alone during verification', async () => {
+    const device = createControlDevice('homey', 0);
+    device.powerLimits = { charge: 2000, discharge: 2000, source: 'inverter' };
+
+    await device.handleTargetPowerChange({ target_power_visible_capability: 5000 });
+    await device.targetPowerQueueWorker;
+
+    // An external writer (other app/flow) sets an unrelated value — that is
+    // not the platform's raw-value signature and must not be touched
+    device.stored['target_power'] = 1000;
+
+    const callsBefore = device.setCapabilityValue.mock.calls.length;
+    await device.firePendingVerification();
+
+    expect(device.setCapabilityValue.mock.calls.length).toBe(callsBefore);
   });
 });
