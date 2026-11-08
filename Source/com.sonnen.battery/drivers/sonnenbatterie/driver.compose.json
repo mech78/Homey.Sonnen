@@ -38,7 +38,9 @@
     "meter_power.charged",
     "meter_power.discharged",
     "target_power",
-    "target_power_mode"
+    "target_power_mode",
+    "target_power_visible_capability",
+    "target_power_mode_visible_capability"
   ],
   "capabilitiesOptions": {
     "button.reset_meter": {
@@ -152,6 +154,11 @@
           }
         }
       ]
+    },
+    "target_power_visible_capability": {
+      "min": -46000,
+      "max": 46000,
+      "step": 100
     },
     "battery_charging_state": {
       "title": {
