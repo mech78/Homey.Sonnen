@@ -29,12 +29,23 @@ function createDevice(): AnyDevice {
   device.removeCapability = jest.fn();
   device.registerMultipleCapabilityListener = jest.fn();
   device.targetPowerVisibleControlsRegistered = false;
+  // Mirrors the production class-field initializers (the constructor is not
+  // invoked on this prototype-only harness).
+  device.powerLimits = { charge: 46000, discharge: 46000, source: 'default' };
+  device.isEnergyFullySupported = jest.fn(() => true); // Homey Pro 2023 default
   device.targetPowerQueueWorker = Promise.resolve();
   device.lastWrittenTargetPowerState = null;
   device.pendingTargetPowerBatches = 0;
   device.targetPowerVerifyTimeoutId = undefined;
-  // Capture the verification callbacks so tests can fire them deliberately
+  // Capability options store + capture of the verification callbacks so tests
+  // can inspect or fire them deliberately
+  const capabilityOptions: Record<string, Record<string, unknown>> = {};
   const verifyFns: Array<() => unknown> = [];
+  device.capabilityOptions = capabilityOptions;
+  device.getCapabilityOptions = jest.fn((capabilityId: string) => capabilityOptions[capabilityId] ?? {});
+  device.setCapabilityOptions = jest.fn((capabilityId: string, options: object) => {
+    capabilityOptions[capabilityId] = { ...capabilityOptions[capabilityId], ...options };
+  });
   device.homey = {
     setTimeout: jest.fn((fn: () => void) => {
       verifyFns.push(fn);
@@ -175,6 +186,83 @@ describe('syncTargetPowerVisibleCapabilities', () => {
 
     expect(device.registerMultipleCapabilityListener).toHaveBeenCalledTimes(1);
   });
+
+  it('applies the real device range to a freshly added twin', async () => {
+    const device = createDevice();
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+    device.hasCapability = jest.fn((capability: string) =>
+      capability === 'target_power' || capability === 'target_power_visible_capability');
+
+    await device.syncTargetPowerVisibleCapabilities(true);
+
+    expect(device.setCapabilityOptions).toHaveBeenCalledWith('target_power_visible_capability', {
+      min: -4600,
+      max: 4600,
+    });
+  });
+});
+
+describe('applyTargetPowerSliderLimits', () => {
+  function createSliderDevice(): AnyDevice {
+    const device = createDevice();
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+    device.isEnergyFullySupported = jest.fn(() => true); // Homey Pro 2023
+    return device;
+  }
+
+  it('limits the twin slider on Homey Pro 2023 and leaves the hidden built-in alone', async () => {
+    const device = createSliderDevice();
+
+    await device.applyTargetPowerSliderLimits({ charge: 4600, discharge: 4600, source: 'inverter' });
+
+    expect(device.setCapabilityOptions).toHaveBeenCalledWith('target_power_visible_capability', { min: -4600, max: 4600 });
+    // The built-in is hidden by design on 2023: a partial write on it was
+    // observed to drop the uiComponent null hide — never write it there
+    expect(device.setCapabilityOptions).not.toHaveBeenCalledWith('target_power', expect.anything());
+    expect(device.capabilityOptions.target_power_visible_capability).toEqual({ min: -4600, max: 4600 });
+  });
+
+  it('limits the built-in slider on Homey Pro 2019 (the visible slider there)', async () => {
+    const device = createSliderDevice();
+    device.isEnergyFullySupported = jest.fn(() => false);
+    device.hasCapability = jest.fn((capability: string) => capability === 'target_power');
+
+    await device.applyTargetPowerSliderLimits({ charge: 4600, discharge: 4600, source: 'inverter' });
+
+    expect(device.setCapabilityOptions).toHaveBeenCalledWith('target_power', { min: -4600, max: 4600 });
+    expect(device.capabilityOptions.target_power).toEqual({ min: -4600, max: 4600 });
+  });
+
+  it('re-applies when the resolved limits change', async () => {
+    const device = createSliderDevice();
+
+    await device.applyTargetPowerSliderLimits({ charge: 4600, discharge: 4600, source: 'inverter' });
+    await device.applyTargetPowerSliderLimits({ charge: 2000, discharge: 2000, source: 'site' });
+
+    expect(device.setCapabilityOptions).toHaveBeenLastCalledWith('target_power_visible_capability', { min: -2000, max: 2000 });
+    expect(device.capabilityOptions.target_power_visible_capability).toEqual({ min: -2000, max: 2000 });
+  });
+
+  it('skips capabilities that are not present', async () => {
+    const device = createSliderDevice();
+    // Homey Pro 2019 with the EMS toggle off: the built-in is removed and the
+    // twins never exist
+    device.hasCapability = jest.fn(() => false);
+
+    await device.applyTargetPowerSliderLimits({ charge: 4600, discharge: 4600, source: 'inverter' });
+
+    expect(device.setCapabilityOptions).not.toHaveBeenCalled();
+  });
+
+  it('logs but does not throw when an option write fails', async () => {
+    const device = createSliderDevice();
+    device.setCapabilityOptions = jest.fn(() => Promise.reject(new Error('unsupported')));
+
+    await device.applyTargetPowerSliderLimits({ charge: 4600, discharge: 4600, source: 'inverter' });
+
+    expect(device.error).toHaveBeenCalled();
+    expect(device.setCapabilityOptions).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('setTargetPowerTwinValueIfPresent', () => {
@@ -218,6 +306,10 @@ describe('syncTargetPowerControls (platform-adaptive EMS toggle)', () => {
 
     expect(device.removeCapability).toHaveBeenCalledWith('target_power');
     expect(device.removeCapability).toHaveBeenCalledWith('target_power_mode');
+    // The twins are manifest-declared now: present from pairing, always
+    // removed on 2019 (the built-ins are the sliders there)
+    expect(device.removeCapability).toHaveBeenCalledWith('target_power_visible_capability');
+    expect(device.removeCapability).toHaveBeenCalledWith('target_power_mode_visible_capability');
     expect(device.addCapability).not.toHaveBeenCalled();
     expect(device.registerMultipleCapabilityListener).not.toHaveBeenCalled();
   });
@@ -237,6 +329,18 @@ describe('syncTargetPowerControls (platform-adaptive EMS toggle)', () => {
     expect(device.addCapability).not.toHaveBeenCalledWith('target_power_mode_visible_capability');
     expect(device.registerMultipleCapabilityListener).toHaveBeenCalledWith(
       ['target_power', 'target_power_mode'], expect.any(Function), 500);
+  });
+
+  it('on Homey Pro 2019, removes manifest-declared twins even with the toggle on', async () => {
+    const device = createPlatformDevice(false);
+    device.hasCapability = jest.fn(() => true);
+
+    await device.syncTargetPowerControls(true);
+
+    expect(device.removeCapability).toHaveBeenCalledWith('target_power_visible_capability');
+    expect(device.removeCapability).toHaveBeenCalledWith('target_power_mode_visible_capability');
+    expect(device.addCapability).not.toHaveBeenCalledWith('target_power_visible_capability');
+    expect(device.addCapability).not.toHaveBeenCalledWith('target_power_mode_visible_capability');
   });
 
   it('on Homey Pro 2023+, keeps the built-ins and adds the twins when toggled on', async () => {

@@ -355,11 +355,12 @@ export class BatteryDevice extends SonnenDevice {
    * - Homey Pro (Early 2023) and newer honor `uiComponent: null`: the
    *   built-ins stay on the device (hidden from the card) so flows and EMS
    *   apps always work, and the toggle adds/removes the visible twin
-   *   capabilities.
+   *   capabilities. The twins are manifest-declared so the options API
+   *   accepts re-ranging writes for them.
    * - Homey Pro 2019: the toggle controls the built-ins' presence instead —
    *   off removes them entirely (clean metrics card, no EMS control), on
    *   adds them back. They render visibly and are already interactive there,
-   *   so the twins would only duplicate them and are never used.
+   *   so the twins would only duplicate them and are always removed.
    */
   private async syncTargetPowerControls(show: boolean): Promise<void> {
     const builtInsAlwaysPresent = this.isEnergyFullySupported();
@@ -368,9 +369,9 @@ export class BatteryDevice extends SonnenDevice {
       this.registerTargetPowerControls();
       await this.initializeTargetPowerCapabilities();
     }
-    if (builtInsAlwaysPresent) {
-      await this.syncTargetPowerVisibleCapabilities(show);
-    }
+    // Twin presence is managed on both platforms: on 2023+ per the setting,
+    // on 2019 the twins are always removed (the built-ins are the sliders).
+    await this.syncTargetPowerVisibleCapabilities(show);
   }
 
   /**
@@ -442,19 +443,22 @@ export class BatteryDevice extends SonnenDevice {
    * The hidden built-ins stay present either way so flows and EMS apps
    * keep working; the twins only mirror them on the device UI.
    *
-   * Only called on platforms that honor the `uiComponent: null` hide for
-   * built-in capabilities (Homey Pro (Early 2023) and newer); Homey Pro 2019
-   * manages the built-ins' presence instead and never uses the twins.
+   * The twins are **manifest-declared** (driver.compose.json capabilities
+   * array) so the options API accepts re-ranging writes for them —
+   * runtime-added capabilities throw `Invalid Capability` there (observed
+   * 2026-11-08). They are present from pairing on both platforms, so
+   * visibility is managed by presence:
+   * - Homey Pro (Early 2023) and newer: present only while `show` is true
+   * - Homey Pro 2019: **always removed** — the built-ins render visibly
+   *   there and are already interactive, so the twins would only duplicate
+   *   them
    */
   private async syncTargetPowerVisibleCapabilities(show: boolean): Promise<void> {
-    for (const capability of BatteryDevice.TARGET_POWER_VISIBLE_CAPABILITIES) {
-      const has = this.hasCapability(capability);
-      if (show && !has) {
-        await this.addCapability(capability);
-      } else if (!show && has) {
-        await this.removeCapability(capability);
-      }
+    if (!this.isEnergyFullySupported()) {
+      await this.syncTargetPowerTwinPresence(false);
+      return;
     }
+    await this.syncTargetPowerTwinPresence(show);
 
     if (show) {
       this.registerTargetPowerVisibleControls();
@@ -472,6 +476,23 @@ export class BatteryDevice extends SonnenDevice {
       // Seed the bookkeeping so an echo of these writes is recognized as a
       // no-op instead of being applied to the battery.
       this.lastWrittenTargetPowerState = { power: seededPower, mode: seededMode };
+      // The twins just became visible: ensure they carry the real device
+      // range (KISS — always apply on visibility, no compare).
+      await this.applyTargetPowerSliderLimits(this.powerLimits);
+    }
+  }
+
+  /**
+   * Adds or removes both visible twins at once.
+   */
+  private async syncTargetPowerTwinPresence(present: boolean): Promise<void> {
+    for (const capability of BatteryDevice.TARGET_POWER_VISIBLE_CAPABILITIES) {
+      const has = this.hasCapability(capability);
+      if (present && !has) {
+        await this.addCapability(capability);
+      } else if (!present && has) {
+        await this.removeCapability(capability);
+      }
     }
   }
 
@@ -704,9 +725,57 @@ export class BatteryDevice extends SonnenDevice {
       this.log('Resolved power limits:', JSON.stringify(limits));
       this.powerLimits = limits;
       await this.setSettingsSafe({ max_charge_power: chargeSetting, max_discharge_power: dischargeSetting });
+      // The resolved limits changed: the visible sliders must always reflect
+      // the real device range (KISS — re-range on change, no compare).
+      await this.applyTargetPowerSliderLimits(limits);
     }
 
     return limits;
+  }
+
+  /**
+   * Limits the target power slider(s) to the resolved device power limits,
+   * using **partial** option writes (`{ min, max }` only) — the
+   * community-proven pattern; Homey merges them into the capability's
+   * options. Full options objects are silently rejected by the platform
+   * (observed 2026-11-08: a merged write containing `title`/`units`/`icon`/
+   * `insights`/`uiComponent` did not apply the range).
+   *
+   * KISS contract: always write, no compare, no readbacks. Called whenever
+   * the UI elements become visible (toggling the setting, first run) and
+   * whenever the resolved limits change — the write is idempotent and the
+   * platform stores it.
+   *
+   * Surfaces:
+   * - the visible twin (Homey Pro (Early 2023) and newer)
+   * - the built-in `target_power` **only on Homey Pro 2019**, where it is
+   *   the visible slider by design (no `uiComponent: null` hide exists
+   *   there to lose). On newer models the built-in is hidden by design and
+   *   its options are never written — a partial write on it was observed to
+   *   drop the hide and un-hide the slider.
+   *
+   * Whether the 2019 firmware honors option overrides on its core Energy
+   * capability is empirical; if it does not, the clamp write-back (see
+   * applyTargetPowerChange) remains the guard.
+   */
+  private async applyTargetPowerSliderLimits(limits: PowerLimits): Promise<void> {
+    const min = -limits.discharge;
+    const max = limits.charge;
+    const surfaces: string[] = [];
+    if (!this.isEnergyFullySupported() && this.hasCapability('target_power')) {
+      surfaces.push('target_power');
+    }
+    if (this.hasCapability('target_power_visible_capability')) {
+      surfaces.push('target_power_visible_capability');
+    }
+    for (const capability of surfaces) {
+      try {
+        await this.setCapabilityOptions(capability, { min, max });
+        this.log('Limited target power slider range:', capability, `${min} ... ${max}`);
+      } catch (e) {
+        this.error(`Failed to limit the range of "${capability}"`, e);
+      }
+    }
   }
 
   private async getSiteLimitsCached(): Promise<SiteLimitsResponse | null> {
