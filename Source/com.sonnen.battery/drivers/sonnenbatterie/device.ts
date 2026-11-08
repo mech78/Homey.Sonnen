@@ -364,10 +364,19 @@ export class BatteryDevice extends SonnenDevice {
    */
   private async syncTargetPowerControls(show: boolean): Promise<void> {
     const builtInsAlwaysPresent = this.isEnergyFullySupported();
-    await this.syncTargetPowerBuiltInPresence(show || builtInsAlwaysPresent);
-    if (show || builtInsAlwaysPresent) {
+    const builtInsPresent = show || builtInsAlwaysPresent;
+    await this.syncTargetPowerBuiltInPresence(builtInsPresent);
+    if (builtInsPresent) {
       this.registerTargetPowerControls();
       await this.initializeTargetPowerCapabilities();
+      // Homey Pro 2019: the built-ins are the visible sliders — apply the
+      // real device range whenever they are present, mirroring the twin rule
+      // (KISS: always apply on visibility). On 2023+ the built-in is hidden
+      // by design and never written (a partial write would drop its
+      // uiComponent: null hide — see applyTargetPowerSliderLimits).
+      if (!builtInsAlwaysPresent) {
+        await this.applyTargetPowerSliderLimits(this.powerLimits);
+      }
     }
     // Twin presence is managed on both platforms: on 2023+ per the setting,
     // on 2019 the twins are always removed (the built-ins are the sliders).

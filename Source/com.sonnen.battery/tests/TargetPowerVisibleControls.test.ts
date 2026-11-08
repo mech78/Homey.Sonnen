@@ -331,6 +331,21 @@ describe('syncTargetPowerControls (platform-adaptive EMS toggle)', () => {
       ['target_power', 'target_power_mode'], expect.any(Function), 500);
   });
 
+  it('on Homey Pro 2019, applies the real device range when the built-ins become visible', async () => {
+    const device = createPlatformDevice(false);
+    device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
+    const added = new Set<string>();
+    device.addCapability = jest.fn((capability: string) => { added.add(capability); });
+    device.hasCapability = jest.fn((capability: string) => added.has(capability));
+
+    await device.syncTargetPowerControls(true);
+
+    // The built-in is the visible slider on 2019 — it must carry the real
+    // device range the moment it becomes visible (mirrors the twin rule)
+    expect(device.setCapabilityOptions).toHaveBeenCalledWith('target_power', { min: -4600, max: 4600 });
+    expect(device.capabilityOptions.target_power).toEqual({ min: -4600, max: 4600 });
+  });
+
   it('on Homey Pro 2019, removes manifest-declared twins even with the toggle on', async () => {
     const device = createPlatformDevice(false);
     device.hasCapability = jest.fn(() => true);
