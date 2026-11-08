@@ -141,41 +141,6 @@ export class SonnenBatterieClient {
     }
   }
 
-  /**
-   * Enables or disables manual standby (the API equivalent of the sonnen UI
-   * "Manual Standby" switch). Persistent, works independent of the operating mode
-   * and does not modify the Time-of-Use schedule.
-   */
-  public async setStandby(enabled: boolean): Promise<void> {
-    try {
-      const response = await fetch(`${this.getBaseUrl()}/api/v2/standby`, {
-        method: "POST",
-        headers: this.getHeaders(),
-        body: JSON.stringify({ "enabled": enabled })
-      });
-
-      if (!response.ok) {
-        if (response.status === 400) {
-          // The spec defines 400 as "Standby is not supported" (older systems/firmware)
-          throw new LocalizedError("error.standby.not_supported");
-        }
-        throw await SonnenBatterieClient.createFetchError(response);
-      }
-    } catch (error) {
-      if (error instanceof LocalizedError) {
-        throw error;
-      }
-      throw SonnenBatterieClient.getLocalizedError(error);
-    }
-  }
-
-  /**
-   * Convenience wrapper to leave standby and hand control back to the battery.
-   */
-  public async stopPowerControl(): Promise<void> {
-    return this.setStandby(false);
-  }
-
   public async getLatestData(): Promise<any> {
     const response = await fetch(`${this.getBaseUrl()}/api/v2/latestdata`, {
       headers: this.getHeaders()

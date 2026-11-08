@@ -112,9 +112,6 @@
       "other": "Oväntat HTTP-fel __statusCode__ uppstod."
     },
     "vpp_priority": "Inte tillåtet eftersom SonnenVPP har prioritet.",
-    "standby": {
-      "not_supported": "Standby stöds inte av detta Sonnen Batterie-system."
-    },
     "validation": {
       "failed": "Valideringen misslyckades: __error__.",
       "failed_to_parse_schedule_json": "Kunde inte tolka schema-JSON: __error__.",

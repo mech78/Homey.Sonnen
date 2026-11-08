@@ -101,7 +101,7 @@
     "startedManualCharging": "Sonnen Batterie: Handmatig opladen gestart met max. __maxPower__W.",
     "startedManualDischarging": "Sonnen Batterie: Handmatig ontladen gestart met max. __maxPower__W."
   },
-  "active": "actief", 
+  "active": "actief",
   "inactive": "inactief",
   "error": {
     "unknown": "Er is een onbekende fout opgetreden: __error__.",
@@ -112,9 +112,6 @@
       "other": "Onverwachte HTTP __statusCode__ fout opgetreden."
     },
     "vpp_priority": "Niet toegestaan omdat SonnenVPP prioriteit heeft.",
-    "standby": {
-      "not_supported": "Standby wordt niet ondersteund door dit Sonnen Batterie systeem."
-    },
     "validation": {
       "failed": "Validatie mislukt: __error__.",
       "failed_to_parse_schedule_json": "Kan schema JSON niet parseren: __error__.",

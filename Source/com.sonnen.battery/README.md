@@ -25,12 +25,18 @@ raw power slider to every user); control happens via Flows (the auto-generated
     switch to Manual from any other mode resolves to `manual`.
 - `target_power`: signed power setpoint in watts.
   - positive = charge, negative = discharge, `0` = idle.
-  - Idle is implemented via the battery's persistent *manual standby* (not a
-    transient 0 W setpoint, which would expire outside Manual mode).
+  - Idle is a plain 0 W setpoint: the battery holds `0 W` and stops charging or
+    discharging. Manual standby is deliberately never used — its enable/disable
+    round-trips force an inverter/DC re-init cycle, and setpoints arriving
+    inside that startup window can leave the battery wedged in its `Init`
+    state (recoverable only via power cycle).
   - Values are clamped to the device's real limits, read from the battery
     (`IC_InverterMaxPower_w`, or `site/limits` on newer systems). The battery
     silently accepts oversized setpoints, so the app enforces honest feedback:
     the clamped value is written back to the `target_power` capability.
+  - Entering `homey` via a mode-only write starts from idle: the battery is
+    stopped with a 0 W setpoint and a stale stored `target_power` is reset to
+    `0` instead of being re-applied.
   - Leaving `homey` control resets the stored target power to `0` so switching
     back at a later time starts from idle instead of re-applying a stale
     setpoint.

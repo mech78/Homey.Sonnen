@@ -59,7 +59,8 @@ export class TargetPowerLimits {
 
   /**
    * Clamps a signed `target_power` value to the device limits.
-   * `0` never enters the clamp path (idle is handled via standby, not setpoints).
+   * `0` never enters the clamp path (it passes through unchanged and is
+   * applied as a 0 W stop setpoint).
    *
    * @returns the clamped value and whether it was modified (for logging).
    */

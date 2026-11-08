@@ -200,6 +200,44 @@
           "nl": "Opmerking",
           "sv": "Anmärkning"
         }
+      },
+      {
+        "id": "max_charge_power",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Max. charge power",
+          "de": "Max. Ladeleistung",
+          "da": "Maks. opladeeffekt",
+          "nl": "Max. laadvermogen",
+          "sv": "Max. laddningseffekt"
+        },
+        "hint": {
+          "en": "Maximum AC charging power the battery accepts, read from the battery. Setpoints above this value are clamped.",
+          "de": "Maximale AC-Ladeleistung, die die Batterie aufnimmt, von der Batterie gelesen. Setpoints über diesem Wert werden begrenzt.",
+          "da": "Maksimal AC-opladeeffekt, som batteriet accepterer, aflæst fra batteriet. Målværdier over denne værdi begrænses.",
+          "nl": "Maximaal AC-laadvermogen dat de batterij accepteert, uitgelezen van de batterij. Streefwaarden boven deze waarde worden begrensd.",
+          "sv": "Maximal AC-laddningseffekt som batteriet accepterar, avläst från batteriet. Målvärden över detta värde begränsas."
+        }
+      },
+      {
+        "id": "max_discharge_power",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Max. discharge power",
+          "de": "Max. Entladeleistung",
+          "da": "Maks. afladeeffekt",
+          "nl": "Max. ontlaadvermogen",
+          "sv": "Max. urladdningseffekt"
+        },
+        "hint": {
+          "en": "Maximum AC discharging power the battery can deliver, read from the battery. Setpoints below the negative of this value are clamped.",
+          "de": "Maximale AC-Entladeleistung, die die Batterie abgeben kann, von der Batterie gelesen. Setpoints unter dem negativen dieses Wertes werden begrenzt.",
+          "da": "Maksimal AC-afladeeffekt, som batteriet kan levere, aflæst fra batteriet. Målværdier under den negative af denne værdi begrænses.",
+          "nl": "Maximaal AC-ontlaadvermogen dat de batterij kan leveren, uitgelezen van de batterij. Streefwaarden onder het negatieve van deze waarde worden begrensd.",
+          "sv": "Maximal AC-urladdningseffekt som batteriet kan leverera, avläst från batteriet. Målvärden under det negativa av detta värde begränsas."
+        }
       }
     ]
   },
