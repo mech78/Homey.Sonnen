@@ -179,23 +179,16 @@ export class TargetPowerMode {
   }
 
   /**
-   * Validates that a power value is a whole non-negative number of watts,
-   * matching the battery's setpoint API constraints (negative or fractional
-   * values are rejected with "invalid argument").
-   */
-  public static isValidTargetPower(watts: number): boolean {
-    return Number.isInteger(watts) && watts >= 0;
-  }
-
-  /**
    * Decomposes a signed `target_power` value into a setpoint command.
    * Positive values charge, negative values discharge; zero yields null here —
    * idle is planned as an explicit 0 W stop setpoint (see {@link planPowerControl}).
+   *
+   * Values reaching this layer are guaranteed whole numbers by the entry layer
+   * (capability options `step`/`decimals: 0`, flow-card args `step: 1`); the
+   * client's `setSetpoint` additionally enforces the battery's API contract
+   * (non-negative integers) on the unsigned magnitude.
    */
   public static decomposeTargetPower(watts: number): SetpointCommand | null {
-    if (!this.isValidTargetPower(Math.abs(watts))) {
-      throw new LocalizedError('error.validation.invalid_setpoint_power', { power: String(watts) });
-    }
     if (watts > 0) {
       return { direction: 'charge', watts };
     }
@@ -219,9 +212,6 @@ export class TargetPowerMode {
    */
   public static planPowerControl(input: PlanPowerControlInput): ControlActions {
     const power = input.requestedPower ?? input.currentPower ?? 0;
-    if (!this.isValidTargetPower(Math.abs(power))) {
-      throw new LocalizedError('error.validation.invalid_setpoint_power', { power: String(power) });
-    }
 
     const modeChanged = input.requestedMode !== input.previousMode;
 

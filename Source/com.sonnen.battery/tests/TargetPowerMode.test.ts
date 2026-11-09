@@ -90,19 +90,6 @@ describe('TargetPowerMode', () => {
     });
   });
 
-  describe('isValidTargetPower (setpoint validation)', () => {
-    it('should accept whole non-negative watts including zero', () => {
-      expect(TargetPowerMode.isValidTargetPower(0)).toBe(true);
-      expect(TargetPowerMode.isValidTargetPower(100)).toBe(true);
-      expect(TargetPowerMode.isValidTargetPower(4600)).toBe(true);
-    });
-
-    it('should reject negative and fractional values', () => {
-      expect(TargetPowerMode.isValidTargetPower(-100)).toBe(false);
-      expect(TargetPowerMode.isValidTargetPower(0.5)).toBe(false);
-    });
-  });
-
   describe('decomposeTargetPower (signed power decomposition)', () => {
     it('should decompose positive values into a charge setpoint', () => {
       expect(TargetPowerMode.decomposeTargetPower(3000)).toEqual({ direction: 'charge', watts: 3000 });
@@ -114,10 +101,6 @@ describe('TargetPowerMode', () => {
 
     it('should return null for zero (idle)', () => {
       expect(TargetPowerMode.decomposeTargetPower(0)).toBeNull();
-    });
-
-    it('should throw for fractional values', () => {
-      expect(() => TargetPowerMode.decomposeTargetPower(100.5)).toThrow(LocalizedError);
     });
   });
 
@@ -294,14 +277,6 @@ describe('TargetPowerMode', () => {
         setpoint: null,
       });
     });
-
-    it('should throw for a fractional power value', () => {
-      expect(() => TargetPowerMode.planPowerControl({
-        ...base,
-        requestedMode: 'homey',
-        requestedPower: 100.5,
-      })).toThrow(LocalizedError);
-    });
   });
 
   describe('planCapabilityChange (combined capability listener planning)', () => {
@@ -446,13 +421,6 @@ describe('TargetPowerMode', () => {
       expect(plan.requestedMode).toBe('homey');
       expect(plan.actions.operatingMode).toBe('1');
       expect(plan.actions.setpoint).toEqual({ direction: 'charge', watts: 0 });
-    });
-
-    it('should throw a LocalizedError for a fractional requested power', () => {
-      expect(() => TargetPowerMode.planCapabilityChange(
-        { targetPower: 100.5, targetPowerMode: null },
-        baseState,
-      )).toThrow(LocalizedError);
     });
   });
 });
