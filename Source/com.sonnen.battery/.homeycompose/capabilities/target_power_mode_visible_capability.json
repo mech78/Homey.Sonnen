@@ -72,6 +72,5 @@
       }
     }
   ],
-  "insights": false,
-  "icon": "/assets/images/svg/switch-button-svgrepo-com.svg"
+  "insights": false
 }
