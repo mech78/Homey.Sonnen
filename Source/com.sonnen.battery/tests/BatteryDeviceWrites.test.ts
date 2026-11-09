@@ -24,6 +24,79 @@ function createDevice(): AnyDevice {
   return device;
 }
 
+describe('fanOutResolvedPowerLimits', () => {
+  function createFanOutDevice(): AnyDevice {
+    const device = createDevice();
+    device.homey = { emit: jest.fn() };
+    device.siteLimitsCache = null;
+    device.siteLimitsCacheTtlMillis = 600000;
+    device.powerLimits = { charge: 46000, discharge: 46000, source: 'default' };
+    device.createSonnenBatterieClient = jest.fn(() => device.client);
+    device.client = {
+      getSiteLimits: jest.fn(async () => ({})),
+    };
+    return device;
+  }
+
+  it('falls back to the inverter power limit when site limits are empty', async () => {
+    const device = createFanOutDevice();
+
+    await device.fanOutResolvedPowerLimits({ IC_InverterMaxPower_w: '4600' });
+
+    expect(device.homey.emit).toHaveBeenCalledWith('sonnenLimitsUpdate', {
+      charge: 4600,
+      discharge: 4600,
+      source: 'inverter',
+    });
+    expect(device.powerLimits).toEqual({ charge: 4600, discharge: 4600, source: 'inverter' });
+  });
+
+  it('prefers the site limits over the inverter power limit', async () => {
+    const device = createFanOutDevice();
+    device.client.getSiteLimits = jest.fn(async () => ({
+      p_bess_inv_max_import_limit: 5000,
+      p_bess_inv_max_export_limit: 4000,
+    }));
+
+    await device.fanOutResolvedPowerLimits({ IC_InverterMaxPower_w: '4600' });
+
+    expect(device.homey.emit).toHaveBeenCalledWith('sonnenLimitsUpdate', {
+      charge: 5000,
+      discharge: 4000,
+      source: 'site',
+    });
+  });
+
+  it('caches the site limits and does not re-request them within the TTL', async () => {
+    const device = createFanOutDevice();
+    device.client.getSiteLimits = jest.fn(async () => ({
+      p_bess_inv_max_import_limit: 5000,
+      p_bess_inv_max_export_limit: 4000,
+    }));
+
+    await device.fanOutResolvedPowerLimits({ IC_InverterMaxPower_w: '4600' });
+    await device.fanOutResolvedPowerLimits({ IC_InverterMaxPower_w: '4600' });
+
+    expect(device.client.getSiteLimits).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the previous limits when the site limits request fails outside the fallback', async () => {
+    const device = createFanOutDevice();
+    device.client.getSiteLimits = jest.fn(async () => {
+      throw new Error('network down');
+    });
+    device.siteLimitsCache = { data: null, fetchedAt: Date.now() + 60_000 }; // cached within the TTL
+
+    await device.fanOutResolvedPowerLimits({ IC_InverterMaxPower_w: '4600' });
+
+    expect(device.homey.emit).toHaveBeenCalledWith('sonnenLimitsUpdate', {
+      charge: 4600,
+      discharge: 4600,
+      source: 'inverter',
+    });
+  });
+});
+
 describe('setCapabilityValueSafe', () => {
   it('sets the value when the capability is present', async () => {
     const device = createDevice();

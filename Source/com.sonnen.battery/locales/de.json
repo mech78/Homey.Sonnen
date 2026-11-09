@@ -73,7 +73,8 @@
     "solarPanel": "Solarmodul",
     "battery": "Batterie",
     "gridMeter": "Netz",
-    "householdMeter": "Haushalt"
+    "householdMeter": "Haushalt",
+    "emsControl": "EMS-Steuerung"
   },
   "operatingMode": {
     "1": "Manuell",

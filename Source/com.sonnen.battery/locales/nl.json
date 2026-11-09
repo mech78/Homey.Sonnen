@@ -73,7 +73,8 @@
     "solarPanel": "zonnepaneel",
     "battery": "batterij",
     "gridMeter": "net",
-    "householdMeter": "huishouden"
+    "householdMeter": "huishouden",
+    "emsControl": "EMS-sturing"
   },
   "operatingMode": {
     "1": "Handmatig",
