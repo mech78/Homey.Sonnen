@@ -24,11 +24,22 @@
     "cycleCountQueuesNotReset": "Kon cyclus-tellingen niet resetten."
   },
   "eclipseLed": {
+    "Blinkingblue": "knipperend blauw",
+    "BlinkingGreen": "knipperend groen",
+    "Blinkingpurple": "knipperend paars",
+    "BlinkingsonnenGradient": "knipperende sonnen-kleurverloop",
     "BlinkingRed": "knipperend rood",
+    "Pulsingblue": "pulserend blauw",
     "PulsingGreen": "pulserend groen",
     "PulsingOrange": "pulserend oranje",
+    "Pulsingpurple": "pulserend paars",
+    "PulsingRed": "pulserend rood",
     "PulsingWhite": "pulserend wit",
+    "RotatingsonnenGradient": "roterende sonnen-kleurverloop",
+    "Solidblue": "continu blauw",
+    "Solidpurple": "continu paars",
     "SolidRed": "continu rood",
+    "SolidsonnenGradient": "continu sonnen-kleurverloop",
     "Unknown": "onbekend"
   },
   "stateBms": {

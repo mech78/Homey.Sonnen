@@ -361,10 +361,11 @@ export class BatteryDevice extends SonnenDevice {
 
       // update device's batteries to actual number of internal batteries
       const numberBatteries = +latestDataJson.ic_status.nrbatterymodules;
-      const actualBatteries = new Array(numberBatteries).fill('INTERNAL');
+      const actualBatteries: [string, ...string[]] =
+        new Array(numberBatteries).fill('INTERNAL') as [string, ...string[]];
       const energy = (await this.getEnergy()) || {
         homeBattery: true,
-        batteries: [],
+        batteries: [] as unknown as [string, ...string[]],
         "meterPowerImportedCapability": "meter_power.charged",
         "meterPowerExportedCapability": "meter_power.discharged"
       };

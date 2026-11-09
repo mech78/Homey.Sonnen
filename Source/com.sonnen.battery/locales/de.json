@@ -24,11 +24,22 @@
     "cycleCountQueuesNotReset": "Zyklenzählung konnte nicht zurückgesetzt werden."
   },
   "eclipseLed": {
+    "Blinkingblue": "blinkt blau",
+    "BlinkingGreen": "blinkt grün",
+    "Blinkingpurple": "blinkt violett",
+    "BlinkingsonnenGradient": "blinkt im sonnen-Farbverlauf",
     "BlinkingRed": "blinkt rot",
+    "Pulsingblue": "pulsiert blau",
     "PulsingGreen": "pulsiert grün",
     "PulsingOrange": "pulsiert orange",
+    "Pulsingpurple": "pulsiert violett",
+    "PulsingRed": "pulsiert rot",
     "PulsingWhite": "pulsiert weiß",
+    "RotatingsonnenGradient": "rotiert im sonnen-Farbverlauf",
+    "Solidblue": "dauerhaft blau",
+    "Solidpurple": "dauerhaft violett",
     "SolidRed": "dauerhaft rot",
+    "SolidsonnenGradient": "dauerhaft im sonnen-Farbverlauf",
     "Unknown": "unbekannt"
   },
   "stateBms": {

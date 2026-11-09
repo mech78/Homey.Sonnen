@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.sonnen.battery",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
@@ -744,7 +744,7 @@
               "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "nl": "Voer begintijd in voor nieuw laadmoment. De tekst moet correct zijn opgemaakt in 24-uurs formaat (bijv. 13:15)",
               "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
@@ -814,7 +814,7 @@
               "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "nl": "Voer begintijd in voor nieuw laadmoment. De tekst moet correct zijn opgemaakt in 24-uurs formaat (bijv. 13:15)",
               "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
@@ -825,7 +825,7 @@
               "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
               "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
               "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
+              "nl": "Voer eindtijd in voor het nieuwe laadmoment. De tekst moet correct zijn opgemaakt in 24-uurs formaat (bijv. 13:15)",
               "sv": "Ange sluttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
             }
           },
@@ -957,22 +957,22 @@
             "type": "text",
             "name": "start",
             "placeholder": {
-              "en": "Enter starting time for new charge event. String must be well-formatted 24h format (ex: 13:15)",
-              "de": "Startzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
-              "da": "Indtast starttidspunkt for ny opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer begintijd in voor nieuw laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
-              "sv": "Ange starttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
+              "en": "Enter the start of the pause period. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Beginn der Pausenzeit eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast starttidspunkt for pausen. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer de begintijd van de pauze in. De tekst moet correct zijn opgemaakt in 24-uurs formaat (bijv. 13:15)",
+              "sv": "Ange början av pausperioden. Strängen måste vara korrekt formaterad i 24-timmarsformat (t.ex. 13:15)"
             }
           },
           {
             "type": "text",
             "name": "end",
             "placeholder": {
-              "en": "Enter end time for the new charge event. String must be well-formatted 24h format (ex: 13:15)",
-              "de": "Endzeit für neues Ladeereignis eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
-              "da": "Indtast sluttidspunkt for den nye opladningsbegivenhed. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
-              "nl": "Voer eindtijd in voor het nieuwe laadmoment. String moet correct zijn geformatteerd in 24-uurs formaat (bijv: 13:15)",
-              "sv": "Ange sluttid för den nya laddningen. Strängen måste vara i korrekt 24-timmarsformat (t.ex. 13:15)"
+              "en": "Enter the end of the pause period. String must be well-formatted 24h format (ex: 13:15)",
+              "de": "Ende der Pausenzeit eingeben. Die Zeichenkette muss im 24-Stunden-Format angegeben werden (z. B. 13:15)",
+              "da": "Indtast sluttidspunkt for pausen. Strengen skal være korrekt formateret i 24-timers format (f.eks.: 13:15)",
+              "nl": "Voer de eindtijd van de pauze in. De tekst moet correct zijn opgemaakt in 24-uurs formaat (bijv. 13:15)",
+              "sv": "Ange slutet av pausperioden. Strängen måste vara korrekt formaterad i 24-timmarsformat (t.ex. 13:15)"
             }
           }
         ]
