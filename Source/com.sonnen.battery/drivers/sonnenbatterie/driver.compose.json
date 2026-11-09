@@ -75,6 +75,7 @@
       "min": -46000,
       "max": 46000,
       "step": 100,
+      "decimals": 0,
       "title": {
         "en": "Target Power (Homey control)",
         "de": "Zielleistung (Homey-Steuerung)",
@@ -158,7 +159,8 @@
     "target_power_visible_capability": {
       "min": -46000,
       "max": 46000,
-      "step": 100
+      "step": 100,
+      "decimals": 0
     },
     "battery_charging_state": {
       "title": {
