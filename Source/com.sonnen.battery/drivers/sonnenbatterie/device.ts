@@ -7,6 +7,7 @@ import { LocalizedError } from '../../domain/LocalizedError';
 import { throwLocalizedError, resolveOperatingMode, resolveCircleColor } from '../../lib/LocalizationService';
 import { KNOWN_OPERATING_MODES, resolveOperatingModeSyncAction, shouldWriteOperatingModeToBattery } from '../../domain/OperatingModes';
 import { isValidBackupBuffer, parseBackupBuffer, shouldWriteBackupBufferToBattery } from '../../domain/BackupBuffer';
+import { PowerLimits, SiteLimitsResponse, TargetPowerLimits } from '../../domain/TargetPowerLimits';
 
 export class BatteryDevice extends SonnenDevice {
   private state: SonnenState = new SonnenState();
@@ -16,6 +17,13 @@ export class BatteryDevice extends SonnenDevice {
   private lastReportedOperatingMode: string | null = null;
   private lastReportedBackupBuffer: number | null = null;
   private missingCapabilitiesWarned = new Set<string>();
+  private siteLimitsCache: { data: SiteLimitsResponse | null; fetchedAt: number } | null = null;
+  private readonly siteLimitsCacheTtlMillis = 600000; // 10 minutes
+  private powerLimits: PowerLimits = {
+    charge: TargetPowerLimits.DEFAULT_LIMIT_W,
+    discharge: TargetPowerLimits.DEFAULT_LIMIT_W,
+    source: 'default',
+  };
 
 
   async onInit() {
@@ -492,6 +500,12 @@ export class BatteryDevice extends SonnenDevice {
 
       const reportedOperatingMode = operatingMode === undefined || operatingMode === null ? null : String(operatingMode);
       this.lastReportedOperatingMode = reportedOperatingMode;
+      // Fan-out the raw operating mode to sibling devices (e.g. the EMS
+      // control device) so they stay in sync without polling the battery
+      // themselves. Emission only — no capability/settings logic here.
+      if (reportedOperatingMode !== null) {
+        this.homey.emit('sonnenControlUpdate', reportedOperatingMode);
+      }
       const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
       const syncAction = resolveOperatingModeSyncAction(reportedOperatingMode, storedOperatingMode, KNOWN_OPERATING_MODES);
       if (syncAction === 'sync') {
@@ -499,6 +513,8 @@ export class BatteryDevice extends SonnenDevice {
       } else if (syncAction === 'unknown') {
         this.error('Battery reported unknown operating mode "' + reportedOperatingMode + '", not syncing it into the operating_mode setting');
       }
+
+      await this.fanOutResolvedPowerLimits(configurationsJson);
 
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];
       const prognosisChargingMode = prognosisCharging === "1";
@@ -545,6 +561,56 @@ export class BatteryDevice extends SonnenDevice {
   private isUpdateDue(currentUpdate: Date, lastUpdate: Date | null, updateIntervalSeconds: number): boolean {
     return !lastUpdate ||
       (currentUpdate.getTime() - lastUpdate.getTime()) > (updateIntervalSeconds * 1000);
+  }
+
+  /**
+   * Resolves the device's real AC power limits and fans them out to sibling
+   * devices (e.g. the EMS control device) over the bus, so they can re-range
+   * their sliders without polling the battery themselves. Emission only —
+   * no capability/settings logic here.
+   *
+   * `site/limits` (preferred, newer systems) falls back to
+   * `IC_InverterMaxPower_w` from the already-fetched configurations: older
+   * generations return an empty site limits object (observed 2026-11-10) or
+   * do not support the endpoint at all, so the inverter value is what the
+   * sibling sliders actually get re-ranged to on them.
+   *
+   * Non-fatal on failure: siblings keep their previous/default slider range
+   * for that cycle and the next poll retries.
+   */
+  private async fanOutResolvedPowerLimits(configurationsJson: Record<string, unknown>): Promise<void> {
+    try {
+      const siteLimits = await this.getSiteLimitsCached();
+      const inverterMaxPowerW = (configurationsJson['IC_InverterMaxPower_w'] as string | number | null | undefined) ?? null;
+      this.powerLimits = TargetPowerLimits.resolve(siteLimits, inverterMaxPowerW);
+      this.homey.emit('sonnenLimitsUpdate', this.powerLimits);
+    } catch (error) {
+      this.error('Could not resolve power limits for the bus fan-out', error);
+    }
+  }
+
+  /**
+   * Reads the site power limits through a short-lived TTL cache: the limits
+   * change rarely, and the endpoint is called on every poll cycle. Older
+   * systems that cannot serve the endpoint are remembered as `null` so the
+   * fan-out falls back to the inverter limit without re-requesting it.
+   */
+  private async getSiteLimitsCached(): Promise<SiteLimitsResponse | null> {
+    const now = Date.now();
+    if (this.siteLimitsCache && (now - this.siteLimitsCache.fetchedAt) < this.siteLimitsCacheTtlMillis) {
+      return this.siteLimitsCache.data;
+    }
+
+    const client = this.createSonnenBatterieClient();
+    try {
+      const data = await client.getSiteLimits() as SiteLimitsResponse;
+      this.siteLimitsCache = { data, fetchedAt: now };
+      return data;
+    } catch (error) {
+      this.log('Could not read site limits, falling back to the inverter power limit', error);
+      this.siteLimitsCache = { data: null, fetchedAt: now };
+      return null;
+    }
   }
 
   /**

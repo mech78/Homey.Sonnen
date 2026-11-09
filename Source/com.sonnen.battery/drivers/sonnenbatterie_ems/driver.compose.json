@@ -1,0 +1,87 @@
+{
+  "$extends": "sonnenbatterie",
+  "name": {
+    "en": "sonnenBatterie EMS",
+    "de": "sonnenBatterie EMS",
+    "da": "sonnenBatterie EMS",
+    "nl": "sonnenBatterie EMS",
+    "sv": "sonnenBatterie EMS"
+  },
+  "class": "battery",
+  "capabilities": [
+    "target_power",
+    "target_power_mode"
+  ],
+  "capabilitiesOptions": {
+    "target_power": {
+      "min": -46000,
+      "max": 46000,
+      "step": 100,
+      "decimals": 0
+    },
+    "target_power_mode": {
+      "values": [
+        {
+          "id": "homey",
+          "title": {
+            "en": "Homey",
+            "de": "Homey",
+            "da": "Homey",
+            "nl": "Homey",
+            "sv": "Homey"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual",
+            "de": "Manuell",
+            "da": "Manuel",
+            "nl": "Handmatig",
+            "sv": "Manuell"
+          }
+        },
+        {
+          "id": "self_consumption",
+          "title": {
+            "en": "Self consumption",
+            "de": "Eigenverbrauch",
+            "da": "Eget forbrug",
+            "nl": "Eigen verbruik",
+            "sv": "Egen förbrukning"
+          }
+        },
+        {
+          "id": "module_extension",
+          "title": {
+            "en": "Module extension (30%)",
+            "de": "Modulerweiterung (30%)",
+            "da": "Moduludvidelse (30%)",
+            "nl": "Module uitbreiding (30%)",
+            "sv": "Modulutbyggnad (30%)"
+          }
+        },
+        {
+          "id": "time_of_use",
+          "title": {
+            "en": "Time-of-Use",
+            "de": "Time-of-Use",
+            "da": "Time-of-Use",
+            "nl": "Time-of-Use",
+            "sv": "Time-of-Use"
+          }
+        },
+        {
+          "id": "optimization",
+          "title": {
+            "en": "Automatic - Optimization",
+            "de": "Automatik - Optimierung",
+            "da": "Automatisk - Optimering",
+            "nl": "Automatisch - Optimalisatie",
+            "sv": "Automatisk - Optimering"
+          }
+        }
+      ]
+    }
+  }
+}

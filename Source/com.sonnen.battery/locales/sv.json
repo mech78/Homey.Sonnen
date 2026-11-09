@@ -73,7 +73,8 @@
     "solarPanel": "solpanel",
     "battery": "batteri",
     "gridMeter": "nät",
-    "householdMeter": "hushåll"
+    "householdMeter": "hushåll",
+    "emsControl": "EMS-styrning"
   },
   "operatingMode": {
     "1": "Manuell",

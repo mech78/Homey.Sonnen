@@ -73,7 +73,8 @@
     "solarPanel": "solar panel",
     "battery": "battery",
     "gridMeter": "grid",
-    "householdMeter": "household"
+    "householdMeter": "household",
+    "emsControl": "EMS control"
   },
   "operatingMode": {
     "1": "Manual",
