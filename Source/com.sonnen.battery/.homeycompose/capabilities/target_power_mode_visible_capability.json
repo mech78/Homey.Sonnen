@@ -1,11 +1,11 @@
 {
   "type": "enum",
   "title": {
-    "en": "Target Power Mode (Homey control)",
-    "de": "Zielleistungsmodus (Homey-Steuerung)",
-    "da": "Måleffekttilstand (Homey-styring)",
-    "nl": "Streefvermogenmodus (Homey-sturing)",
-    "sv": "Måleffektsläge (Homey-styrning)"
+    "en": "Target Power Mode",
+    "de": "Zielleistungsmodus",
+    "da": "Måleffekttilstand",
+    "nl": "Streefvermogenmodus",
+    "sv": "Måleffektsläge"
   },
   "uiComponent": "picker",
   "getable": true,

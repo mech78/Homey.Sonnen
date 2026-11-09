@@ -1,11 +1,11 @@
 {
   "type": "number",
   "title": {
-    "en": "Target Power (Homey control)",
-    "de": "Zielleistung (Homey-Steuerung)",
-    "da": "Måleffekt (Homey-styring)",
-    "nl": "Streefvermogen (Homey-sturing)",
-    "sv": "Måleffekt (Homey-styrning)"
+    "en": "Target Power",
+    "de": "Zielleistung",
+    "da": "Måleffekt",
+    "nl": "Streefvermogen",
+    "sv": "Måleffekt"
   },
   "uiComponent": "slider",
   "getable": true,
