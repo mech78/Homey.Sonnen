@@ -16,6 +16,5 @@
   "min": -46000,
   "max": 46000,
   "step": 100,
-  "insights": false,
-  "icon": "/assets/images/svg/bolt-thunder-svgrepo-com.svg"
+  "insights": false
 }
