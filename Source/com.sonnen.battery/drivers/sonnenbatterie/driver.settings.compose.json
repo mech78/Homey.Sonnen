@@ -157,6 +157,25 @@
           "nl": "Voer de datum in waarop de batterij is geïnstalleerd in ISO 8601-formaat (bijv. 2020-12-31). Wordt gebruikt om het gemiddelde dagelijkse aantal cycli sinds de installatie te berekenen. De installatiedatum is te vinden bij de batterijgegevens in de Sonnen App.",
           "sv": "Ange datumet då batteriet installerades i ISO 8601-format (t.ex. 2020-12-31). Används för att beräkna det genomsnittliga dagliga antalet cykler sedan installationen. Installationsdatumet finns i batteridetaljerna i Sonnen-appen."
         }
+      },
+      {
+        "id": "show_target_power_controls",
+        "type": "checkbox",
+        "label": {
+          "en": "EMS power control (target power)",
+          "de": "EMS-Leistungssteuerung (Zielleistung)",
+          "da": "EMS-strømstyring (måleffekt)",
+          "nl": "EMS-vermogensregeling (doelvermogen)",
+          "sv": "EMS-effektstyrning (måleffekt)"
+        },
+        "value": false,
+        "hint": {
+          "en": "Adds the target power control surface to this device: Homey Energy, EMS apps (e.g. Smart EMS, Ultimate EMS) and flows can then control the battery's charge/discharge power. Disabling removes the surface again and returns the battery to self-consumption.",
+          "de": "Fügt diesem Gerät die Zielleistungssteuerung hinzu: Homey Energy, EMS-Apps (z. B. Smart EMS, Ultimate EMS) und Flows können dann die Lade-/Entladeleistung der Batterie steuern. Das Deaktivieren entfernt die Steuerung wieder und versetzt die Batterie zurück in den Eigenverbrauch.",
+          "da": "Tilføjer måleffektstyringen til denne enhed: Homey Energy, EMS-apps (f.eks. Smart EMS, Ultimate EMS) og flows kan derefter styre batteriets ladning/afladning. Deaktivering fjerner styringen igen og sætter batteriet tilbage til eget forbrug.",
+          "nl": "Voegt het doelvermogensoppervlak aan dit apparaat toe: Homey Energy, EMS-apps (zoals Smart EMS, Ultimate EMS) en flows kunnen dan het laad-/ontlaadvermogen van de batterij sturen. Uitschakelen verwijdert het oppervlak weer en zet de batterij terug naar eigen verbruik.",
+          "sv": "Lägger till måleffektstyrningen till denna enhet: Homey Energy, EMS-appar (t.ex. Smart EMS, Ultimate EMS) och flöden kan sedan styra batteriets laddning/urladdning. Avaktivering tar bort styrningen igen och återställer batteriet till egen förbrukning."
+        }
       }
     ]
   },
