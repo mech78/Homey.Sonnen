@@ -140,19 +140,10 @@ export class BatteryDevice extends SonnenDevice {
     if (_.contains(changedKeys, "show_target_power_controls")) {
       const showTargetPowerControls = newSettings["show_target_power_controls"] === true;
       this.log("Settings", "ShowTargetPowerControls", showTargetPowerControls);
-      await this.syncTargetPowerControls(showTargetPowerControls);
-      if (!showTargetPowerControls) {
-        // Leaving EMS control: no setpoint may survive the surface going
-        // away. Self-consumption releases the Manual-mode carrier setpoint;
-        // the toggle-on path re-seeds from the battery's real mode.
-        try {
-          await this.createSonnenBatterieClient().setOperatingMode('2');
-        } catch (error) {
-          this.error('Failed to reset the battery operating mode after disabling EMS power control', error);
-          throwLocalizedError(error);
-        }
-        this.targetPowerModeState = null;
-        this.lastWrittenTargetPowerState = null;
+      if (showTargetPowerControls) {
+        await this.syncTargetPowerControls(true);
+      } else {
+        await this.disableTargetPowerControl();
       }
     }
 
@@ -176,7 +167,7 @@ export class BatteryDevice extends SonnenDevice {
         this.log("Settings", "OperatingMode", newOperatingMode, "already active on battery, skipping battery write");
       } else {
         try {
-          await this.createSonnenBatterieClient().setOperatingMode(newOperatingMode);
+          await this.applyExternalOperatingMode(newOperatingMode);
 
           // Clear time-of-use schedule when operating mode is changed away from 10
           if (currentOperatingMode === mode_ToU && newOperatingMode !== mode_ToU) {
@@ -368,21 +359,16 @@ export class BatteryDevice extends SonnenDevice {
 
   /**
    * Initializes the target power capability values for freshly added
-   * capabilities. Falls back to the persisted operating mode (synced from
-   * the battery by the polling loop) so flows act on the real mode even
-   * before the first poll completed; defaults to self consumption otherwise,
-   * consistent with the settings-page operating mode default.
+   * capabilities. The controller model is two-valued (`homey` / `device`):
+   * enabling the surface never takes control by itself, so the seeded state
+   * is `device` — the battery keeps running whatever strategy the user's
+   * `operating_mode` setting has it on (visible on the operating mode card).
    */
   private async initializeTargetPowerCapabilities() {
     this.targetPowerModeState = (this.getCapabilityValue('target_power_mode') as TargetPowerModeValue) ?? null;
     if (this.targetPowerModeState === null || this.targetPowerModeState === undefined) {
-      const storedOperatingMode = this.getSetting('operating_mode') as string | undefined;
-      const persistedMode = storedOperatingMode !== undefined && storedOperatingMode !== null
-        ? TargetPowerMode.fromOperatingMode(storedOperatingMode)
-        : null;
-      const initialMode: TargetPowerModeValue = persistedMode ?? 'self_consumption';
-      await this.setCapabilityValueSafe('target_power_mode', initialMode);
-      this.targetPowerModeState = initialMode;
+      await this.setCapabilityValueSafe('target_power_mode', 'device');
+      this.targetPowerModeState = 'device';
     }
     const currentPower = this.getCapabilityValue('target_power');
     if (currentPower === null || currentPower === undefined) {
@@ -396,6 +382,38 @@ export class BatteryDevice extends SonnenDevice {
       power: seededPower === null || seededPower === undefined ? null : +seededPower,
       mode: this.targetPowerModeState,
     };
+  }
+
+  /**
+   * The operating mode captured before Homey took control (persisted in an
+   * undeclared device setting — the same storage pattern the platform's own
+   * energy keys use), validated against the known operating modes. `null`
+   * means no usable backup exists and an exit must not write any mode.
+   */
+  private getPersistedPriorOperatingMode(): string | null {
+    const mode = this.getSetting('target_power_prior_operating_mode');
+    return typeof mode === 'string' && (KNOWN_OPERATING_MODES as readonly string[]).includes(mode) ? mode : null;
+  }
+
+  /**
+   * Captures the battery's current operating mode before Homey takes
+   * control, so an exit can restore it. Only called on the transition into
+   * control. Without a readable mode, nothing is persisted and the exit
+   * later applies no mode change at all (never a guessed default).
+   */
+  private async capturePriorOperatingMode(): Promise<void> {
+    const mode = this.getSetting('operating_mode') as string | undefined;
+    if (typeof mode === 'string' && (KNOWN_OPERATING_MODES as readonly string[]).includes(mode)) {
+      await this.setSettingsSafe({ target_power_prior_operating_mode: mode });
+      this.log('Captured prior operating mode before Homey control:', mode);
+    } else {
+      this.log('No known operating mode to capture before Homey control; exit will not restore a mode');
+      await this.setSettingsSafe({ target_power_prior_operating_mode: '' });
+    }
+  }
+
+  private async clearPersistedPriorOperatingMode(): Promise<void> {
+    await this.setSettingsSafe({ target_power_prior_operating_mode: '' });
   }
 
   /**
@@ -457,14 +475,23 @@ export class BatteryDevice extends SonnenDevice {
   private async applyTargetPowerChange(values: Record<string, unknown>): Promise<void> {
     const request = BatteryDevice.readControlRequest(values);
     const currentPowerValue = this.getCapabilityValue('target_power');
+    const wasControlling = this.targetPowerModeState === 'homey';
     const plan = TargetPowerMode.planCapabilityChange(request, {
       currentMode: this.targetPowerModeState,
       currentPower: currentPowerValue === null || currentPowerValue === undefined ? null : +currentPowerValue,
       limits: this.powerLimits,
+      restoreOperatingMode: wasControlling ? this.getPersistedPriorOperatingMode() : null,
     });
 
     if (request.targetPowerMode === null && request.targetPower !== null && plan.requestedMode !== this.targetPowerModeState) {
       this.log('Implied mode switch: writing target_power hands control to Homey');
+    }
+
+    if (plan.requestedMode === 'homey' && !wasControlling) {
+      // Entering control: remember the battery's own strategy so an exit can
+      // restore it. Must happen before the operating mode is switched to
+      // Manual below.
+      await this.capturePriorOperatingMode();
     }
 
     await this.applyControlActions(plan.actions);
@@ -485,6 +512,11 @@ export class BatteryDevice extends SonnenDevice {
       power: writtenPower !== null ? writtenPower : this.lastWrittenTargetPowerState?.power ?? null,
       mode: plan.requestedMode,
     };
+    if (plan.requestedMode === 'device' && wasControlling) {
+      // The captured mode was consumed by the restore — do not keep it
+      // around as a stale backup for a future control period.
+      await this.clearPersistedPriorOperatingMode();
+    }
     if (plan.writeBackPower !== null) {
       // A clamp correction happened: this is the only write Homey's delayed
       // finalization of the user's raw set can revert, so schedule the
@@ -573,6 +605,82 @@ export class BatteryDevice extends SonnenDevice {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Applies an operating mode from **outside** the target-power control path
+   * (settings dialog, operating-mode card/flow actions). Per the controller
+   * model, every such application of a mode while Homey is in control is a
+   * return of control to the device: the controller exits (capability to
+   * `device`, stored power reset, prior-mode memory cleared) and the
+   * requested mode is then applied to the battery. Exits are chained onto
+   * the control queue so they cannot interleave with an in-flight setpoint
+   * batch; the mode write itself proceeds immediately (the queued exit
+   * performs no operating-mode write of its own).
+   *
+   * Public: the driver's flow actions call this for their operating-mode
+   * writes — the one deliberate entry point for external mode applications.
+   */
+  public async applyExternalOperatingMode(mode: string): Promise<void> {
+    if (this.targetPowerModeState === 'homey') {
+      this.exitTargetPowerControlToDevice(`operating mode ${mode} applied outside Homey control`);
+    }
+    await this.createSonnenBatterieClient().setOperatingMode(mode);
+  }
+
+  /**
+   * Exits Homey control and returns the controller to `device`. Used by the
+   * poll sync (battery reported a strategy mode while controlling) and by
+   * {@link applyExternalOperatingMode}. The battery is **not** switched to
+   * any mode here — it already runs the strategy the exit is reacting to.
+   * Chained onto the control queue; a stale signal (state already left) is
+   * a no-op.
+   */
+  private exitTargetPowerControlToDevice(reason: string): void {
+    this.targetPowerQueueWorker = this.targetPowerQueueWorker
+      .catch(() => undefined)
+      .then(async () => {
+        if (this.targetPowerModeState !== 'homey') {
+          return; // stale signal: control already left via another path
+        }
+        this.log('Exiting Homey control:', reason);
+        this.targetPowerModeState = 'device';
+        await this.setCapabilityValueSafe('target_power_mode', 'device');
+        await this.setCapabilityValueSafe('target_power', 0);
+        await this.clearPersistedPriorOperatingMode();
+        this.lastWrittenTargetPowerState = { power: 0, mode: 'device' };
+      })
+      .catch((e) => this.error('Failed to exit target power control', e));
+  }
+
+  /**
+   * Disables the EMS power-control surface: removes the capabilities and,
+   * when Homey was in control, restores the captured prior operating mode.
+   * Per the controller model there is **no default mode**: without a capture
+   * (control was never taken, or the backup is unusable) the battery's mode
+   * is left untouched — at worst it stays in Manual, where a leftover
+   * setpoint expires on its own.
+   */
+  private async disableTargetPowerControl(): Promise<void> {
+    const wasControlling = this.targetPowerModeState === 'homey';
+    const priorMode = wasControlling ? this.getPersistedPriorOperatingMode() : null;
+
+    await this.syncTargetPowerControls(false);
+    this.targetPowerModeState = null;
+    this.lastWrittenTargetPowerState = null;
+
+    if (wasControlling && priorMode !== null) {
+      this.log('Restoring the captured prior operating mode after disabling EMS power control:', priorMode);
+      try {
+        await this.createSonnenBatterieClient().setOperatingMode(priorMode);
+      } catch (error) {
+        this.error('Failed to restore the prior operating mode after disabling EMS power control', error);
+        throwLocalizedError(error);
+      }
+    } else if (wasControlling) {
+      this.log('No prior operating mode captured; leaving the battery mode untouched');
+    }
+    await this.clearPersistedPriorOperatingMode();
   }
 
   /**
@@ -924,17 +1032,17 @@ export class BatteryDevice extends SonnenDevice {
         this.error('Could not refresh power limits', limitsError);
       }
 
-      // Sync the target_power_mode capability with externally changed operating
-      // modes (sonnen app, battery UI, other flows). Skipped while the
-      // capabilities are absent (EMS power control disabled). Modes without a
-      // capability representation leave the capability unchanged. Manual
-      // (mode 1) is ambiguous (homey and manual are both its carriers), so
-      // the resolution is sticky on the current state.
-      const targetPowerMode = TargetPowerMode.resolveExternalMode(operatingMode, this.targetPowerModeState);
+      // Sync the controller state with externally changed operating modes
+      // (sonnen app, battery UI). Skipped while the capabilities are absent
+      // (EMS power control disabled). Rule: mode 1 (Manual) is the carrier
+      // of Homey control and is sticky — our own writes and an external
+      // sonnen-app Manual are indistinguishable by mode value alone. Any
+      // other reported mode means the battery runs its own strategy again:
+      // the controller exits to `device` (queued; the exit itself writes no
+      // operating mode).
+      const targetPowerMode = TargetPowerMode.resolveControllerMode(operatingMode, this.targetPowerModeState);
       if (targetPowerMode !== null && this.hasCapability('target_power_mode') && targetPowerMode !== this.targetPowerModeState) {
-        this.log('Syncing target_power_mode with externally changed operating mode', operatingMode, '->', targetPowerMode);
-        await this.setCapabilityValueSafe('target_power_mode', targetPowerMode);
-        this.targetPowerModeState = targetPowerMode;
+        this.exitTargetPowerControlToDevice(`battery operating mode changed externally to ${operatingMode}`);
       }
 
       const prognosisCharging = configurationsJson['EM_Prognosis_Charging'];

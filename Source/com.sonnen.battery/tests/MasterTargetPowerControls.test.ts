@@ -34,7 +34,6 @@ function createDevice(settings: Record<string, unknown> = {}, capabilities: Reco
   device.registerMultipleCapabilityListener = jest.fn();
   device.getSetting = jest.fn((key: string) => settings[key]);
   device.setSettings = jest.fn();
-  device.setSettingsSafe = jest.fn(async (values: Record<string, unknown>) => undefined);
   device.homey = {
     on: jest.fn(),
     removeListener: jest.fn(),
@@ -77,18 +76,18 @@ describe('target power toggle lifecycle', () => {
       expect.any(Function),
       500,
     );
-    // Seeded from the persisted operating mode (2 = self consumption)
-    expect(device.targetPowerModeState).toBe('self_consumption');
-    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'self_consumption');
+    // Two-value controller model: enabling never takes control by itself.
+    expect(device.targetPowerModeState).toBe('device');
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'device');
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power', 0);
     // Bookkeeping seeded so boot-time echoes are no-ops
-    expect(device.lastWrittenTargetPowerState).toEqual({ power: 0, mode: 'self_consumption' });
+    expect(device.lastWrittenTargetPowerState).toEqual({ power: 0, mode: 'device' });
     expect(device.setCapabilityOptions).toHaveBeenCalledWith('target_power', { min: -46000, max: 46000 });
   });
 
   it('disabling removes the built-in capabilities', async () => {
-    const device = createDevice({}, { target_power: 0, target_power_mode: 'homey' });
-    device.targetPowerModeState = 'homey';
+    const device = createDevice({}, { target_power: 0, target_power_mode: 'device' });
+    device.targetPowerModeState = 'device';
 
     await device.syncTargetPowerControls(false);
 
@@ -98,17 +97,44 @@ describe('target power toggle lifecycle', () => {
 });
 
 describe('target power control path', () => {
-  it('applies a power write in homey mode with the implied mode switch and write-backs', async () => {
-    const device = createDevice({}, { target_power_mode: 'self_consumption', target_power: 0 });
-    device.targetPowerModeState = 'self_consumption';
+  it('captures the prior operating mode and switches to Manual with the implied mode switch', async () => {
+    const settings = { operating_mode: '10', target_power_prior_operating_mode: '' };
+    const device = createDevice(settings, { target_power_mode: 'device', target_power: 0 });
+    device.targetPowerModeState = 'device';
     device.powerLimits = { charge: 4600, discharge: 4600, source: 'inverter' };
 
     await applyChange(device, { target_power: 2000 });
 
+    expect(device.setSettings).toHaveBeenCalledWith({ target_power_prior_operating_mode: '10' });
     expect(device.client.setOperatingMode).toHaveBeenCalledWith('1'); // Manual carries the setpoint
     expect(device.client.setSetpoint).toHaveBeenCalledWith('charge', 2000);
     expect(device.targetPowerModeState).toBe('homey');
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'homey');
+  });
+
+  it('restores the captured prior mode when the controller returns to device', async () => {
+    const settings = { target_power_prior_operating_mode: '10' };
+    const device = createDevice(settings, { target_power_mode: 'homey', target_power: 2000 });
+    device.targetPowerModeState = 'homey';
+
+    await applyChange(device, { target_power_mode: 'device' });
+
+    expect(device.client.setOperatingMode).toHaveBeenCalledWith('10'); // ToU restored, not a guessed default
+    expect(device.client.setSetpoint).not.toHaveBeenCalled();
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'device');
+    expect(device.targetPowerModeState).toBe('device');
+    expect(device.setSettings).toHaveBeenCalledWith({ target_power_prior_operating_mode: '' }); // memory consumed
+  });
+
+  it('applies no operating mode on exit when no backup was captured', async () => {
+    const settings = { target_power_prior_operating_mode: '' };
+    const device = createDevice(settings, { target_power_mode: 'homey', target_power: 2000 });
+    device.targetPowerModeState = 'homey';
+
+    await applyChange(device, { target_power_mode: 'device' });
+
+    expect(device.client.setOperatingMode).not.toHaveBeenCalled(); // honest no-op, never a guessed default
+    expect(device.targetPowerModeState).toBe('device');
   });
 
   it('clamps over-limit setpoints and writes the clamped value back', async () => {
@@ -132,17 +158,60 @@ describe('target power control path', () => {
     expect(device.client.setSetpoint).not.toHaveBeenCalled();
     expect(device.setCapabilityValue).not.toHaveBeenCalled();
   });
+});
 
-  it('resets the stored power when leaving Homey control to a device mode', async () => {
-    const device = createDevice({}, { target_power_mode: 'homey', target_power: 4200 });
+describe('exiting control externally', () => {
+  it('exits to device when the battery reports a strategy mode while Homey controls', async () => {
+    const settings = { target_power_prior_operating_mode: '2' };
+    const device = createDevice(settings, { target_power_mode: 'homey', target_power: 3000 });
     device.targetPowerModeState = 'homey';
 
-    await applyChange(device, { target_power_mode: 'self_consumption' });
+    device.exitTargetPowerControlToDevice('battery operating mode changed externally to 6');
+    await device.targetPowerQueueWorker;
 
-    expect(device.client.setOperatingMode).toHaveBeenCalledWith('2');
-    expect(device.client.setSetpoint).not.toHaveBeenCalled();
+    expect(device.client.setOperatingMode).not.toHaveBeenCalled(); // battery already runs the strategy
+    expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power_mode', 'device');
     expect(device.setCapabilityValue).toHaveBeenCalledWith('target_power', 0);
-    expect(device.targetPowerModeState).toBe('self_consumption');
+    expect(device.setSettings).toHaveBeenCalledWith({ target_power_prior_operating_mode: '' });
+    expect(device.targetPowerModeState).toBe('device');
+  });
+
+  it('applies the requested mode and exits control when a mode is applied outside the control path', async () => {
+    const settings = { target_power_prior_operating_mode: '2' };
+    const device = createDevice(settings, { target_power_mode: 'homey', target_power: 3000 });
+    device.targetPowerModeState = 'homey';
+
+    await device.applyExternalOperatingMode('10');
+
+    expect(device.client.setOperatingMode).toHaveBeenCalledWith('10');
+    expect(device.targetPowerModeState).toBe('device');
+  });
+});
+
+describe('disableTargetPowerControl', () => {
+  it('restores the captured prior mode when Homey was in control', async () => {
+    const settings = { target_power_prior_operating_mode: '10' };
+    const device = createDevice(settings, { target_power_mode: 'homey', target_power: 2000 });
+    device.targetPowerModeState = 'homey';
+
+    await device.disableTargetPowerControl();
+
+    expect(device.client.setOperatingMode).toHaveBeenCalledWith('10');
+    expect(device.hasCapability('target_power')).toBe(false);
+    expect(device.hasCapability('target_power_mode')).toBe(false);
+    expect(device.setSettings).toHaveBeenCalledWith({ target_power_prior_operating_mode: '' });
+    expect(device.targetPowerModeState).toBeNull();
+  });
+
+  it('leaves the battery mode untouched when control was never taken', async () => {
+    const device = createDevice({}, { target_power_mode: 'device', target_power: 0 });
+    device.targetPowerModeState = 'device';
+
+    await device.disableTargetPowerControl();
+
+    expect(device.client.setOperatingMode).not.toHaveBeenCalled();
+    expect(device.hasCapability('target_power')).toBe(false);
+    expect(device.targetPowerModeState).toBeNull();
   });
 });
 

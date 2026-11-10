@@ -178,7 +178,11 @@ module.exports = class SonnenBatterieDriver extends SonnenDriver {
 
   private async handleSwitchOperatingMode(args: { device: BatteryDevice, operating_mode: string }): Promise<void> {
     try {
-      await this.createSonnenBatterieClient(args.device).setOperatingMode(args.operating_mode);
+      // Routed through the device so an operating-mode application while
+      // Homey is in target-power control exits control first (controller
+      // model: every mode application outside the control path reverts to
+      // device control).
+      await args.device.applyExternalOperatingMode(args.operating_mode);
       const operatingModeText = resolveOperatingMode(args.operating_mode);
 
       const notification = this.homey.__("notification.changedOperatingMode", { operatingMode: operatingModeText });

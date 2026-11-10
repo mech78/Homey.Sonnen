@@ -4,43 +4,24 @@ import { PowerLimits, TargetPowerLimits } from './TargetPowerLimits';
 /**
  * Values supported by the Homey `target_power_mode` capability.
  *
- * `homey` is Homey's reserved value for "an EMS (Homey Energy / EMS apps) is
- * in control". The device-side values mirror the sonnenBatterie operating
- * modes one-to-one, so the capability doubles as a standardized
- * representation of the battery's operating mode.
+ * This is the **two-value controller model**: the capability only answers
+ * *who controls the power*, never *which strategy the battery runs*.
  *
- * `homey` and `manual` both map to battery operating mode 1 (Manual): the
- * difference is purely who is expected to write setpoints — an EMS for
- * `homey`, the sonnen app for `manual`.
+ * - `homey`: Homey (Energy / EMS apps / flows) drives the setpoint. The
+ *   battery is switched to Manual (operating mode 1), the only mode in which
+ *   a setpoint is held without an expiry timer.
+ * - `device`: the battery runs its own strategy again. The strategy is
+ *   selected exclusively through the app's `operating_mode` setting; on exit
+ *   the device layer restores the operating mode captured when control was
+ *   taken (see {@link TargetPowerMode.resolveControllerMode} and the device
+ *   layer's prior-mode backup).
  */
-export type TargetPowerModeValue = 'homey' | 'manual' | 'self_consumption' | 'module_extension' | 'time_of_use' | 'optimization';
+export type TargetPowerModeValue = 'homey' | 'device';
 
 /**
  * Direction of a sonnenBatterie setpoint command.
  */
 export type SetpointDirection = 'charge' | 'discharge';
-
-/**
- * sonnenBatterie `EM_OperatingMode` values used by this feature:
- * 1 = Manual (carrier mode for setpoints, held by both `homey` and `manual`),
- * 2 = Self consumption, 6 = Module extension (30%), 10 = Time-of-Use,
- * 11 = Automatic - Optimization.
- */
-const MODE_TO_OPERATING_MODE: Record<Exclude<TargetPowerModeValue, 'homey'>, string> = {
-  manual: '1',
-  self_consumption: '2',
-  module_extension: '6',
-  time_of_use: '10',
-  optimization: '11',
-};
-
-const OPERATING_MODE_TO_MODE: Record<string, TargetPowerModeValue> = {
-  '1': 'manual',
-  '2': 'self_consumption',
-  '6': 'module_extension',
-  '10': 'time_of_use',
-  '11': 'optimization',
-};
 
 /**
  * A concrete setpoint command for the sonnenBatterie API.
@@ -73,6 +54,14 @@ export interface PlanPowerControlInput {
   requestedPower: number | null;
   /** The previously stored `target_power` value in watts, or null when unknown. */
   currentPower: number | null;
+  /**
+   * The operating mode captured before Homey took control, to restore on
+   * exit. Only meaningful when `requestedMode` is `'device'` and the mode
+   * actually changed. `null` means no backup exists — the honest no-op:
+   * the device layer then applies **no** operating mode change at all (never
+   * a guessed default).
+   */
+  restoreOperatingMode: string | null;
 }
 
 /**
@@ -97,6 +86,12 @@ export interface CapabilityChangeState {
   currentPower: number | null;
   /** Device power limits used to clamp the effective power. */
   limits: PowerLimits;
+  /**
+   * The operating mode captured before Homey took control (validated by the
+   * device layer), or null when none was captured. Only consumed when the
+   * requested change exits control.
+   */
+  restoreOperatingMode: string | null;
 }
 
 /**
@@ -131,51 +126,33 @@ export class TargetPowerMode {
   /**
    * Maps a `target_power_mode` value to the sonnenBatterie `EM_OperatingMode`.
    * `homey` maps to Manual (1), the only mode in which the battery holds a
-   * setpoint without an expiry timer.
+   * setpoint without an expiry timer. The `device` exit is not a mapping —
+   * it restores the captured prior mode (see {@link planPowerControl}).
    */
   public static toOperatingMode(mode: TargetPowerModeValue): string {
     if (mode === 'homey') {
       return '1';
     }
-    const operatingMode = MODE_TO_OPERATING_MODE[mode];
-    if (operatingMode === undefined) {
-      throw new LocalizedError('error.validation.invalid_target_power_mode', { mode });
-    }
-    return operatingMode;
+    throw new LocalizedError('error.validation.invalid_target_power_mode', { mode });
   }
 
   /**
-   * Maps a sonnenBatterie `EM_OperatingMode` back to the device-side
-   * `target_power_mode` value, or null when the operating mode has no
-   * capability representation. Mode 1 (Manual) maps to `manual`, the
-   * device-side carrier; `homey` is Homey-side state and is never derived
-   * from the battery. Use {@link resolveExternalMode} for polling syncs,
-   * which must keep an established `homey`/`manual` state sticky.
-   */
-  public static fromOperatingMode(operatingMode: string): TargetPowerModeValue | null {
-    return OPERATING_MODE_TO_MODE[String(operatingMode)] ?? null;
-  }
-
-  /**
-   * Resolves the `target_power_mode` value for an operating mode read from
-   * the battery (polling sync), given the current capability state.
+   * Resolves the controller state for an operating mode read from the
+   * battery (polling sync), given the current capability state.
    *
-   * Battery mode 1 (Manual) is ambiguous: both `homey` and `manual` are its
-   * carriers. The rule is sticky:
-   * - current state `homey` or `manual` → keep it (Homey control implies
-   *   battery mode 1; a user-chosen `manual` must survive polling)
-   * - any other current state → the battery was switched to Manual
-   *   externally (e.g. via the sonnen app), so Homey is not in control
-   *
-   * All other operating modes map directly; unknown modes yield null and the
-   * caller must leave the capability unchanged.
+   * Rule: battery mode 1 (Manual) is the carrier of Homey control and is
+   * **sticky** — the current state is kept, because our own control writes
+   * and an external sonnen-app Manual are indistinguishable by mode value
+   * alone. Any other reported operating mode means the battery runs its own
+   * strategy again, so the controller returns to `device`. `null` means
+   * "leave the capability unchanged" (unknown mode, or unseeded capability).
    */
-  public static resolveExternalMode(operatingMode: string, currentState: TargetPowerModeValue | null): TargetPowerModeValue | null {
+  public static resolveControllerMode(operatingMode: string, currentState: TargetPowerModeValue | null): TargetPowerModeValue | null {
     const mode = String(operatingMode);
-    if (mode === '1' && (currentState === 'homey' || currentState === 'manual')) {
+    if (mode === '1') {
       return currentState;
     }
-    return OPERATING_MODE_TO_MODE[mode] ?? null;
+    return currentState === null ? null : 'device';
   }
 
   /**
@@ -216,11 +193,14 @@ export class TargetPowerMode {
     const modeChanged = input.requestedMode !== input.previousMode;
 
     if (input.requestedMode !== 'homey') {
-      // The battery follows its own strategy; a stored setpoint expires on its
-      // own via the remote-command timeout outside Manual mode, and Manual mode
-      // is the device-side carrier for external (sonnen app) setpoints.
+      // Leaving Homey control: the battery returns to its own strategy.
+      // The operating mode to restore is the captured prior mode — when no
+      // backup exists, no operating mode is written at all (never a guessed
+      // default; at worst the battery stays in Manual, where its setpoint
+      // expires on its own via the remote-command timeout).
+      const restore = modeChanged ? input.restoreOperatingMode ?? null : null;
       return {
-        operatingMode: modeChanged ? this.toOperatingMode(input.requestedMode) : null,
+        operatingMode: restore,
         setpoint: null,
       };
     }
@@ -247,7 +227,7 @@ export class TargetPowerMode {
    */
   public static planCapabilityChange(request: CapabilityChangeRequest, state: CapabilityChangeState): CapabilityChangePlan {
     const requestedMode = request.targetPowerMode
-      ?? (request.targetPower !== null ? 'homey' : state.currentMode ?? 'self_consumption');
+      ?? (request.targetPower !== null ? 'homey' : state.currentMode ?? 'device');
     const previousMode = state.currentMode;
 
     // Observed 2026-11-08: a mode-only UI toggle to homey re-applied a stale
@@ -272,6 +252,9 @@ export class TargetPowerMode {
       previousMode,
       requestedPower: power,
       currentPower: null,
+      restoreOperatingMode: requestedMode !== 'homey' && previousMode === 'homey'
+        ? state.restoreOperatingMode
+        : null,
     });
 
     return {
