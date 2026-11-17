@@ -37,7 +37,7 @@ function createDevice(settings: Record<string, unknown> = {}, capabilities: Reco
   device.homey = {
     on: jest.fn(),
     removeListener: jest.fn(),
-    setTimeout: jest.fn((fn: () => void) => 1),
+    setTimeout: jest.fn((_fn: () => void) => 1),
     clearTimeout: jest.fn(),
     settings: { get: jest.fn(() => '30') },
   };
