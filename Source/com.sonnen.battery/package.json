@@ -9,12 +9,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.6",
+    "@tsconfig/node22": "^22.0.7",
     "@types/underscore": "^1.13.0",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^1.8.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
-    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
     "@typescript-eslint/parser": "^8.51.0",
     "eslint": "^10.14.0",
     "jest": "^30.5.2",
